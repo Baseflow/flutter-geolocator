@@ -1,4 +1,4 @@
-# flutter_geolocator
+# [WIP] Flutter Geolocator Plugin
 
 Geolocation plugin for Flutter (based on the excellent Geolocator plugin for Xamarin by James Montemagno)
 
