@@ -22,6 +22,9 @@ class LocationMapper {
             position.put("heading", (double) location.getBearing());
         if(location.hasSpeed())
             position.put("speed", (double) location.getSpeed());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasSpeedAccuracy()) {
+            position.put("speed_accuracy", (double) location.getSpeedAccuracyMetersPerSecond());
+        }
 
         return position;
     }
