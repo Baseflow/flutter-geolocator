@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 /// Contains detail location information.
 class Position {
 
@@ -37,17 +39,34 @@ class Position {
   final double speedAccuracy;
 
   /// Converts the supplied [Map] to an instance of the [Position] class.
-  static Position fromMap(dynamic message) {
-    final Map<dynamic, dynamic> map = message;
+  static Position fromMap(Map<String, double> positionMap) {
+    if(!positionMap.containsKey('latitude'))
+      throw new ArgumentError.value(positionMap, 'positionMap', 'The supplied map doesn\'t contain the mandatory key `latitude`.');
+
+    if(!positionMap.containsKey('longitude'))
+      throw new ArgumentError.value(positionMap, 'positionMap', 'The supplied map doesn\'t contain the mandatory key `longitude`.');
 
     return new Position._(
-        latitude: map['latitude'],
-        longitude: map['longitude'],
-        altitude: map.containsKey('altitude') ? map['altitude'] : 0.0,
-        accuracy: map.containsKey('accuracy') ? map['accuracy'] : 0.0,
-        heading: map.containsKey('heading') ? map['heading'] : 0.0,
-        speed: map.containsKey('speed') ? map['speed'] : 0.0,
-        speedAccuracy: map.containsKey('speed_accuracy') ? map['speed_accuracy'] : 0.0,
+        latitude: positionMap['latitude'],
+        longitude: positionMap['longitude'],
+        altitude: positionMap.containsKey('altitude') ? positionMap['altitude'] : 0.0,
+        accuracy: positionMap.containsKey('accuracy') ? positionMap['accuracy'] : 0.0,
+        heading: positionMap.containsKey('heading') ? positionMap['heading'] : 0.0,
+        speed: positionMap.containsKey('speed') ? positionMap['speed'] : 0.0,
+        speedAccuracy: positionMap.containsKey('speed_accuracy') ? positionMap['speed_accuracy'] : 0.0,
     );
+  }
+
+  @visibleForTesting
+  Map<String, double> toMap() {
+    return <String, double> {
+      'latitude' : latitude, 
+      'longitude' : longitude,
+      'altitude' : altitude,
+      'accuracy' : accuracy,
+      'heading' : heading,
+      'speed' : speed,
+      'speed_accuracy' : speedAccuracy
+    };
   }
 }
