@@ -19,7 +19,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   plugin:
-    androidPackage: com.baseflow.flutter
+    androidPackage: com.baseflow.flutter.plugin.geolocator
     pluginClass: GeolocatorPlugin
 
   # To add assets to your plugin package, add an assets section, like this:

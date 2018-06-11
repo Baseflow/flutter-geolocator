@@ -8,7 +8,9 @@
 .atom/
 .buildlog/
 .history
+.project
 .svn/
+bin/
 
 # IntelliJ related
 *.iml
