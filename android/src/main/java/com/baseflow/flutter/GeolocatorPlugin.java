@@ -1,4 +1,4 @@
-package com.baseflow.fluttergeolocator;
+package com.baseflow.flutter;
 
 import android.Manifest;
 import android.content.IntentSender;
@@ -34,9 +34,9 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import java.util.Map;
 
 /**
- * FlutterGeolocatorPlugin
+ * GeolocatorPlugin
  */
-public class FlutterGeolocatorPlugin implements MethodCallHandler, EventChannel.StreamHandler {
+public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamHandler {
 
   private static final String LOG_TAG = "baseflow.com/geolocator";
   private static final String METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods";
@@ -55,7 +55,7 @@ public class FlutterGeolocatorPlugin implements MethodCallHandler, EventChannel.
   private EventChannel.EventSink mEventSink;
   private Result mResult;
 
-  private FlutterGeolocatorPlugin(PluginRegistry.Registrar registrar){
+  private GeolocatorPlugin(PluginRegistry.Registrar registrar){
     this.mRegistrar = registrar;
 
     mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mRegistrar.activity());
@@ -76,7 +76,7 @@ public class FlutterGeolocatorPlugin implements MethodCallHandler, EventChannel.
    * Plugin registration.
    */
   public static void registerWith(Registrar registrar) {
-    FlutterGeolocatorPlugin geolocatorPlugin = new FlutterGeolocatorPlugin(registrar);
+    GeolocatorPlugin geolocatorPlugin = new GeolocatorPlugin(registrar);
 
     final MethodChannel methodChannel = new MethodChannel(registrar.messenger(), METHOD_CHANNEL_NAME);
     final EventChannel eventChannel = new EventChannel(registrar.messenger(), EVENT_CHANNEL_NAME);

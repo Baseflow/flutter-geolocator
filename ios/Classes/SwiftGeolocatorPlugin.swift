@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import CoreLocation
 
-public class SwiftFlutterGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugin, CLLocationManagerDelegate {
+public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugin, CLLocationManagerDelegate {
     private static let METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods"
     private static let EVENT_CHANNEL_NAME = "flutter.baseflow.com/geolocator/events"
     
@@ -13,7 +13,7 @@ public class SwiftFlutterGeolocatorPlugin: NSObject, FlutterStreamHandler, Flutt
     public static func register(with registrar: FlutterPluginRegistrar) {
         let methodChannel = FlutterMethodChannel(name: METHOD_CHANNEL_NAME, binaryMessenger: registrar.messenger())
         let eventsChannel = FlutterEventChannel(name: EVENT_CHANNEL_NAME, binaryMessenger: registrar.messenger())
-        let instance = SwiftFlutterGeolocatorPlugin()
+        let instance = SwiftGeolocatorPlugin()
     
         registrar.addMethodCallDelegate(instance, channel: methodChannel)
         eventsChannel.setStreamHandler(instance)

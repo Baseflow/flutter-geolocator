@@ -1,4 +1,4 @@
-# [WIP] Flutter Geolocator Plugin
+# Flutter Geolocator Plugin
 
 A Flutter plugin which provides easy access to the platform specific location services ([FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient) on Android and [CLLocationManager](https://developer.apple.com/documentation/corelocation/cllocationmanager) on iOS). 
 
@@ -17,7 +17,7 @@ To use this plugin, add `flutter_geolocator` as a [dependency in your pubspec.ya
 
 On Android you'll need to add the `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` permissions to your Android Manifest. Todo so open the AndroidManifest.xml file and add the following two lines as direct children of the `<manifest>` tag:
 
-```
+``` xml
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
@@ -26,14 +26,14 @@ On Android you'll need to add the `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCA
 
 On iOS you'll need to add the `NSLocationWhenInUseUsageDescription` to your Info.plist file in order to access the device's location. Simply open your Info.plist file and add the following:
 
-```
+``` xml
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>This app needs access to location when open.</string>
 ```
 
 If you would like to access the device's location when your App is running in the background, you should also add the `NSLocationAlwaysAndWhenInUseUsageDescription` (if your App support iOS 10 or earlier you should also add the key `NSLocationAlwaysUsageDescription`) key to your Info.plist file:
 
-```
+``` xml
 <key>NSLocationAlwaysUsageDescription</key>
 <string>This app needs access to location when in the background.</string>
 <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
