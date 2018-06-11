@@ -5,22 +5,22 @@ import 'package:meta/meta.dart';
 import 'models/position.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
-class FlutterGeolocator {
-  factory FlutterGeolocator() {
+class Geolocator {
+  factory Geolocator() {
     if (_instance == null) {
       final MethodChannel methodChannel =
           const MethodChannel('flutter.baseflow.com/geolocator/methods');
       final EventChannel eventChannel =
           const EventChannel('flutter.baseflow.com/geolocator/events');
-      _instance = new FlutterGeolocator.private(methodChannel, eventChannel);
+      _instance = new Geolocator.private(methodChannel, eventChannel);
     }
     return _instance;
   }
 
   @visibleForTesting
-  FlutterGeolocator.private(this._methodChannel, this._eventChannel);
+  Geolocator.private(this._methodChannel, this._eventChannel);
 
-  static FlutterGeolocator _instance;
+  static Geolocator _instance;
 
   final MethodChannel _methodChannel;
   final EventChannel _eventChannel;

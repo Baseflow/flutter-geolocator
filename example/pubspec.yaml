@@ -1,5 +1,5 @@
-name: flutter_geolocator_example
-description: Demonstrates how to use the flutter_geolocator plugin.
+name: geolocator_example
+description: Demonstrates how to use the geolocator plugin.
 
 dependencies:
   flutter:
@@ -13,7 +13,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_geolocator:
+  geolocator:
     path: ../
 
 # For information on the generic Dart part of this file, see the

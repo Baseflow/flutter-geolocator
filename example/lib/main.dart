@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_geolocator/flutter_geolocator.dart';
-import 'package:flutter_geolocator/models/position.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/position.dart';
 
 void main() => runApp(new MyApp());
 
@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FlutterGeolocator _geolocator = new FlutterGeolocator();
+  Geolocator _geolocator = new Geolocator();
   Position _position;
   StreamSubscription<Position> _positionSubscription;
 

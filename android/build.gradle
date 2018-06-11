@@ -1,4 +1,4 @@
-group 'com.baseflow.fluttergeolocator'
+group 'com.baseflow.flutter'
 version '1.0-SNAPSHOT'
 
 buildscript {

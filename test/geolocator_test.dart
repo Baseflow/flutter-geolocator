@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:mockito/mockito.dart';
-import 'package:flutter_geolocator/flutter_geolocator.dart';
-import 'package:flutter_geolocator/models/position.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/position.dart';
 import 'package:test/test.dart';
 
 void main() {
   MockMethodChannel _methodChannel;
   MockEventChannel _eventChannel;
-  FlutterGeolocator _geolocator;
+  Geolocator _geolocator;
 
   const Map<String, double> _mockPosition = const <String, double> {
     'latitude' : 52.561270, 
@@ -73,7 +73,7 @@ void main() {
   setUp(() {
     _methodChannel = new MockMethodChannel();
     _eventChannel = new MockEventChannel();
-    _geolocator = new FlutterGeolocator.private(_methodChannel, _eventChannel);
+    _geolocator = new Geolocator.private(_methodChannel, _eventChannel);
   });
 
   test('Retrieve the current position', () async {

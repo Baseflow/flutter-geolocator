@@ -1,4 +1,4 @@
-package com.baseflow.fluttergeolocator;
+package com.baseflow.flutter;
 
 import android.location.Location;
 import android.os.Build;

@@ -1,4 +1,4 @@
-import 'package:flutter_geolocator/models/position.dart';
+import 'package:geolocator/models/position.dart';
 import 'package:test/test.dart';
 
 void main() {
