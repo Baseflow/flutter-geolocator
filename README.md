@@ -2,7 +2,10 @@
 
 A Flutter plugin which provides easy access to the platform specific location services ([FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient) on Android and [CLLocationManager](https://developer.apple.com/documentation/corelocation/cllocationmanager) on iOS). 
 
-[![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.svg?branch=develop)](https://travis-ci.com/BaseflowIT/flutter-geolocator)
+Branch  | Build Status 
+------- | ------------
+develop | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.svg?branch=develop)](https://travis-ci.com/BaseflowIT/flutter-geolocator)
+master  | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.svg?branch=master)](https://travis-ci.com/BaseflowIT/flutter-geolocator)
 
 ## Usage
 
