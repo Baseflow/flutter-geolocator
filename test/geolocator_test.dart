@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_geolocator/flutter_geolocator.dart';
@@ -21,13 +22,61 @@ void main() {
     'speed_accuracy' : 0.0
   };
 
+  const List<Map<String, double>> _mockPositions = const [
+    <String, double> {
+      'latitude' : 52.561270, 
+      'longitude' : 5.639382,
+      'altitude' : 3000.0,
+      'accuracy' : 0.0,
+      'heading' : 0.0,
+      'speed' : 0.0,
+      'speed_accuracy' : 0.0
+    },
+    <String, double> {
+      'latitude' : 52.560919, 
+      'longitude' : 5.639771,
+      'altitude' : 3000.0,
+      'accuracy' : 0.0,
+      'heading' : 0.0,
+      'speed' : 0.0,
+      'speed_accuracy' : 0.0
+    },
+    <String, double> {
+      'latitude' : 52.562143, 
+      'longitude' : 5.641147,
+      'altitude' : 3000.0,
+      'accuracy' : 0.0,
+      'heading' : 0.0,
+      'speed' : 0.0,
+      'speed_accuracy' : 0.0
+    },
+    <String, double> {
+      'latitude' : 52.562454, 
+      'longitude' : 5.640372,
+      'altitude' : 3000.0,
+      'accuracy' : 0.0,
+      'heading' : 0.0,
+      'speed' : 0.0,
+      'speed_accuracy' : 0.0
+    },
+    <String, double> {
+      'latitude' : 52.561242, 
+      'longitude' : 5.639010,
+      'altitude' : 3000.0,
+      'accuracy' : 0.0,
+      'heading' : 0.0,
+      'speed' : 0.0,
+      'speed_accuracy' : 0.0
+    }
+  ];
+
   setUp(() {
     _methodChannel = new MockMethodChannel();
     _eventChannel = new MockEventChannel();
     _geolocator = new FlutterGeolocator.private(_methodChannel, _eventChannel);
   });
 
-  test('position', () async {
+  test('Retrieve the current position', () async {
     when(_methodChannel.invokeMethod('getPosition'))
       .thenReturn(new Future<Map<String, double>>.value(_mockPosition));
     
@@ -41,6 +90,46 @@ void main() {
     expect(position.speed, _mockPosition['speed']);
     expect(position.speedAccuracy, _mockPosition['speed_accuracy']);
   });
+
+  group('Postion state changes', (){
+    StreamController<Map<String, double>> _controller;
+
+    setUp(() {
+      _controller = new StreamController<Map<String,double>>();
+      when(_eventChannel.receiveBroadcastStream()).thenReturn(_controller.stream);
+    });
+
+    tearDown((){
+      _controller.close();
+    });
+
+    test('The receiveBroadcastStream should only be called once', () {
+      _geolocator.onPositionChanged;
+      _geolocator.onPositionChanged;
+      _geolocator.onPositionChanged;
+
+      verify(_eventChannel.receiveBroadcastStream()).called(1);
+    });
+
+    test('Receive position changes', () async {
+      final StreamQueue<Position> queue = new StreamQueue<Position>(_geolocator.onPositionChanged);
+
+      _controller.add(_mockPositions[0]);
+      expect((await queue.next).toMap(), _mockPositions[0]);
+
+      _controller.add(_mockPositions[1]);
+      expect((await queue.next).toMap(), _mockPositions[1]);
+      
+      _controller.add(_mockPositions[2]);
+      expect((await queue.next).toMap(), _mockPositions[2]);
+      
+      _controller.add(_mockPositions[3]);
+      expect((await queue.next).toMap(), _mockPositions[3]);
+
+      _controller.add(_mockPositions[4]);
+      expect((await queue.next).toMap(), _mockPositions[4]);
+    }); 
+  });  
 }
 
 class MockMethodChannel extends Mock implements MethodChannel {}
