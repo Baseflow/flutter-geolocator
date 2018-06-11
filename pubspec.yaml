@@ -1,11 +1,16 @@
 name: flutter_geolocator
 description: Geolocation plugin for Flutter (based on the excellent Geolocator plugin for Xamarin by James Montemagno)
 version: 0.0.1
-author:
-homepage:
+author: Baseflow
+homepage: https://baseflow.com
 
 dependencies:
   flutter:
+    sdk: flutter
+
+dev_dependencies:
+  mockito: "^2.0.2"
+  flutter_test:
     sdk: flutter
 
 # For information on the generic Dart part of this file, see the
