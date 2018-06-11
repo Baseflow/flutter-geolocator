@@ -1,20 +1,34 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'models/position.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
 class FlutterGeolocator {
-  static const MethodChannel _methodChannel =
-      const MethodChannel('flutter.baseflow.com/geolocator/methods');
+  factory FlutterGeolocator() {
+    if (_instance == null) {
+      final MethodChannel methodChannel =
+          const MethodChannel('flutter.baseflow.com/geolocator/methods');
+      final EventChannel eventChannel =
+          const EventChannel('flutter.baseflow.com/geolocator/events');
+      _instance = new FlutterGeolocator.private(methodChannel, eventChannel);
+    }
+    return _instance;
+  }
 
-  static const EventChannel _eventChannel =
-      const EventChannel('flutter.baseflow.com/geolocator/events');
+  @visibleForTesting
+  FlutterGeolocator.private(this._methodChannel, this._eventChannel);
+
+  static FlutterGeolocator _instance;
+
+  final MethodChannel _methodChannel;
+  final EventChannel _eventChannel;
 
   Stream<Position> _onPositionChanged;
   
   /// Returns the current location.
-  static Future<Position> get getPosition  => _methodChannel
+  Future<Position> get getPosition  => _methodChannel
       .invokeMethod('getPosition')
       .then((result) => Position.fromMap(result));
 

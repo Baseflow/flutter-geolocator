@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      position = await FlutterGeolocator.getPosition;
+      position = await _geolocator.getPosition;
     } on PlatformException {
       position = null;
     }
