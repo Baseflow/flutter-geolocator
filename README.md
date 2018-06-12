@@ -45,19 +45,19 @@ If you would like to access the device's location when your App is running in th
 To query the current location of the device simply make a call to the `getPosition` method:
 
 ``` dart
-import 'package:flutter_geolocator/flutter_geolocator.dart';
-import 'package:flutter_geolocator/models/position.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/position.dart';
 
-Position position = await FlutterGeolocator.getPosition;
+Position position = await new Geolocator.getPosition;
 ```
 
 To listen for location changes you can subscribe to the `onPositionChanged` stream:
 
 ``` dart
-import 'package:flutter_geolocator/flutter_geolocator.dart';
-import 'package:flutter_geolocator/models/position.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/position.dart';
 
-FlutterGeolocator geolocator = new FlutterGeolocator();
+Geolocator geolocator = new Geolocator();
 StreamSubscription<Position> positionStream = geolocator.onPositionChanged.listen(
     (Position position) {
         print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
