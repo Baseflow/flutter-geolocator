@@ -66,4 +66,14 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    if(_positionSubscription != null) {
+      _positionSubscription.cancel();
+      _positionSubscription = null;
+    }
+
+    super.dispose();
+  }
 }
