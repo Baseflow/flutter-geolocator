@@ -26,33 +26,31 @@ class Geolocator {
   final EventChannel _eventChannel;
 
   Stream<Position> _onPositionChanged;
-  
+
   /// Returns the current location.
-  Future<Position> get getPosition  => _methodChannel
+  Future<Position> get getPosition => _methodChannel
       .invokeMethod('getPosition')
       .then((result) => Position.fromMap(result));
 
   /// Fires whenever the location changes.
-  /// 
+  ///
   /// This event starts all location sensors on the device and will keep them
-  /// active until you cancel listening to the stream or when the application 
-  /// is killed. 
-  /// 
+  /// active until you cancel listening to the stream or when the application
+  /// is killed.
+  ///
   /// ```
   /// StreamSubscription<Position> positionStream = new FlutterGeolocator().onPositionChanged.listen(
   ///   (Position position) => {
   ///     // Handle position changes
   ///   });
-  /// 
+  ///
   /// // When no longer needed cancel the subscription
   /// positionStream.cancel();
   /// ```
   Stream<Position> get onPositionChanged {
-    if(_onPositionChanged == null) {
-      _onPositionChanged = _eventChannel
-          .receiveBroadcastStream()
-          .map<Position>(
-              (element) => Position.fromMap(element.cast<String, double>()));
+    if (_onPositionChanged == null) {
+      _onPositionChanged = _eventChannel.receiveBroadcastStream().map<Position>(
+          (element) => Position.fromMap(element.cast<String, double>()));
     }
 
     return _onPositionChanged;

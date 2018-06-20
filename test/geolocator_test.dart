@@ -12,61 +12,61 @@ void main() {
   MockEventChannel _eventChannel;
   Geolocator _geolocator;
 
-  const Map<String, double> _mockPosition = const <String, double> {
-    'latitude' : 52.561270, 
-    'longitude' : 5.639382,
-    'altitude' : 3000.0,
-    'accuracy' : 0.0,
-    'heading' : 0.0,
-    'speed' : 0.0,
-    'speed_accuracy' : 0.0
+  const Map<String, double> _mockPosition = const <String, double>{
+    'latitude': 52.561270,
+    'longitude': 5.639382,
+    'altitude': 3000.0,
+    'accuracy': 0.0,
+    'heading': 0.0,
+    'speed': 0.0,
+    'speed_accuracy': 0.0
   };
 
   const List<Map<String, double>> _mockPositions = const [
-    <String, double> {
-      'latitude' : 52.561270, 
-      'longitude' : 5.639382,
-      'altitude' : 3000.0,
-      'accuracy' : 0.0,
-      'heading' : 0.0,
-      'speed' : 0.0,
-      'speed_accuracy' : 0.0
+    <String, double>{
+      'latitude': 52.561270,
+      'longitude': 5.639382,
+      'altitude': 3000.0,
+      'accuracy': 0.0,
+      'heading': 0.0,
+      'speed': 0.0,
+      'speed_accuracy': 0.0
     },
-    <String, double> {
-      'latitude' : 52.560919, 
-      'longitude' : 5.639771,
-      'altitude' : 3000.0,
-      'accuracy' : 0.0,
-      'heading' : 0.0,
-      'speed' : 0.0,
-      'speed_accuracy' : 0.0
+    <String, double>{
+      'latitude': 52.560919,
+      'longitude': 5.639771,
+      'altitude': 3000.0,
+      'accuracy': 0.0,
+      'heading': 0.0,
+      'speed': 0.0,
+      'speed_accuracy': 0.0
     },
-    <String, double> {
-      'latitude' : 52.562143, 
-      'longitude' : 5.641147,
-      'altitude' : 3000.0,
-      'accuracy' : 0.0,
-      'heading' : 0.0,
-      'speed' : 0.0,
-      'speed_accuracy' : 0.0
+    <String, double>{
+      'latitude': 52.562143,
+      'longitude': 5.641147,
+      'altitude': 3000.0,
+      'accuracy': 0.0,
+      'heading': 0.0,
+      'speed': 0.0,
+      'speed_accuracy': 0.0
     },
-    <String, double> {
-      'latitude' : 52.562454, 
-      'longitude' : 5.640372,
-      'altitude' : 3000.0,
-      'accuracy' : 0.0,
-      'heading' : 0.0,
-      'speed' : 0.0,
-      'speed_accuracy' : 0.0
+    <String, double>{
+      'latitude': 52.562454,
+      'longitude': 5.640372,
+      'altitude': 3000.0,
+      'accuracy': 0.0,
+      'heading': 0.0,
+      'speed': 0.0,
+      'speed_accuracy': 0.0
     },
-    <String, double> {
-      'latitude' : 52.561242, 
-      'longitude' : 5.639010,
-      'altitude' : 3000.0,
-      'accuracy' : 0.0,
-      'heading' : 0.0,
-      'speed' : 0.0,
-      'speed_accuracy' : 0.0
+    <String, double>{
+      'latitude': 52.561242,
+      'longitude': 5.639010,
+      'altitude': 3000.0,
+      'accuracy': 0.0,
+      'heading': 0.0,
+      'speed': 0.0,
+      'speed_accuracy': 0.0
     }
   ];
 
@@ -78,8 +78,8 @@ void main() {
 
   test('Retrieve the current position', () async {
     when(_methodChannel.invokeMethod('getPosition'))
-      .thenReturn(new Future<Map<String, double>>.value(_mockPosition));
-    
+        .thenReturn(new Future<Map<String, double>>.value(_mockPosition));
+
     Position position = await _geolocator.getPosition;
 
     expect(position.latitude, _mockPosition['latitude']);
@@ -91,15 +91,16 @@ void main() {
     expect(position.speedAccuracy, _mockPosition['speed_accuracy']);
   });
 
-  group('Postion state changes', (){
+  group('Postion state changes', () {
     StreamController<Map<String, double>> _controller;
 
     setUp(() {
-      _controller = new StreamController<Map<String,double>>();
-      when(_eventChannel.receiveBroadcastStream()).thenReturn(_controller.stream);
+      _controller = new StreamController<Map<String, double>>();
+      when(_eventChannel.receiveBroadcastStream())
+          .thenReturn(_controller.stream);
     });
 
-    tearDown((){
+    tearDown(() {
       _controller.close();
     });
 
@@ -112,25 +113,27 @@ void main() {
     });
 
     test('Receive position changes', () async {
-      final StreamQueue<Position> queue = new StreamQueue<Position>(_geolocator.onPositionChanged);
+      final StreamQueue<Position> queue =
+          new StreamQueue<Position>(_geolocator.onPositionChanged);
 
       _controller.add(_mockPositions[0]);
       expect((await queue.next).toMap(), _mockPositions[0]);
 
       _controller.add(_mockPositions[1]);
       expect((await queue.next).toMap(), _mockPositions[1]);
-      
+
       _controller.add(_mockPositions[2]);
       expect((await queue.next).toMap(), _mockPositions[2]);
-      
+
       _controller.add(_mockPositions[3]);
       expect((await queue.next).toMap(), _mockPositions[3]);
 
       _controller.add(_mockPositions[4]);
       expect((await queue.next).toMap(), _mockPositions[4]);
-    }); 
-  });  
+    });
+  });
 }
 
 class MockMethodChannel extends Mock implements MethodChannel {}
+
 class MockEventChannel extends Mock implements EventChannel {}
