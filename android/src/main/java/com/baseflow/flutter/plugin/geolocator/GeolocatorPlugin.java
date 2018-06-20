@@ -31,6 +31,8 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +47,7 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   private static final int REQUEST_CHECK_SETTINGS = 0x1;
   private static final long DEFAULT_REFRESH_INTERVAL_IN_MILLISECONDS = 1000;
 
+  private final List<Result> mResultHandles;
   private final Registrar mRegistrar;
   private final FusedLocationProviderClient mFusedLocationClient;
   private final SettingsClient mSettingsClient;
@@ -53,11 +56,11 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   private LocationCallback mLocationCallback;
   private PluginRegistry.RequestPermissionsResultListener mPermissionsResultListener;
   private EventChannel.EventSink mEventSink;
-  private Result mResult;
 
   private GeolocatorPlugin(PluginRegistry.Registrar registrar) {
     this.mRegistrar = registrar;
 
+    mResultHandles = new ArrayList<>();
     mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mRegistrar.activity());
     mSettingsClient = LocationServices.getSettingsClient(mRegistrar.activity());
 
@@ -87,12 +90,14 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     if (call.method.equals("getPosition")) {
-      mResult = result;
+      mResultHandles.add(result);
 
-      if (!hasPermissions()) {
-        requestPermissions();
-      } else {
-        acquirePosition();
+      if (mResultHandles.size() == 1) {
+        if (!hasPermissions()) {
+          requestPermissions();
+        } else {
+          acquirePosition();
+        }
       }
     } else {
       result.notImplemented();
@@ -178,11 +183,14 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
             acquirePosition();
           } else {
             if (!shouldShowRequestPermissionRationale()) {
-              if (mResult != null) {
-                mResult.error("PERMISSION_DENIED_NEVER_ASK",
-                    "Access to location data denied. To allow access to location services enable them in the device settings.",
-                    null);
-                mResult = null;
+              if (mResultHandles.size() > 0) {
+                for (Result result : mResultHandles) {
+                  result.error("PERMISSION_DENIED_NEVER_ASK",
+                      "Access to location data denied. To allow access to location services enable them in the device settings.",
+                      null);
+                }
+
+                mResultHandles.clear();
               } else if (mEventSink != null) {
                 mEventSink.error("PERMISSION_DENIED_NEVER_ASK",
                     "Access to location data denied. To allow access to location services enable them in the device settings.",
@@ -190,9 +198,12 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
                 mEventSink = null;
               }
             } else {
-              if (mResult != null) {
-                mResult.error("PERMISSION_DENIED", "Access to location data denied", null);
-                mResult = null;
+              if (mResultHandles.size() > 0) {
+                for (Result result : mResultHandles) {
+                  result.error("PERMISSION_DENIED", "Access to location data denied", null);
+                }
+
+                mResultHandles.clear();
               } else if (mEventSink != null) {
                 mEventSink.error("PERMISSION_DENIED", "Access to location data denied", null);
                 mEventSink = null;
@@ -231,14 +242,18 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
         if (location != null) {
           Map<String, Double> position = LocationMapper.toHashMap(location);
 
-          if (mResult != null) {
-            mResult.success(position);
-            mResult = null;
+          if (mResultHandles.size() > 0) {
+            for (Result result : mResultHandles) {
+              result.success(position);
+            }
+            mResultHandles.clear();
           }
         } else {
-          if (mResult != null) {
-            mResult.error("ERROR", "Failed to get location.", null);
-            mResult = null;
+          if (mResultHandles.size() > 0) {
+            for (Result result : mResultHandles) {
+              result.error("ERROR", "Failed to get location.", null);
+            }
+            mResultHandles.clear();
           }
           // Do not send error on events otherwise it will produce an error
         }
