@@ -2,14 +2,15 @@ import 'package:meta/meta.dart';
 
 /// Contains detail location information.
 class Position {
-  Position._(
-      {this.longitude,
-      this.latitude,
-      this.accuracy,
-      this.altitude,
-      this.heading,
-      this.speed,
-      this.speedAccuracy});
+  Position._({
+    this.longitude,
+    this.latitude,
+    this.accuracy,
+    this.altitude,
+    this.heading,
+    this.speed,
+    this.speedAccuracy,
+  });
 
   /// Gets or sets the location latitude.
   final double latitude;
