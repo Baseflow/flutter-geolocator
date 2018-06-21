@@ -2,14 +2,15 @@ import 'package:meta/meta.dart';
 
 /// Contains detail location information.
 class Position {
-  Position._(
-      {this.longitude,
-      this.latitude,
-      this.accuracy,
-      this.altitude,
-      this.heading,
-      this.speed,
-      this.speedAccuracy});
+  Position._({
+    this.longitude,
+    this.latitude,
+    this.accuracy,
+    this.altitude,
+    this.heading,
+    this.speed,
+    this.speedAccuracy,
+  });
 
   /// The latitude of this position in degrees normalized to the interval -90.0 to +90.0 (both inclusive).
   final double latitude;
