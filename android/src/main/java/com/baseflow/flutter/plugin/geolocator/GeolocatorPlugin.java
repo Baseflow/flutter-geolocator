@@ -31,6 +31,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
+import java.lang.FunctionalInterface;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,11 @@ import java.util.Map;
  * GeolocatorPlugin
  */
 public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamHandler {
+
+  @FunctionalInterface
+  private interface ResultLambdaExpression {
+    void ProcessResult(Result result);
+  }
 
   private static final String LOG_TAG = "baseflow.com/geolocator";
   private static final String METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods";
@@ -183,28 +189,20 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
             acquirePosition();
           } else {
             if (!shouldShowRequestPermissionRationale()) {
-              if (mResultHandles.size() > 0) {
-                for (Result result : mResultHandles) {
-                  result.error("PERMISSION_DENIED_NEVER_ASK",
+                SignalResultHandles(result -> result.error("PERMISSION_DENIED_NEVER_ASK",
                       "Access to location data denied. To allow access to location services enable them in the device settings.",
-                      null);
-                }
+                      null));
 
-                mResultHandles.clear();
-              } else if (mEventSink != null) {
-                mEventSink.error("PERMISSION_DENIED_NEVER_ASK",
+                if (mEventSink != null) {
+                  mEventSink.error("PERMISSION_DENIED_NEVER_ASK",
                     "Access to location data denied. To allow access to location services enable them in the device settings.",
                     null);
-                mEventSink = null;
-              }
-            } else {
-              if (mResultHandles.size() > 0) {
-                for (Result result : mResultHandles) {
-                  result.error("PERMISSION_DENIED", "Access to location data denied", null);
+                  mEventSink = null;
                 }
+            } else {
+              SignalResultHandles(result -> result.error("PERMISSION_DENIED", "Access to location data denied", null));
 
-                mResultHandles.clear();
-              } else if (mEventSink != null) {
+              if (mEventSink != null) {
                 mEventSink.error("PERMISSION_DENIED", "Access to location data denied", null);
                 mEventSink = null;
               }
@@ -242,22 +240,22 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
         if (location != null) {
           Map<String, Double> position = LocationMapper.toHashMap(location);
 
-          if (mResultHandles.size() > 0) {
-            for (Result result : mResultHandles) {
-              result.success(position);
-            }
-            mResultHandles.clear();
-          }
+          SignalResultHandles(result -> result.success(position));
         } else {
-          if (mResultHandles.size() > 0) {
-            for (Result result : mResultHandles) {
-              result.error("ERROR", "Failed to get location.", null);
-            }
-            mResultHandles.clear();
-          }
+          SignalResultHandles((result) -> result.error("ERROR", "Failed to get location.", null));
+
           // Do not send error on events otherwise it will produce an error
         }
       }
     });
+  }
+
+  private void SignalResultHandles(ResultLambdaExpression resultFunc) {
+    if (mResultHandles.size() > 0) {
+      for (Result result : mResultHandles) {
+        resultFunc.ProcessResult(result);
+      }
+      mResultHandles.clear();
+    }
   }
 }
