@@ -31,7 +31,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-import java.lang.FunctionalInterface;
+import java.util.function.Consumer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
 
   @FunctionalInterface
   private interface ResultLambdaExpression {
-    void ProcessResult(Result result);
+    void processResult(Result result);
   }
 
   private static final String LOG_TAG = "baseflow.com/geolocator";
@@ -253,7 +253,7 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   private void SignalResultHandles(ResultLambdaExpression resultFunc) {
     if (mResultHandles.size() > 0) {
       for (Result result : mResultHandles) {
-        resultFunc.ProcessResult(result);
+        resultFunc.processResult(result);
       }
       mResultHandles.clear();
     }
