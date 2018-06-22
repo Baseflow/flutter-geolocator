@@ -1,17 +1,21 @@
 name: geolocator
 description: Geolocation plugin for Flutter
 version: 0.0.1
-author: Baseflow
+author: Baseflow <hello@baseflow.com>
 homepage: https://github.com/baseflowit/flutter-geolocator
 
 dependencies:
+  meta: "^1.0.5"
   flutter:
     sdk: flutter
-
 dev_dependencies:
   mockito: "^2.0.2"
   flutter_test:
     sdk: flutter
+
+environment:
+  sdk: ">=2.0.0-dev.28.0 <3.0.0"
+  flutter: ">=0.2.5 <2.0.0"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
