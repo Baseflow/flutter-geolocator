@@ -28,9 +28,8 @@ class Geolocator {
   Stream<Position> _onPositionChanged;
 
   /// Returns the current location.
-  Future<Position> get getPosition => _methodChannel
-      .invokeMethod('getPosition')
-      .then((result) => Position.fromMap(result));
+  Future<Position> get getPosition async =>
+      Position.fromMap(await _methodChannel.invokeMethod('getPosition'));
 
   /// Fires whenever the location changes.
   ///
