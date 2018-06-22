@@ -44,7 +44,9 @@ class Position {
   final double speedAccuracy;
 
   /// Converts the supplied [Map] to an instance of the [Position] class.
-  static Position fromMap(Map<String, double> positionMap) {
+  static Position fromMap(dynamic message) {
+    final Map<dynamic, dynamic> positionMap = message;
+
     if (!positionMap.containsKey('latitude'))
       throw new ArgumentError.value(positionMap, 'positionMap',
           'The supplied map doesn\'t contain the mandatory key `latitude`.');
