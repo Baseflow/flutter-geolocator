@@ -1,4 +1,4 @@
-package com.baseflow.fluttergeolocatorexample;
+package com.baseflow.flutter.plugin.geolocator.example;
 
 import android.os.Bundle;
 
