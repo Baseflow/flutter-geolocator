@@ -78,7 +78,7 @@ void main() {
 
   test('Retrieve the current position', () async {
     when(_methodChannel.invokeMethod('getPosition'))
-        .thenReturn(new Future<Map<String, double>>.value(_mockPosition));
+        .thenAnswer((_) async => _mockPosition);
 
     Position position = await _geolocator.getPosition;
 

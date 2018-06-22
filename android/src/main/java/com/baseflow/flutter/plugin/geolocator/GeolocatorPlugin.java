@@ -31,12 +31,19 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * GeolocatorPlugin
  */
 public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamHandler {
+
+  @FunctionalInterface
+  private interface ResultLambdaExpression {
+    void processResult(Result result);
+  }
 
   private static final String LOG_TAG = "baseflow.com/geolocator";
   private static final String METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods";
@@ -45,6 +52,7 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   private static final int REQUEST_CHECK_SETTINGS = 0x1;
   private static final long DEFAULT_REFRESH_INTERVAL_IN_MILLISECONDS = 1000;
 
+  private final List<Result> mResultHandles;
   private final Registrar mRegistrar;
   private final FusedLocationProviderClient mFusedLocationClient;
   private final SettingsClient mSettingsClient;
@@ -53,11 +61,11 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   private LocationCallback mLocationCallback;
   private PluginRegistry.RequestPermissionsResultListener mPermissionsResultListener;
   private EventChannel.EventSink mEventSink;
-  private Result mResult;
 
-  private GeolocatorPlugin(PluginRegistry.Registrar registrar){
+  private GeolocatorPlugin(PluginRegistry.Registrar registrar) {
     this.mRegistrar = registrar;
 
+    mResultHandles = new ArrayList<>();
     mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mRegistrar.activity());
     mSettingsClient = LocationServices.getSettingsClient(mRegistrar.activity());
 
@@ -87,12 +95,14 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     if (call.method.equals("getPosition")) {
-      mResult = result;
+      mResultHandles.add(result);
 
-      if (!hasPermissions()) {
-        requestPermissions();
-      } else {
-        acquirePosition();
+      if (mResultHandles.size() == 1) {
+        if (!hasPermissions()) {
+          requestPermissions();
+        } else {
+          acquirePosition();
+        }
       }
     } else {
       result.notImplemented();
@@ -105,41 +115,38 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
 
     // Make sure all permissions are available,
     // if not request for permissions and return.
-    if(!hasPermissions())
-    {
+    if (!hasPermissions()) {
       requestPermissions();
       return;
     }
 
     mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
-            .addOnSuccessListener(mRegistrar.activity(), new OnSuccessListener<LocationSettingsResponse>() {
-              @Override
-              public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback,
-                        Looper.myLooper());
+        .addOnSuccessListener(mRegistrar.activity(), new OnSuccessListener<LocationSettingsResponse>() {
+          @Override
+          public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+          }
+        }).addOnFailureListener(mRegistrar.activity(), new OnFailureListener() {
+          @Override
+          public void onFailure(@NonNull Exception e) {
+            int statusCode = ((ApiException) e).getStatusCode();
+            switch (statusCode) {
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+              try {
+                // Show the dialog by calling startResolutionForResult(), and check the
+                // result in onActivityResult().
+                ResolvableApiException rae = (ResolvableApiException) e;
+                rae.startResolutionForResult(mRegistrar.activity(), REQUEST_CHECK_SETTINGS);
+              } catch (IntentSender.SendIntentException sie) {
+                Log.i(LOG_TAG, "PendingIntent unable to execute request.");
               }
-            }).addOnFailureListener(mRegistrar.activity(), new OnFailureListener() {
-      @Override
-      public void onFailure(@NonNull Exception e) {
-        int statusCode = ((ApiException) e).getStatusCode();
-        switch (statusCode) {
-          case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-            try {
-              // Show the dialog by calling startResolutionForResult(), and check the
-              // result in onActivityResult().
-              ResolvableApiException rae = (ResolvableApiException) e;
-              rae.startResolutionForResult(mRegistrar.activity(), REQUEST_CHECK_SETTINGS);
-            } catch (IntentSender.SendIntentException sie) {
-              Log.i(LOG_TAG, "PendingIntent unable to execute request.");
+              break;
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+              String errorMessage = "Location settings are inadequate, and cannot be " + "fixed here. Fix in Settings.";
+              Log.e(LOG_TAG, errorMessage);
             }
-            break;
-          case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-            String errorMessage = "Location settings are inadequate, and cannot be "
-                    + "fixed here. Fix in Settings.";
-            Log.e(LOG_TAG, errorMessage);
-        }
-      }
-    });
+          }
+        });
   }
 
   @Override
@@ -149,16 +156,14 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   }
 
   private void createLocationCallback() {
-    mLocationCallback = new LocationCallback()
-    {
+    mLocationCallback = new LocationCallback() {
       @Override
-      public void onLocationResult(LocationResult locationResult)
-      {
+      public void onLocationResult(LocationResult locationResult) {
         super.onLocationResult(locationResult);
 
         Location location = locationResult.getLastLocation();
 
-        if(mEventSink != null && location != null) {
+        if (mEventSink != null && location != null) {
           mEventSink.success(LocationMapper.toHashMap(location));
         }
       }
@@ -177,23 +182,26 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
     mPermissionsResultListener = new PluginRegistry.RequestPermissionsResultListener() {
       @Override
       public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && permissions.length == 1 && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && permissions.length == 1
+            && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
           if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             acquirePosition();
           } else {
             if (!shouldShowRequestPermissionRationale()) {
-              if (mResult != null) {
-                mResult.error("PERMISSION_DENIED_NEVER_ASK", "Access to location data denied. To allow access to location services enable them in the device settings.", null);
-                mResult = null;
-              } else if (mEventSink != null) {
-                mEventSink.error("PERMISSION_DENIED_NEVER_ASK", "Access to location data denied. To allow access to location services enable them in the device settings.", null);
-                mEventSink = null;
-              }
+                SignalResultHandles(result -> result.error("PERMISSION_DENIED_NEVER_ASK",
+                      "Access to location data denied. To allow access to location services enable them in the device settings.",
+                      null));
+
+                if (mEventSink != null) {
+                  mEventSink.error("PERMISSION_DENIED_NEVER_ASK",
+                    "Access to location data denied. To allow access to location services enable them in the device settings.",
+                    null);
+                  mEventSink = null;
+                }
             } else {
-              if (mResult != null) {
-                mResult.error("PERMISSION_DENIED", "Access to location data denied", null);
-                mResult = null;
-              } else if (mEventSink != null) {
+              SignalResultHandles(result -> result.error("PERMISSION_DENIED", "Access to location data denied", null));
+
+              if (mEventSink != null) {
                 mEventSink.error("PERMISSION_DENIED", "Access to location data denied", null);
                 mEventSink = null;
               }
@@ -209,17 +217,19 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
   }
 
   private boolean hasPermissions() {
-    int permissionState = ActivityCompat.checkSelfPermission(mRegistrar.activity(), Manifest.permission.ACCESS_FINE_LOCATION);
+    int permissionState = ActivityCompat.checkSelfPermission(mRegistrar.activity(),
+        Manifest.permission.ACCESS_FINE_LOCATION);
     return permissionState == PackageManager.PERMISSION_GRANTED;
   }
 
   private void requestPermissions() {
-    ActivityCompat.requestPermissions(mRegistrar.activity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-            REQUEST_PERMISSIONS_REQUEST_CODE);
+    ActivityCompat.requestPermissions(mRegistrar.activity(), new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+        REQUEST_PERMISSIONS_REQUEST_CODE);
   }
 
   private boolean shouldShowRequestPermissionRationale() {
-    return ActivityCompat.shouldShowRequestPermissionRationale(mRegistrar.activity(), Manifest.permission.ACCESS_FINE_LOCATION);
+    return ActivityCompat.shouldShowRequestPermissionRationale(mRegistrar.activity(),
+        Manifest.permission.ACCESS_FINE_LOCATION);
   }
 
   private void acquirePosition() {
@@ -229,17 +239,22 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
         if (location != null) {
           Map<String, Double> position = LocationMapper.toHashMap(location);
 
-          if (mResult != null) {
-            mResult.success(position);
-            mResult = null;
-          }
+          SignalResultHandles(result -> result.success(position));
         } else {
-          if (mResult != null) {
-            mResult.error("ERROR", "Failed to get location.", null);
-          }
+          SignalResultHandles((result) -> result.error("ERROR", "Failed to get location.", null));
+
           // Do not send error on events otherwise it will produce an error
         }
       }
     });
+  }
+
+  private void SignalResultHandles(ResultLambdaExpression resultFunc) {
+    if (mResultHandles.size() > 0) {
+      for (Result result : mResultHandles) {
+        resultFunc.processResult(result);
+      }
+      mResultHandles.clear();
+    }
   }
 }
