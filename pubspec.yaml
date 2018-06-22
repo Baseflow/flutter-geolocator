@@ -1,11 +1,16 @@
-name: flutter_geolocator
-description: Geolocation plugin for Flutter (based on the excellent Geolocator plugin for Xamarin by James Montemagno)
+name: geolocator
+description: Geolocation plugin for Flutter
 version: 0.0.1
-author:
-homepage:
+author: Baseflow
+homepage: https://github.com/baseflowit/flutter-geolocator
 
 dependencies:
   flutter:
+    sdk: flutter
+
+dev_dependencies:
+  mockito: "^2.0.2"
+  flutter_test:
     sdk: flutter
 
 # For information on the generic Dart part of this file, see the
@@ -14,8 +19,8 @@ dependencies:
 # The following section is specific to Flutter.
 flutter:
   plugin:
-    androidPackage: com.baseflow.fluttergeolocator
-    pluginClass: FlutterGeolocatorPlugin
+    androidPackage: com.baseflow.flutter.plugin.geolocator
+    pluginClass: GeolocatorPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

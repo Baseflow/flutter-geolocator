@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_geolocator/flutter_geolocator.dart';
-import 'package:flutter_geolocator/models/position.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/position.dart';
 
 void main() => runApp(new MyApp());
 
@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FlutterGeolocator _geolocator = new FlutterGeolocator();
+  Geolocator _geolocator = new Geolocator();
   Position _position;
   StreamSubscription<Position> _positionSubscription;
 
@@ -24,10 +24,10 @@ class _MyAppState extends State<MyApp> {
 
     _positionSubscription =
         _geolocator.onPositionChanged.listen((Position position) {
-          setState(() {
-            _position = position;
-          });
-        });
+      setState(() {
+        _position = position;
+      });
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      position = await FlutterGeolocator.getPosition;
+      position = await _geolocator.getPosition;
     } on PlatformException {
       position = null;
     }
@@ -43,8 +43,7 @@ class _MyAppState extends State<MyApp> {
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
-    if (!mounted)
-      return;
+    if (!mounted) return;
 
     setState(() {
       _position = position;
@@ -53,7 +52,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final position = _position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString();
+    final position = _position == null
+        ? 'Unknown'
+        : _position.latitude.toString() + ', ' + _position.longitude.toString();
 
     return new MaterialApp(
       home: new Scaffold(
@@ -65,5 +66,15 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    if(_positionSubscription != null) {
+      _positionSubscription.cancel();
+      _positionSubscription = null;
+    }
+
+    super.dispose();
   }
 }
