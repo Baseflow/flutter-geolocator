@@ -4,13 +4,13 @@
 Pod::Spec.new do |s|
   s.name             = 'geolocator'
   s.version          = '0.0.1'
-  s.summary          = 'Geolocation plugin for Flutter'
+  s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
-Geolocation plugin for Flutter
+A new flutter plugin project.
                        DESC
-  s.homepage         = 'http://github.com/BaseflowIT/flutter-geolocator'
+  s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Baseflow' => 'hello@baseflow.com' }
+  s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
