@@ -1,6 +1,6 @@
 name: geolocator
 description: Geolocation plugin for Flutter
-version: 0.0.1
+version: 0.0.2
 author: Baseflow <hello@baseflow.com>
 homepage: https://github.com/baseflowit/flutter-geolocator
 
