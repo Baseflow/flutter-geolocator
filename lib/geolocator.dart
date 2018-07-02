@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:geolocator/models/geolocation_accuracy.dart';
+import 'package:geolocator/models/location_accuracy.dart';
 import 'package:meta/meta.dart';
 
 import 'models/position.dart';
@@ -32,7 +32,7 @@ class Geolocator {
   /// Returns the current location taking the supplied [desiredAccuracy] into account.
   /// 
   /// When the [desiredAccuracy] is not supplied, it defaults to medium.
-  Future<Position> getPosition([GeolocationAccuracy desiredAccuracy = GeolocationAccuracy.Medium]) async =>
+  Future<Position> getPosition([LocationAccuracy desiredAccuracy = LocationAccuracy.Medium]) async =>
       Position.fromMap(await _methodChannel.invokeMethod('getPosition', desiredAccuracy.index));
 
   /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
@@ -52,7 +52,7 @@ class Geolocator {
   /// ```
   /// 
   /// When the [desiredAccuracy] is not supplied, it defaults to medium.
-  Stream<Position> getPositionStream([GeolocationAccuracy desiredAccuracy = GeolocationAccuracy.Medium]) {
+  Stream<Position> getPositionStream([LocationAccuracy desiredAccuracy = LocationAccuracy.Medium]) {
     if (_onPositionChanged == null) {
       _onPositionChanged = _eventChannel.receiveBroadcastStream(desiredAccuracy.index).map<Position>(
           (element) => Position.fromMap(element.cast<String, double>()));
