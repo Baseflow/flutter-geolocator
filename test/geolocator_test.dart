@@ -80,7 +80,7 @@ void main() {
     when(_methodChannel.invokeMethod('getPosition'))
         .thenAnswer((_) async => _mockPosition);
 
-    Position position = await _geolocator.getPosition;
+    Position position = await _geolocator.getPosition();
 
     expect(position.latitude, _mockPosition['latitude']);
     expect(position.longitude, _mockPosition['longitude']);
@@ -105,16 +105,16 @@ void main() {
     });
 
     test('The receiveBroadcastStream should only be called once', () {
-      _geolocator.onPositionChanged;
-      _geolocator.onPositionChanged;
-      _geolocator.onPositionChanged;
+      _geolocator.getPositionStream();
+      _geolocator.getPositionStream();
+      _geolocator.getPositionStream();
 
       verify(_eventChannel.receiveBroadcastStream()).called(1);
     });
 
     test('Receive position changes', () async {
       final StreamQueue<Position> queue =
-          new StreamQueue<Position>(_geolocator.onPositionChanged);
+          new StreamQueue<Position>(_geolocator.getPositionStream());
 
       _controller.add(_mockPositions[0]);
       expect((await queue.next).toMap(), _mockPositions[0]);
