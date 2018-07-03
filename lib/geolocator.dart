@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:geolocator/models/location_accuracy.dart';
 import 'package:meta/meta.dart';
+
 import 'models/position.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
@@ -27,18 +29,22 @@ class Geolocator {
 
   Stream<Position> _onPositionChanged;
 
-  /// Returns the current location.
-  Future<Position> get getPosition async =>
-      Position.fromMap(await _methodChannel.invokeMethod('getPosition'));
+  /// Returns the current location taking the supplied [desiredAccuracy] into account.
+  /// 
+  /// When the [desiredAccuracy] is not supplied, it defaults to best.
+  Future<Position> getPosition([LocationAccuracy desiredAccuracy = LocationAccuracy.Best]) async {
+      var position = await _methodChannel.invokeMethod('getPosition', desiredAccuracy.index);
+      return Position.fromMap(position);
+  }
 
-  /// Fires whenever the location changes.
+  /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
   ///
   /// This event starts all location sensors on the device and will keep them
   /// active until you cancel listening to the stream or when the application
   /// is killed.
   ///
   /// ```
-  /// StreamSubscription<Position> positionStream = new FlutterGeolocator().onPositionChanged.listen(
+  /// StreamSubscription<Position> positionStream = new Geolocator().GetPostionStream().listen(
   ///   (Position position) => {
   ///     // Handle position changes
   ///   });
@@ -46,9 +52,11 @@ class Geolocator {
   /// // When no longer needed cancel the subscription
   /// positionStream.cancel();
   /// ```
-  Stream<Position> get onPositionChanged {
+  /// 
+  /// When the [desiredAccuracy] is not supplied, it defaults to best.
+  Stream<Position> getPositionStream([LocationAccuracy desiredAccuracy = LocationAccuracy.Best]) {
     if (_onPositionChanged == null) {
-      _onPositionChanged = _eventChannel.receiveBroadcastStream().map<Position>(
+      _onPositionChanged = _eventChannel.receiveBroadcastStream(desiredAccuracy.index).map<Position>(
           (element) => Position.fromMap(element.cast<String, double>()));
     }
 
