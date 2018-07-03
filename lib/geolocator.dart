@@ -31,9 +31,11 @@ class Geolocator {
 
   /// Returns the current location taking the supplied [desiredAccuracy] into account.
   /// 
-  /// When the [desiredAccuracy] is not supplied, it defaults to medium.
-  Future<Position> getPosition([LocationAccuracy desiredAccuracy = LocationAccuracy.Medium]) async =>
-      Position.fromMap(await _methodChannel.invokeMethod('getPosition', desiredAccuracy.index));
+  /// When the [desiredAccuracy] is not supplied, it defaults to best.
+  Future<Position> getPosition([LocationAccuracy desiredAccuracy = LocationAccuracy.Best]) async {
+      var position = await _methodChannel.invokeMethod('getPosition', desiredAccuracy.index);
+      return Position.fromMap(position);
+  }
 
   /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
   ///
@@ -51,8 +53,8 @@ class Geolocator {
   /// positionStream.cancel();
   /// ```
   /// 
-  /// When the [desiredAccuracy] is not supplied, it defaults to medium.
-  Stream<Position> getPositionStream([LocationAccuracy desiredAccuracy = LocationAccuracy.Medium]) {
+  /// When the [desiredAccuracy] is not supplied, it defaults to best.
+  Stream<Position> getPositionStream([LocationAccuracy desiredAccuracy = LocationAccuracy.Best]) {
     if (_onPositionChanged == null) {
       _onPositionChanged = _eventChannel.receiveBroadcastStream(desiredAccuracy.index).map<Position>(
           (element) => Position.fromMap(element.cast<String, double>()));
