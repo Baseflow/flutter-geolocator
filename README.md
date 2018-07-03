@@ -1,6 +1,6 @@
 # Flutter Geolocator Plugin
 
-A Flutter plugin which provides easy access to the platform specific location services ([FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient) on Android and [CLLocationManager](https://developer.apple.com/documentation/corelocation/cllocationmanager) on iOS). 
+A Flutter plugin which provides easy access to the platform specific location services ([LocationManager](https://developer.android.com/reference/android/location/LocationManager) on Android and [CLLocationManager](https://developer.apple.com/documentation/corelocation/cllocationmanager) on iOS). 
 
 Branch  | Build Status 
 ------- | ------------
@@ -53,22 +53,36 @@ To query the current location of the device simply make a call to the `getPositi
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/location_accuracy.dart';
 import 'package:geolocator/models/position.dart';
 
-Position position = await new Geolocator.getPosition;
+Position position = await new Geolocator().getPosition(LocationAccuracy.High);
 ```
 
 To listen for location changes you can subscribe to the `onPositionChanged` stream:
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/location_accuracy.dart';
 import 'package:geolocator/models/position.dart';
 
 Geolocator geolocator = new Geolocator();
-StreamSubscription<Position> positionStream = geolocator.onPositionChanged.listen(
+StreamSubscription<Position> positionStream = geolocator.getPositionStream(LocationAccuracy.High).listen(
     (Position position) {
         print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
     });
 ```
 
 See also the [example](example/lib/main.dart) project for a complete implementation.
+
+### Location accuracy
+
+The table below outlines the accuracy options per platform:
+
+|            | Android    | iOS   |
+|------------|-----------:|------:|
+| **Lowest** | 500m       | 3000m |
+| **Low**    | 500m       | 1000m |    
+| **Medium** | 100 - 500m | 100m  |
+| **High**   | 0 - 100m   | 10m   |
+| **Best**   | 0 - 100m   | ~0m   |

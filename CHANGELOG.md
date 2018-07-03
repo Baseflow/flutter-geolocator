@@ -1,3 +1,12 @@
+## [1.1.0]
+
+* Introduced the option to supply a desired accuracy. 
+
+> **Important:** 
+>
+>This introduces a breaking change, the `getPosition` and `onPositionChanged` properties have been replaced by methods (`getPosition([LocationAccuracy desiredAccuracy = LocationAccuracy.Best])` and `getPositionStream([LocationAccuracy desiredAccuracy = LocationAccuracy.Best])` respectively) accepting a parameter to indicate the desired accuracy.
+* Updated the Android part to make use of the [LocationManager](https://developer.android.com/reference/android/location/LocationManager) instead of the [FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient)
+
 ## [1.0.0]
 
 * Updated documentation
