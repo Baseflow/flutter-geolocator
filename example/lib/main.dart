@@ -19,12 +19,12 @@ class _MyAppState extends State<MyApp> {
   StreamSubscription<Position> _positionSubscription;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     initPlatformState();
 
     _positionSubscription =
-        _geolocator.getPositionStream(LocationAccuracy.High).listen((Position position) {
+        _geolocator.getPositionStream(LocationAccuracy.high).listen((Position position) {
       setState(() {
         _position = position;
       });
@@ -32,11 +32,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  initPlatformState() async {
+  void initPlatformState() async {
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      position = await _geolocator.getPosition(LocationAccuracy.High);
+      position = await _geolocator.getPosition(LocationAccuracy.high);
     } on PlatformException {
       position = null;
     }
