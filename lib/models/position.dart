@@ -43,6 +43,12 @@ class Position {
   /// The speedAccuracy is not available on all devices. In these cases the value is 0.0.
   final double speedAccuracy;
 
+  static List<Position> fromMaps(dynamic message) {
+    final List<Map<dynamic, dynamic>> positionMaps =  message;
+
+    return positionMaps.map((m) => Position.fromMap(m));
+  }
+
   /// Converts the supplied [Map] to an instance of the [Position] class.
   static Position fromMap(dynamic message) {
     final Map<dynamic, dynamic> positionMap = message;

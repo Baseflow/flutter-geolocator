@@ -11,7 +11,7 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
     private static let EVENT_CHANNEL_NAME = "flutter.baseflow.com/geolocator/events"
     
     private var _streamLocationService: StreamLocationService?
-    private var _oneTimeLocationServices: [String:LocationService] = [:];
+    private var _locationServices: [String:TaskProtocol] = [:];
     
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -24,29 +24,25 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        if(call.method == "getPosition") {
-            if let argument = call.arguments as? Int, let accuracy = GeolocationAccuracy(rawValue: argument) {
-                
-                let taskId = UUID().uuidString
-                let completionAction: (String) -> Void = {
-                    (taskId) in self._oneTimeLocationServices.removeValue(forKey: taskId)
-                }
-                let oneTimeLocationService = OneTimeLocationService.init(
-                    taskId: taskId,
-                    resultHandler: result,
-                    completionHandler: completionAction);
-                
-                _oneTimeLocationServices[taskId] = oneTimeLocationService
-                
-                let clAccuracy = determineAccuracy(accuracy: accuracy)
-                oneTimeLocationService.startTracking(accuracy: clAccuracy)
-            } else {
-                result(FlutterError.init(
-                    code: "INVALID_ARGUMENT",
-                    message:"The supplied argument is invalid.",
-                    details:nil))
-            }
+        let context = buildTaskContext(arguments: call.arguments, resultHandler: result)
+        let completionAction: (String) -> Void = {
+            (taskId) in self._locationServices.removeValue(forKey: taskId)
+        }
+        
+        if call.method == "getPosition" {
+            let oneTimeLocationService = OneTimeLocationService.init(
+                context: context,
+                completionHandler: completionAction);
             
+            _locationServices[context.taskID] = oneTimeLocationService
+            oneTimeLocationService.startTask()
+        } else if call.method == "getPlacemark" {
+            let geocodingService = GeocodingService.init(
+                context: context,
+                completionHandler: completionAction)
+            
+            _locationServices[context.taskID] = geocodingService
+            geocodingService.startTask()
         } else {
             result(FlutterMethodNotImplemented)
         }
@@ -59,37 +55,33 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
                 message: "You are already listening for location changes. Create a new instance or stop listening to the current stream.",
                 details: nil)
         }
+
+        let context = buildTaskContext(arguments: arguments, resultHandler: events)
         
-        if let argument = arguments as? Int, let accuracy = GeolocationAccuracy(rawValue: argument) {
-            let clAccuracy = determineAccuracy(accuracy: accuracy)
-            
-            _streamLocationService = StreamLocationService.init(
-                taskId: UUID().uuidString,
-                resultHandler: events,
-                completionHandler: nil);
-            
-            _streamLocationService?.startTracking(accuracy: clAccuracy)
-        }
+        _streamLocationService = StreamLocationService.init(
+            context: context,
+            completionHandler: nil);
+        
+        _streamLocationService?.startTask()
         
         return nil
     }
 
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         if _streamLocationService != nil {
-            _streamLocationService?.stopTracking()
+            _streamLocationService?.stopTask()
             _streamLocationService = nil
         }
         
         return nil
     }
-
-    private func determineAccuracy(accuracy: GeolocationAccuracy) -> CLLocationAccuracy {
-        switch(accuracy) {
-            case .Lowest: return kCLLocationAccuracyThreeKilometers
-            case .Low: return kCLLocationAccuracyKilometer
-            case .Medium: return kCLLocationAccuracyHundredMeters
-            case .High: return kCLLocationAccuracyNearestTenMeters
-            case .Best: return kCLLocationAccuracyBest
-        }
+    
+    private func buildTaskContext(arguments: Any?, resultHandler: @escaping ResultHandler) -> TaskContext {
+        let taskID = UUID().uuidString
+        
+        return TaskContext.init(
+            taskID: taskID,
+            resultHandler: resultHandler,
+            arguments: arguments)
     }
 }

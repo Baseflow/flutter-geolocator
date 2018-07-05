@@ -27,7 +27,7 @@ class Geolocator {
   final MethodChannel _methodChannel;
   final EventChannel _eventChannel;
 
-  Stream<Position> _onPositionChanged;
+  Stream<Position> _onPositionChanged
 
   /// Returns the current location taking the supplied [desiredAccuracy] into account.
   ///
@@ -37,6 +37,16 @@ class Geolocator {
     var position =
         await _methodChannel.invokeMethod('getPosition', desiredAccuracy.index);
     return Position.fromMap(position);
+  }
+
+  /// Returns a list of positions found for the supplied address.
+  /// 
+  /// In most situations the returned list should only contain one entry.
+  /// However in some situations where the supplied address could not be 
+  /// resolved into a single position, multiple positions may be returned.
+  Future<List<Position>> getPlacemark(String address) async {
+    var positions = await _methodChannel.invokeMethod('getPlacemark', address);
+    return Position.fromMaps(positions);
   }
 
   /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
