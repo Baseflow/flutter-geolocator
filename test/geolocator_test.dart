@@ -78,7 +78,7 @@ void main() {
   });
 
   test('Retrieve the current position', () async {
-    when(_methodChannel.invokeMethod('getPosition', LocationAccuracy.Best.index))
+    when(_methodChannel.invokeMethod('getPosition', LocationAccuracy.best.index))
         .thenAnswer((_) async => _mockPosition);
 
     Position position = await _geolocator.getPosition();
@@ -97,7 +97,7 @@ void main() {
 
     setUp(() {
       _controller = new StreamController<Map<String, double>>();
-      when(_eventChannel.receiveBroadcastStream(LocationAccuracy.Best.index))
+      when(_eventChannel.receiveBroadcastStream(LocationAccuracy.best.index))
           .thenReturn(_controller.stream);
     });
 
@@ -110,12 +110,12 @@ void main() {
       _geolocator.getPositionStream();
       _geolocator.getPositionStream();
 
-      verify(_eventChannel.receiveBroadcastStream(LocationAccuracy.Best.index)).called(1);
+      verify(_eventChannel.receiveBroadcastStream(LocationAccuracy.best.index)).called(1);
     });
 
     test('Receive position changes', () async {
       final StreamQueue<Position> queue =
-          new StreamQueue<Position>(_geolocator.getPositionStream(LocationAccuracy.Best));
+          new StreamQueue<Position>(_geolocator.getPositionStream(LocationAccuracy.best));
 
       _controller.add(_mockPositions[0]);
       expect((await queue.next).toMap(), _mockPositions[0]);
