@@ -86,3 +86,11 @@ The table below outlines the accuracy options per platform:
 | **Medium** | 100 - 500m | 100m  |
 | **High**   | 0 - 100m   | 10m   |
 | **Best**   | 0 - 100m   | ~0m   |
+
+## Issues
+
+Please file any issues, bugs or feature request as an issue on our [GitHub](https://github.com/BaseflowIT/flutter-geolocator/issues) page.
+
+## Want to contribute
+
+I you would like to contribute to the plugin (e.g. by improving the documentation, solving a bug or adding a cool new feature), please carefully review our [contribution guide](CONTRIBUTING.md) and send us your [pull request](https://github.com/BaseflowIT/flutter-geolocator/pulls).
