@@ -18,8 +18,10 @@ class _MyAppState extends State<MyApp> {
   Geolocator _geolocator = new Geolocator();
   Position _position;
   String _placemarkCoords = '';
+  String _placemark = '';
   StreamSubscription<Position> _positionSubscription;
   TextEditingController _addressTextController = new TextEditingController();
+  TextEditingController _coordinatesTextController = new TextEditingController();
 
   @override
   void initState() {
@@ -54,13 +56,27 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void onPressed() async {
+    void onLookupCoordinatesPressed() async {
     List<Placemark> placemarks = await _geolocator.toPlacemark(_addressTextController.text);
 
     if(placemarks != null && placemarks.length >= 1) {
       var pos = placemarks[0];
       setState(() {
               _placemarkCoords = pos.position.latitude.toString() + ', ' + pos.position.longitude.toString();
+            });
+    }
+  }
+
+  void onLookupAddressPressed() async {
+    var coords = _coordinatesTextController.text.split(',');
+    var latitude = double.parse(coords[0]);
+    var longitude = double.parse(coords[1]);
+    List<Placemark> placemarks = await _geolocator.fromPlacemark(latitude, longitude);
+
+    if(placemarks != null && placemarks.length >= 1) {
+      var pos = placemarks[0];
+      setState(() {
+              _placemark = pos.thoroughfare + ", " + pos.locality;
             });
     }
   }
@@ -80,14 +96,31 @@ class _MyAppState extends State<MyApp> {
           child: new Column (
             children: <Widget>[
               new Text('Current location: $position\n'),
+              new Divider(),
               new TextField(
+                decoration: new InputDecoration(
+                  hintText: "Please enter an address"
+                ),
                 controller: _addressTextController,
               ),
               new RaisedButton(
                 child: new Text('Look up...'),
-                onPressed: (){onPressed();},
+                onPressed: (){onLookupCoordinatesPressed();},
               ),
               new Text(_placemarkCoords),
+              new Divider(),
+              new TextField(
+                decoration: new InputDecoration(
+                  hintText: "latitude,longitude"
+                ),
+                controller: _coordinatesTextController,
+              ),
+              new RaisedButton(
+                child: new Text('Look up...'),
+                onPressed: (){onLookupAddressPressed();},
+              ),
+              new Text(_placemark),
+              new Divider(),
           ],
         ),
       )
