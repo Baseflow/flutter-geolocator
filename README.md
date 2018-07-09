@@ -8,7 +8,8 @@ develop | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.s
 master  | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.svg?branch=master)](https://travis-ci.com/BaseflowIT/flutter-geolocator)
 
 ## Features
-* Get one-shot location
+
+* Get the current location of the device
 * Get continuous location updates
 
 ## Usage
@@ -21,6 +22,34 @@ dependencies:
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
+
+## Example
+
+To query the current location of the device simply make a call to the `getPosition` method:
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/location_accuracy.dart';
+import 'package:geolocator/models/position.dart';
+
+Position position = await new Geolocator().getPosition(LocationAccuracy.High);
+```
+
+To listen for location changes you can subscribe to the `onPositionChanged` stream:
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/location_accuracy.dart';
+import 'package:geolocator/models/position.dart';
+
+Geolocator geolocator = new Geolocator();
+StreamSubscription<Position> positionStream = geolocator.getPositionStream(LocationAccuracy.High).listen(
+    (Position position) {
+        print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
+    });
+```
+
+See also the [example](example/lib/main.dart) project for a complete implementation.
 
 ## Permissions
 
@@ -51,34 +80,6 @@ If you would like to access the device's location when your App is running in th
 <string>This app needs access to location when open and in the background.</string>
 ```
 
-## Example
-
-To query the current location of the device simply make a call to the `getPosition` method:
-
-``` dart
-import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/location_accuracy.dart';
-import 'package:geolocator/models/position.dart';
-
-Position position = await new Geolocator().getPosition(LocationAccuracy.High);
-```
-
-To listen for location changes you can subscribe to the `onPositionChanged` stream:
-
-``` dart
-import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/location_accuracy.dart';
-import 'package:geolocator/models/position.dart';
-
-Geolocator geolocator = new Geolocator();
-StreamSubscription<Position> positionStream = geolocator.getPositionStream(LocationAccuracy.High).listen(
-    (Position position) {
-        print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
-    });
-```
-
-See also the [example](example/lib/main.dart) project for a complete implementation.
-
 ### Location accuracy
 
 The table below outlines the accuracy options per platform:
@@ -97,4 +98,8 @@ Please file any issues, bugs or feature request as an issue on our [GitHub](http
 
 ## Want to contribute
 
-I you would like to contribute to the plugin (e.g. by improving the documentation, solving a bug or adding a cool new feature), please carefully review our [contribution guide](CONTRIBUTING.md) and send us your [pull request](https://github.com/BaseflowIT/flutter-geolocator/pulls).
+If you would like to contribute to the plugin (e.g. by improving the documentation, solving a bug or adding a cool new feature), please carefully review our [contribution guide](CONTRIBUTING.md) and send us your [pull request](https://github.com/BaseflowIT/flutter-geolocator/pulls).
+
+## Author
+
+This Geolocator plugin for Flutter is developed by [Baseflow](https://baseflow.com). You can contact us at <hello@baseflow.com>
