@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/location_accuracy.dart';
 import 'package:geolocator/models/position.dart';
 
 void main() => runApp(new MyApp());
@@ -18,12 +19,12 @@ class _MyAppState extends State<MyApp> {
   StreamSubscription<Position> _positionSubscription;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     initPlatformState();
 
     _positionSubscription =
-        _geolocator.onPositionChanged.listen((Position position) {
+        _geolocator.getPositionStream(LocationAccuracy.high).listen((Position position) {
       setState(() {
         _position = position;
       });
@@ -31,11 +32,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  initPlatformState() async {
+  void initPlatformState() async {
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      position = await _geolocator.getPosition;
+      position = await _geolocator.getPosition(LocationAccuracy.high);
     } on PlatformException {
       position = null;
     }
