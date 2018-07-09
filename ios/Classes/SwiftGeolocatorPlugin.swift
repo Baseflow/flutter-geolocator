@@ -10,8 +10,8 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
     private static let METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods"
     private static let EVENT_CHANNEL_NAME = "flutter.baseflow.com/geolocator/events"
     
-    private var _streamLocationService: StreamLocationService?
-    private var _locationServices: [String:TaskProtocol] = [:];
+    private var _streamLocationService: StreamLocationTask?
+    private var _tasks: [UUID:TaskProtocol] = [:];
     
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -24,28 +24,30 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let context = buildTaskContext(arguments: call.arguments, resultHandler: result)
-        let completionAction: (String) -> Void = {
-            (taskId) in self._locationServices.removeValue(forKey: taskId)
+        let completionAction: (UUID) -> Void = {
+            (taskId) in self._tasks.removeValue(forKey: taskId)
         }
         
         if call.method == "getPosition" {
-            let oneTimeLocationService = OneTimeLocationService.init(
-                context: context,
-                completionHandler: completionAction);
-            
-            _locationServices[context.taskID] = oneTimeLocationService
-            oneTimeLocationService.startTask()
-        } else if call.method == "getPlacemark" {
-            let geocodingService = GeocodingService.init(
-                context: context,
-                completionHandler: completionAction)
-            
-            _locationServices[context.taskID] = geocodingService
-            geocodingService.startTask()
+            executeTask(task: OneTimeLocationTask.init(
+                context: buildTaskContext(arguments: call.arguments, resultHandler: result),
+                completionHandler: completionAction))
+        } else if call.method == "toPlacemark" {
+            executeTask(task: ForwardGeocodeTask.init(
+                context: buildTaskContext(arguments: call.arguments, resultHandler: result),
+                completionHandler: completionAction))
+        } else if call.method == "fromPlacemark" {
+            executeTask(task: ReverseGeocodeTask.init(
+                context: buildTaskContext(arguments: call.arguments, resultHandler: result),
+                completionHandler: completionAction))
         } else {
             result(FlutterMethodNotImplemented)
         }
+    }
+    
+    private func executeTask(task: TaskProtocol) {
+        _tasks[task.taskID] = task
+        task.startTask()
     }
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
@@ -58,7 +60,7 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
 
         let context = buildTaskContext(arguments: arguments, resultHandler: events)
         
-        _streamLocationService = StreamLocationService.init(
+        _streamLocationService = StreamLocationTask.init(
             context: context,
             completionHandler: nil);
         
@@ -77,10 +79,7 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
     }
     
     private func buildTaskContext(arguments: Any?, resultHandler: @escaping ResultHandler) -> TaskContext {
-        let taskID = UUID().uuidString
-        
         return TaskContext.init(
-            taskID: taskID,
             resultHandler: resultHandler,
             arguments: arguments)
     }

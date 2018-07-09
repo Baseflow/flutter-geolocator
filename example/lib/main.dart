@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/location_accuracy.dart';
+import 'package:geolocator/models/placemark.dart';
 import 'package:geolocator/models/position.dart';
 
 void main() => runApp(new MyApp());
@@ -16,7 +17,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Geolocator _geolocator = new Geolocator();
   Position _position;
+  String _placemarkCoords = '';
   StreamSubscription<Position> _positionSubscription;
+  TextEditingController _addressTextController = new TextEditingController();
 
   @override
   void initState() {
@@ -51,6 +54,17 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void onPressed() async {
+    List<Placemark> placemarks = await _geolocator.toPlacemark(_addressTextController.text);
+
+    if(placemarks != null && placemarks.length >= 1) {
+      var pos = placemarks[0];
+      setState(() {
+              _placemarkCoords = pos.position.latitude.toString() + ', ' + pos.position.longitude.toString();
+            });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final position = _position == null
@@ -63,9 +77,21 @@ class _MyAppState extends State<MyApp> {
           title: new Text('Plugin example app'),
         ),
         body: new Center(
-          child: new Text('Current location: $position\n'),
+          child: new Column (
+            children: <Widget>[
+              new Text('Current location: $position\n'),
+              new TextField(
+                controller: _addressTextController,
+              ),
+              new RaisedButton(
+                child: new Text('Look up...'),
+                onPressed: (){onPressed();},
+              ),
+              new Text(_placemarkCoords),
+          ],
         ),
-      ),
+      )
+      )
     );
   }
 

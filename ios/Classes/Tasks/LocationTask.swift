@@ -9,7 +9,7 @@ import CoreLocation
 import Flutter
 import Foundation
 
-class LocationService : NSObject, TaskProtocol, CLLocationManagerDelegate {
+class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
     private var _desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest
     private var _locationManager: CLLocationManager?
     
@@ -17,6 +17,7 @@ class LocationService : NSObject, TaskProtocol, CLLocationManagerDelegate {
         context: TaskContext,
         completionHandler: CompletionHandler?) {
         
+        self.taskID = UUID.init()
         self.context = context
         self.completionHandler = completionHandler
         
@@ -25,6 +26,7 @@ class LocationService : NSObject, TaskProtocol, CLLocationManagerDelegate {
         _desiredAccuracy = parseAccuracy(accuracy: context.arguments)
     }
     
+    let taskID: UUID
     let context: TaskContext
     let completionHandler: CompletionHandler?
     
@@ -59,7 +61,7 @@ class LocationService : NSObject, TaskProtocol, CLLocationManagerDelegate {
         }
         
         guard let action = completionHandler else { return }
-        action(context.taskID)
+        action(taskID)
     }
     
     private func parseAccuracy(accuracy: Any?) -> CLLocationAccuracy {
@@ -77,7 +79,7 @@ class LocationService : NSObject, TaskProtocol, CLLocationManagerDelegate {
     }
 }
 
-final class OneTimeLocationService : LocationService {
+final class OneTimeLocationTask : LocationTask {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let positionDict = location.toDictionary()
@@ -96,7 +98,7 @@ final class OneTimeLocationService : LocationService {
     }
 }
 
-final class StreamLocationService : LocationService {
+final class StreamLocationTask : LocationTask {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let positionDict = location.toDictionary()

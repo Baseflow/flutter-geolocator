@@ -7,11 +7,12 @@
 
 import Foundation
 
-typealias CompletionHandler = (_ taskID: String) -> ()
+typealias CompletionHandler = (_ taskID: UUID) -> ()
 
 protocol TaskProtocol {
     init(context: TaskContext, completionHandler: CompletionHandler?)
     
+    var taskID: UUID { get }
     var context: TaskContext { get }
     var completionHandler: CompletionHandler? { get }
     

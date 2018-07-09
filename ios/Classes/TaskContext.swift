@@ -11,13 +11,11 @@ typealias ResultHandler = (_ result: Any) -> ()
 
 class TaskContext : NSObject {
     
-    init(taskID: String, resultHandler: @escaping ResultHandler, arguments: Any?) {
-        self.taskID = taskID
+    init(resultHandler: @escaping ResultHandler, arguments: Any?) {
         self.resultHandler = resultHandler
         self.arguments = arguments
     }
     
-    let taskID: String
     let arguments: Any?
     let resultHandler: ResultHandler
 }
