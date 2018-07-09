@@ -41,9 +41,9 @@ class Geolocator {
   }
 
   /// Returns a list of [Placemark] instances found for the supplied address.
-  /// 
+  ///
   /// In most situations the returned list should only contain one entry.
-  /// However in some situations where the supplied address could not be 
+  /// However in some situations where the supplied address could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
   Future<List<Placemark>> toPlacemark(String address) async {
     var placemarks = await _methodChannel.invokeMethod('toPlacemark', address);
@@ -51,12 +51,14 @@ class Geolocator {
   }
 
   /// Returns a list of [Placemark] instances found for the supplied address.
-  /// 
+  ///
   /// In most situations the returned list should only contain one entry.
-  /// However in some situations where the supplied address could not be 
+  /// However in some situations where the supplied address could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
-  Future<List<Placemark>> fromPlacemark(double latitude, double longitude) async {
-    var placemarks = await _methodChannel.invokeMethod('fromPlacemark', <String, double> {"latitude": latitude, "longitude": longitude});
+  Future<List<Placemark>> fromPlacemark(
+      double latitude, double longitude) async {
+    var placemarks = await _methodChannel.invokeMethod('fromPlacemark',
+        <String, double>{"latitude": latitude, "longitude": longitude});
     return Placemark.fromMaps(placemarks);
   }
 

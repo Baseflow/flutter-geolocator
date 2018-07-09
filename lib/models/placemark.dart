@@ -2,19 +2,18 @@ import 'package:geolocator/models/position.dart';
 
 /// Contains detailed placemark information.
 class Placemark {
-  Placemark._({
-    this.name,
-    this.isoCountryCode,
-    this.country,
-    this.postalCode,
-    this.administrativeArea,
-    this.subAdministratieArea,
-    this.locality,
-    this.subLocality,
-    this.thoroughfare,
-    this.subThoroughfare,
-    this.position
-  });
+  Placemark._(
+      {this.name,
+      this.isoCountryCode,
+      this.country,
+      this.postalCode,
+      this.administrativeArea,
+      this.subAdministratieArea,
+      this.locality,
+      this.subLocality,
+      this.thoroughfare,
+      this.subThoroughfare,
+      this.position});
 
   /// The name of the placemark.
   final String name;
@@ -57,19 +56,20 @@ class Placemark {
 
   /// Converts the supplied [Map] to an instance of the [Placemark] class.
   static Placemark fromMap(dynamic message) {
-    final Map<dynamic, dynamic> placemarkMap = message;  
+    final Map<dynamic, dynamic> placemarkMap = message;
 
     return new Placemark._(
-        name: placemarkMap['name'] ?? "",
-        isoCountryCode: placemarkMap['isoCountryCode'] ?? "",
-        country: placemarkMap["country"] ?? "",
-        postalCode: placemarkMap["postalCode"] ?? "",
-        administrativeArea: placemarkMap["administrativeArea"] ?? "",
-        subAdministratieArea: placemarkMap["subAdministrativeArea"] ?? "",
-        locality: placemarkMap["locality"] ?? "",
-        subLocality: placemarkMap["subLocality"] ?? "",
-        thoroughfare: placemarkMap["thoroughfare"] ?? "",
-        subThoroughfare: placemarkMap["subThoroughfare"] ?? "",
-        position: Position.fromMap(placemarkMap['location']),);
+      name: placemarkMap['name'] ?? "",
+      isoCountryCode: placemarkMap['isoCountryCode'] ?? "",
+      country: placemarkMap["country"] ?? "",
+      postalCode: placemarkMap["postalCode"] ?? "",
+      administrativeArea: placemarkMap["administrativeArea"] ?? "",
+      subAdministratieArea: placemarkMap["subAdministrativeArea"] ?? "",
+      locality: placemarkMap["locality"] ?? "",
+      subLocality: placemarkMap["subLocality"] ?? "",
+      thoroughfare: placemarkMap["thoroughfare"] ?? "",
+      subThoroughfare: placemarkMap["subThoroughfare"] ?? "",
+      position: Position.fromMap(placemarkMap['location']),
+    );
   }
 }

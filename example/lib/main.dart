@@ -21,15 +21,17 @@ class _MyAppState extends State<MyApp> {
   String _placemark = '';
   StreamSubscription<Position> _positionSubscription;
   TextEditingController _addressTextController = new TextEditingController();
-  TextEditingController _coordinatesTextController = new TextEditingController();
+  TextEditingController _coordinatesTextController =
+      new TextEditingController();
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
 
-    _positionSubscription =
-        _geolocator.getPositionStream(LocationAccuracy.high).listen((Position position) {
+    _positionSubscription = _geolocator
+        .getPositionStream(LocationAccuracy.high)
+        .listen((Position position) {
       setState(() {
         _position = position;
       });
@@ -56,14 +58,17 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-    void onLookupCoordinatesPressed() async {
-    List<Placemark> placemarks = await _geolocator.toPlacemark(_addressTextController.text);
+  void onLookupCoordinatesPressed() async {
+    List<Placemark> placemarks =
+        await _geolocator.toPlacemark(_addressTextController.text);
 
-    if(placemarks != null && placemarks.length >= 1) {
+    if (placemarks != null && placemarks.length >= 1) {
       var pos = placemarks[0];
       setState(() {
-              _placemarkCoords = pos.position.latitude.toString() + ', ' + pos.position.longitude.toString();
-            });
+        _placemarkCoords = pos.position.latitude.toString() +
+            ', ' +
+            pos.position.longitude.toString();
+      });
     }
   }
 
@@ -71,13 +76,14 @@ class _MyAppState extends State<MyApp> {
     var coords = _coordinatesTextController.text.split(',');
     var latitude = double.parse(coords[0]);
     var longitude = double.parse(coords[1]);
-    List<Placemark> placemarks = await _geolocator.fromPlacemark(latitude, longitude);
+    List<Placemark> placemarks =
+        await _geolocator.fromPlacemark(latitude, longitude);
 
-    if(placemarks != null && placemarks.length >= 1) {
+    if (placemarks != null && placemarks.length >= 1) {
       var pos = placemarks[0];
       setState(() {
-              _placemark = pos.thoroughfare + ", " + pos.locality;
-            });
+        _placemark = pos.thoroughfare + ", " + pos.locality;
+      });
     }
   }
 
@@ -88,49 +94,49 @@ class _MyAppState extends State<MyApp> {
         : _position.latitude.toString() + ', ' + _position.longitude.toString();
 
     return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Plugin example app'),
-        ),
-        body: new Center(
-          child: new Column (
-            children: <Widget>[
-              new Text('Current location: $position\n'),
-              new Divider(),
-              new TextField(
-                decoration: new InputDecoration(
-                  hintText: "Please enter an address"
-                ),
-                controller: _addressTextController,
+        home: new Scaffold(
+            appBar: new AppBar(
+              title: new Text('Plugin example app'),
+            ),
+            body: new Center(
+              child: new Column(
+                children: <Widget>[
+                  new Text('Current location: $position\n'),
+                  new Divider(),
+                  new TextField(
+                    decoration: new InputDecoration(
+                        hintText: "Please enter an address"),
+                    controller: _addressTextController,
+                  ),
+                  new RaisedButton(
+                    child: new Text('Look up...'),
+                    onPressed: () {
+                      onLookupCoordinatesPressed();
+                    },
+                  ),
+                  new Text(_placemarkCoords),
+                  new Divider(),
+                  new TextField(
+                    decoration:
+                        new InputDecoration(hintText: "latitude,longitude"),
+                    controller: _coordinatesTextController,
+                  ),
+                  new RaisedButton(
+                    child: new Text('Look up...'),
+                    onPressed: () {
+                      onLookupAddressPressed();
+                    },
+                  ),
+                  new Text(_placemark),
+                  new Divider(),
+                ],
               ),
-              new RaisedButton(
-                child: new Text('Look up...'),
-                onPressed: (){onLookupCoordinatesPressed();},
-              ),
-              new Text(_placemarkCoords),
-              new Divider(),
-              new TextField(
-                decoration: new InputDecoration(
-                  hintText: "latitude,longitude"
-                ),
-                controller: _coordinatesTextController,
-              ),
-              new RaisedButton(
-                child: new Text('Look up...'),
-                onPressed: (){onLookupAddressPressed();},
-              ),
-              new Text(_placemark),
-              new Divider(),
-          ],
-        ),
-      )
-      )
-    );
+            )));
   }
 
   @override
   void dispose() {
-    if(_positionSubscription != null) {
+    if (_positionSubscription != null) {
       _positionSubscription.cancel();
       _positionSubscription = null;
     }
