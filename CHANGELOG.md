@@ -1,3 +1,7 @@
+## [1.2.0]
+
+* Added support to translate an address into geocoordinates and vice versa (a.k.a. Geocoding). See the [README.md](README.md) file for more information.
+
 ## [1.1.2]
 
 * Fixed reported formatting issues

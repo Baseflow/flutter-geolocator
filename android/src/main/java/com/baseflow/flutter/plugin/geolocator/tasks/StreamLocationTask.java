@@ -1,4 +1,4 @@
-package com.baseflow.flutter.plugin.geolocator.services;
+package com.baseflow.flutter.plugin.geolocator.tasks;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -6,26 +6,15 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 
-import com.baseflow.flutter.plugin.geolocator.GeolocationAccuracy;
+import com.baseflow.flutter.plugin.geolocator.data.GeolocationAccuracy;
+import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
 import com.google.android.gms.common.util.Strings;
 
-import java.util.UUID;
-
-import io.flutter.plugin.common.EventChannel;
-import io.flutter.plugin.common.PluginRegistry;
-
-public class StreamLocationService extends LocationService {
-    private final EventChannel.EventSink mEventSink;
-
+public class StreamLocationTask extends LocationTask {
     private StreamLocationListener mLocationListener;
 
-    public StreamLocationService(UUID taskID,
-                                 EventChannel.EventSink eventSink,
-                                 PluginRegistry.Registrar registrar)
-    {
-        super(taskID, registrar);
-
-        mEventSink = eventSink;
+    public StreamLocationTask(TaskContext context) {
+        super(context);
     }
 
     @Override
@@ -68,16 +57,8 @@ public class StreamLocationService extends LocationService {
     }
 
     @Override
-    public void stopTracking() {
-        LocationManager locationManager = getLocationManager();
-        locationManager.removeUpdates(mLocationListener);
-
-        super.stopTracking();
-    }
-
-    @Override
     protected void handleError(String code, String message) {
-        mEventSink.error(
+        getTaskContext().getResult().error(
                 code,
                 message,
                 null);
@@ -103,7 +84,7 @@ public class StreamLocationService extends LocationService {
         public synchronized void onLocationChanged(Location location) {
             if(isBetterLocation(location, mBestLocation) && location.getAccuracy() <= mDesiredAccuracy) {
                 mBestLocation = location;
-                mEventSink.success(LocationMapper.toHashMap(location));
+                getTaskContext().getResult().success(LocationMapper.toHashMap(location));
                 return;
             }
         }

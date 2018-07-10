@@ -31,3 +31,6 @@
 *.nupkg   binary
 *.png     binary
 *.sdf     binary
+
+*.java linguist-language=Dart
+*.swift linguist-language=Dart

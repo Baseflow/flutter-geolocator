@@ -9,30 +9,28 @@ import CoreLocation
 import Flutter
 import Foundation
 
-protocol LocationServiceProtocol : CLLocationManagerDelegate {
-    func startTracking(accuracy: CLLocationAccuracy) -> Void
-    func stopTracking() -> Void
-}
-
-class LocationService : NSObject, LocationServiceProtocol {
-    typealias ResultHandler = (_ result: Any) -> ()
-    typealias CompletionHandler = (_ taskId: String) -> ()
-    
-    private let _taskId: String
+class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
+    private var _desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest
     private var _locationManager: CLLocationManager?
-    private var _completionHandler: CompletionHandler? = nil
     
-    let _resultHandler: ResultHandler
-    
-    init(taskId: String,
-         resultHandler: @escaping ResultHandler,
-         completionHandler: ((String) -> ())?) {
-        _taskId = taskId
-        _completionHandler = completionHandler
-        _resultHandler = resultHandler
+    required init(
+        context: TaskContext,
+        completionHandler: CompletionHandler?) {
+        
+        self.taskID = UUID.init()
+        self.context = context
+        self.completionHandler = completionHandler
+        
+        super.init()
+        
+        _desiredAccuracy = parseAccuracy(accuracy: context.arguments)
     }
     
-    public func startTracking(accuracy: CLLocationAccuracy) {
+    let taskID: UUID
+    let context: TaskContext
+    let completionHandler: CompletionHandler?
+    
+    func startTask() {
         if(_locationManager == nil)
         {
             _locationManager = CLLocationManager()
@@ -51,55 +49,69 @@ class LocationService : NSObject, LocationServiceProtocol {
                 
             }
             
-            _locationManager!.desiredAccuracy = accuracy;
+            _locationManager!.desiredAccuracy = _desiredAccuracy;
         }
         
         _locationManager!.startUpdatingLocation()
     }
     
-    public func stopTracking() {
+    func stopTask() {
         if(_locationManager != nil) {
             _locationManager!.stopUpdatingLocation()
         }
         
-        guard let action = _completionHandler else { return }
-        action(_taskId)
+        guard let action = completionHandler else { return }
+        action(taskID)
+    }
+    
+    private func parseAccuracy(accuracy: Any?) -> CLLocationAccuracy {
+        if let argument = accuracy as? Int, let accuracy = GeolocationAccuracy(rawValue: argument) {
+            switch(accuracy) {
+                case .Lowest: return kCLLocationAccuracyThreeKilometers
+                case .Low: return kCLLocationAccuracyKilometer
+                case .Medium: return kCLLocationAccuracyHundredMeters
+                case .High: return kCLLocationAccuracyNearestTenMeters
+                case .Best: return kCLLocationAccuracyBest
+            }
+        } else {
+            return kCLLocationAccuracyBest
+        }
     }
 }
 
-final class OneTimeLocationService : LocationService {
+final class OneTimeLocationTask : LocationTask {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let positionDict = location.toDictionary()
         
-        _resultHandler(positionDict)
-        stopTracking()
+        context.resultHandler(positionDict)
+        stopTask()
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        _resultHandler(FlutterError.init(
+        context.resultHandler(FlutterError.init(
             code: "ERROR_UPDATING_LOCATION",
             message: error.localizedDescription,
             details: nil))
         
-        stopTracking()
+        stopTask()
     }
 }
 
-final class StreamLocationService : LocationService {
+final class StreamLocationTask : LocationTask {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let positionDict = location.toDictionary()
         
-        _resultHandler(positionDict)
+        context.resultHandler(positionDict)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        _resultHandler(FlutterError.init(
+        context.resultHandler(FlutterError.init(
             code: "ERROR_UPDATING_LOCATION",
             message: error.localizedDescription,
             details: nil))
         
-        stopTracking()
+        stopTask()
     }
 }
