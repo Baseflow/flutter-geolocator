@@ -1,21 +1,14 @@
-package com.baseflow.flutter.plugin.geolocator.services;
+package com.baseflow.flutter.plugin.geolocator.tasks;
 
 import android.location.Location;
 import android.location.LocationManager;
 
-import java.util.UUID;
+import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
 
-import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
+public class OneTimeLocationTask extends LocationTask {
 
-public class OneTimeLocationService extends LocationService {
-    private final MethodChannel.Result mResult;
-
-    public OneTimeLocationService(UUID taskID, MethodChannel.Result result, PluginRegistry.Registrar registrar)
-    {
-        super(taskID, registrar);
-
-        mResult = result;
+    public OneTimeLocationTask(TaskContext context) {
+        super(context);
     }
 
     @Override
@@ -37,12 +30,12 @@ public class OneTimeLocationService extends LocationService {
             return;
         }
 
-        mResult.success(LocationMapper.toHashMap(bestLocation));
+        getTaskContext().getResult().success(LocationMapper.toHashMap(bestLocation));
     }
 
     @Override
     protected void handleError(String code, String message) {
-        mResult.error(
+        getTaskContext().getResult().error(
                 code,
                 message,
                 null);

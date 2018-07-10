@@ -36,6 +36,10 @@ class GeocodeTask: NSObject {
         
         if locations.count > 0 {
             context.resultHandler(locations)
+        } else {
+            handleError(
+                code: "ERROR_GEOCODING_ADDRESSNOTFOUND",
+                message: "Could not find any result for the supplied address or coordinates.")
         }
     }
     
@@ -97,6 +101,7 @@ class ForwardGeocodeTask: GeocodeTask, TaskProtocol {
                     message: err.localizedDescription)
             }
             
+            stopTask();
         }
     }
 }
@@ -153,6 +158,7 @@ class ReverseGeocodeTask: GeocodeTask, TaskProtocol {
                     message: err.localizedDescription)
             }
             
+            stopTask();
         }
     }
 }

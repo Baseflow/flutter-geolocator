@@ -128,7 +128,6 @@ class _MyAppState extends State<MyApp> {
                     },
                   ),
                   new Text(_placemark),
-                  new Divider(),
                 ],
               ),
             )));
