@@ -11,6 +11,7 @@ master  | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.s
 
 * Get the current location of the device
 * Get continuous location updates
+* Translate an address to geocoordinates and vice verse (a.k.a. Geocoding)
 
 ## Usage
 
@@ -23,7 +24,9 @@ dependencies:
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
 
-## Example
+## API
+
+### Geolocation
 
 To query the current location of the device simply make a call to the `getPosition` method:
 
@@ -47,6 +50,26 @@ StreamSubscription<Position> positionStream = geolocator.getPositionStream(Locat
     (Position position) {
         print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
     });
+```
+
+### Geocoding
+
+To translate an address into latitude and longitude coordinates you can use the `toPlacemark` method:
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/placemark.dart';
+
+Placemark placemark = await new Geolocator().toPlacemark("Gronausestraat 710, Enschede");
+```
+
+If you want to translate latitude and longitude coordinates into an address you can use the `fromPlacemark` method:
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/models/placemark.dart';
+
+Placemark placemark = await new Geolocator().toPlacemark(52.2165157, 6.9437819);
 ```
 
 See also the [example](example/lib/main.dart) project for a complete implementation.

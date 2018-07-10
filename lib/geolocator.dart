@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:geolocator/models/location_accuracy.dart';
+import 'package:geolocator/models/placemark.dart';
 import 'package:meta/meta.dart';
 
 import 'models/position.dart';
@@ -37,6 +38,28 @@ class Geolocator {
     var position =
         await _methodChannel.invokeMethod('getPosition', desiredAccuracy.index);
     return Position.fromMap(position);
+  }
+
+  /// Returns a list of [Placemark] instances found for the supplied address.
+  ///
+  /// In most situations the returned list should only contain one entry.
+  /// However in some situations where the supplied address could not be
+  /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
+  Future<List<Placemark>> toPlacemark(String address) async {
+    var placemarks = await _methodChannel.invokeMethod('toPlacemark', address);
+    return Placemark.fromMaps(placemarks);
+  }
+
+  /// Returns a list of [Placemark] instances found for the supplied address.
+  ///
+  /// In most situations the returned list should only contain one entry.
+  /// However in some situations where the supplied address could not be
+  /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
+  Future<List<Placemark>> fromPlacemark(
+      double latitude, double longitude) async {
+    var placemarks = await _methodChannel.invokeMethod('fromPlacemark',
+        <String, double>{"latitude": latitude, "longitude": longitude});
+    return Placemark.fromMaps(placemarks);
   }
 
   /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].

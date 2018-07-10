@@ -1,4 +1,4 @@
-package com.baseflow.flutter.plugin.geolocator.services;
+package com.baseflow.flutter.plugin.geolocator;
 
 import java.util.UUID;
 

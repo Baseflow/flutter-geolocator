@@ -1,9 +1,11 @@
 package com.baseflow.flutter.plugin.geolocator;
 
-import com.baseflow.flutter.plugin.geolocator.services.LocationServiceInterface;
-import com.baseflow.flutter.plugin.geolocator.services.OnCompletionListener;
-import com.baseflow.flutter.plugin.geolocator.services.OneTimeLocationService;
-import com.baseflow.flutter.plugin.geolocator.services.StreamLocationService;
+import com.baseflow.flutter.plugin.geolocator.tasks.ForwardGeocodingTask;
+import com.baseflow.flutter.plugin.geolocator.tasks.OneTimeLocationTask;
+import com.baseflow.flutter.plugin.geolocator.tasks.ReverseGeocodingTask;
+import com.baseflow.flutter.plugin.geolocator.tasks.StreamLocationTask;
+import com.baseflow.flutter.plugin.geolocator.tasks.Task;
+import com.baseflow.flutter.plugin.geolocator.tasks.TaskContext;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
@@ -13,9 +15,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -26,9 +26,9 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
     private static final String METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods";
     private static final String EVENT_CHANNEL_NAME = "flutter.baseflow.com/geolocator/events";
 
-    private final Map<UUID, Result> mResultHandles = new HashMap<>();
+    private final ArrayList<Task> mTasks = new ArrayList<>();
     private final Registrar mRegistrar;
-    private LocationServiceInterface mStreamLocationService;
+    private Task mStreamLocationTask;
 
     private GeolocatorPlugin(PluginRegistry.Registrar registrar) {
         this.mRegistrar = registrar;
@@ -48,15 +48,24 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
 
     @Override
     public void onMethodCall(MethodCall call, Result result) {
+        TaskContext context = TaskContext.BuildFromMethodResult(
+                mRegistrar,
+                result,
+                call.arguments,
+                this);
+
         if (call.method.equals("getPosition")) {
-            GeolocationAccuracy accuracy = parseAccuracy(call.arguments);
-
-            UUID taskID = UUID.randomUUID();
-            mResultHandles.put(UUID.randomUUID(), result);
-
-            LocationServiceInterface locationService = new OneTimeLocationService(taskID, result, mRegistrar);
-            locationService.addCompletionListener(this);
-            locationService.startTracking(accuracy);
+            Task task = new OneTimeLocationTask(context);
+            mTasks.add(task);
+            task.startTask();
+        } else if (call.method.equals("toPlacemark")) {
+            Task task = new ForwardGeocodingTask(context);
+            mTasks.add(task);
+            task.startTask();
+        } else if (call.method.equals("fromPlacemark")) {
+            Task task = new ReverseGeocodingTask(context);
+            mTasks.add(task);
+            task.startTask();
         } else {
             result.notImplemented();
         }
@@ -64,7 +73,7 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
 
     @Override
     public void onListen(Object o, EventChannel.EventSink eventSink) {
-        if (mStreamLocationService != null) {
+        if (mStreamLocationTask != null) {
             eventSink.error(
                     "ALLREADY_LISTENING",
                     "You are already listening for location changes. Create a new instance or stop listening to the current stream.",
@@ -73,47 +82,39 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
             return;
         }
 
-        GeolocationAccuracy accuracy = parseAccuracy(o);
-
-        mStreamLocationService = new StreamLocationService(
-                UUID.randomUUID(),
+        TaskContext context = TaskContext.BuildFromEventSink(
+                mRegistrar,
                 eventSink,
-                mRegistrar);
-        mStreamLocationService.startTracking(accuracy);
+                o,
+                this);
+
+        mStreamLocationTask = new StreamLocationTask(
+                context);
+        mStreamLocationTask.startTask();
     }
 
     @Override
     public void onCancel(Object arguments) {
-        if (mStreamLocationService == null) return;
+        if (mStreamLocationTask == null) return;
 
-        mStreamLocationService.stopTracking();
-        mStreamLocationService = null;
+        mStreamLocationTask.stopTask();
+        mStreamLocationTask = null;
     }
 
     public void onCompletion(UUID taskID) {
-        Iterator<Map.Entry<UUID, Result>> it = mResultHandles.entrySet().iterator();
+        Task taskToRemove = null;
 
-        while (it.hasNext()) {
-            Map.Entry<UUID, Result> entry = it.next();
-
-            if (taskID == entry.getKey()) {
-                it.remove();
+        for (Task task : mTasks) {
+            if(task.getTaskID() == taskID) {
+                taskToRemove = task;
+                break;
             }
+        }
+
+        if(taskToRemove != null) {
+            mTasks.remove(taskToRemove);
         }
     }
 
-    private static GeolocationAccuracy parseAccuracy(Object o) {
-        GeolocationAccuracy accuracy = GeolocationAccuracy.Medium;
 
-        try {
-            int index = (Integer) o;
-            if(index > 0 && index < GeolocationAccuracy.values().length) {
-                accuracy = GeolocationAccuracy.values()[index];
-            }
-
-            return accuracy;
-        } catch(Exception ex) {
-            return GeolocationAccuracy.Medium;
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package com.baseflow.flutter.plugin.geolocator.services;
+package com.baseflow.flutter.plugin.geolocator.tasks;
 
 import android.Manifest;
 import android.app.Activity;
@@ -9,54 +9,59 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 
-import com.baseflow.flutter.plugin.geolocator.GeolocationAccuracy;
+import com.baseflow.flutter.plugin.geolocator.data.GeolocationAccuracy;
 import com.google.android.gms.common.util.Strings;
 
 import java.util.List;
-import java.util.UUID;
 
 import io.flutter.plugin.common.PluginRegistry;
 
-abstract class LocationService implements LocationServiceInterface {
+abstract class LocationTask extends Task {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private static final long TWO_MINUTES = 120000;
 
-
-    private final UUID mTaskID;
-    private OnCompletionListener mCompletionListener;
-
     private final Activity mActivity;
-    GeolocationAccuracy mAccuracy = GeolocationAccuracy.Medium;
+    GeolocationAccuracy mAccuracy;
 
-    LocationService(UUID taskID, PluginRegistry.Registrar registrar) {
-        mTaskID = taskID;
+    LocationTask(TaskContext context) {
+        super(context);
+
+        PluginRegistry.Registrar registrar = context.getRegistrar();
+
         mActivity = registrar.activity();
 
         PluginRegistry.RequestPermissionsResultListener permissionsResultListener = createPermissionsResultListener();
-
         registrar.addRequestPermissionsResultListener(permissionsResultListener);
+
+        mAccuracy = parseAccuracy(context.getArguments());
+    }
+
+    private static GeolocationAccuracy parseAccuracy(Object arguments) {
+        GeolocationAccuracy accuracy = GeolocationAccuracy.Medium;
+
+        if(arguments == null) return accuracy;
+
+        try {
+            int index = (Integer) arguments;
+            if(index > 0 && index < GeolocationAccuracy.values().length) {
+                accuracy = GeolocationAccuracy.values()[index];
+            }
+
+            return accuracy;
+        } catch(Exception ex) {
+            return GeolocationAccuracy.Medium;
+        }
     }
 
     protected abstract void acquirePosition();
     protected abstract void handleError(String code, String message);
 
-    public void addCompletionListener(OnCompletionListener onCompletionListener) {
-        mCompletionListener = onCompletionListener;
-    }
-
-    public void startTracking(GeolocationAccuracy accuracy) {
-        mAccuracy = accuracy;
-
+    @Override
+    public void startTask() {
         if(!hasPermissions()) {
             requestPermissions();
         } else {
             acquirePosition();
-        }
-    }
-
-    public void stopTracking() {
-        if(mCompletionListener != null) {
-            mCompletionListener.onCompletion(mTaskID);
         }
     }
 

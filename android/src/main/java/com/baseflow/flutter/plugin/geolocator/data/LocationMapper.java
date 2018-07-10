@@ -1,4 +1,4 @@
-package com.baseflow.flutter.plugin.geolocator.services;
+package com.baseflow.flutter.plugin.geolocator.data;
 
 import android.location.Location;
 import android.os.Build;
@@ -6,9 +6,9 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.Map;
 
-class LocationMapper {
+public class LocationMapper {
 
-    static Map<String, Double> toHashMap(Location location)
+    public static Map<String, Double> toHashMap(Location location)
     {
         Map<String, Double> position = new HashMap<>();
 
