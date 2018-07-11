@@ -10,7 +10,7 @@ import Flutter
 import Foundation
 
 class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
-    private var _desiredAccuracy: CLLocationAccuracy = kCLLocationAccuracyBest
+    private var _locationOptions: LocationOptions
     private var _locationManager: CLLocationManager?
     
     required init(
@@ -20,10 +20,9 @@ class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
         self.taskID = UUID.init()
         self.context = context
         self.completionHandler = completionHandler
+        self._locationOptions = Codec.decodeLocationOptions(from: context.arguments)
         
         super.init()
-        
-        _desiredAccuracy = parseAccuracy(accuracy: context.arguments)
     }
     
     let taskID: UUID
@@ -49,7 +48,8 @@ class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
                 
             }
             
-            _locationManager!.desiredAccuracy = _desiredAccuracy;
+            _locationManager!.desiredAccuracy = _locationOptions.accuracy.clValue;
+            _locationManager!.distanceFilter = _locationOptions.distanceFilter;
         }
         
         _locationManager!.startUpdatingLocation()
@@ -62,20 +62,6 @@ class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
         
         guard let action = completionHandler else { return }
         action(taskID)
-    }
-    
-    private func parseAccuracy(accuracy: Any?) -> CLLocationAccuracy {
-        if let argument = accuracy as? Int, let accuracy = GeolocationAccuracy(rawValue: argument) {
-            switch(accuracy) {
-                case .Lowest: return kCLLocationAccuracyThreeKilometers
-                case .Low: return kCLLocationAccuracyKilometer
-                case .Medium: return kCLLocationAccuracyHundredMeters
-                case .High: return kCLLocationAccuracyNearestTenMeters
-                case .Best: return kCLLocationAccuracyBest
-            }
-        } else {
-            return kCLLocationAccuracyBest
-        }
     }
 }
 

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/models/location_accuracy.dart';
+import 'package:geolocator/models/location_options.dart';
 import 'package:mockito/mockito.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/position.dart';
@@ -117,7 +118,8 @@ void main() {
 
     test('Receive position changes', () async {
       final StreamQueue<Position> queue = new StreamQueue<Position>(
-          _geolocator.getPositionStream(LocationAccuracy.best));
+          _geolocator.getPositionStream(LocationOptions(
+              accuracy: LocationAccuracy.best, distanceFilter: 10)));
 
       _controller.add(_mockPositions[0]);
       expect((await queue.next).toMap(), _mockPositions[0]);

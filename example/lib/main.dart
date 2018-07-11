@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/location_accuracy.dart';
+import 'package:geolocator/models/location_options.dart';
 import 'package:geolocator/models/placemark.dart';
 import 'package:geolocator/models/position.dart';
 
@@ -30,7 +31,8 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
 
     _positionSubscription = _geolocator
-        .getPositionStream(LocationAccuracy.high)
+        .getPositionStream(LocationOptions(
+            accuracy: LocationAccuracy.high, distanceFilter: 10))
         .listen((Position position) {
       setState(() {
         _position = position;
