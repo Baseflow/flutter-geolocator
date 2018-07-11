@@ -18,6 +18,10 @@ bin/
 *.iws
 .idea/
 
+# Android Studio related
+android/.classpath
+android/.settings/
+
 # Visual Studio Code related
 .vscode/
 
