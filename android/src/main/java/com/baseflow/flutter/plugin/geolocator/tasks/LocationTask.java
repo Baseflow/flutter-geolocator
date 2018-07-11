@@ -117,27 +117,30 @@ abstract class LocationTask extends Task {
     }
 
     private PluginRegistry.RequestPermissionsResultListener createPermissionsResultListener() {
-        return (requestCode, permissions, grantResults) -> {
-            if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && permissions.length == 1
-                    && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    acquirePosition();
-                } else {
-                    if (!shouldShowRequestPermissionRationale()) {
-                        handleError(
-                                "PERMISSION_DENIED_NEVER_ASK",
-                                "Access to location data denied. To allow access to location services enable them in the device settings.");
+        return new PluginRegistry.RequestPermissionsResultListener() {
+            @Override
+            public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && permissions.length == 1
+                        && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        acquirePosition();
                     } else {
-                        handleError(
-                                "PERMISSION_DENIED",
-                                "Access to location data denied");
+                        if (!shouldShowRequestPermissionRationale()) {
+                            handleError(
+                                    "PERMISSION_DENIED_NEVER_ASK",
+                                    "Access to location data denied. To allow access to location services enable them in the device settings.");
+                        } else {
+                            handleError(
+                                    "PERMISSION_DENIED",
+                                    "Access to location data denied");
+                        }
                     }
+
+                    return true;
                 }
 
-                return true;
+                return false;
             }
-
-            return false;
         };
     }
 

@@ -101,7 +101,7 @@ class ForwardGeocodeTask: GeocodeTask, TaskProtocol {
                     message: err.localizedDescription)
             }
             
-            stopTask();
+            self.stopTask();
         }
     }
 }
@@ -158,7 +158,7 @@ class ReverseGeocodeTask: GeocodeTask, TaskProtocol {
                     message: err.localizedDescription)
             }
             
-            stopTask();
+            self.stopTask();
         }
     }
 }
