@@ -40,8 +40,8 @@ class Geolocator {
       [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) async {
     var locationOptions =
         LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
-    var position =
-        await _methodChannel.invokeMethod('getPosition', Codec.encodeLocationOptions(locationOptions));
+    var position = await _methodChannel.invokeMethod(
+        'getPosition', Codec.encodeLocationOptions(locationOptions));
     return Position.fromMap(position);
   }
 

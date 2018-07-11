@@ -80,9 +80,9 @@ void main() {
   });
 
   test('Retrieve the current position', () async {
-    var codedOptions = Codec.encodeLocationOptions(LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 0));
-    when(_methodChannel.invokeMethod(
-            'getPosition', codedOptions))
+    var codedOptions = Codec.encodeLocationOptions(
+        LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 0));
+    when(_methodChannel.invokeMethod('getPosition', codedOptions))
         .thenAnswer((_) async => _mockPosition);
 
     Position position = await _geolocator.getPosition(LocationAccuracy.best);
@@ -99,10 +99,9 @@ void main() {
   group('Postion state changes', () {
     StreamController<Map<String, double>> _controller;
     var _codedOptions = Codec.encodeLocationOptions(
-      LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 0));
+        LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 0));
 
     setUp(() {
-      
       _controller = new StreamController<Map<String, double>>();
       when(_eventChannel.receiveBroadcastStream(_codedOptions))
           .thenReturn(_controller.stream);
@@ -117,8 +116,7 @@ void main() {
       _geolocator.getPositionStream();
       _geolocator.getPositionStream();
 
-      verify(_eventChannel.receiveBroadcastStream(_codedOptions))
-          .called(1);
+      verify(_eventChannel.receiveBroadcastStream(_codedOptions)).called(1);
     });
 
     test('Receive position changes', () async {
