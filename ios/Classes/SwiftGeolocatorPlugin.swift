@@ -2,10 +2,6 @@ import Flutter
 import UIKit
 import CoreLocation
 
-enum GeolocationAccuracy : Int {
-    case Lowest = 0, Low, Medium, High, Best
-}
-
 public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugin, CLLocationManagerDelegate {
     private static let METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods"
     private static let EVENT_CHANNEL_NAME = "flutter.baseflow.com/geolocator/events"

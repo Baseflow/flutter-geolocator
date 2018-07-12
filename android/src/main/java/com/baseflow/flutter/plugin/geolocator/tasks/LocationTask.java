@@ -9,7 +9,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 
+import com.baseflow.flutter.plugin.geolocator.Codec;
 import com.baseflow.flutter.plugin.geolocator.data.GeolocationAccuracy;
+import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
 import com.google.android.gms.common.util.Strings;
 
 import java.util.List;
@@ -21,7 +23,7 @@ abstract class LocationTask extends Task {
     private static final long TWO_MINUTES = 120000;
 
     private final Activity mActivity;
-    GeolocationAccuracy mAccuracy;
+    protected final LocationOptions mLocationOptions;
 
     LocationTask(TaskContext context) {
         super(context);
@@ -33,24 +35,7 @@ abstract class LocationTask extends Task {
         PluginRegistry.RequestPermissionsResultListener permissionsResultListener = createPermissionsResultListener();
         registrar.addRequestPermissionsResultListener(permissionsResultListener);
 
-        mAccuracy = parseAccuracy(context.getArguments());
-    }
-
-    private static GeolocationAccuracy parseAccuracy(Object arguments) {
-        GeolocationAccuracy accuracy = GeolocationAccuracy.Medium;
-
-        if(arguments == null) return accuracy;
-
-        try {
-            int index = (Integer) arguments;
-            if(index > 0 && index < GeolocationAccuracy.values().length) {
-                accuracy = GeolocationAccuracy.values()[index];
-            }
-
-            return accuracy;
-        } catch(Exception ex) {
-            return GeolocationAccuracy.Medium;
-        }
+        mLocationOptions = Codec.decodeLocationOptions(context.getArguments());
     }
 
     protected abstract void acquirePosition();
@@ -117,27 +102,30 @@ abstract class LocationTask extends Task {
     }
 
     private PluginRegistry.RequestPermissionsResultListener createPermissionsResultListener() {
-        return (requestCode, permissions, grantResults) -> {
-            if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && permissions.length == 1
-                    && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    acquirePosition();
-                } else {
-                    if (!shouldShowRequestPermissionRationale()) {
-                        handleError(
-                                "PERMISSION_DENIED_NEVER_ASK",
-                                "Access to location data denied. To allow access to location services enable them in the device settings.");
+        return new PluginRegistry.RequestPermissionsResultListener() {
+            @Override
+            public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && permissions.length == 1
+                        && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        acquirePosition();
                     } else {
-                        handleError(
-                                "PERMISSION_DENIED",
-                                "Access to location data denied");
+                        if (!shouldShowRequestPermissionRationale()) {
+                            handleError(
+                                    "PERMISSION_DENIED_NEVER_ASK",
+                                    "Access to location data denied. To allow access to location services enable them in the device settings.");
+                        } else {
+                            handleError(
+                                    "PERMISSION_DENIED",
+                                    "Access to location data denied");
+                        }
                     }
+
+                    return true;
                 }
 
-                return true;
+                return false;
             }
-
-            return false;
         };
     }
 

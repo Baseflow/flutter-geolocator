@@ -28,7 +28,9 @@ public class StreamLocationTask extends LocationTask {
         }
 
         // Try to get the best possible location provider for the requested accuracy
-        String bestProvider = getBestProvider(locationManager, mAccuracy);
+        String bestProvider = getBestProvider(
+                locationManager,
+                mLocationOptions.accuracy);
 
         if(Strings.isEmptyOrWhitespace(bestProvider)) {
             handleError(
@@ -40,7 +42,7 @@ public class StreamLocationTask extends LocationTask {
 
         mLocationListener = new StreamLocationListener(
                 locationManager,
-                mAccuracy,
+                mLocationOptions.accuracy,
                 bestProvider);
 
         Looper looper = Looper.myLooper();
@@ -51,7 +53,7 @@ public class StreamLocationTask extends LocationTask {
         locationManager.requestLocationUpdates(
                 bestProvider,
                 0,
-                0,
+                mLocationOptions.distanceFilter,
                 mLocationListener,
                 looper);
     }

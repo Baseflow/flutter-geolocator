@@ -1,3 +1,14 @@
+## [1.2.1]
+
+* Added feature to throttle the amount of locations updates based on a supplied distance filter.
+
+> **Important:**
+>
+> This introduces a breaking change since the signature of the `getPositionStream` has changed from `getPositionStream(LocationAccuracy accuracy)` to
+> `getPositionStream(LocationOptions locationOptions)` .
+
+*  Made some small changes to ensure the plugin no longer is depending on JAVA 8, meaning the plugin will run using the default Android configuration.
+
 ## [1.2.0]
 
 * Added support to translate an address into geocoordinates and vice versa (a.k.a. Geocoding). See the [README.md](README.md) file for more information.

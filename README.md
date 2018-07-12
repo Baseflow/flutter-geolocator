@@ -1,4 +1,6 @@
-# Flutter Geolocator Plugin  [![pub package](https://img.shields.io/pub/v/geolocator.svg)](https://pub.dartlang.org/packages/geolocator)
+# Flutter Geolocator Plugin  
+
+[![pub package](https://img.shields.io/pub/v/geolocator.svg)](https://pub.dartlang.org/packages/geolocator)
 
 A Flutter geolocation plugin which provides easy access to the platform specific location services ([LocationManager](https://developer.android.com/reference/android/location/LocationManager) on Android and [CLLocationManager](https://developer.apple.com/documentation/corelocation/cllocationmanager) on iOS).
 
@@ -19,7 +21,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^1.2.0'
+  geolocator: '^1.2.1'
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
@@ -35,18 +37,21 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/location_accuracy.dart';
 import 'package:geolocator/models/position.dart';
 
-Position position = await new Geolocator().getPosition(LocationAccuracy.High);
+Position position = await Geolocator().getPosition(LocationAccuracy.High);
 ```
 
-To listen for location changes you can subscribe to the `onPositionChanged` stream:
+To listen for location changes you can subscribe to the `onPositionChanged` stream. Supply an instance of the `LocationOptions` class to configure
+the desired accuracy and the minimum distance change (in meters) before updates are send to the application.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/location_accuracy.dart';
 import 'package:geolocator/models/position.dart';
 
-Geolocator geolocator = new Geolocator();
-StreamSubscription<Position> positionStream = geolocator.getPositionStream(LocationAccuracy.High).listen(
+var geolocator = Geolocator();
+var locationOptions = LocationOptions(accuracy: LocationAccuracy.High, distanceFilter: 10);
+
+StreamSubscription<Position> positionStream = geolocator.getPositionStream(locationOptions).listen(
     (Position position) {
         print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
     });
@@ -60,7 +65,7 @@ To translate an address into latitude and longitude coordinates you can use the 
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/placemark.dart';
 
-Placemark placemark = await new Geolocator().toPlacemark("Gronausestraat 710, Enschede");
+Placemark placemark = await Geolocator().toPlacemark("Gronausestraat 710, Enschede");
 ```
 
 If you want to translate latitude and longitude coordinates into an address you can use the `fromPlacemark` method:

@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:geolocator/models/location_accuracy.dart';
+import 'package:geolocator/models/location_options.dart';
 import 'package:geolocator/models/placemark.dart';
 import 'package:meta/meta.dart';
 
 import 'models/position.dart';
+
+import 'utils/codec.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
 class Geolocator {
@@ -35,9 +38,42 @@ class Geolocator {
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
   Future<Position> getPosition(
       [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) async {
-    var position =
-        await _methodChannel.invokeMethod('getPosition', desiredAccuracy.index);
+    var locationOptions =
+        LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
+    var position = await _methodChannel.invokeMethod(
+        'getPosition', Codec.encodeLocationOptions(locationOptions));
     return Position.fromMap(position);
+  }
+
+  /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
+  ///
+  /// This event starts all location sensors on the device and will keep them
+  /// active until you cancel listening to the stream or when the application
+  /// is killed.
+  ///
+  /// ```
+  /// StreamSubscription<Position> positionStream = new Geolocator().GetPostionStream().listen(
+  ///   (Position position) => {
+  ///     // Handle position changes
+  ///   });
+  ///
+  /// // When no longer needed cancel the subscription
+  /// positionStream.cancel();
+  /// ```
+  ///
+  /// You can customize the behaviour of the location updates by supplying an
+  /// instance [LocationOptions] class. When you don't supply any specific
+  /// options, default values will be used for each setting.
+  Stream<Position> getPositionStream(
+      [LocationOptions locationOptions = const LocationOptions()]) {
+    if (_onPositionChanged == null) {
+      _onPositionChanged = _eventChannel
+          .receiveBroadcastStream(Codec.encodeLocationOptions(locationOptions))
+          .map<Position>(
+              (element) => Position.fromMap(element.cast<String, double>()));
+    }
+
+    return _onPositionChanged;
   }
 
   /// Returns a list of [Placemark] instances found for the supplied address.
@@ -60,34 +96,5 @@ class Geolocator {
     var placemarks = await _methodChannel.invokeMethod('fromPlacemark',
         <String, double>{"latitude": latitude, "longitude": longitude});
     return Placemark.fromMaps(placemarks);
-  }
-
-  /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
-  ///
-  /// This event starts all location sensors on the device and will keep them
-  /// active until you cancel listening to the stream or when the application
-  /// is killed.
-  ///
-  /// ```
-  /// StreamSubscription<Position> positionStream = new Geolocator().GetPostionStream().listen(
-  ///   (Position position) => {
-  ///     // Handle position changes
-  ///   });
-  ///
-  /// // When no longer needed cancel the subscription
-  /// positionStream.cancel();
-  /// ```
-  ///
-  /// When the [desiredAccuracy] is not supplied, it defaults to best.
-  Stream<Position> getPositionStream(
-      [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) {
-    if (_onPositionChanged == null) {
-      _onPositionChanged = _eventChannel
-          .receiveBroadcastStream(desiredAccuracy.index)
-          .map<Position>(
-              (element) => Position.fromMap(element.cast<String, double>()));
-    }
-
-    return _onPositionChanged;
   }
 }

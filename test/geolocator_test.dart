@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/models/location_accuracy.dart';
+import 'package:geolocator/models/location_options.dart';
+import 'package:geolocator/utils/codec.dart';
 import 'package:mockito/mockito.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/position.dart';
@@ -78,11 +80,12 @@ void main() {
   });
 
   test('Retrieve the current position', () async {
-    when(_methodChannel.invokeMethod(
-            'getPosition', LocationAccuracy.best.index))
+    var codedOptions = Codec.encodeLocationOptions(
+        LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 0));
+    when(_methodChannel.invokeMethod('getPosition', codedOptions))
         .thenAnswer((_) async => _mockPosition);
 
-    Position position = await _geolocator.getPosition();
+    Position position = await _geolocator.getPosition(LocationAccuracy.best);
 
     expect(position.latitude, _mockPosition['latitude']);
     expect(position.longitude, _mockPosition['longitude']);
@@ -95,10 +98,12 @@ void main() {
 
   group('Postion state changes', () {
     StreamController<Map<String, double>> _controller;
+    var _codedOptions = Codec.encodeLocationOptions(
+        LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 0));
 
     setUp(() {
       _controller = new StreamController<Map<String, double>>();
-      when(_eventChannel.receiveBroadcastStream(LocationAccuracy.best.index))
+      when(_eventChannel.receiveBroadcastStream(_codedOptions))
           .thenReturn(_controller.stream);
     });
 
@@ -111,13 +116,13 @@ void main() {
       _geolocator.getPositionStream();
       _geolocator.getPositionStream();
 
-      verify(_eventChannel.receiveBroadcastStream(LocationAccuracy.best.index))
-          .called(1);
+      verify(_eventChannel.receiveBroadcastStream(_codedOptions)).called(1);
     });
 
     test('Receive position changes', () async {
       final StreamQueue<Position> queue = new StreamQueue<Position>(
-          _geolocator.getPositionStream(LocationAccuracy.best));
+          _geolocator.getPositionStream(LocationOptions(
+              accuracy: LocationAccuracy.best, distanceFilter: 0)));
 
       _controller.add(_mockPositions[0]);
       expect((await queue.next).toMap(), _mockPositions[0]);
