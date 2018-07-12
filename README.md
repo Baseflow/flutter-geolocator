@@ -35,18 +35,21 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/location_accuracy.dart';
 import 'package:geolocator/models/position.dart';
 
-Position position = await new Geolocator().getPosition(LocationAccuracy.High);
+Position position = await Geolocator().getPosition(LocationAccuracy.High);
 ```
 
-To listen for location changes you can subscribe to the `onPositionChanged` stream:
+To listen for location changes you can subscribe to the `onPositionChanged` stream. Supply an instance of the `LocationOptions` class to configure
+the desired accuracy and the minimum distance change (in meters) before updates are send to the application.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/location_accuracy.dart';
 import 'package:geolocator/models/position.dart';
 
-Geolocator geolocator = new Geolocator();
-StreamSubscription<Position> positionStream = geolocator.getPositionStream(LocationAccuracy.High).listen(
+var geolocator = Geolocator();
+var locationOptions = LocationOptions(accuracy: LocationAccuracy.High, distanceFilter: 10);
+
+StreamSubscription<Position> positionStream = geolocator.getPositionStream(locationOptions).listen(
     (Position position) {
         print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
     });
@@ -60,7 +63,7 @@ To translate an address into latitude and longitude coordinates you can use the 
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/placemark.dart';
 
-Placemark placemark = await new Geolocator().toPlacemark("Gronausestraat 710, Enschede");
+Placemark placemark = await Geolocator().toPlacemark("Gronausestraat 710, Enschede");
 ```
 
 If you want to translate latitude and longitude coordinates into an address you can use the `fromPlacemark` method:
