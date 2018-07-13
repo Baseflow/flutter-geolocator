@@ -1,3 +1,7 @@
+## [1.2.2]
+
+* Make sure that an Android App using the plugin is informed when the platform stops transmitting location updates.
+
 ## [1.2.1]
 
 * Added feature to throttle the amount of locations updates based on a supplied distance filter.
