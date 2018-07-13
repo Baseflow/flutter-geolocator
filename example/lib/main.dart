@@ -33,11 +33,16 @@ class _MyAppState extends State<MyApp> {
     _positionSubscription = _geolocator
         .getPositionStream(LocationOptions(
             accuracy: LocationAccuracy.high, distanceFilter: 10))
+        .handleError((onError) {
+          setState(() {
+                      _position = null;
+                    });
+        })
         .listen((Position position) {
-      setState(() {
-        _position = position;
-      });
-    });
+          setState(() {
+            _position = position;
+          });
+        });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.

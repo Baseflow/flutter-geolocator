@@ -3,6 +3,7 @@ package com.baseflow.flutter.plugin.geolocator.tasks;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Looper;
 
@@ -87,23 +88,32 @@ public class StreamLocationTask extends LocationTask {
             if(isBetterLocation(location, mBestLocation) && location.getAccuracy() <= mDesiredAccuracy) {
                 mBestLocation = location;
                 getTaskContext().getResult().success(LocationMapper.toHashMap(location));
-                return;
             }
         }
 
         @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
+        public void onStatusChanged(String provider, int status, Bundle bundle) {
+            if (status == LocationProvider.AVAILABLE) {
+                onProviderEnabled(provider);
+            } else if (status == LocationProvider.OUT_OF_SERVICE) {
+                onProviderDisabled(provider);
+            }
 
         }
 
         @Override
-        public void onProviderEnabled(String s) {
+        public void onProviderEnabled(String provider) {
 
         }
 
         @Override
-        public void onProviderDisabled(String s) {
-
+        public void onProviderDisabled(String provider) {
+            if(provider.equals(mActiveProvider)) {
+                getTaskContext().getResult().error(
+                        "ERROR_UPDATING_LOCATION",
+                        "The active location provider was disabled. Check if the location services are enabled in the device settings.",
+                        null);
+            }
         }
 
         float accuracyToFloat(GeolocationAccuracy accuracy) {
