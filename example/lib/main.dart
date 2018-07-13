@@ -33,7 +33,11 @@ class _MyAppState extends State<MyApp> {
     _positionSubscription = _geolocator
         .getPositionStream(LocationOptions(
             accuracy: LocationAccuracy.high, distanceFilter: 10))
-        .listen((Position position) {
+        .handleError((onError) {
+      setState(() {
+        _position = null;
+      });
+    }).listen((Position position) {
       setState(() {
         _position = position;
       });
