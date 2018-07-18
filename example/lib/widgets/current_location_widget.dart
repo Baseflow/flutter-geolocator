@@ -6,7 +6,7 @@ import 'package:geolocator/models/location_options.dart';
 import 'package:geolocator/models/position.dart';
 
 class CurrentLocationWidget extends StatefulWidget {
-  @override 
+  @override
   _LocationState createState() => _LocationState();
 }
 
@@ -16,24 +16,22 @@ class _LocationState extends State<CurrentLocationWidget> {
   _LocationState();
 
   @override
-  void initState() { 
-      super.initState();
+  void initState() {
+    super.initState();
     _initPlatformState();
-    
+
     _geolocator
-      .getPositionStream(LocationOptions(
-          accuracy: LocationAccuracy.high, 
-          distanceFilter: 10))
-      .handleError((onError) {
-        setState(() {
-          _position = null;
-        });
-      })
-      .listen((Position position) {
-        setState(() {
-          _position = position;
-        });
+        .getPositionStream(LocationOptions(
+            accuracy: LocationAccuracy.high, distanceFilter: 10))
+        .handleError((onError) {
+      setState(() {
+        _position = null;
       });
+    }).listen((Position position) {
+      setState(() {
+        _position = position;
+      });
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -58,10 +56,10 @@ class _LocationState extends State<CurrentLocationWidget> {
 
   @override
   Widget build(BuildContext context) {
-      final position = _position == null
+    final position = _position == null
         ? 'Unknown'
         : _position.latitude.toString() + ', ' + _position.longitude.toString();
-      
-      return new Text('Current location: $position\n');
-    }
+
+    return new Text('Current location: $position\n');
+  }
 }

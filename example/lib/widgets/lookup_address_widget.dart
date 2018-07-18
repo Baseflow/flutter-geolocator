@@ -9,9 +9,8 @@ class LookupAddressWidget extends StatefulWidget {
 
 class _LookupAddressState extends State<LookupAddressWidget> {
   final Geolocator _geolocator = Geolocator();
-  final TextEditingController _addressTextController =
-      TextEditingController();
-  
+  final TextEditingController _addressTextController = TextEditingController();
+
   String _placemarkCoords = '';
 
   void _onLookupCoordinatesPressed() async {
@@ -32,18 +31,17 @@ class _LookupAddressState extends State<LookupAddressWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-                  new TextField(
-                    decoration: new InputDecoration(
-                        hintText: "Please enter an address"),
-                    controller: _addressTextController,
-                  ),
-                  new RaisedButton(
-                    child: new Text('Look up...'),
-                    onPressed: () {
-                      _onLookupCoordinatesPressed();
-                    },
-                  ),
-                  new Text(_placemarkCoords),
+        new TextField(
+          decoration: new InputDecoration(hintText: "Please enter an address"),
+          controller: _addressTextController,
+        ),
+        new RaisedButton(
+          child: new Text('Look up...'),
+          onPressed: () {
+            _onLookupCoordinatesPressed();
+          },
+        ),
+        new Text(_placemarkCoords),
       ],
     );
   }
