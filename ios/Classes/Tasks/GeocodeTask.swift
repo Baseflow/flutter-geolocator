@@ -8,24 +8,12 @@
 import CoreLocation
 import Foundation
 
-class GeocodeTask: NSObject {
-    private var _address: String?
-    
+class GeocodeTask: Task {   
     required init(context: TaskContext,
          completionHandler: CompletionHandler?) {
-        
-        self.taskID = UUID.init()
-        self.context = context
-        self.completionHandler = completionHandler
-    }
-    
-    let taskID: UUID
-    let context: TaskContext
-    let completionHandler: CompletionHandler?
-   
-    func stopTask() {
-        guard let action = completionHandler else { return }
-        action(taskID)
+
+        super.init(context: context,
+                   completionHandler: completionHandler)
     }
     
     func processPlacemark(placemarks: [CLPlacemark]) {
@@ -42,14 +30,6 @@ class GeocodeTask: NSObject {
                 message: "Could not find any result for the supplied address or coordinates.")
         }
     }
-    
-    func handleError(code: String, message: String) {
-        self.context.resultHandler(FlutterError.init(
-            code: code,
-            message: message,
-            details: nil))
-    }
-    
 }
 
 class ForwardGeocodeTask: GeocodeTask, TaskProtocol {
@@ -92,7 +72,6 @@ class ForwardGeocodeTask: GeocodeTask, TaskProtocol {
         geocoding.geocodeAddressString(address) { (placemarks, error) in
             if let marks = placemarks {
                 self.processPlacemark(placemarks: marks);
-                return
             }
             
             if let err = error {
@@ -149,7 +128,6 @@ class ReverseGeocodeTask: GeocodeTask, TaskProtocol {
         geocoding.reverseGeocodeLocation(location) { (placemarks, error) in
             if let marks = placemarks {
                 self.processPlacemark(placemarks: marks);
-                return
             }
             
             if let err = error {
@@ -158,7 +136,7 @@ class ReverseGeocodeTask: GeocodeTask, TaskProtocol {
                     message: err.localizedDescription)
             }
             
-            self.stopTask();
+            self.stopTask()
         }
     }
 }
