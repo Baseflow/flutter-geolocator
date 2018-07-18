@@ -53,7 +53,7 @@ public final class CalculateDistanceTask extends Task {
                     null);
         }
 
-        float[] results = null;
+        float[] results = new float[1];
 
         try {
             Location.distanceBetween(
