@@ -11,9 +11,10 @@ master  | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.s
 
 ## Features
 
-* Get the current location of the device
-* Get continuous location updates
-* Translate an address to geocoordinates and vice verse (a.k.a. Geocoding)
+* Get the current location of the device;
+* Get continuous location updates;
+* Translate an address to geocoordinates and vice verse (a.k.a. Geocoding);
+* Calculate the distance (in meters) between two geocoordinates.
 
 ## Usage
 
@@ -75,6 +76,23 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/placemark.dart';
 
 Placemark placemark = await new Geolocator().toPlacemark(52.2165157, 6.9437819);
+```
+
+### Calculate distance
+
+To calculate the distance (in meters) between two geocoordinates you can use the `distanceBetween` method. The `distanceBetween` method takes four parameters:
+
+Parameter | Type | Description
+----------|------|------------
+startLatitude | double | Latitude of the start position
+startLongitude | double | Longitude of the start position
+endLatitude | double | Latitude of the destination position
+endLongitude | double | Longitude of the destination position
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+double distanceInMeters = await new Geolocator().distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 See also the [example](example/lib/main.dart) project for a complete implementation.
