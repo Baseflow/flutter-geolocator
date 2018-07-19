@@ -1,5 +1,6 @@
 package com.baseflow.flutter.plugin.geolocator;
 
+import com.baseflow.flutter.plugin.geolocator.tasks.CalculateDistanceTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.ForwardGeocodingTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.OneTimeLocationTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.ReverseGeocodingTask;
@@ -64,6 +65,10 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
             task.startTask();
         } else if (call.method.equals("fromPlacemark")) {
             Task task = new ReverseGeocodingTask(context);
+            mTasks.add(task);
+            task.startTask();
+        } else if (call.method.equals("distanceBetween")) {
+            Task task = new CalculateDistanceTask(context);
             mTasks.add(task);
             task.startTask();
         } else {

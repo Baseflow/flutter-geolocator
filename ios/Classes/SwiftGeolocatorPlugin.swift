@@ -36,6 +36,10 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
             executeTask(task: ReverseGeocodeTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))
+        } else if call.method == "distanceBetween" {
+            executeTask(task: CalculateDistance.init(
+                context: buildTaskContext(arguments: call.arguments, resultHandler: result),
+                completionHandler: completionAction))
         } else {
             result(FlutterMethodNotImplemented)
         }

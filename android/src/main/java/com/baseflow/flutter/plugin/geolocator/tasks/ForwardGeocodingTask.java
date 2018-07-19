@@ -54,8 +54,8 @@ public class ForwardGeocodingTask extends Task {
                     "ERROR_GEOCODING_ADDRESS",
                     e.getLocalizedMessage(),
                     null);
+        } finally {
+            stopTask();
         }
-
-        stopTask();
     }
 }
