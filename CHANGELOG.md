@@ -1,3 +1,7 @@
+## [1.3.0]
+
+* Added the option to check the distance between two geocoordinates (using the `distanceBetween` method).
+
 ## [1.2.2]
 
 * Make sure that an Android App using the plugin is informed when the platform stops transmitting location updates.
