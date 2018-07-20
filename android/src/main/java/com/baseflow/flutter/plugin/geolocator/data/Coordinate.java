@@ -1,10 +1,10 @@
 package com.baseflow.flutter.plugin.geolocator.data;
 
-public class Coordinates {
+public class Coordinate {
     private final Double mLatitude;
     private final Double mLongitude;
 
-    public Coordinates(Double latitude, Double longitude) {
+    public Coordinate(Double latitude, Double longitude) {
         mLatitude = latitude;
         mLongitude = longitude;
     }

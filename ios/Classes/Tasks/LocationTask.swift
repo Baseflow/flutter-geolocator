@@ -9,7 +9,7 @@ import CoreLocation
 import Flutter
 import Foundation
 
-class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
+class LocationTask : Task, TaskProtocol, CLLocationManagerDelegate {
     private var _locationOptions: LocationOptions
     private var _locationManager: CLLocationManager?
     
@@ -17,17 +17,11 @@ class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
         context: TaskContext,
         completionHandler: CompletionHandler?) {
         
-        self.taskID = UUID.init()
-        self.context = context
-        self.completionHandler = completionHandler
         self._locationOptions = Codec.decodeLocationOptions(from: context.arguments)
         
-        super.init()
+        super.init(context: context,
+                   completionHandler: completionHandler)
     }
-    
-    let taskID: UUID
-    let context: TaskContext
-    let completionHandler: CompletionHandler?
     
     func startTask() {
         if(_locationManager == nil)
@@ -55,13 +49,12 @@ class LocationTask : NSObject, TaskProtocol, CLLocationManagerDelegate {
         _locationManager!.startUpdatingLocation()
     }
     
-    func stopTask() {
+    override func stopTask() {
         if(_locationManager != nil) {
             _locationManager!.stopUpdatingLocation()
         }
         
-        guard let action = completionHandler else { return }
-        action(taskID)
+        super.stopTask()
     }
 }
 
