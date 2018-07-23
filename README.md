@@ -22,7 +22,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^1.3.0'
+  geolocator: '^1.3.1'
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
@@ -132,11 +132,12 @@ The table below outlines the accuracy options per platform:
 
 |            | Android    | iOS   |
 |------------|-----------:|------:|
-| **Lowest** | 500m       | 3000m |
-| **Low**    | 500m       | 1000m |    
-| **Medium** | 100 - 500m | 100m  |
-| **High**   | 0 - 100m   | 10m   |
-| **Best**   | 0 - 100m   | ~0m   |
+| **lowest** | 500m       | 3000m |
+| **low**    | 500m       | 1000m |    
+| **medium** | 100 - 500m | 100m  |
+| **high**   | 0 - 100m   | 10m   |
+| **best**   | 0 - 100m   | ~0m   |
+| **bestForNavigation** | 0 - 100m | [Optimized for navigation](https://developer.apple.com/documentation/corelocation/kcllocationaccuracybestfornavigation) |
 
 ## Issues
 

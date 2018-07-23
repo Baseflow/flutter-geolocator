@@ -15,5 +15,8 @@ enum LocationAccuracy {
   high,
 
   /// Location is accurate within a distance of ~0m on iOS and between 0m and 100m on Android
-  best
+  best,
+
+  /// Location is accuracy is optimized for navigation on iOS and matches the [LocationAccuracy.best] on Android
+  bestForNavigation
 }
