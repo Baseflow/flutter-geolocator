@@ -39,7 +39,8 @@ class _LocationState extends State<CurrentLocationWidget> {
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      position = await _geolocator.getPosition(LocationAccuracy.bestForNavigation);
+      position =
+          await _geolocator.getPosition(LocationAccuracy.bestForNavigation);
     } on PlatformException {
       position = null;
     }
