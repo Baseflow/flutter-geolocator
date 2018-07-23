@@ -1,3 +1,7 @@
+## [1.3.1]
+
+* Added support for iOS `kCLLocationAccurayBestForNavigation` (defaults to `best` when on Android).
+
 ## [1.3.0]
 
 * Added the option to check the distance between two geocoordinates (using the `distanceBetween` method).
