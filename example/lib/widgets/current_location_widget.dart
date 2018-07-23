@@ -22,7 +22,7 @@ class _LocationState extends State<CurrentLocationWidget> {
 
     _geolocator
         .getPositionStream(LocationOptions(
-            accuracy: LocationAccuracy.high, distanceFilter: 10))
+            accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 10))
         .handleError((onError) {
       setState(() {
         _position = null;
@@ -39,7 +39,8 @@ class _LocationState extends State<CurrentLocationWidget> {
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      position = await _geolocator.getPosition(LocationAccuracy.high);
+      position =
+          await _geolocator.getPosition(LocationAccuracy.bestForNavigation);
     } on PlatformException {
       position = null;
     }

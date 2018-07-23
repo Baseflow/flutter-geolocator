@@ -24,6 +24,7 @@ enum GeolocationAccuracy : String, Codable {
     case medium = "medium"
     case high = "high"
     case best = "best"
+    case bestForNavigation = "bestForNavigation"
     
     var clValue: CLLocationAccuracy {
         switch self {
@@ -37,6 +38,8 @@ enum GeolocationAccuracy : String, Codable {
             return kCLLocationAccuracyNearestTenMeters
         case .best:
             return kCLLocationAccuracyBest
+        case .bestForNavigation:
+            return kCLLocationAccuracyBestForNavigation
         }
     }
 }
