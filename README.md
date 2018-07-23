@@ -132,11 +132,12 @@ The table below outlines the accuracy options per platform:
 
 |            | Android    | iOS   |
 |------------|-----------:|------:|
-| **Lowest** | 500m       | 3000m |
-| **Low**    | 500m       | 1000m |    
-| **Medium** | 100 - 500m | 100m  |
-| **High**   | 0 - 100m   | 10m   |
-| **Best**   | 0 - 100m   | ~0m   |
+| **lowest** | 500m       | 3000m |
+| **low**    | 500m       | 1000m |    
+| **medium** | 100 - 500m | 100m  |
+| **high**   | 0 - 100m   | 10m   |
+| **best**   | 0 - 100m   | ~0m   |
+| **bestForNavigation** | 0 - 100m | [Optimized for navigation](https://developer.apple.com/documentation/corelocation/kcllocationaccuracybestfornavigation) |
 
 ## Issues
 
