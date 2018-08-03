@@ -5,9 +5,9 @@ import android.location.LocationManager;
 
 import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
 
-public class OneTimeLocationTask extends LocationTask {
+public class LastKnownLocationTask extends LocationTask {
 
-    public OneTimeLocationTask(TaskContext context) {
+    public LastKnownLocationTask(TaskContext context) {
         super(context);
     }
 

@@ -2,9 +2,10 @@ package com.baseflow.flutter.plugin.geolocator;
 
 import com.baseflow.flutter.plugin.geolocator.tasks.CalculateDistanceTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.ForwardGeocodingTask;
+import com.baseflow.flutter.plugin.geolocator.tasks.LastKnownLocationTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.OneTimeLocationTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.ReverseGeocodingTask;
-import com.baseflow.flutter.plugin.geolocator.tasks.StreamLocationTask;
+import com.baseflow.flutter.plugin.geolocator.tasks.StreamLocationUpdatesTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.Task;
 import com.baseflow.flutter.plugin.geolocator.tasks.TaskContext;
 
@@ -58,8 +59,14 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
                 this);
 
         switch (call.method) {
-            case "getPosition": {
-                Task task = new OneTimeLocationTask(context);
+            case "getLastKnownPosition": {
+                Task task = new LastKnownLocationTask(context);
+                mTasks.put(task.getTaskID(), task);
+                task.startTask();
+                break;
+            }
+            case "getCurrentPosition": {
+                Task task = new CurrentLocationTask(context);
                 mTasks.put(task.getTaskID(), task);
                 task.startTask();
                 break;
@@ -105,7 +112,7 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
                 o,
                 this);
 
-        mStreamLocationTask = new StreamLocationTask(
+        mStreamLocationTask = new StreamLocationUpdatesTask(
                 context);
         mStreamLocationTask.startTask();
     }

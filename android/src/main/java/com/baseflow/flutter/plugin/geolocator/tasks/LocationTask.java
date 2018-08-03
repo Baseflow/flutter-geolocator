@@ -150,7 +150,7 @@ abstract class LocationTask extends Task {
                 Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
-    boolean isBetterLocation(Location location, Location bestLocation) {
+    public static boolean isBetterLocation(Location location, Location bestLocation) {
         if (bestLocation == null)
             return true;
 
