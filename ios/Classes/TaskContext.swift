@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias ResultHandler = (_ result: Any) -> ()
+typealias ResultHandler = (_ result: Any?) -> ()
 
 class TaskContext : NSObject {
     

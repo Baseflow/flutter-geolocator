@@ -58,7 +58,7 @@ class LocationTask : Task, TaskProtocol, CLLocationManagerDelegate {
     }
 }
 
-final class OneTimeLocationTask : LocationTask {
+final class CurrentLocationTask : LocationTask {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let positionDict = location.toDictionary()
@@ -77,7 +77,7 @@ final class OneTimeLocationTask : LocationTask {
     }
 }
 
-final class StreamLocationTask : LocationTask {
+final class StreamLocationUpdatesTask : LocationTask {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let positionDict = location.toDictionary()
