@@ -2,12 +2,8 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/models/location_accuracy.dart';
-import 'package:geolocator/models/location_options.dart';
-import 'package:geolocator/utils/codec.dart';
 import 'package:mockito/mockito.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/position.dart';
 import 'package:test/test.dart';
 
 void main() {

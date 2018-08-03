@@ -1,3 +1,5 @@
+part of geolocator;
+
 /// Defines the accuracy used to determine the location data.
 ///
 /// The accuracy is measured in meters (distance) and differs per platform.
