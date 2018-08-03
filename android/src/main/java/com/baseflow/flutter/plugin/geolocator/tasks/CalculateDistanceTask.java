@@ -1,6 +1,5 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
-import android.app.Activity;
 import android.location.Location;
 
 import com.baseflow.flutter.plugin.geolocator.data.Coordinate;
@@ -9,13 +8,11 @@ import com.baseflow.flutter.plugin.geolocator.data.Result;
 import java.util.Map;
 
 public final class CalculateDistanceTask extends Task {
-    private final Activity mActivity;
     private Coordinate mStartCoordinate;
     private Coordinate mEndCoordinate;
 
     public CalculateDistanceTask(TaskContext context) {
         super(context);
-        mActivity = context.getRegistrar().activity();
 
         parseCoordinates(context.getArguments());
     }
@@ -26,20 +23,18 @@ public final class CalculateDistanceTask extends Task {
             mEndCoordinate = null;
         }
 
-        try {
-            Map<String, Double> coordinates = (Map<String, Double>)arguments;
+        @SuppressWarnings("unchecked")
+        Map<String, Double> coordinates = (Map<String, Double>)arguments;
 
-            mStartCoordinate = new Coordinate(
-                    coordinates.get("startLatitude"),
-                    coordinates.get("startLongitude"));
-            mEndCoordinate = new Coordinate(
-                    coordinates.get("endLatitude"),
-                    coordinates.get("endLongitude"));
+        if(coordinates == null)
+            throw new IllegalArgumentException("No coordinates supplied to calculate distance between.");
 
-        } catch(Exception ex) {
-            mStartCoordinate = null;
-            mEndCoordinate = null;
-        }
+        mStartCoordinate = new Coordinate(
+                coordinates.get("startLatitude"),
+                coordinates.get("startLongitude"));
+        mEndCoordinate = new Coordinate(
+                coordinates.get("endLatitude"),
+                coordinates.get("endLongitude"));
     }
 
     @Override
@@ -57,10 +52,10 @@ public final class CalculateDistanceTask extends Task {
 
         try {
             Location.distanceBetween(
-                    mStartCoordinate.getLatitude(),
-                    mStartCoordinate.getLongitude(),
-                    mEndCoordinate.getLatitude(),
-                    mEndCoordinate.getLongitude(),
+                    mStartCoordinate.latitude,
+                    mStartCoordinate.longitude,
+                    mEndCoordinate.latitude,
+                    mEndCoordinate.longitude,
                     results);
 
             // According to the Android documentation the distance is

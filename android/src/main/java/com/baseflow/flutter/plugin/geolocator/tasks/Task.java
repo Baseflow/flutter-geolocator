@@ -8,7 +8,7 @@ public abstract class Task {
     private final UUID mTaskID;
     private final TaskContext mTaskContext;
 
-    public Task(TaskContext context) {
+    Task(TaskContext context) {
         mTaskID = UUID.randomUUID();
         mTaskContext = context;
     }
@@ -17,7 +17,7 @@ public abstract class Task {
         return mTaskID;
     }
 
-    public TaskContext getTaskContext() {
+    TaskContext getTaskContext() {
         return mTaskContext;
     }
 

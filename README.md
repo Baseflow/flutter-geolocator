@@ -35,8 +35,6 @@ To query the current location of the device simply make a call to the `getPositi
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/location_accuracy.dart';
-import 'package:geolocator/models/position.dart';
 
 Position position = await Geolocator().getPosition(LocationAccuracy.High);
 ```
@@ -46,8 +44,6 @@ the desired accuracy and the minimum distance change (in meters) before updates 
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/location_accuracy.dart';
-import 'package:geolocator/models/position.dart';
 
 var geolocator = Geolocator();
 var locationOptions = LocationOptions(accuracy: LocationAccuracy.High, distanceFilter: 10);
@@ -60,22 +56,20 @@ StreamSubscription<Position> positionStream = geolocator.getPositionStream(locat
 
 ### Geocoding
 
-To translate an address into latitude and longitude coordinates you can use the `toPlacemark` method:
+To translate an address into latitude and longitude coordinates you can use the `placemarkFromAddress` method:
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/placemark.dart';
 
-Placemark placemark = await Geolocator().toPlacemark("Gronausestraat 710, Enschede");
+Placemark placemark = await Geolocator().placemarkFromAddress("Gronausestraat 710, Enschede");
 ```
 
-If you want to translate latitude and longitude coordinates into an address you can use the `fromPlacemark` method:
+If you want to translate latitude and longitude coordinates into an address you can use the `placemarkFromCoordinates` method:
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/placemark.dart';
 
-Placemark placemark = await new Geolocator().toPlacemark(52.2165157, 6.9437819);
+Placemark placemark = await new Geolocator().placemarkFromCoordinates(52.2165157, 6.9437819);
 ```
 
 ### Calculate distance

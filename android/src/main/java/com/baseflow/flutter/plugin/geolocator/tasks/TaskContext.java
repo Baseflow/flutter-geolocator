@@ -41,19 +41,7 @@ public final class TaskContext {
         return mResult;
     }
 
-    public static TaskContext BuildFromMethodResult(
-            PluginRegistry.Registrar registrar,
-            MethodChannel.Result result,
-            OnCompletionListener completionListener) {
-
-        return TaskContext.BuildFromMethodResult(
-            registrar,
-            result,
-            null,
-            completionListener);
-    }
-
-    public static TaskContext BuildFromMethodResult(
+    public static TaskContext buildFromMethodResult(
             PluginRegistry.Registrar registrar,
             MethodChannel.Result methodResult,
             Object arguments,
@@ -67,20 +55,7 @@ public final class TaskContext {
                 completionListener);
     }
 
-    public static TaskContext BuildFromEventSink(
-            PluginRegistry.Registrar registrar,
-            EventChannel.EventSink eventSink,
-            OnCompletionListener completionListener) {
-        Result result = new Result(eventSink);
-
-        return new TaskContext(
-                registrar,
-                result,
-                null,
-                completionListener);
-    }
-
-    public static TaskContext BuildFromEventSink(
+    public static TaskContext buildFromEventSink(
             PluginRegistry.Registrar registrar,
             EventChannel.EventSink eventSink,
             Object arguments,

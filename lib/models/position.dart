@@ -1,4 +1,4 @@
-import 'package:meta/meta.dart';
+part of geolocator;
 
 /// Contains detail location information.
 class Position {
@@ -43,13 +43,13 @@ class Position {
   /// The speedAccuracy is not available on all devices. In these cases the value is 0.0.
   final double speedAccuracy;
 
-  static List<dynamic> fromMaps(dynamic message) {
-    var list = message.map<Position>(fromMap).toList();
+  static List<Position> _fromMaps(dynamic message) {
+    var list = message.map<Position>(_fromMap).toList();
     return list;
   }
 
   /// Converts the supplied [Map] to an instance of the [Position] class.
-  static Position fromMap(dynamic message) {
+  static Position _fromMap(dynamic message) {
     final Map<dynamic, dynamic> positionMap = message;
 
     if (!positionMap.containsKey('latitude'))

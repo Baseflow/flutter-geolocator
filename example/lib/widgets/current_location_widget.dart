@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator/models/location_accuracy.dart';
 import 'package:geolocator/models/location_options.dart';
-import 'package:geolocator/models/position.dart';
 
 class CurrentLocationWidget extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class CurrentLocationWidget extends StatefulWidget {
 
 class _LocationState extends State<CurrentLocationWidget> {
   final Geolocator _geolocator = Geolocator();
+  StreamSubscription<Position> _positionStream;
   Position _position;
   _LocationState();
 
@@ -20,7 +22,28 @@ class _LocationState extends State<CurrentLocationWidget> {
     super.initState();
     _initPlatformState();
 
-    _geolocator
+    _subscribeToPositionStream();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _unsubscribeFromPositionStream();
+  }
+
+  @override
+  void didUpdateWidget(CurrentLocationWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget != widget) {
+      _unsubscribeFromPositionStream();
+      _subscribeToPositionStream();
+    }
+  }
+
+  void _subscribeToPositionStream() {
+    _positionStream = _geolocator
         .getPositionStream(LocationOptions(
             accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 10))
         .handleError((onError) {
@@ -32,6 +55,13 @@ class _LocationState extends State<CurrentLocationWidget> {
         _position = position;
       });
     });
+  }
+
+  void _unsubscribeFromPositionStream() {
+    if (_positionStream != null) {
+      _positionStream.cancel();
+      _positionStream = null;
+    }
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.

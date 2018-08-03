@@ -1,8 +1,6 @@
 package com.baseflow.flutter.plugin.geolocator.data;
 
 import android.location.Address;
-import android.location.Location;
-import android.os.Build;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +10,7 @@ import java.util.Map;
 public class AddressMapper {
 
     public static List<Map<String,Object>> toHashMapList(List<Address> addresses) {
-        List<Map<String, Object>> hashMaps = new ArrayList<>();
+        List<Map<String, Object>> hashMaps = new ArrayList<>(addresses.size());
 
         for(Address address: addresses) {
             Map<String, Object> hashMap = AddressMapper.toHashMap(address);
@@ -22,7 +20,7 @@ public class AddressMapper {
         return hashMaps;
     }
 
-    public static Map<String, Object> toHashMap(Address address)
+    private static Map<String, Object> toHashMap(Address address)
     {
         Map<String, Object> placemark = new HashMap<>();
 

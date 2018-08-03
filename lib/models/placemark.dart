@@ -1,4 +1,4 @@
-import 'package:geolocator/models/position.dart';
+part of geolocator;
 
 /// Contains detailed placemark information.
 class Placemark {
@@ -49,13 +49,13 @@ class Placemark {
   final Position position;
 
   /// Converts a list of [Map] instances to a list of [Placemark] instances.
-  static List<dynamic> fromMaps(dynamic message) {
-    var list = message.map<Placemark>(fromMap).toList();
+  static List<Placemark> _fromMaps(dynamic message) {
+    var list = message.map<Placemark>(_fromMap).toList();
     return list;
   }
 
   /// Converts the supplied [Map] to an instance of the [Placemark] class.
-  static Placemark fromMap(dynamic message) {
+  static Placemark _fromMap(dynamic message) {
     final Map<dynamic, dynamic> placemarkMap = message;
 
     return new Placemark._(
@@ -69,7 +69,7 @@ class Placemark {
       subLocality: placemarkMap["subLocality"] ?? "",
       thoroughfare: placemarkMap["thoroughfare"] ?? "",
       subThoroughfare: placemarkMap["subThoroughfare"] ?? "",
-      position: Position.fromMap(placemarkMap['location']),
+      position: Position._fromMap(placemarkMap['location']),
     );
   }
 }
