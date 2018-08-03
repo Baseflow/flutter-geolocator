@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:geolocator/models/location_options.dart';
+part of geolocator;
 
 class Codec {
   static String encodeLocationOptions(LocationOptions locationOptions) =>
