@@ -81,7 +81,7 @@ void main() {
     when(_methodChannel.invokeMethod('getPosition', codedOptions))
         .thenAnswer((_) async => _mockPosition);
 
-    Position position = await _geolocator.getPosition(LocationAccuracy.best);
+    Position position = await _geolocator.getCurrentPosition(LocationAccuracy.best);
 
     expect(position.latitude, _mockPosition['latitude']);
     expect(position.longitude, _mockPosition['longitude']);

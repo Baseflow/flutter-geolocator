@@ -12,6 +12,7 @@ master  | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.s
 ## Features
 
 * Get the current location of the device;
+* Get the last known location;
 * Get continuous location updates;
 * Translate an address to geocoordinates and vice verse (a.k.a. Geocoding);
 * Calculate the distance (in meters) between two geocoordinates.
@@ -31,12 +32,20 @@ dependencies:
 
 ### Geolocation
 
-To query the current location of the device simply make a call to the `getPosition` method:
+To query the current location of the device simply make a call to the `getCurrentPosition` method:
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator().getPosition(LocationAccuracy.High);
+Position position = await Geolocator().getCurrentPosition(LocationAccuracy.High);
+```
+
+To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+Position position = await Geolocator().getLastKnownPosition(LocationAccuracy.High);
 ```
 
 To listen for location changes you can subscribe to the `onPositionChanged` stream. Supply an instance of the `LocationOptions` class to configure
