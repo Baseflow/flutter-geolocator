@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/location_accuracy.dart';
-import 'package:geolocator/models/location_options.dart';
 
 class CurrentLocationWidget extends StatefulWidget {
   @override
@@ -70,7 +68,7 @@ class _LocationState extends State<CurrentLocationWidget> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       position =
-          await _geolocator.getPosition(LocationAccuracy.bestForNavigation);
+          await _geolocator.getLastKnownPosition(LocationAccuracy.bestForNavigation);
     } on PlatformException {
       position = null;
     }

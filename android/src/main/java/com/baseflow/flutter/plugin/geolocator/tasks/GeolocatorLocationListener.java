@@ -14,6 +14,8 @@ class GeolocatorLocationListener implements LocationListener {
     final TaskContext mTaskContext;
     final float mDesiredAccuracy;
     final String mActiveProvider;
+    final boolean mStopAfterFirstLocationUpdate;
+    final LocationManager mLocationManager;
 
     Location mBestLocation;
 
@@ -21,11 +23,14 @@ class GeolocatorLocationListener implements LocationListener {
             TaskContext taskContext,
             LocationManager locationManager,
             GeolocationAccuracy desiredAccuracy,
+            boolean stopAfterFirstLocationUpdate,
             String provider) {
 
         mTaskContext = taskContext;
         mDesiredAccuracy = accuracyToFloat(desiredAccuracy);
+        mLocationManager = locationManager;
         mActiveProvider = provider;
+        mStopAfterFirstLocationUpdate = stopAfterFirstLocationUpdate;
         mBestLocation = locationManager.getLastKnownLocation(provider);
     }
 
@@ -34,6 +39,10 @@ class GeolocatorLocationListener implements LocationListener {
         if(LocationTask.isBetterLocation(location, mBestLocation) && location.getAccuracy() <= mDesiredAccuracy) {
             mBestLocation = location;
             mTaskContext.getResult().success(LocationMapper.toHashMap(location));
+
+            if(mStopAfterFirstLocationUpdate) {
+                mLocationManager.removeUpdates(this);
+            }
         }
     }
 
