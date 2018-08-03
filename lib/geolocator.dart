@@ -47,13 +47,13 @@ class Geolocator {
     return Position._fromMap(position);
   }
 
-  /// Returns the last known position stored on the users device. 
-  /// 
+  /// Returns the last known position stored on the users device.
+  ///
   /// On Android we look for the location provider matching best with the
   /// supplied [desiredAccuracy]. On iOS this parameter is ignored.
   /// When no position is available, null is returned.
   Future<Position> getLastKnownPosition(
-    [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) async {
+      [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) async {
     var locationOptions =
         LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
     var position = await _methodChannel.invokeMethod(
@@ -98,7 +98,8 @@ class Geolocator {
   /// However in some situations where the supplied address could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
   Future<List<Placemark>> placemarkFromAddress(String address) async {
-    var placemarks = await _methodChannel.invokeMethod('placemarkFromAddress', address);
+    var placemarks =
+        await _methodChannel.invokeMethod('placemarkFromAddress', address);
     return Placemark._fromMaps(placemarks);
   }
 
@@ -109,7 +110,8 @@ class Geolocator {
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
   Future<List<Placemark>> placemarkFromCoordinates(
       double latitude, double longitude) async {
-    var placemarks = await _methodChannel.invokeMethod('placemarkFromCoordinates',
+    var placemarks = await _methodChannel.invokeMethod(
+        'placemarkFromCoordinates',
         <String, double>{"latitude": latitude, "longitude": longitude});
     return Placemark._fromMaps(placemarks);
   }
