@@ -35,16 +35,30 @@ class Geolocator {
 
   Stream<Position> _onPositionChanged;
 
-  /// Returns the current location taking the supplied [desiredAccuracy] into account.
+  /// Returns the current position taking the supplied [desiredAccuracy] into account.
   ///
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
-  Future<Position> getPosition(
+  Future<Position> getCurrentPosition(
       [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) async {
     var locationOptions =
         LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
     var position = await _methodChannel.invokeMethod(
-        'getPosition', Codec.encodeLocationOptions(locationOptions));
+        'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
     return Position._fromMap(position);
+  }
+
+  /// Returns the last known position stored on the users device. 
+  /// 
+  /// On Android we look for the location provider matching best with the
+  /// supplied [desiredAccuracy]. On iOS this parameter is ignored.
+  /// When no position is available, null is returned.
+  Future<Position> getLastKnownPosition(
+    [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) async {
+    var locationOptions =
+        LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
+    var position = await _methodChannel.invokeMethod(
+        'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
+    return Position?._fromMap(position);
   }
 
   /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].

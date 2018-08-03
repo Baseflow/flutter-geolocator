@@ -3,7 +3,7 @@ package com.baseflow.flutter.plugin.geolocator;
 import com.baseflow.flutter.plugin.geolocator.tasks.CalculateDistanceTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.ForwardGeocodingTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.LastKnownLocationTask;
-import com.baseflow.flutter.plugin.geolocator.tasks.OneTimeLocationTask;
+import com.baseflow.flutter.plugin.geolocator.tasks.CurrentLocationTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.ReverseGeocodingTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.StreamLocationUpdatesTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.Task;

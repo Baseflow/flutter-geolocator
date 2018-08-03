@@ -45,6 +45,7 @@ public class StreamLocationUpdatesTask extends LocationTask {
                 getTaskContext(),
                 locationManager,
                 mLocationOptions.accuracy,
+                false,
                 bestProvider);
 
         Looper looper = Looper.myLooper();

@@ -1,14 +1,7 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
-import android.os.Bundle;
 import android.os.Looper;
-
-import com.baseflow.flutter.plugin.geolocator.data.GeolocationAccuracy;
-import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
 import com.google.android.gms.common.util.Strings;
 
 public class CurrentLocationTask extends LocationTask {
@@ -45,6 +38,7 @@ public class CurrentLocationTask extends LocationTask {
                 getTaskContext(),
                 locationManager,
                 mLocationOptions.accuracy,
+                true,
                 bestProvider);
 
         Looper looper = Looper.myLooper();
