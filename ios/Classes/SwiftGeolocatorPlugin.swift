@@ -28,11 +28,11 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
             executeTask(task: OneTimeLocationTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))
-        } else if call.method == "toPlacemark" {
+        } else if call.method == "placemarkFromAddress" {
             executeTask(task: ForwardGeocodeTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))
-        } else if call.method == "fromPlacemark" {
+        } else if call.method == "placemarkFromCoordinates" {
             executeTask(task: ReverseGeocodeTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))

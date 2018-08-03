@@ -25,11 +25,7 @@ public class ForwardGeocodingTask extends Task {
     private static String parseAddress(Object arguments) {
         if(arguments == null) return null;
 
-        try {
-            return (String) arguments;
-        } catch(Exception ex) {
-            return null;
-        }
+        return (String) arguments;
     }
 
     @Override

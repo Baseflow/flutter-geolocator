@@ -1,4 +1,4 @@
-import 'package:geolocator/models/location_accuracy.dart';
+part of geolocator;
 
 /// Represents different options to configure the quality and frequency
 /// of location updates.

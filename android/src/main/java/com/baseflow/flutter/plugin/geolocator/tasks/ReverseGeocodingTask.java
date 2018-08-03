@@ -27,16 +27,12 @@ public class ReverseGeocodingTask extends Task {
     private static Coordinate parseCoordinates(Object arguments) {
         if(arguments == null) return null;
 
-        try {
-            Map<String, Double> coordinates = (Map<String, Double>)arguments;
+        @SuppressWarnings("unchecked")
+        Map<String, Double> coordinates = (Map<String, Double>)arguments;
 
-            return new Coordinate(
-                    coordinates.get("latitude"),
-                    coordinates.get("longitude"));
-
-        } catch(Exception ex) {
-            return null;
-        }
+        return new Coordinate(
+                coordinates.get("latitude"),
+                coordinates.get("longitude"));
     }
 
     @Override
@@ -45,20 +41,20 @@ public class ReverseGeocodingTask extends Task {
         Result result = getTaskContext().getResult();
 
         try {
-            List<Address> addresses = geocoder.getFromLocation(mCoordinatesToLookup.getLatitude(), mCoordinatesToLookup.getLongitude(), 1);
+            List<Address> addresses = geocoder.getFromLocation(mCoordinatesToLookup.latitude, mCoordinatesToLookup.longitude, 1);
 
             if(addresses.size() > 0) {
                 result.success(AddressMapper.toHashMapList(addresses));
             } else {
                 result.error(
-                        "ERROR_GEOCODNG_ADDRESSNOTFOUND",
-                        "Unable to find coordinates matching the supplied address.",
+                        "ERROR_GEOCODING_INVALID_COORDINATES",
+                        "Unable to find an address for the supplied coordinates.",
                         null);
             }
 
         } catch (IOException e) {
             result.error(
-                    "ERROR_GEOCODING_ADDRESS",
+                    "ERROR_GEOCODING_COORDINATES",
                     e.getLocalizedMessage(),
                     null);
         } finally {
