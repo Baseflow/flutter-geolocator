@@ -1,3 +1,10 @@
+## [1.4.0
+
+* Added feature to query the last known location that is stored on the device using the `getLastKnownLocation` method;
+* **breaking** Renamed the `getPosition` to `getCurrentPosition`;
+* Fixed bug where calling `getCurrentPosition` on Android resulted in returning the last known location;
+* **breaking** Renamed methods `toPlacemark` and `fromPlacemark` respectively to the, more meaningfull names, `placemarkFromAddress` and `placemarkFromCoordinates`;
+
 ## [1.3.1]
 
 * Added support for iOS `kCLLocationAccurayBestForNavigation` (defaults to `best` when on Android).
