@@ -2,12 +2,8 @@ import 'dart:async';
 
 import 'package:async/async.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/models/location_accuracy.dart';
-import 'package:geolocator/models/location_options.dart';
-import 'package:geolocator/utils/codec.dart';
 import 'package:mockito/mockito.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/position.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -82,10 +78,11 @@ void main() {
   test('Retrieve the current position', () async {
     var codedOptions = Codec.encodeLocationOptions(
         LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 0));
-    when(_methodChannel.invokeMethod('getPosition', codedOptions))
+    when(_methodChannel.invokeMethod('getCurrentPosition', codedOptions))
         .thenAnswer((_) async => _mockPosition);
 
-    Position position = await _geolocator.getPosition(LocationAccuracy.best);
+    Position position =
+        await _geolocator.getCurrentPosition(LocationAccuracy.best);
 
     expect(position.latitude, _mockPosition['latitude']);
     expect(position.longitude, _mockPosition['longitude']);

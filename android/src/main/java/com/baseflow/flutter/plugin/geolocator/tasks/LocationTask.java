@@ -23,7 +23,7 @@ abstract class LocationTask extends Task {
     private static final long TWO_MINUTES = 120000;
 
     private final Activity mActivity;
-    protected final LocationOptions mLocationOptions;
+    final LocationOptions mLocationOptions;
 
     LocationTask(TaskContext context) {
         super(context);
@@ -150,7 +150,7 @@ abstract class LocationTask extends Task {
                 Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
-    boolean isBetterLocation(Location location, Location bestLocation) {
+    public static boolean isBetterLocation(Location location, Location bestLocation) {
         if (bestLocation == null)
             return true;
 

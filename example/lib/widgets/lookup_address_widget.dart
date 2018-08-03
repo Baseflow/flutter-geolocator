@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator/models/placemark.dart';
 
 class LookupAddressWidget extends StatefulWidget {
   @override
@@ -15,7 +14,7 @@ class _LookupAddressState extends State<LookupAddressWidget> {
 
   void _onLookupCoordinatesPressed() async {
     List<Placemark> placemarks =
-        await _geolocator.toPlacemark(_addressTextController.text);
+        await _geolocator.placemarkFromAddress(_addressTextController.text);
 
     if (placemarks != null && placemarks.length >= 1) {
       var pos = placemarks[0];

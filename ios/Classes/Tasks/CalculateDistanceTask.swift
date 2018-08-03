@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-class CalculateDistance : Task, TaskProtocol {
+class CalculateDistanceTask : Task, TaskProtocol {
     private var _startLocation: CLLocation?
     private var _endLocation: CLLocation?
     

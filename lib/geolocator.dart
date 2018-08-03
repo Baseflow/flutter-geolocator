@@ -1,14 +1,16 @@
+library geolocator;
+
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:geolocator/models/location_accuracy.dart';
-import 'package:geolocator/models/location_options.dart';
-import 'package:geolocator/models/placemark.dart';
 import 'package:meta/meta.dart';
 
-import 'models/position.dart';
-
-import 'utils/codec.dart';
+part 'models/location_accuracy.dart';
+part 'models/location_options.dart';
+part 'models/placemark.dart';
+part 'models/position.dart';
+part 'utils/codec.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
 class Geolocator {
@@ -33,16 +35,30 @@ class Geolocator {
 
   Stream<Position> _onPositionChanged;
 
-  /// Returns the current location taking the supplied [desiredAccuracy] into account.
+  /// Returns the current position taking the supplied [desiredAccuracy] into account.
   ///
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
-  Future<Position> getPosition(
+  Future<Position> getCurrentPosition(
       [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) async {
     var locationOptions =
         LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
     var position = await _methodChannel.invokeMethod(
-        'getPosition', Codec.encodeLocationOptions(locationOptions));
-    return Position.fromMap(position);
+        'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
+    return Position._fromMap(position);
+  }
+
+  /// Returns the last known position stored on the users device.
+  ///
+  /// On Android we look for the location provider matching best with the
+  /// supplied [desiredAccuracy]. On iOS this parameter is ignored.
+  /// When no position is available, null is returned.
+  Future<Position> getLastKnownPosition(
+      [LocationAccuracy desiredAccuracy = LocationAccuracy.best]) async {
+    var locationOptions =
+        LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
+    var position = await _methodChannel.invokeMethod(
+        'getLastKnownPosition', Codec.encodeLocationOptions(locationOptions));
+    return Position?._fromMap(position);
   }
 
   /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
@@ -70,7 +86,7 @@ class Geolocator {
       _onPositionChanged = _eventChannel
           .receiveBroadcastStream(Codec.encodeLocationOptions(locationOptions))
           .map<Position>(
-              (element) => Position.fromMap(element.cast<String, double>()));
+              (element) => Position._fromMap(element.cast<String, double>()));
     }
 
     return _onPositionChanged;
@@ -81,21 +97,23 @@ class Geolocator {
   /// In most situations the returned list should only contain one entry.
   /// However in some situations where the supplied address could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
-  Future<List<Placemark>> toPlacemark(String address) async {
-    var placemarks = await _methodChannel.invokeMethod('toPlacemark', address);
-    return Placemark.fromMaps(placemarks);
+  Future<List<Placemark>> placemarkFromAddress(String address) async {
+    var placemarks =
+        await _methodChannel.invokeMethod('placemarkFromAddress', address);
+    return Placemark._fromMaps(placemarks);
   }
 
-  /// Returns a list of [Placemark] instances found for the supplied address.
+  /// Returns a list of [Placemark] instances found for the supplied coordinates.
   ///
   /// In most situations the returned list should only contain one entry.
-  /// However in some situations where the supplied address could not be
+  /// However in some situations where the supplied coordinates could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
-  Future<List<Placemark>> fromPlacemark(
+  Future<List<Placemark>> placemarkFromCoordinates(
       double latitude, double longitude) async {
-    var placemarks = await _methodChannel.invokeMethod('fromPlacemark',
+    var placemarks = await _methodChannel.invokeMethod(
+        'placemarkFromCoordinates',
         <String, double>{"latitude": latitude, "longitude": longitude});
-    return Placemark.fromMaps(placemarks);
+    return Placemark._fromMaps(placemarks);
   }
 
   /// Returns the distance between the supplied coordinates in meters.

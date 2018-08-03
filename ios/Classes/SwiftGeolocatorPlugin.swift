@@ -6,7 +6,7 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
     private static let METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods"
     private static let EVENT_CHANNEL_NAME = "flutter.baseflow.com/geolocator/events"
     
-    private var _streamLocationService: StreamLocationTask?
+    private var _streamLocationService: StreamLocationUpdatesTask?
     private var _tasks: [UUID:TaskProtocol] = [:];
     
     
@@ -24,20 +24,24 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
             (taskId) in self._tasks.removeValue(forKey: taskId)
         }
         
-        if call.method == "getPosition" {
-            executeTask(task: OneTimeLocationTask.init(
+        if call.method == "getCurrentPosition" {
+            executeTask(task: CurrentLocationTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))
-        } else if call.method == "toPlacemark" {
+        } else if call.method == "getLastKnownPosition" {
+            executeTask(task: LastKnownLocationTask.init(
+                context: buildTaskContext(arguments: call.arguments, resultHandler: result),
+                completionHandler: completionAction))
+        } else if call.method == "placemarkFromAddress" {
             executeTask(task: ForwardGeocodeTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))
-        } else if call.method == "fromPlacemark" {
+        } else if call.method == "placemarkFromCoordinates" {
             executeTask(task: ReverseGeocodeTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))
         } else if call.method == "distanceBetween" {
-            executeTask(task: CalculateDistance.init(
+            executeTask(task: CalculateDistanceTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))
         } else {
@@ -60,7 +64,7 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
 
         let context = buildTaskContext(arguments: arguments, resultHandler: events)
         
-        _streamLocationService = StreamLocationTask.init(
+        _streamLocationService = StreamLocationUpdatesTask.init(
             context: context,
             completionHandler: nil);
         
