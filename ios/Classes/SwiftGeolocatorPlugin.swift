@@ -28,7 +28,7 @@ public class SwiftGeolocatorPlugin: NSObject, FlutterStreamHandler, FlutterPlugi
             executeTask(task: CurrentLocationTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))
-        } else if call.method == "getLastKnowPosition" {
+        } else if call.method == "getLastKnownPosition" {
             executeTask(task: LastKnownLocationTask.init(
                 context: buildTaskContext(arguments: call.arguments, resultHandler: result),
                 completionHandler: completionAction))

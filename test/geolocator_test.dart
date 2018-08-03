@@ -78,7 +78,7 @@ void main() {
   test('Retrieve the current position', () async {
     var codedOptions = Codec.encodeLocationOptions(
         LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 0));
-    when(_methodChannel.invokeMethod('getPosition', codedOptions))
+    when(_methodChannel.invokeMethod('getCurrentPosition', codedOptions))
         .thenAnswer((_) async => _mockPosition);
 
     Position position =
