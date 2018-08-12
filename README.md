@@ -37,7 +37,7 @@ To query the current location of the device simply make a call to the `getCurren
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator().getCurrentPosition(LocationAccuracy.High);
+Position position = await Geolocator().getCurrentPosition(LocationAccuracy.high);
 ```
 
 To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
@@ -45,7 +45,7 @@ To query the last known location retrieved stored on the device you can use the 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator().getLastKnownPosition(LocationAccuracy.High);
+Position position = await Geolocator().getLastKnownPosition(LocationAccuracy.high);
 ```
 
 To listen for location changes you can subscribe to the `onPositionChanged` stream. Supply an instance of the `LocationOptions` class to configure
@@ -55,7 +55,7 @@ the desired accuracy and the minimum distance change (in meters) before updates 
 import 'package:geolocator/geolocator.dart';
 
 var geolocator = Geolocator();
-var locationOptions = LocationOptions(accuracy: LocationAccuracy.High, distanceFilter: 10);
+var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
 StreamSubscription<Position> positionStream = geolocator.getPositionStream(locationOptions).listen(
     (Position position) {
