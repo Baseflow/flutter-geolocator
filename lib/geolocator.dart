@@ -44,7 +44,12 @@ class Geolocator {
         LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
     var position = await _methodChannel.invokeMethod(
         'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
-    return Position._fromMap(position);
+
+    try {
+      return Position._fromMap(position);
+    } on ArgumentError {
+      return null;
+    }
   }
 
   /// Returns the last known position stored on the users device.
@@ -58,7 +63,12 @@ class Geolocator {
         LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
     var position = await _methodChannel.invokeMethod(
         'getLastKnownPosition', Codec.encodeLocationOptions(locationOptions));
-    return Position?._fromMap(position);
+
+    try {
+      return Position._fromMap(position);
+    } on ArgumentError {
+      return null;
+    }
   }
 
   /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
@@ -113,7 +123,12 @@ class Geolocator {
     var placemarks = await _methodChannel.invokeMethod(
         'placemarkFromCoordinates',
         <String, double>{"latitude": latitude, "longitude": longitude});
-    return Placemark._fromMaps(placemarks);
+
+    try {
+      return Placemark._fromMaps(placemarks);
+    } on ArgumentError {
+      return null;
+    }
   }
 
   /// Returns the distance between the supplied coordinates in meters.
