@@ -11,13 +11,13 @@ import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
 
 class GeolocatorLocationListener implements LocationListener {
 
-    final TaskContext mTaskContext;
-    final float mDesiredAccuracy;
-    final String mActiveProvider;
-    final boolean mStopAfterFirstLocationUpdate;
-    final LocationManager mLocationManager;
+    private final TaskContext mTaskContext;
+    private final float mDesiredAccuracy;
+    private final String mActiveProvider;
+    private final boolean mStopAfterFirstLocationUpdate;
+    private final LocationManager mLocationManager;
 
-    Location mBestLocation;
+    private Location mBestLocation;
 
     GeolocatorLocationListener(
             TaskContext taskContext,
@@ -71,7 +71,7 @@ class GeolocatorLocationListener implements LocationListener {
         }
     }
 
-    float accuracyToFloat(GeolocationAccuracy accuracy) {
+    private float accuracyToFloat(GeolocationAccuracy accuracy) {
         switch(accuracy) {
             case Lowest: case Low: return 500;
             case Medium: return 250;
