@@ -14,7 +14,6 @@ public class StreamLocationUpdatesTask extends LocationTask {
 
     @Override
     protected void acquirePosition() {
-
         LocationManager locationManager = getLocationManager();
 
         // Make sure we remove existing listeners before we register a new one
@@ -61,5 +60,15 @@ public class StreamLocationUpdatesTask extends LocationTask {
                 code,
                 message,
                 null);
+    }
+
+    @Override
+    public void stopTask() {
+        super.stopTask();
+
+        LocationManager locationManager = getLocationManager();
+        if(mLocationListener != null) {
+            locationManager.removeUpdates(mLocationListener);
+        }
     }
 }

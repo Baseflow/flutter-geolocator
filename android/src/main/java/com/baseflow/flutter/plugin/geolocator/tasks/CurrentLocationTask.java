@@ -61,4 +61,14 @@ public class CurrentLocationTask extends LocationTask {
                 message,
                 null);
     }
+
+    @Override
+    public void stopTask() {
+        super.stopTask();
+
+        LocationManager locationManager = getLocationManager();
+        if(mLocationListener != null) {
+            locationManager.removeUpdates(mLocationListener);
+        }
+    }
 }
