@@ -28,30 +28,17 @@ class LocationTask : Task, TaskProtocol, CLLocationManagerDelegate {
         {
             _locationManager = CLLocationManager()
             _locationManager!.delegate = self
-            
-            if (CLLocationManager.authorizationStatus() == .notDetermined) {
-                if (Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription") != nil) {
-                    _locationManager!.requestWhenInUseAuthorization()
-                }
-                else if (Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysUsageDescription") != nil) {
-                    _locationManager!.requestAlwaysAuthorization();
-                }
-                else {
-                    NSException(name: NSExceptionName.internalInconsistencyException, reason:"To use location in iOS8 you need to define either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in the app bundle's Info.plist file", userInfo: nil).raise()
-                }
-                
-            }
-            
-            _locationManager!.desiredAccuracy = _locationOptions.accuracy.clValue;
-            _locationManager!.distanceFilter = _locationOptions.distanceFilter;
         }
-        
+
+        _locationManager!.desiredAccuracy = _locationOptions.accuracy.clValue;
+        _locationManager!.distanceFilter = _locationOptions.distanceFilter;
         _locationManager!.startUpdatingLocation()
     }
     
     override func stopTask() {
         if(_locationManager != nil) {
             _locationManager!.stopUpdatingLocation()
+            _locationManager = nil
         }
         
         super.stopTask()

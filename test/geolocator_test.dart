@@ -118,7 +118,7 @@ void main() {
 
     test('Receive position changes', () async {
       final StreamQueue<Position> queue = new StreamQueue<Position>(
-          _geolocator.getPositionStream(LocationOptions(
+          await _geolocator.getPositionStream(LocationOptions(
               accuracy: LocationAccuracy.best, distanceFilter: 0)));
 
       _controller.add(_mockPositions[0]);

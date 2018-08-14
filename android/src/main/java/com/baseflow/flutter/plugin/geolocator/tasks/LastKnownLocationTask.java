@@ -13,7 +13,7 @@ public class LastKnownLocationTask extends LocationTask {
     }
 
     @Override
-    protected void acquirePosition() {
+    public void startTask() {
         LocationManager locationManager = getLocationManager();
 
         Location bestLocation = null;
@@ -33,13 +33,5 @@ public class LastKnownLocationTask extends LocationTask {
         }
 
         result.success(LocationMapper.toHashMap(bestLocation));
-    }
-
-    @Override
-    protected void handleError(String code, String message) {
-        getTaskContext().getResult().error(
-                code,
-                message,
-                null);
     }
 }

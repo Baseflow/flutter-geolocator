@@ -1,14 +1,8 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
-import android.os.Bundle;
 import android.os.Looper;
 
-import com.baseflow.flutter.plugin.geolocator.data.GeolocationAccuracy;
-import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
 import com.google.android.gms.common.util.Strings;
 
 public class StreamLocationUpdatesTask extends LocationTask {
@@ -19,7 +13,7 @@ public class StreamLocationUpdatesTask extends LocationTask {
     }
 
     @Override
-    protected void acquirePosition() {
+    public void startTask() {
 
         LocationManager locationManager = getLocationManager();
 
@@ -35,8 +29,7 @@ public class StreamLocationUpdatesTask extends LocationTask {
 
         if(Strings.isEmptyOrWhitespace(bestProvider)) {
             handleError(
-                    "INVALID_LOCATION_SETTINGS",
-                    "Location settings are inadequate, check your location settings.");
+            );
 
             return;
         }
@@ -61,11 +54,5 @@ public class StreamLocationUpdatesTask extends LocationTask {
                 looper);
     }
 
-    @Override
-    protected void handleError(String code, String message) {
-        getTaskContext().getResult().error(
-                code,
-                message,
-                null);
-    }
+
 }

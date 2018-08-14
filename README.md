@@ -14,6 +14,7 @@ master  | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.s
 * Get the current location of the device;
 * Get the last known location;
 * Get continuous location updates;
+* Check if location services are enabled on the device;
 * Translate an address to geocoordinates and vice verse (a.k.a. Geocoding);
 * Calculate the distance (in meters) between two geocoordinates.
 
@@ -61,6 +62,14 @@ StreamSubscription<Position> positionStream = geolocator.getPositionStream(locat
     (Position position) {
         print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
     });
+```
+
+To check if location services are enabled you can call the `checkGeolocationStatus` method. This method returns a value of the `GeolocationStatus` enum indicating the availability of the location services on the device. Optionally you can specify if you want to test for `GeolocationPermission.locationAlways` or `GeolocationPermission.locationWhenInUse` (by default `GeolocationPermission.location` is used, which checks for either one of the previously mentioned permissions). Example usage:
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+GeolocationStatus geolocationStatus  = await Geolocator.checkGeolocationStatus();
 ```
 
 ### Geocoding

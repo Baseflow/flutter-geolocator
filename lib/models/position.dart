@@ -43,6 +43,11 @@ class Position {
   /// The speedAccuracy is not available on all devices. In these cases the value is 0.0.
   final double speedAccuracy;
 
+  @override
+  String toString() {
+    return 'Lat: $latitude, Long: $longitude';
+  }
+
   /// Converts a collection of [Map] objects into a collection of [Position] objects.
   static List<Position> _fromMaps(dynamic message) {
     if (message == null) {
