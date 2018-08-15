@@ -1,31 +1,94 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator_example/widgets/calculate_distance_widget.dart';
-import 'package:geolocator_example/widgets/current_location_widget.dart';
-import 'package:geolocator_example/widgets/lookup_address_widget.dart';
-import 'package:geolocator_example/widgets/lookup_coordinates_widget.dart';
+import 'package:geolocator_example/pages/calculate_distance_widget.dart';
+import 'package:geolocator_example/pages/current_location_widget.dart';
+import 'package:geolocator_example/pages/location_stream_widget.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(new GeolocatorExampleApp());
 
-class MyApp extends StatelessWidget {
+enum TabItem { singleLocation, locationStream, distance }
+
+class GeolocatorExampleApp extends StatefulWidget {
+  @override
+  State<GeolocatorExampleApp> createState() => BottomNavigationState();
+}
+
+class BottomNavigationState extends State<GeolocatorExampleApp> {
+  TabItem _currentItem = TabItem.singleLocation;
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-        home: new Scaffold(
-            appBar: new AppBar(
-              title: new Text('Plugin example app'),
-            ),
-            body: new Center(
-              child: new Column(
-                children: <Widget>[
-                  new CurrentLocationWidget(),
-                  new Divider(),
-                  new LookupAddressWidget(),
-                  new Divider(),
-                  new LookupCoordinatesWidget(),
-                  new Divider(),
-                  new CalculateDistanceWidget(),
-                ],
-              ),
-            )));
+      home: new Scaffold(
+        appBar: new AppBar(
+          title: new Text('Geolocator Example App'),
+        ),
+        body: _buildBody(),
+        bottomNavigationBar: _buildBottomNavigationBar(),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    switch (_currentItem) {
+      case TabItem.locationStream:
+        return LocationStreamWidget();
+      case TabItem.distance:
+        return CalculateDistanceWidget();
+      case TabItem.singleLocation:
+      default:
+        return CurrentLocationWidget();
+    }
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      items: [
+        _buildBottomNavigationBarItem(
+            Icons.location_on, TabItem.singleLocation),
+        _buildBottomNavigationBarItem(Icons.clear_all, TabItem.locationStream),
+        _buildBottomNavigationBarItem(Icons.redo, TabItem.distance),
+      ],
+      onTap: _onSelectTab,
+    );
+  }
+
+  BottomNavigationBarItem _buildBottomNavigationBarItem(
+      IconData icon, TabItem tabItem) {
+    String text = tabItem.toString().split('.').last;
+    Color color =
+        _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
+
+    return BottomNavigationBarItem(
+      icon: Icon(
+        icon,
+        color: color,
+      ),
+      title: Text(
+        text,
+        style: TextStyle(
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  void _onSelectTab(int index) {
+    TabItem selectedTabItem;
+
+    switch (index) {
+      case 1:
+        selectedTabItem = TabItem.locationStream;
+        break;
+      case 2:
+        selectedTabItem = TabItem.distance;
+        break;
+      default:
+        selectedTabItem = TabItem.singleLocation;
+    }
+
+    setState(() {
+      _currentItem = selectedTabItem;
+    });
   }
 }

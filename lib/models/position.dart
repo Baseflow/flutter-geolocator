@@ -43,13 +43,27 @@ class Position {
   /// The speedAccuracy is not available on all devices. In these cases the value is 0.0.
   final double speedAccuracy;
 
+  @override
+  String toString() {
+    return 'Lat: $latitude, Long: $longitude';
+  }
+
+  /// Converts a collection of [Map] objects into a collection of [Position] objects.
   static List<Position> _fromMaps(dynamic message) {
+    if (message == null) {
+      throw new ArgumentError("The parameter 'message' should not be null.");
+    }
+
     var list = message.map<Position>(_fromMap).toList();
     return list;
   }
 
   /// Converts the supplied [Map] to an instance of the [Position] class.
   static Position _fromMap(dynamic message) {
+    if (message == null) {
+      throw new ArgumentError("The parameter 'message' should not be null.");
+    }
+
     final Map<dynamic, dynamic> positionMap = message;
 
     if (!positionMap.containsKey('latitude'))

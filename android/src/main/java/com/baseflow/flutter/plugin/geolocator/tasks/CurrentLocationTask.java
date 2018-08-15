@@ -12,7 +12,7 @@ public class CurrentLocationTask extends LocationTask {
     }
 
     @Override
-    protected void acquirePosition() {
+    public void startTask() {
 
         LocationManager locationManager = getLocationManager();
 
@@ -28,8 +28,7 @@ public class CurrentLocationTask extends LocationTask {
 
         if(Strings.isEmptyOrWhitespace(bestProvider)) {
             handleError(
-                    "INVALID_LOCATION_SETTINGS",
-                    "Location settings are inadequate, check your location settings.");
+            );
 
             return;
         }
@@ -55,10 +54,12 @@ public class CurrentLocationTask extends LocationTask {
     }
 
     @Override
-    protected void handleError(String code, String message) {
-        getTaskContext().getResult().error(
-                code,
-                message,
-                null);
+    public void stopTask() {
+        super.stopTask();
+
+        LocationManager locationManager = getLocationManager();
+        if(mLocationListener != null) {
+            locationManager.removeUpdates(mLocationListener);
+        }
     }
 }

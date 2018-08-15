@@ -14,6 +14,7 @@ master  | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.s
 * Get the current location of the device;
 * Get the last known location;
 * Get continuous location updates;
+* Check if location services are enabled on the device;
 * Translate an address to geocoordinates and vice verse (a.k.a. Geocoding);
 * Calculate the distance (in meters) between two geocoordinates.
 
@@ -23,7 +24,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^1.4.0'
+  geolocator: '^1.5.0'
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
@@ -37,7 +38,7 @@ To query the current location of the device simply make a call to the `getCurren
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator().getCurrentPosition(LocationAccuracy.High);
+Position position = await Geolocator().getCurrentPosition(LocationAccuracy.high);
 ```
 
 To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
@@ -45,7 +46,7 @@ To query the last known location retrieved stored on the device you can use the 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator().getLastKnownPosition(LocationAccuracy.High);
+Position position = await Geolocator().getLastKnownPosition(LocationAccuracy.high);
 ```
 
 To listen for location changes you can subscribe to the `onPositionChanged` stream. Supply an instance of the `LocationOptions` class to configure
@@ -55,12 +56,20 @@ the desired accuracy and the minimum distance change (in meters) before updates 
 import 'package:geolocator/geolocator.dart';
 
 var geolocator = Geolocator();
-var locationOptions = LocationOptions(accuracy: LocationAccuracy.High, distanceFilter: 10);
+var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
 StreamSubscription<Position> positionStream = geolocator.getPositionStream(locationOptions).listen(
     (Position position) {
         print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
     });
+```
+
+To check if location services are enabled you can call the `checkGeolocationStatus` method. This method returns a value of the `GeolocationStatus` enum indicating the availability of the location services on the device. Optionally you can specify if you want to test for `GeolocationPermission.locationAlways` or `GeolocationPermission.locationWhenInUse` (by default `GeolocationPermission.location` is used, which checks for either one of the previously mentioned permissions). Example usage:
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+GeolocationStatus geolocationStatus  = await Geolocator.checkGeolocationStatus();
 ```
 
 ### Geocoding
