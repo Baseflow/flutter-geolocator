@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator_example/common_widgets/placeholder_widget.dart';
+
+import '../common_widgets/placeholder_widget.dart';
 
 class LocationStreamWidget extends StatefulWidget {
   @override
