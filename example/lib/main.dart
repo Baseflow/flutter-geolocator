@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator_example/pages/calculate_distance_widget.dart';
-import 'package:geolocator_example/pages/current_location_widget.dart';
-import 'package:geolocator_example/pages/location_stream_widget.dart';
+
+import 'pages/calculate_distance_widget.dart';
+import 'pages/current_location_widget.dart';
+import 'pages/location_stream_widget.dart';
 
 void main() => runApp(new GeolocatorExampleApp());
 
