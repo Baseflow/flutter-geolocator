@@ -7,13 +7,10 @@ class CalculateDistanceWidget extends StatefulWidget {
 }
 
 class _CalculateDistanceState extends State<CalculateDistanceWidget> {
-  final Geolocator _geolocator = Geolocator();
   final TextEditingController _startCoordinatesTextController =
       TextEditingController();
   final TextEditingController _endCoordinatesTextController =
       TextEditingController();
-
-  String _distance = '';
 
   void _onCalculatePressed() async {
     var startCoords = _startCoordinatesTextController.text.split(',');
@@ -23,35 +20,46 @@ class _CalculateDistanceState extends State<CalculateDistanceWidget> {
     var endLatitude = double.parse(endCoords[0]);
     var endLongitude = double.parse(endCoords[1]);
 
-    double distance = await _geolocator.distanceBetween(
+    double distance = await Geolocator().distanceBetween(
         startLatitude, startLongitude, endLatitude, endLongitude);
 
-    setState(() {
-      _distance = 'The distance is: $distance';
-    });
+    Scaffold.of(context).showSnackBar(SnackBar(
+          backgroundColor: Theme.of(context).primaryColorDark,
+          content: new Text("The distance is: $distance"),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        new TextField(
-          decoration:
-              new InputDecoration(hintText: "start latitude,start longitude"),
-          controller: _startCoordinatesTextController,
+        Container(
+          padding: EdgeInsets.all(8.0),
+          child: TextField(
+            decoration:
+                InputDecoration(hintText: "start latitude,start longitude"),
+            controller: _startCoordinatesTextController,
+          ),
         ),
-        new TextField(
-          decoration:
-              new InputDecoration(hintText: "end latitude,end longitude"),
-          controller: _endCoordinatesTextController,
+        Container(
+          padding: EdgeInsets.all(8.0),
+          child: TextField(
+            decoration: InputDecoration(hintText: "end latitude,end longitude"),
+            controller: _endCoordinatesTextController,
+          ),
         ),
-        new RaisedButton(
-          child: new Text('Calculate...'),
+        RaisedButton(
+          child: Text(
+            "Calculate",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          color: Theme.of(context).primaryColor,
+          padding: EdgeInsets.all(8.0),
           onPressed: () {
             _onCalculatePressed();
           },
         ),
-        new Text(_distance),
       ],
     );
   }

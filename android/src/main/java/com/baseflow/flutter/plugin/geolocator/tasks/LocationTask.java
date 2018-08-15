@@ -1,13 +1,10 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
 
 import com.baseflow.flutter.plugin.geolocator.Codec;
 import com.baseflow.flutter.plugin.geolocator.data.GeolocationAccuracy;
@@ -19,7 +16,6 @@ import java.util.List;
 import io.flutter.plugin.common.PluginRegistry;
 
 abstract class LocationTask extends Task {
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private static final long TWO_MINUTES = 120000;
 
     private final Activity mActivity;
@@ -32,23 +28,17 @@ abstract class LocationTask extends Task {
 
         mActivity = registrar.activity();
 
-        PluginRegistry.RequestPermissionsResultListener permissionsResultListener = createPermissionsResultListener();
-        registrar.addRequestPermissionsResultListener(permissionsResultListener);
-
         mLocationOptions = Codec.decodeLocationOptions(context.getArguments());
     }
 
-    protected abstract void acquirePosition();
-    protected abstract void handleError(String code, String message);
-
-    @Override
-    public void startTask() {
-        if(!hasPermissions()) {
-            requestPermissions();
-        } else {
-            acquirePosition();
-        }
+    void handleError() {
+        getTaskContext().getResult().error(
+                "INVALID_LOCATION_SETTINGS",
+                "Location settings are inadequate, check your location settings.",
+                null);
     }
+
+    public abstract void startTask();
 
     LocationManager getLocationManager() {
         Context context = mActivity.getApplicationContext();
@@ -99,55 +89,6 @@ abstract class LocationTask extends Task {
         }
 
         return provider;
-    }
-
-    private PluginRegistry.RequestPermissionsResultListener createPermissionsResultListener() {
-        return new PluginRegistry.RequestPermissionsResultListener() {
-            @Override
-            public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-                if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE && permissions.length == 1
-                        && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        acquirePosition();
-                    } else {
-                        if (!shouldShowRequestPermissionRationale()) {
-                            handleError(
-                                    "PERMISSION_DENIED_NEVER_ASK",
-                                    "Access to location data denied. To allow access to location services enable them in the device settings.");
-                        } else {
-                            handleError(
-                                    "PERMISSION_DENIED",
-                                    "Access to location data denied");
-                        }
-                    }
-
-                    return true;
-                }
-
-                return false;
-            }
-        };
-    }
-
-    private boolean hasPermissions() {
-        int permissionState = ActivityCompat.checkSelfPermission(
-                mActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-
-        return permissionState == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(
-                mActivity,
-                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-                REQUEST_PERMISSIONS_REQUEST_CODE);
-    }
-
-    private boolean shouldShowRequestPermissionRationale() {
-        return ActivityCompat.shouldShowRequestPermissionRationale(
-                mActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
     public static boolean isBetterLocation(Location location, Location bestLocation) {

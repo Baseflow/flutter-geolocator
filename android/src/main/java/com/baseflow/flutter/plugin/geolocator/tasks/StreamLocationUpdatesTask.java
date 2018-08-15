@@ -13,7 +13,7 @@ public class StreamLocationUpdatesTask extends LocationTask {
     }
 
     @Override
-    protected void acquirePosition() {
+    public void startTask() {
         LocationManager locationManager = getLocationManager();
 
         // Make sure we remove existing listeners before we register a new one
@@ -28,8 +28,7 @@ public class StreamLocationUpdatesTask extends LocationTask {
 
         if(Strings.isEmptyOrWhitespace(bestProvider)) {
             handleError(
-                    "INVALID_LOCATION_SETTINGS",
-                    "Location settings are inadequate, check your location settings.");
+            );
 
             return;
         }
@@ -54,13 +53,7 @@ public class StreamLocationUpdatesTask extends LocationTask {
                 looper);
     }
 
-    @Override
-    protected void handleError(String code, String message) {
-        getTaskContext().getResult().error(
-                code,
-                message,
-                null);
-    }
+
 
     @Override
     public void stopTask() {
