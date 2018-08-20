@@ -10,7 +10,6 @@ dependencies:
     sdk: flutter
   permission_handler: ">=1.0.1 <2.0.0"
 dev_dependencies:
-  mockito: "^2.0.2"
   flutter_test:
     sdk: flutter
 
