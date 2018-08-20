@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class ReverseGeocodingTask extends Task {
+class ReverseGeocodingTask extends Task {
     private final Activity mActivity;
 
     private Coordinate mCoordinatesToLookup;
