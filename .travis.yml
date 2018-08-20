@@ -14,8 +14,8 @@ matrix:
             - libstdc++6
             - fonts-droid
       before_script:
-        - git clone https://github.com/flutter/flutter.git
-        - export PATH=`pwd`/flutter/bin:`pwd`/flutter/bin/cache/dart-sdk/bin:$PATH
+        - git clone https://github.com/flutter/flutter.git $HOME/flutter
+        - export PATH=$HOME/flutter/bin:$HOME/flutter/bin/cache/dart-sdk/bin:$PATH
         - flutter doctor
       script:
         - flutter analyze
