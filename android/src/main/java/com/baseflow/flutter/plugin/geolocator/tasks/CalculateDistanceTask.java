@@ -7,7 +7,7 @@ import com.baseflow.flutter.plugin.geolocator.data.Result;
 
 import java.util.Map;
 
-public final class CalculateDistanceTask extends Task {
+class CalculateDistanceTask extends Task {
     private Coordinate mStartCoordinate;
     private Coordinate mEndCoordinate;
 

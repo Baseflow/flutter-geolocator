@@ -1,13 +1,7 @@
 package com.baseflow.flutter.plugin.geolocator;
 
-import com.baseflow.flutter.plugin.geolocator.tasks.CalculateDistanceTask;
-import com.baseflow.flutter.plugin.geolocator.tasks.ForwardGeocodingTask;
-import com.baseflow.flutter.plugin.geolocator.tasks.LastKnownLocationTask;
-import com.baseflow.flutter.plugin.geolocator.tasks.CurrentLocationTask;
-import com.baseflow.flutter.plugin.geolocator.tasks.ReverseGeocodingTask;
-import com.baseflow.flutter.plugin.geolocator.tasks.StreamLocationUpdatesTask;
 import com.baseflow.flutter.plugin.geolocator.tasks.Task;
-import com.baseflow.flutter.plugin.geolocator.tasks.TaskContext;
+import com.baseflow.flutter.plugin.geolocator.tasks.TaskFactory;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
@@ -52,39 +46,38 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
 
     @Override
     public void onMethodCall(MethodCall call, Result result) {
-        TaskContext context = TaskContext.buildFromMethodResult(
-                mRegistrar,
-                result,
-                call.arguments,
-                this);
-
         switch (call.method) {
             case "getLastKnownPosition": {
-                Task task = new LastKnownLocationTask(context);
+                Task task = TaskFactory.createLastKnownLocationTask(
+                        mRegistrar, result, call.arguments, this);
                 mTasks.put(task.getTaskID(), task);
                 task.startTask();
                 break;
             }
             case "getCurrentPosition": {
-                Task task = new CurrentLocationTask(context);
+                Task task = TaskFactory.createCurrentLocationTask(
+                        mRegistrar, result, call.arguments, this);
                 mTasks.put(task.getTaskID(), task);
                 task.startTask();
                 break;
             }
             case "placemarkFromAddress": {
-                Task task = new ForwardGeocodingTask(context);
+                Task task = TaskFactory.createForwardGeocodingTask(
+                        mRegistrar, result, call.arguments, this);
                 mTasks.put(task.getTaskID(), task);
                 task.startTask();
                 break;
             }
             case "placemarkFromCoordinates": {
-                Task task = new ReverseGeocodingTask(context);
+                Task task = TaskFactory.createReverseGeocodingTask(
+                        mRegistrar, result, call.arguments, this);
                 mTasks.put(task.getTaskID(), task);
                 task.startTask();
                 break;
             }
             case "distanceBetween": {
-                Task task = new CalculateDistanceTask(context);
+                Task task = TaskFactory.createCalculateDistanceTask(
+                        mRegistrar, result, call.arguments, this);
                 mTasks.put(task.getTaskID(), task);
                 task.startTask();
                 break;
@@ -106,14 +99,8 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
             return;
         }
 
-        TaskContext context = TaskContext.buildFromEventSink(
-                mRegistrar,
-                eventSink,
-                o,
-                this);
-
-        mStreamLocationTask = new StreamLocationUpdatesTask(
-                context);
+        mStreamLocationTask = TaskFactory.createStreamLocationUpdatesTask(
+                mRegistrar, eventSink, o, this);
         mStreamLocationTask.startTask();
     }
 

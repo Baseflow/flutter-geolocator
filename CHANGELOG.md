@@ -1,3 +1,9 @@
+## [1.6.0]
+
+* Use the Location Services (through the `FusedLocationProviderClient`) on Android if available, otherwise fallback to the `LocationManager` class;
+* Make sure that on Android the last know location is returned immediately on the stream when requesting location updates through the `getPositionStream` method;
+* Updated documentation on adding location permissions on Android.
+
 ## [1.5.0]
 
 * It is now possible to check the location permissions using the `checkGeolocationStatus` method [[ISSUE #51](https://github.com/BaseflowIT/flutter-geolocator/issues/51)].
