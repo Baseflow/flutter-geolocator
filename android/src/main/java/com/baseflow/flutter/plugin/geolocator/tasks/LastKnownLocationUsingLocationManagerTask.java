@@ -6,9 +6,9 @@ import android.location.LocationManager;
 import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
 import com.baseflow.flutter.plugin.geolocator.data.Result;
 
-public class LastKnownLocationTask extends LocationTask {
+class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationManagerTask {
 
-    public LastKnownLocationTask(TaskContext context) {
+    public LastKnownLocationUsingLocationManagerTask(TaskContext context) {
         super(context);
     }
 
@@ -29,9 +29,11 @@ public class LastKnownLocationTask extends LocationTask {
         Result result = getTaskContext().getResult();
         if(bestLocation == null) {
             result.success(null);
+            stopTask();
             return;
         }
 
         result.success(LocationMapper.toHashMap(bestLocation));
+        stopTask();
     }
 }

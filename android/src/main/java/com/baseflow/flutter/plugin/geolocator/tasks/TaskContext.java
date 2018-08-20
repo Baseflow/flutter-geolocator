@@ -1,5 +1,7 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
+import android.content.Context;
+
 import com.baseflow.flutter.plugin.geolocator.OnCompletionListener;
 import com.baseflow.flutter.plugin.geolocator.data.Result;
 
@@ -7,7 +9,7 @@ import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
-public final class TaskContext {
+final class TaskContext {
     private final Object mArguments;
     private final OnCompletionListener mCompletionListener;
     private final PluginRegistry.Registrar mRegistrar;
@@ -36,6 +38,8 @@ public final class TaskContext {
     public PluginRegistry.Registrar getRegistrar() {
         return mRegistrar;
     }
+
+    public Context getAndroidContext() { return mRegistrar.activity() != null ? mRegistrar.activity() : mRegistrar.activeContext(); }
 
     public Result getResult() {
         return mResult;
