@@ -54,7 +54,7 @@ class Placemark {
       throw new ArgumentError("The parameter 'message' should not be null.");
     }
 
-    var list = message.map<Placemark>(_fromMap).toList();
+    List<Placemark> list = message.map<Placemark>(_fromMap).toList();
     return list;
   }
 

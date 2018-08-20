@@ -1,6 +1,8 @@
 # https://www.dartlang.org/guides/language/analysis-options
 analyzer:
-  strong-mode: true
+  strong-mode:
+    implicit-casts: true
+    implicit-dynamic: false
 
 # Source of linter options:
 # http://dart-lang.github.io/linter/lints/options/options.html
