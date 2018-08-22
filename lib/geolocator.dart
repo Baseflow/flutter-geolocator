@@ -58,7 +58,7 @@ class Geolocator {
     if (permission == PermissionStatus.granted) {
       var locationOptions =
           LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
-      Future<dynamic> position = await _methodChannel.invokeMethod(
+      var position = await _methodChannel.invokeMethod(
           'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
 
       try {
