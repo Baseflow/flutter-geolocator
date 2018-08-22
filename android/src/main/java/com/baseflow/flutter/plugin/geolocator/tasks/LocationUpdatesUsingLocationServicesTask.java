@@ -83,14 +83,10 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
     private LocationRequest createLocationRequest() {
         LocationRequest locationRequest = new LocationRequest();
 
-        float distanceFilter = mLocationOptions.distanceFilter > 0
-                ? mLocationOptions.distanceFilter
-                : 1;
-
         locationRequest
                 .setInterval(0)
                 .setFastestInterval(0)
-                .setSmallestDisplacement(distanceFilter);
+                .setSmallestDisplacement(mLocationOptions.distanceFilter);
 
         switch(mLocationOptions.accuracy) {
             case Low: case Lowest:
