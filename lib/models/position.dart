@@ -54,7 +54,7 @@ class Position {
       throw new ArgumentError("The parameter 'message' should not be null.");
     }
 
-    var list = message.map<Position>(_fromMap).toList();
+    List<Position> list = message.map<Position>(_fromMap).toList();
     return list;
   }
 

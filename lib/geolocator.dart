@@ -58,7 +58,7 @@ class Geolocator {
     if (permission == PermissionStatus.granted) {
       var locationOptions =
           LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
-      var position = await _methodChannel.invokeMethod(
+      Future<dynamic> position = await _methodChannel.invokeMethod(
           'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
 
       try {
@@ -85,7 +85,7 @@ class Geolocator {
     if (permission == PermissionStatus.granted) {
       var locationOptions =
           LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
-      var position = await _methodChannel.invokeMethod(
+      Future<dynamic> position = await _methodChannel.invokeMethod(
           'getLastKnownPosition', Codec.encodeLocationOptions(locationOptions));
 
       try {
@@ -128,8 +128,8 @@ class Geolocator {
         _onPositionChanged = _eventChannel
             .receiveBroadcastStream(
                 Codec.encodeLocationOptions(locationOptions))
-            .map<Position>(
-                (element) => Position._fromMap(element.cast<String, double>()));
+            .map<Position>((dynamic element) =>
+                Position._fromMap(element.cast<String, double>()));
       }
 
       return _onPositionChanged;
@@ -147,8 +147,8 @@ class Geolocator {
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.disabled) {
       Map<PermissionGroup, PermissionStatus> permissionStatus =
-          await PermissionHandler
-              .requestPermissions([PermissionGroup.location]);
+          await PermissionHandler.requestPermissions(
+              [PermissionGroup.location]);
 
       return permissionStatus[PermissionGroup.location] ??
           PermissionStatus.unknown;
@@ -177,7 +177,7 @@ class Geolocator {
   /// However in some situations where the supplied address could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
   Future<List<Placemark>> placemarkFromAddress(String address) async {
-    var placemarks =
+    Future<dynamic> placemarks =
         await _methodChannel.invokeMethod('placemarkFromAddress', address);
     return Placemark._fromMaps(placemarks);
   }
@@ -189,7 +189,7 @@ class Geolocator {
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
   Future<List<Placemark>> placemarkFromCoordinates(
       double latitude, double longitude) async {
-    var placemarks = await _methodChannel.invokeMethod(
+    Future<dynamic> placemarks = await _methodChannel.invokeMethod(
         'placemarkFromCoordinates',
         <String, double>{"latitude": latitude, "longitude": longitude});
 

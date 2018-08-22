@@ -10,7 +10,7 @@ class Codec {
 
   static Map<String, dynamic> _locationOptionsMap(
           LocationOptions locationOptions) =>
-      {
+      <String, dynamic>{
         "accuracy": Codec.encodeEnum(locationOptions.accuracy),
         "distanceFilter": locationOptions.distanceFilter
       };
