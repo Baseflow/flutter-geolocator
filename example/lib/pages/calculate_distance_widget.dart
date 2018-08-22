@@ -24,9 +24,9 @@ class _CalculateDistanceState extends State<CalculateDistanceWidget> {
         startLatitude, startLongitude, endLatitude, endLongitude);
 
     Scaffold.of(context).showSnackBar(SnackBar(
-          backgroundColor: Theme.of(context).primaryColorDark,
-          content: new Text("The distance is: $distance"),
-        ));
+      backgroundColor: Theme.of(context).primaryColorDark,
+      content: new Text("The distance is: $distance"),
+    ));
   }
 
   @override
