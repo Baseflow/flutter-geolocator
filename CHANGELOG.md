@@ -1,3 +1,7 @@
+## [1.6.1]
+
+* Fixed a bug which caused stationary location updates not to be streamed when using the new `FusedLocationProviderClient` on Android (thanks @audkar for the PR).
+
 ## [1.6.0]
 
 * Use the Location Services (through the `FusedLocationProviderClient`) on Android if available, otherwise fallback to the `LocationManager` class;

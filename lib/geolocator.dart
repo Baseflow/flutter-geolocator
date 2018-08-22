@@ -147,8 +147,8 @@ class Geolocator {
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.disabled) {
       Map<PermissionGroup, PermissionStatus> permissionStatus =
-          await PermissionHandler
-              .requestPermissions([PermissionGroup.location]);
+          await PermissionHandler.requestPermissions(
+              [PermissionGroup.location]);
 
       return permissionStatus[PermissionGroup.location] ??
           PermissionStatus.unknown;
