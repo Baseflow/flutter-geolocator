@@ -1,3 +1,7 @@
+## [1.6.2]
+
+* Hot fix to solve cast exception
+
 ## [1.6.1]
 
 * Fixed a bug which caused stationary location updates not to be streamed when using the new `FusedLocationProviderClient` on Android (thanks @audkar for the PR).
