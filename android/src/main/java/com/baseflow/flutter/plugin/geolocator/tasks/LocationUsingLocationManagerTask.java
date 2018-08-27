@@ -21,7 +21,7 @@ abstract class LocationUsingLocationManagerTask extends Task {
 
         PluginRegistry.Registrar registrar = context.getRegistrar();
 
-        mContext = registrar.context();
+        mContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
         mLocationOptions = Codec.decodeLocationOptions(context.getArguments());
     }
 

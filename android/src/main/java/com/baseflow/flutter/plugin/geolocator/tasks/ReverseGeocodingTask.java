@@ -1,6 +1,6 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
-import android.app.Activity;
+import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 
@@ -12,15 +12,19 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import io.flutter.plugin.common.PluginRegistry;
+
 class ReverseGeocodingTask extends Task {
-    private final Activity mActivity;
+    private final Context mContext;
 
     private Coordinate mCoordinatesToLookup;
 
     public ReverseGeocodingTask(TaskContext context) {
         super(context);
 
-        mActivity = context.getRegistrar().activity();
+        PluginRegistry.Registrar registrar = context.getRegistrar();
+
+        mContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
         mCoordinatesToLookup = parseCoordinates(context.getArguments());
     }
 
@@ -37,7 +41,7 @@ class ReverseGeocodingTask extends Task {
 
     @Override
     public void startTask() {
-        Geocoder geocoder = new Geocoder(mActivity);
+        Geocoder geocoder = new Geocoder(mContext);
         Result result = getTaskContext().getResult();
 
         try {

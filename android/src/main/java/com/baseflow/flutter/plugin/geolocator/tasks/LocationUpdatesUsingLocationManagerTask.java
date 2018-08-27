@@ -89,27 +89,27 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
         criteria.setSpeedRequired(false);
 
         switch(accuracy) {
-            case Lowest:
+            case LOWEST:
                 criteria.setAccuracy(Criteria.NO_REQUIREMENT);
                 criteria.setHorizontalAccuracy(Criteria.NO_REQUIREMENT);
                 criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
                 break;
-            case Low:
+            case LOW:
                 criteria.setAccuracy(Criteria.ACCURACY_COARSE);
                 criteria.setHorizontalAccuracy(Criteria.ACCURACY_LOW);
                 criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
                 break;
-            case Medium:
+            case MEDIUM:
                 criteria.setAccuracy(Criteria.ACCURACY_COARSE);
                 criteria.setHorizontalAccuracy(Criteria.ACCURACY_MEDIUM);
                 criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
                 break;
-            case High:
+            case HIGH:
                 criteria.setAccuracy(Criteria.ACCURACY_FINE);
                 criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
                 criteria.setPowerRequirement(Criteria.POWER_HIGH);
                 break;
-            case Best:
+            case BEST:
                 criteria.setAccuracy(Criteria.ACCURACY_FINE);
                 criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
                 criteria.setPowerRequirement(Criteria.POWER_HIGH);
@@ -167,10 +167,10 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
 
     private float accuracyToFloat(GeolocationAccuracy accuracy) {
         switch(accuracy) {
-            case Lowest: case Low: return 500;
-            case Medium: return 250;
-            case High: return 100;
-            case Best: return 50;
+            case LOWEST: case LOW: return 500;
+            case MEDIUM: return 250;
+            case HIGH: return 100;
+            case BEST: return 50;
             default: return 100;
         }
     }
