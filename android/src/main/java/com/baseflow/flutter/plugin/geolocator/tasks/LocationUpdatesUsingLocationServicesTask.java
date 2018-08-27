@@ -89,13 +89,13 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
                 .setSmallestDisplacement(mLocationOptions.distanceFilter);
 
         switch(mLocationOptions.accuracy) {
-            case Low: case Lowest:
+            case LOW: case LOWEST:
                 locationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
                 break;
-            case Medium:
+            case MEDIUM:
                 locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
                 break;
-            case High: case Best:
+            case HIGH: case BEST:
                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         }
 

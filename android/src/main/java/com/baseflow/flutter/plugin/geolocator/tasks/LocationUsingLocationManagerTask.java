@@ -13,7 +13,7 @@ import io.flutter.plugin.common.PluginRegistry;
 abstract class LocationUsingLocationManagerTask extends Task {
     private static final long TWO_MINUTES = 120000;
 
-    private final Activity mActivity;
+    private final Context mContext;
     final LocationOptions mLocationOptions;
 
     LocationUsingLocationManagerTask(TaskContext context) {
@@ -21,14 +21,14 @@ abstract class LocationUsingLocationManagerTask extends Task {
 
         PluginRegistry.Registrar registrar = context.getRegistrar();
 
-        mActivity = registrar.activity();
+        mContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
         mLocationOptions = Codec.decodeLocationOptions(context.getArguments());
     }
 
     public abstract void startTask();
 
     LocationManager getLocationManager() {
-        Context context = mActivity.getApplicationContext();
+        Context context = mContext;
         return (LocationManager) context.getSystemService(Activity.LOCATION_SERVICE);
     }
 

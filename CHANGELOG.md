@@ -1,3 +1,9 @@
+## [1.6.3]
+
+* Added feature to check the availability of Google Play services on the device (using the `checkGooglePlayServicesAvailability` method). This will allow developers to implement a more user friendly experience regarding the usage of Google Play services (for more information see the article [Set Up Google Play Services](https://developers.google.com/android/guides/setup));
+* Fixed the error `'List<dynamic>' is not a subtype of type 'Future<dynamic>'` on Flutter 0.6.2 and higher (thanks @fawadkhanucp for reporting the issue and solution);
+* Fixed an error when calling the `getCurrentPosition`, `getPositionStream`, `placemarkFromAddress` and `placemarkFromCoordinates` from an Android background service (thanks @sestegra for reporting the issue and creating a pull-request).
+
 ## [1.6.2]
 
 * Hot fix to solve cast exception

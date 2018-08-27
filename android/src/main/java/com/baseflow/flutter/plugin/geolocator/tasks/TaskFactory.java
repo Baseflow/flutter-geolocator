@@ -121,8 +121,23 @@ public class TaskFactory {
         }
     }
 
+    public static Task createCheckPlayServicesAvailabilityTask(
+            PluginRegistry.Registrar registrar,
+            MethodChannel.Result result,
+            Object arguments,
+            OnCompletionListener completionListener) {
+
+        TaskContext taskContext = TaskContext.buildFromMethodResult(
+                registrar,
+                result,
+                arguments,
+                completionListener);
+
+        return new CheckPlayServicesAvailabilityTask(taskContext);
+    }
+
     private static boolean isGooglePlayServicesAvailable(PluginRegistry.Registrar registrar) {
-        Context context = registrar.activity() == null ? registrar.activity() : registrar.activeContext();
+        Context context = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
 
         if (context == null) {
             return false;

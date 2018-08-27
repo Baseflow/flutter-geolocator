@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'pages/calculate_distance_widget.dart';
 import 'pages/current_location_widget.dart';
 import 'pages/location_stream_widget.dart';
+import 'pages/google_play_services_widget.dart';
 
 void main() => runApp(new GeolocatorExampleApp());
 
-enum TabItem { singleLocation, locationStream, distance }
+enum TabItem { singleLocation, locationStream, distance, googlePlayServices }
 
 class GeolocatorExampleApp extends StatefulWidget {
   @override
@@ -35,6 +36,8 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
         return LocationStreamWidget();
       case TabItem.distance:
         return CalculateDistanceWidget();
+      case TabItem.googlePlayServices:
+        return GooglePlayServicesWidget();
       case TabItem.singleLocation:
       default:
         return CurrentLocationWidget();
@@ -49,6 +52,7 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
             Icons.location_on, TabItem.singleLocation),
         _buildBottomNavigationBarItem(Icons.clear_all, TabItem.locationStream),
         _buildBottomNavigationBarItem(Icons.redo, TabItem.distance),
+        _buildBottomNavigationBarItem(Icons.adb, TabItem.googlePlayServices),
       ],
       onTap: _onSelectTab,
     );
@@ -83,6 +87,9 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
         break;
       case 2:
         selectedTabItem = TabItem.distance;
+        break;
+      case 3:
+        selectedTabItem = TabItem.googlePlayServices;
         break;
       default:
         selectedTabItem = TabItem.singleLocation;
