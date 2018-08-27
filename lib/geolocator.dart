@@ -2,12 +2,14 @@ library geolocator;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'models/geolocation_enums.dart';
+part 'models/google_play_services_availability.dart';
 part 'models/location_accuracy.dart';
 part 'models/location_options.dart';
 part 'models/placemark.dart';
@@ -56,13 +58,13 @@ class Geolocator {
     PermissionStatus permission = await _getLocationPermission();
 
     if (permission == PermissionStatus.granted) {
-      var locationOptions =
+      LocationOptions locationOptions =
           LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
-      var position = await _methodChannel.invokeMethod(
+      Map<dynamic, dynamic> positionMap = await _methodChannel.invokeMethod(
           'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
 
       try {
-        return Position._fromMap(position);
+        return Position._fromMap(positionMap);
       } on ArgumentError {
         return null;
       }
@@ -83,13 +85,13 @@ class Geolocator {
     PermissionStatus permission = await _getLocationPermission();
 
     if (permission == PermissionStatus.granted) {
-      var locationOptions =
+      LocationOptions locationOptions =
           LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
-      var position = await _methodChannel.invokeMethod(
+      Map<dynamic, dynamic> positionMap = await _methodChannel.invokeMethod(
           'getLastKnownPosition', Codec.encodeLocationOptions(locationOptions));
 
       try {
-        return Position._fromMap(position);
+        return Position._fromMap(positionMap);
       } on ArgumentError {
         return null;
       }
@@ -177,7 +179,7 @@ class Geolocator {
   /// However in some situations where the supplied address could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
   Future<List<Placemark>> placemarkFromAddress(String address) async {
-    Future<dynamic> placemarks =
+    List<dynamic> placemarks =
         await _methodChannel.invokeMethod('placemarkFromAddress', address);
     return Placemark._fromMaps(placemarks);
   }
@@ -189,7 +191,7 @@ class Geolocator {
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
   Future<List<Placemark>> placemarkFromCoordinates(
       double latitude, double longitude) async {
-    Future<dynamic> placemarks = await _methodChannel.invokeMethod(
+    List<dynamic> placemarks = await _methodChannel.invokeMethod(
         'placemarkFromCoordinates',
         <String, double>{"latitude": latitude, "longitude": longitude});
 
@@ -209,4 +211,21 @@ class Geolocator {
         "endLatitude": endLatitude,
         "endLongitude": endLongitude
       }).then<double>((dynamic result) => result);
+
+  /// Returns the distance between the supplied coordinates in meters.
+  ///
+  /// This feature is only available on Android devices. On any other platforms
+  /// the [checkPlayServicesAvailability] method will always return
+  /// [GooglePlayServicesAvailability.notAvailableOnPlatform].
+  Future<GooglePlayServicesAvailability>
+      checkGooglePlayServicesAvailability() async {
+    if (!Platform.isAndroid) {
+      return GooglePlayServicesAvailability.notAvailableOnPlatform;
+    }
+
+    final dynamic availability =
+        await _methodChannel.invokeMethod('checkPlayServicesAvailability');
+
+    return Codec.decodePlayServicesAvailability(availability);
+  }
 }

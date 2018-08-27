@@ -16,7 +16,8 @@ master  | [![Build Status](https://travis-ci.com/BaseflowIT/flutter-geolocator.s
 * Get continuous location updates;
 * Check if location services are enabled on the device;
 * Translate an address to geocoordinates and vice verse (a.k.a. Geocoding);
-* Calculate the distance (in meters) between two geocoordinates.
+* Calculate the distance (in meters) between two geocoordinates;
+* Check the availability of Google Play services (on Android only).
 
 ## Usage
 
@@ -24,7 +25,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^1.6.2'
+  geolocator: '^1.6.3'
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
@@ -87,7 +88,7 @@ If you want to translate latitude and longitude coordinates into an address you 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Placemark placemark = await new Geolocator().placemarkFromCoordinates(52.2165157, 6.9437819);
+Placemark placemark = await Geolocator().placemarkFromCoordinates(52.2165157, 6.9437819);
 ```
 
 ### Calculate distance
@@ -104,7 +105,18 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double distanceInMeters = await new Geolocator().distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double distanceInMeters = await Geolocator().distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+```
+
+### Check the availability of Google Play services
+
+To check the availability of Google Play services on the current device, you can use the `checkGooglePlayServicesAvailability` method. This could be helpful to provide a more friendly experience to users in case an user-action is required to enable support for Google Play services (More information can be found [here](https://developers.google.com/android/guides/setup)). 
+
+``` dart
+import `package:geolocator/geolocator.dart`;
+
+GooglePlayServicesAvailability availability = 
+  await Geolocator().checkGooglePlayServicesAvailability();
 ```
 
 See also the [example](example/lib/main.dart) project for a complete implementation.

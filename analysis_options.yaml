@@ -2,7 +2,7 @@
 analyzer:
   strong-mode:
     implicit-casts: true
-    implicit-dynamic: true
+    implicit-dynamic: false
 
 # Source of linter options:
 # http://dart-lang.github.io/linter/lints/options/options.html

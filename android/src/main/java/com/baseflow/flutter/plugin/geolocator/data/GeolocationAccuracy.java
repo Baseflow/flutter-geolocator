@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public enum GeolocationAccuracy {
     @SerializedName("lowest")
-    Lowest,
+    LOWEST,
     @SerializedName("low")
-    Low,
+    LOW,
     @SerializedName("medium")
-    Medium,
+    MEDIUM,
     @SerializedName("high")
-    High,
+    HIGH,
     @SerializedName(value = "best", alternate = "bestForNavigation")
-    Best
+    BEST
 }
