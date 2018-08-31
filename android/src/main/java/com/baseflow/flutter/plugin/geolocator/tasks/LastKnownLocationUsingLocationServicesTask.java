@@ -1,6 +1,5 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
-import android.app.Activity;
 import android.location.Location;
 import android.support.annotation.NonNull;
 
@@ -23,10 +22,8 @@ class LastKnownLocationUsingLocationServicesTask extends LocationUsingLocationSe
 
     @Override
     public void startTask() {
-        Activity activity = getTaskContext().getRegistrar().activity();
-
         mFusedLocationProviderClient.getLastLocation()
-                .addOnSuccessListener(activity, new OnSuccessListener<Location>() {
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         Map<String, Double> locationMap = location != null
@@ -38,7 +35,7 @@ class LastKnownLocationUsingLocationServicesTask extends LocationUsingLocationSe
                         stopTask();
                     }
                 })
-                .addOnFailureListener(activity, new OnFailureListener() {
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         getTaskContext().getResult().error(
