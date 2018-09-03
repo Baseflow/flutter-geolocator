@@ -45,12 +45,12 @@ class Geolocator {
   static Future<GeolocationStatus> checkGeolocationStatus(
       [GeolocationPermission locationPermission =
           GeolocationPermission.location]) {
-    return Geolocator().checkGeolocationPermissionstatus(
+    return Geolocator().checkGeolocationPermissionStatus(
         locationPermission: locationPermission);
   }
 
   /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.
-  Future<GeolocationStatus> checkGeolocationPermissionstatus(
+  Future<GeolocationStatus> checkGeolocationPermissionStatus(
       {GeolocationPermission locationPermission =
           GeolocationPermission.location}) async {
     PermissionStatus permissionStatus =

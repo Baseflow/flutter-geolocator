@@ -42,7 +42,7 @@ class _LocationState extends State<CurrentLocationWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Geolocator.checkGeolocationStatus(),
+        future: Geolocator().checkGeolocationPermissionStatus(),
         builder:
             (BuildContext context, AsyncSnapshot<GeolocationStatus> snapshot) {
           if (!snapshot.hasData) {

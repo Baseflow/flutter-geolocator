@@ -65,12 +65,12 @@ StreamSubscription<Position> positionStream = geolocator.getPositionStream(locat
     });
 ```
 
-To check if location services are enabled you can call the `checkGeolocationStatus` method. This method returns a value of the `GeolocationStatus` enum indicating the availability of the location services on the device. Optionally you can specify if you want to test for `GeolocationPermission.locationAlways` or `GeolocationPermission.locationWhenInUse` (by default `GeolocationPermission.location` is used, which checks for either one of the previously mentioned permissions). Example usage:
+To check if location services are enabled you can call the `checkGeolocationPermissionStatus` method. This method returns a value of the `GeolocationStatus` enum indicating the availability of the location services on the device. Optionally you can specify if you want to test for `GeolocationPermission.locationAlways` or `GeolocationPermission.locationWhenInUse` (by default `GeolocationPermission.location` is used, which checks for either one of the previously mentioned permissions). Example usage:
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-GeolocationStatus geolocationStatus  = await Geolocator.checkGeolocationStatus();
+GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
 ```
 
 ### Geocoding
