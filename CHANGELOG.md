@@ -1,3 +1,7 @@
+## [1.6.4]
+
+* Added support to supply a locale when using the `placemarkFromAddress` and `placemarkFromCoordinates` methods.
+
 ## [1.6.3]
 
 * Added feature to check the availability of Google Play services on the device (using the `checkGooglePlayServicesAvailability` method). This will allow developers to implement a more user friendly experience regarding the usage of Google Play services (for more information see the article [Set Up Google Play Services](https://developers.google.com/android/guides/setup));
