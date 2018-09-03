@@ -1,3 +1,8 @@
+## [1.6.4]
+
+* Added support to supply a locale when using the `placemarkFromAddress` and `placemarkFromCoordinates` methods.
+* Depracated the static method `checkGeolocationStatus` in favor of the instance method `checkGeolocationPermissionStatus` (the static version will be removed in version 2.0 of the Geolocator plugin).
+
 ## [1.6.3]
 
 * Added feature to check the availability of Google Play services on the device (using the `checkGooglePlayServicesAvailability` method). This will allow developers to implement a more user friendly experience regarding the usage of Google Play services (for more information see the article [Set Up Google Play Services](https://developers.google.com/android/guides/setup));

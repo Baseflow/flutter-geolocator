@@ -25,7 +25,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^1.6.3'
+  geolocator: '^1.6.4'
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
@@ -65,12 +65,12 @@ StreamSubscription<Position> positionStream = geolocator.getPositionStream(locat
     });
 ```
 
-To check if location services are enabled you can call the `checkGeolocationStatus` method. This method returns a value of the `GeolocationStatus` enum indicating the availability of the location services on the device. Optionally you can specify if you want to test for `GeolocationPermission.locationAlways` or `GeolocationPermission.locationWhenInUse` (by default `GeolocationPermission.location` is used, which checks for either one of the previously mentioned permissions). Example usage:
+To check if location services are enabled you can call the `checkGeolocationPermissionStatus` method. This method returns a value of the `GeolocationStatus` enum indicating the availability of the location services on the device. Optionally you can specify if you want to test for `GeolocationPermission.locationAlways` or `GeolocationPermission.locationWhenInUse` (by default `GeolocationPermission.location` is used, which checks for either one of the previously mentioned permissions). Example usage:
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-GeolocationStatus geolocationStatus  = await Geolocator.checkGeolocationStatus();
+GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
 ```
 
 ### Geocoding
@@ -90,6 +90,16 @@ import 'package:geolocator/geolocator.dart';
 
 Placemark placemark = await Geolocator().placemarkFromCoordinates(52.2165157, 6.9437819);
 ```
+
+Both the `placemarkFromAddress` and `placemarkFromCoordinates` accept an optional `localeIdentifier` parameter. This paramter can be used to enforce the resulting placemark to be formatted (and translated) according to the specified locale. The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode]. Use the [ISO 639-1 or ISO 639-2](http://www.loc.gov/standards/iso639-2/php/English_list.php) standard for the language code and the 2 letter [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1) standard for the country code. Some examples are:
+
+Locale identifier | Description
+----------------- | -----------
+en | All English speakers (will translate all attributes to English)
+en_US | English speakers in the United States of America
+en_UK | English speakers in the United Kingdom
+nl_NL | Dutch speakers in The Netherlands
+nl_BE | Dutch speakers in Belgium
 
 ### Calculate distance
 

@@ -7,17 +7,22 @@ import android.location.Geocoder;
 import com.baseflow.flutter.plugin.geolocator.data.AddressMapper;
 import com.baseflow.flutter.plugin.geolocator.data.Coordinate;
 import com.baseflow.flutter.plugin.geolocator.data.Result;
+import com.baseflow.flutter.plugin.geolocator.utils.LocaleConverter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import io.flutter.plugin.common.PluginRegistry;
 
 class ReverseGeocodingTask extends Task {
+    private static final String LOCALE_DELIMITER = "_";
+
     private final Context mContext;
 
     private Coordinate mCoordinatesToLookup;
+    private Locale mLocale;
 
     public ReverseGeocodingTask(TaskContext context) {
         super(context);
@@ -25,23 +30,26 @@ class ReverseGeocodingTask extends Task {
         PluginRegistry.Registrar registrar = context.getRegistrar();
 
         mContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
-        mCoordinatesToLookup = parseCoordinates(context.getArguments());
+
+        parseArguments(context.getArguments());
     }
 
-    private static Coordinate parseCoordinates(Object arguments) {
-        if(arguments == null) return null;
-
+    private void parseArguments(Object arguments) {
         @SuppressWarnings("unchecked")
-        Map<String, Double> coordinates = (Map<String, Double>)arguments;
+        Map<String, Object> argumentMap = (Map<String, Object>)arguments;
 
-        return new Coordinate(
-                coordinates.get("latitude"),
-                coordinates.get("longitude"));
+        mCoordinatesToLookup = new Coordinate(
+                (double)argumentMap.get("latitude"),
+                (double)argumentMap.get("longitude"));
+
+        if (argumentMap.containsKey("localeIdentifier")) {
+            mLocale = LocaleConverter.fromLanguageTag((String)argumentMap.get("localeIdentifier"));
+        }
     }
 
     @Override
     public void startTask() {
-        Geocoder geocoder = new Geocoder(mContext);
+        Geocoder geocoder = new Geocoder(mContext, mLocale);
         Result result = getTaskContext().getResult();
 
         try {
