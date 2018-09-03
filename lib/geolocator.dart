@@ -40,9 +40,19 @@ class Geolocator {
   Stream<Position> _onPositionChanged;
 
   /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.
+  @Deprecated(
+      "This static method will be removed in version 2.0. Please use the `checkGeolocationPermissionStatus` instance method instead.")
   static Future<GeolocationStatus> checkGeolocationStatus(
       [GeolocationPermission locationPermission =
-          GeolocationPermission.location]) async {
+          GeolocationPermission.location]) {
+    return Geolocator().checkGeolocationPermissionstatus(
+        locationPermission: locationPermission);
+  }
+
+  /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.
+  Future<GeolocationStatus> checkGeolocationPermissionstatus(
+      {GeolocationPermission locationPermission =
+          GeolocationPermission.location}) async {
     PermissionStatus permissionStatus =
         await PermissionHandler.checkPermissionStatus(
             _GeolocationStatusConverter.toPermissionGroup(locationPermission));
