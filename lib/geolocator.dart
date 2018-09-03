@@ -40,9 +40,19 @@ class Geolocator {
   Stream<Position> _onPositionChanged;
 
   /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.
+  @Deprecated(
+      "This static method will be removed in version 2.0. Please use the `checkGeolocationPermissionStatus` instance method instead.")
   static Future<GeolocationStatus> checkGeolocationStatus(
       [GeolocationPermission locationPermission =
-          GeolocationPermission.location]) async {
+          GeolocationPermission.location]) {
+    return Geolocator().checkGeolocationPermissionStatus(
+        locationPermission: locationPermission);
+  }
+
+  /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.
+  Future<GeolocationStatus> checkGeolocationPermissionStatus(
+      {GeolocationPermission locationPermission =
+          GeolocationPermission.location}) async {
     PermissionStatus permissionStatus =
         await PermissionHandler.checkPermissionStatus(
             _GeolocationStatusConverter.toPermissionGroup(locationPermission));
@@ -178,9 +188,19 @@ class Geolocator {
   /// In most situations the returned list should only contain one entry.
   /// However in some situations where the supplied address could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
-  Future<List<Placemark>> placemarkFromAddress(String address) async {
+  ///
+  /// Optionally you can specify a locale in which the results are returned.
+  /// When not supplied the currently active locale of the device will be used.
+  /// The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode] (eg. en_US or nl_NL).
+  Future<List<Placemark>> placemarkFromAddress(String address,
+      {String localeIdentifier}) async {
+    Map<String, String> parameters = <String, String>{"address": address};
+    if (localeIdentifier != null) {
+      parameters["localeIdentifier"] = localeIdentifier;
+    }
+
     List<dynamic> placemarks =
-        await _methodChannel.invokeMethod('placemarkFromAddress', address);
+        await _methodChannel.invokeMethod('placemarkFromAddress', parameters);
     return Placemark._fromMaps(placemarks);
   }
 
@@ -189,11 +209,24 @@ class Geolocator {
   /// In most situations the returned list should only contain one entry.
   /// However in some situations where the supplied coordinates could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
+  ///
+  /// Optionally you can specify a locale in which the results are returned.
+  /// When not supplied the currently active locale of the device will be used.
+  /// The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode] (eg. en_US or nl_NL).
   Future<List<Placemark>> placemarkFromCoordinates(
-      double latitude, double longitude) async {
+      double latitude, double longitude,
+      {String localeIdentifier}) async {
+    Map<String, dynamic> parameters = <String, dynamic>{
+      "latitude": latitude,
+      "longitude": longitude
+    };
+
+    if (localeIdentifier != null) {
+      parameters["localeIdentifier"] = localeIdentifier;
+    }
+
     List<dynamic> placemarks = await _methodChannel.invokeMethod(
-        'placemarkFromCoordinates',
-        <String, double>{"latitude": latitude, "longitude": longitude});
+        'placemarkFromCoordinates', parameters);
 
     try {
       return Placemark._fromMaps(placemarks);

@@ -6,9 +6,12 @@ import android.location.Geocoder;
 
 import com.baseflow.flutter.plugin.geolocator.data.AddressMapper;
 import com.baseflow.flutter.plugin.geolocator.data.Result;
+import com.baseflow.flutter.plugin.geolocator.utils.LocaleConverter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import io.flutter.plugin.common.PluginRegistry;
 
@@ -16,6 +19,7 @@ class ForwardGeocodingTask extends Task {
     private final Context mContext;
 
     private String mAddressToLookup;
+    private Locale mLocale;
 
     public ForwardGeocodingTask(TaskContext context) {
         super(context);
@@ -23,18 +27,23 @@ class ForwardGeocodingTask extends Task {
         PluginRegistry.Registrar registrar = context.getRegistrar();
 
         mContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
-        mAddressToLookup = parseAddress(context.getArguments());
+        parseArguments(context.getArguments());
     }
 
-    private static String parseAddress(Object arguments) {
-        if(arguments == null) return null;
+    private void parseArguments(Object arguments) {
+        @SuppressWarnings("unchecked")
+        Map<String, String> argumentMap = (Map<String, String>)arguments;
 
-        return (String) arguments;
+        mAddressToLookup = argumentMap.get("address");
+
+        if (argumentMap.containsKey("localeIdentifier")) {
+            mLocale = LocaleConverter.fromLanguageTag((String)argumentMap.get("localeIdentifier"));
+        }
     }
 
     @Override
     public void startTask() {
-        Geocoder geocoder = new Geocoder(mContext);
+        Geocoder geocoder = new Geocoder(mContext, mLocale);
         Result result = getTaskContext().getResult();
 
         try {
