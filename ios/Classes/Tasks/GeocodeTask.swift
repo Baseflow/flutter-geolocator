@@ -16,6 +16,20 @@ class GeocodeTask: Task {
                    completionHandler: completionHandler)
     }
     
+    func geocodeCompletionHandler(placemarks: [CLPlacemark]?, errorCode: String, error: Error?) {
+        if let marks = placemarks {
+            self.processPlacemark(placemarks: marks);
+        }
+        
+        if let err = error {
+            self.handleError(
+                code: errorCode,
+                message: err.localizedDescription)
+        }
+        
+        self.stopTask();
+    }
+    
     func processPlacemark(placemarks: [CLPlacemark]) {
         var locations: [NSDictionary] = []
         for placemark in placemarks {
@@ -34,6 +48,7 @@ class GeocodeTask: Task {
 
 class ForwardGeocodeTask: GeocodeTask, TaskProtocol {
     private var _address: String?
+    private var _locale: Locale?
     
     required init(context: TaskContext,
                   completionHandler: CompletionHandler?) {
@@ -41,12 +56,16 @@ class ForwardGeocodeTask: GeocodeTask, TaskProtocol {
         super.init(context: context,
                    completionHandler: completionHandler)
         
-        parseAddress(arguments: context.arguments)
+        parseArguments(arguments: context.arguments)
     }
     
-    func parseAddress(arguments: Any?) {
-        if let address = context.arguments as? String {
-            _address = address
+    func parseArguments(arguments: Any?) {
+        if let argumentMap = context.arguments as! NSDictionary? {
+            _address = argumentMap["address"] as? String
+            
+            if let localeIdentifier = argumentMap["localeIdentifier"] {
+                _locale = Locale(identifier: localeIdentifier as! String)
+            }
         } else {
             _address = nil
         }
@@ -69,24 +88,31 @@ class ForwardGeocodeTask: GeocodeTask, TaskProtocol {
     private func geocodeAddress(address: String) {
         
         let geocoding = CLGeocoder.init()
-        geocoding.geocodeAddressString(address) { (placemarks, error) in
-            if let marks = placemarks {
-                self.processPlacemark(placemarks: marks);
+        if #available(iOS 11.0, *) {
+            geocoding.geocodeAddressString(address, in: nil, preferredLocale: _locale) {(placemarks, error) in
+                self.geocodeCompletionHandler(placemarks: placemarks, errorCode: "ERROR_GEOCODING_ADDRESS", error: error)
+            }
+        } else {
+            var defaultLanguages: [String]?
+            if let locale = _locale {
+                defaultLanguages = UserDefaults.standard.array(forKey: "AppleLanguages") as? [String]
+                UserDefaults.standard.set([locale.languageCode], forKey: "AppleLanguages")
             }
             
-            if let err = error {
-                self.handleError(
-                    code: "ERROR_GEOCODING_ADDRESS",
-                    message: err.localizedDescription)
+            geocoding.geocodeAddressString(address) { (placemarks, error) in
+                self.geocodeCompletionHandler(placemarks: placemarks, errorCode: "ERROR_GEOCODING_ADDRESS", error: error)
+                
+                if self._locale != nil {
+                    UserDefaults.standard.set(defaultLanguages, forKey: "AppleLanguages")
+                }
             }
-            
-            self.stopTask();
         }
     }
 }
 
 class ReverseGeocodeTask: GeocodeTask, TaskProtocol {
     private var _location: CLLocation?
+    private var _locale: Locale?
     
     required init(context: TaskContext,
                   completionHandler: CompletionHandler?) {
@@ -94,15 +120,19 @@ class ReverseGeocodeTask: GeocodeTask, TaskProtocol {
         super.init(context: context,
                    completionHandler: completionHandler)
         
-        parseLocation(arguments: context.arguments)
+        parseArguments(arguments: context.arguments)
     }
     
-    func parseLocation(arguments: Any?) {
-        if let location = context.arguments as! NSDictionary? {
-            let latitude = location.object(forKey: "latitude") as! CLLocationDegrees
-            let longitude = location.object(forKey: "longitude") as! CLLocationDegrees
+    func parseArguments(arguments: Any?) {
+        if let argumentMap = context.arguments as! NSDictionary? {
+            let latitude = argumentMap["latitude"] as! CLLocationDegrees
+            let longitude = argumentMap["longitude"] as! CLLocationDegrees
             
             _location = CLLocation.init(latitude: latitude, longitude: longitude)
+            
+            if let localeIdentifier = argumentMap["localeIdentifier"] {
+                _locale = Locale(identifier: localeIdentifier as! String)
+            }
         } else {
             _location = nil
         }
@@ -125,18 +155,25 @@ class ReverseGeocodeTask: GeocodeTask, TaskProtocol {
     private func reverseToAddress(location: CLLocation) {
         
         let geocoding = CLGeocoder.init()
-        geocoding.reverseGeocodeLocation(location) { (placemarks, error) in
-            if let marks = placemarks {
-                self.processPlacemark(placemarks: marks);
+        
+        if #available(iOS 11.0, *) {
+            geocoding.reverseGeocodeLocation(location, preferredLocale: _locale) { (placemarks, error) in
+                self.geocodeCompletionHandler(placemarks: placemarks, errorCode: "ERROR_REVERSEGEOCODING_LOCATION", error: error)
+            }
+        } else {
+            var defaultLanguages: [String]?
+            if let locale = _locale {
+                defaultLanguages = UserDefaults.standard.array(forKey: "AppleLanguages") as? [String]
+                UserDefaults.standard.set([locale.languageCode], forKey: "AppleLanguages")
             }
             
-            if let err = error {
-                self.handleError(
-                    code: "ERROR_REVERSEGEOCODING_LOCATION",
-                    message: err.localizedDescription)
+            geocoding.reverseGeocodeLocation(location)  { (placemarks, error) in
+                self.geocodeCompletionHandler(placemarks: placemarks, errorCode: "ERROR_REVERSEGEOCODING_LOCATION", error: error)
+                
+                if self._locale != nil {
+                    UserDefaults.standard.set(defaultLanguages, forKey: "AppleLanguages")
+                }
             }
-            
-            self.stopTask()
         }
     }
 }

@@ -178,9 +178,18 @@ class Geolocator {
   /// In most situations the returned list should only contain one entry.
   /// However in some situations where the supplied address could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
-  Future<List<Placemark>> placemarkFromAddress(String address) async {
+  ///
+  /// Optionally you can specify a locale in which the results are returned.
+  /// When not supplied the currently active locale of the device will be used.
+  Future<List<Placemark>> placemarkFromAddress(String address,
+      {String localeIdentifier}) async {
+    Map<String, String> parameters = <String, String>{"address": address};
+    if (localeIdentifier != null) {
+      parameters["localeIdentifier"] = localeIdentifier;
+    }
+
     List<dynamic> placemarks =
-        await _methodChannel.invokeMethod('placemarkFromAddress', address);
+        await _methodChannel.invokeMethod('placemarkFromAddress', parameters);
     return Placemark._fromMaps(placemarks);
   }
 
@@ -189,11 +198,23 @@ class Geolocator {
   /// In most situations the returned list should only contain one entry.
   /// However in some situations where the supplied coordinates could not be
   /// resolved into a single [Placemark], multiple [Placemark] instances may be returned.
+  ///
+  /// Optionally you can specify a locale in which the results are returned.
+  /// When not supplied the currently active locale of the device will be used.
   Future<List<Placemark>> placemarkFromCoordinates(
-      double latitude, double longitude) async {
+      double latitude, double longitude,
+      {String localeIdentifier}) async {
+    Map<String, dynamic> parameters = <String, dynamic>{
+      "latitude": latitude,
+      "longitude": longitude
+    };
+
+    if (localeIdentifier != null) {
+      parameters["localeIdentifier"] = localeIdentifier;
+    }
+
     List<dynamic> placemarks = await _methodChannel.invokeMethod(
-        'placemarkFromCoordinates',
-        <String, double>{"latitude": latitude, "longitude": longitude});
+        'placemarkFromCoordinates', parameters);
 
     try {
       return Placemark._fromMaps(placemarks);
