@@ -54,7 +54,7 @@ class Geolocator {
       {GeolocationPermission locationPermission =
           GeolocationPermission.location}) async {
     PermissionStatus permissionStatus =
-        await PermissionHandler.checkPermissionStatus(
+        await PermissionHandler().checkPermissionStatus(
             _GeolocationStatusConverter.toPermissionGroup(locationPermission));
 
     return _GeolocationStatusConverter.fromPermissionStatus(permissionStatus);
@@ -154,12 +154,12 @@ class Geolocator {
 
   Future<PermissionStatus> _getLocationPermission() async {
     PermissionStatus permission =
-        await PermissionHandler.checkPermissionStatus(PermissionGroup.location);
+        await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
 
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.disabled) {
       Map<PermissionGroup, PermissionStatus> permissionStatus =
-          await PermissionHandler.requestPermissions(
+          await PermissionHandler().requestPermissions(
               [PermissionGroup.location]);
 
       return permissionStatus[PermissionGroup.location] ??
