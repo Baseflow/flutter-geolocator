@@ -49,7 +49,10 @@ class ReverseGeocodingTask extends Task {
 
     @Override
     public void startTask() {
-        Geocoder geocoder = new Geocoder(mContext, mLocale);
+        Geocoder geocoder = (mLocale != null)
+                ? new Geocoder(mContext, mLocale)
+                : new Geocoder(mContext);
+
         Result result = getTaskContext().getResult();
 
         try {
