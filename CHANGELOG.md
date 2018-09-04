@@ -1,3 +1,7 @@
+## [1.6.5]
+
+* Fixed bug on Android when not supplying a locale while using the  Geocoding features.
+
 ## [1.6.4]
 
 * Added support to supply a locale when using the `placemarkFromAddress` and `placemarkFromCoordinates` methods.
