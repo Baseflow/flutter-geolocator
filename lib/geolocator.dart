@@ -9,7 +9,6 @@ import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'models/geolocation_enums.dart';
-part 'models/google_play_services_availability.dart';
 part 'models/location_accuracy.dart';
 part 'models/location_options.dart';
 part 'models/placemark.dart';
@@ -258,21 +257,4 @@ class Geolocator {
         "endLatitude": endLatitude,
         "endLongitude": endLongitude
       }).then<double>((dynamic result) => result);
-
-  /// Returns the distance between the supplied coordinates in meters.
-  ///
-  /// This feature is only available on Android devices. On any other platforms
-  /// the [checkPlayServicesAvailability] method will always return
-  /// [GooglePlayServicesAvailability.notAvailableOnPlatform].
-  Future<GooglePlayServicesAvailability>
-      checkGooglePlayServicesAvailability() async {
-    if (!Platform.isAndroid) {
-      return GooglePlayServicesAvailability.notAvailableOnPlatform;
-    }
-
-    final dynamic availability =
-        await _methodChannel.invokeMethod('checkPlayServicesAvailability');
-
-    return Codec.decodePlayServicesAvailability(availability);
-  }
 }

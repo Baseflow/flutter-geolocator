@@ -14,8 +14,4 @@ public class Codec {
     public static LocationOptions decodeLocationOptions(Object arguments) {
         return GSON_DECODER.fromJson((String)arguments, LocationOptions.class);
     }
-
-    public static String encodePlayServicesAvailability(PlayServicesAvailability availability) {
-        return GSON_DECODER.toJson(availability);
-    }
 }

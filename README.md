@@ -118,17 +118,6 @@ import 'package:geolocator/geolocator.dart';
 double distanceInMeters = await Geolocator().distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
-### Check the availability of Google Play services
-
-To check the availability of Google Play services on the current device, you can use the `checkGooglePlayServicesAvailability` method. This could be helpful to provide a more friendly experience to users in case an user-action is required to enable support for Google Play services (More information can be found [here](https://developers.google.com/android/guides/setup)). 
-
-``` dart
-import `package:geolocator/geolocator.dart`;
-
-GooglePlayServicesAvailability availability = 
-  await Geolocator().checkGooglePlayServicesAvailability();
-```
-
 See also the [example](example/lib/main.dart) project for a complete implementation.
 
 ## Permissions
