@@ -121,9 +121,8 @@ class PositionListItemState extends State<PositionListItem> {
 
   void _onTap() async {
     String address = "unknown";
-    List<Placemark> placemarks = await Geolocator().placemarkFromCoordinates(
-        _position.latitude, _position.longitude,
-        localeIdentifier: "nl_NL");
+    List<Placemark> placemarks = await Geolocator()
+        .placemarkFromCoordinates(_position.latitude, _position.longitude);
 
     if (placemarks != null && placemarks.length > 0) {
       address = _buildAddressString(placemarks.first);
