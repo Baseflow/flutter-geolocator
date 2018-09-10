@@ -5,6 +5,7 @@ class Position {
   Position._({
     this.longitude,
     this.latitude,
+    this.timestamp,
     this.accuracy,
     this.altitude,
     this.heading,
@@ -17,6 +18,9 @@ class Position {
 
   /// The longitude of the position in degrees normalized to the interval -180 (exclusive) to +180 (inclusive).
   final double longitude;
+
+  /// The time at which this position was determined.
+  final DateTime timestamp;
 
   /// The altitude of the device in meters.
   ///
@@ -74,26 +78,18 @@ class Position {
       throw new ArgumentError.value(positionMap, 'positionMap',
           'The supplied map doesn\'t contain the mandatory key `longitude`.');
 
+    final int timestamp = positionMap['timestamp'];
+
     return new Position._(
         latitude: positionMap['latitude'],
         longitude: positionMap['longitude'],
+        timestamp: (timestamp != null)
+            ? DateTime.fromMillisecondsSinceEpoch(timestamp, isUtc: true)
+            : null,
         altitude: positionMap['altitude'] ?? 0.0,
         accuracy: positionMap['accuracy'] ?? 0.0,
         heading: positionMap['heading'] ?? 0.0,
         speed: positionMap['speed'] ?? 0.0,
         speedAccuracy: positionMap['speed_accuracy'] ?? 0.0);
-  }
-
-  @visibleForTesting
-  Map<String, double> toMap() {
-    return <String, double>{
-      'latitude': latitude,
-      'longitude': longitude,
-      'altitude': altitude,
-      'accuracy': accuracy,
-      'heading': heading,
-      'speed': speed,
-      'speed_accuracy': speedAccuracy
-    };
   }
 }

@@ -53,8 +53,8 @@ class Geolocator {
   Future<GeolocationStatus> checkGeolocationPermissionStatus(
       {GeolocationPermission locationPermission =
           GeolocationPermission.location}) async {
-    PermissionStatus permissionStatus =
-        await PermissionHandler().checkPermissionStatus(
+    PermissionStatus permissionStatus = await PermissionHandler()
+        .checkPermissionStatus(
             _GeolocationStatusConverter.toPermissionGroup(locationPermission));
 
     return _GeolocationStatusConverter.fromPermissionStatus(permissionStatus);
@@ -141,7 +141,7 @@ class Geolocator {
             .receiveBroadcastStream(
                 Codec.encodeLocationOptions(locationOptions))
             .map<Position>((dynamic element) =>
-                Position._fromMap(element.cast<String, double>()));
+                Position._fromMap(element.cast<String, dynamic>()));
       }
 
       return _onPositionChanged;
@@ -153,14 +153,14 @@ class Geolocator {
   }
 
   Future<PermissionStatus> _getLocationPermission() async {
-    PermissionStatus permission =
-        await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.location);
 
     if (permission != PermissionStatus.granted &&
         permission != PermissionStatus.disabled) {
       Map<PermissionGroup, PermissionStatus> permissionStatus =
-          await PermissionHandler().requestPermissions(
-              [PermissionGroup.location]);
+          await PermissionHandler()
+              .requestPermissions([PermissionGroup.location]);
 
       return permissionStatus[PermissionGroup.location] ??
           PermissionStatus.unknown;
