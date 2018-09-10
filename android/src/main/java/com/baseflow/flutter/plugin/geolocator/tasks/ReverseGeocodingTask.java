@@ -17,14 +17,12 @@ import java.util.Map;
 import io.flutter.plugin.common.PluginRegistry;
 
 class ReverseGeocodingTask extends Task {
-    private static final String LOCALE_DELIMITER = "_";
-
     private final Context mContext;
 
     private Coordinate mCoordinatesToLookup;
     private Locale mLocale;
 
-    public ReverseGeocodingTask(TaskContext context) {
+    ReverseGeocodingTask(TaskContext context) {
         super(context);
 
         PluginRegistry.Registrar registrar = context.getRegistrar();

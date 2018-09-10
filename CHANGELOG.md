@@ -1,3 +1,8 @@
+## [1.7.0]
+
+* Added timestamp to instances of the `Position` class indicating when the GPS fix was acquired;
+* Updated the dependency on the `PermissionHandler` to version >=2.0.0 <3.0.0. 
+
 ## [1.6.5]
 
 * Fixed bug on Android when not supplying a locale while using the  Geocoding features.

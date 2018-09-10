@@ -21,7 +21,7 @@ class ForwardGeocodingTask extends Task {
     private String mAddressToLookup;
     private Locale mLocale;
 
-    public ForwardGeocodingTask(TaskContext context) {
+    ForwardGeocodingTask(TaskContext context) {
         super(context);
 
         PluginRegistry.Registrar registrar = context.getRegistrar();
@@ -37,7 +37,7 @@ class ForwardGeocodingTask extends Task {
         mAddressToLookup = argumentMap.get("address");
 
         if (argumentMap.containsKey("localeIdentifier")) {
-            mLocale = LocaleConverter.fromLanguageTag((String)argumentMap.get("localeIdentifier"));
+            mLocale = LocaleConverter.fromLanguageTag(argumentMap.get("localeIdentifier"));
         }
     }
 

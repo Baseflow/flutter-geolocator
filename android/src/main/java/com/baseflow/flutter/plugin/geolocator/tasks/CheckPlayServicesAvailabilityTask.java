@@ -13,7 +13,7 @@ import io.flutter.plugin.common.PluginRegistry;
 class CheckPlayServicesAvailabilityTask extends Task {
     private final Context mContext;
 
-    public CheckPlayServicesAvailabilityTask(TaskContext taskContext) {
+    CheckPlayServicesAvailabilityTask(TaskContext taskContext) {
         super(taskContext);
 
         PluginRegistry.Registrar registry = taskContext.getRegistrar();

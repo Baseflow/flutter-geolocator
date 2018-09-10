@@ -11,7 +11,7 @@ class CalculateDistanceTask extends Task {
     private Coordinate mStartCoordinate;
     private Coordinate mEndCoordinate;
 
-    public CalculateDistanceTask(TaskContext context) {
+    CalculateDistanceTask(TaskContext context) {
         super(context);
 
         parseCoordinates(context.getArguments());

@@ -8,7 +8,7 @@ import com.baseflow.flutter.plugin.geolocator.data.Result;
 
 class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationManagerTask {
 
-    public LastKnownLocationUsingLocationManagerTask(TaskContext context) {
+    LastKnownLocationUsingLocationManagerTask(TaskContext context) {
         super(context);
     }
 
