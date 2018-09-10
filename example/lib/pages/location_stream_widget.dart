@@ -112,9 +112,38 @@ class PositionListItemState extends State<PositionListItem> {
 
   @override
   Widget build(BuildContext context) {
+    Row row = Row(
+      children: <Widget>[
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "Lat: ${_position.latitude}",
+                style: TextStyle(fontSize: 16.0, color: Colors.black),
+              ),
+              Text(
+                "Lon: ${_position.longitude}",
+                style: TextStyle(fontSize: 16.0, color: Colors.black),
+              ),
+            ]),
+        Expanded(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  _position.timestamp.toLocal().toString(),
+                  style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                )
+              ]),
+        ),
+      ],
+    );
+
     return ListTile(
       onTap: _onTap,
-      title: Text(_position.toString()),
+      title: row,
       subtitle: Text(_address),
     );
   }

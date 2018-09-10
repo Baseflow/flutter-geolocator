@@ -20,7 +20,7 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
     private Location mBestLocation;
     private String mActiveProvider;
 
-    public LocationUpdatesUsingLocationManagerTask(TaskContext context, boolean stopAfterFirstLocationUpdate) {
+    LocationUpdatesUsingLocationManagerTask(TaskContext context, boolean stopAfterFirstLocationUpdate) {
         super(context);
 
         mStopAfterFirstLocationUpdate = stopAfterFirstLocationUpdate;
@@ -74,14 +74,14 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
         locationManager.removeUpdates(this);
     }
 
-    void handleError() {
+    private void handleError() {
         getTaskContext().getResult().error(
                 "INVALID_LOCATION_SETTINGS",
                 "Location settings are inadequate, check your location settings.",
                 null);
     }
 
-    String getBestProvider(LocationManager locationManager, GeolocationAccuracy accuracy) {
+    private String getBestProvider(LocationManager locationManager, GeolocationAccuracy accuracy) {
         Criteria criteria = new Criteria();
 
         criteria.setBearingRequired(false);
@@ -176,7 +176,7 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
     }
 
     private void reportLocationUpdate(Location location) {
-        Map<String, Double> locationMap = LocationMapper.toHashMap(location);
+        Map<String, Object> locationMap = LocationMapper.toHashMap(location);
 
         getTaskContext().getResult().success(locationMap);
     }

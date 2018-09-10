@@ -28,8 +28,7 @@ abstract class LocationUsingLocationManagerTask extends Task {
     public abstract void startTask();
 
     LocationManager getLocationManager() {
-        Context context = mContext;
-        return (LocationManager) context.getSystemService(Activity.LOCATION_SERVICE);
+        return (LocationManager) mContext.getSystemService(Activity.LOCATION_SERVICE);
     }
 
     public static boolean isBetterLocation(Location location, Location bestLocation) {

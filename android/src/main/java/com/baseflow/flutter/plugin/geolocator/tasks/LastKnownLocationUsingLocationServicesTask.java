@@ -26,7 +26,7 @@ class LastKnownLocationUsingLocationServicesTask extends LocationUsingLocationSe
                 .addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
-                        Map<String, Double> locationMap = location != null
+                        Map<String, Object> locationMap = location != null
                                 ? LocationMapper.toHashMap(location)
                                 : null;
 

@@ -22,7 +22,7 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
     private final LocationCallback mLocationCallback;
 
 
-    public LocationUpdatesUsingLocationServicesTask(TaskContext taskContext, boolean stopAfterFirstLocationUpdate) {
+    LocationUpdatesUsingLocationServicesTask(TaskContext taskContext, boolean stopAfterFirstLocationUpdate) {
 
         super(taskContext);
 
@@ -48,7 +48,7 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
                 if (mStopAfterFirstLocationUpdate) {
                     stopTask();
                 }
-            };
+            }
         };
     }
 
@@ -103,7 +103,7 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
     }
 
     private void reportLocationUpdate(Location location) {
-        Map<String, Double> locationMap = LocationMapper.toHashMap(location);
+        Map<String, Object> locationMap = LocationMapper.toHashMap(location);
 
         getTaskContext().getResult().success(locationMap);
     }

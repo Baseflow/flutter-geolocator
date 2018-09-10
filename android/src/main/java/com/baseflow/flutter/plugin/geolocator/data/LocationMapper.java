@@ -8,12 +8,13 @@ import java.util.Map;
 
 public class LocationMapper {
 
-    public static Map<String, Double> toHashMap(Location location)
+    public static Map<String, Object> toHashMap(Location location)
     {
-        Map<String, Double> position = new HashMap<>();
+        Map<String, Object> position = new HashMap<>();
 
         position.put("latitude", location.getLatitude());
         position.put("longitude", location.getLongitude());
+        position.put("timestamp", location.getTime());
 
         if(location.hasAltitude())
             position.put("altitude", location.getAltitude());
@@ -23,9 +24,8 @@ public class LocationMapper {
             position.put("heading", (double) location.getBearing());
         if(location.hasSpeed())
             position.put("speed", (double) location.getSpeed());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasSpeedAccuracy()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasSpeedAccuracy())
             position.put("speed_accuracy", (double) location.getSpeedAccuracyMetersPerSecond());
-        }
 
         return position;
     }
