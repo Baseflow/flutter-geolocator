@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 
 import com.baseflow.flutter.plugin.geolocator.data.AddressMapper;
+import com.baseflow.flutter.plugin.geolocator.data.ForwardGeocodingOptions;
 import com.baseflow.flutter.plugin.geolocator.data.Result;
 import com.baseflow.flutter.plugin.geolocator.utils.LocaleConverter;
 
@@ -15,42 +16,29 @@ import java.util.Map;
 
 import io.flutter.plugin.common.PluginRegistry;
 
-class ForwardGeocodingTask extends Task {
+class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
     private final Context mContext;
 
-    private String mAddressToLookup;
-    private Locale mLocale;
-
-    ForwardGeocodingTask(TaskContext context) {
+    ForwardGeocodingTask(TaskContext<ForwardGeocodingOptions> context) {
         super(context);
 
         PluginRegistry.Registrar registrar = context.getRegistrar();
 
         mContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
-        parseArguments(context.getArguments());
-    }
-
-    private void parseArguments(Object arguments) {
-        @SuppressWarnings("unchecked")
-        Map<String, String> argumentMap = (Map<String, String>)arguments;
-
-        mAddressToLookup = argumentMap.get("address");
-
-        if (argumentMap.containsKey("localeIdentifier")) {
-            mLocale = LocaleConverter.fromLanguageTag(argumentMap.get("localeIdentifier"));
-        }
     }
 
     @Override
     public void startTask() {
-        Geocoder geocoder = (mLocale != null)
-                ? new Geocoder(mContext, mLocale)
+        ForwardGeocodingOptions options = getTaskContext().getOptions();
+
+        Geocoder geocoder = (options.getLocale() != null)
+                ? new Geocoder(mContext, options.getLocale())
                 : new Geocoder(mContext);
 
         Result result = getTaskContext().getResult();
 
         try {
-            List<Address> addresses = geocoder.getFromLocationName(mAddressToLookup, 1);
+            List<Address> addresses = geocoder.getFromLocationName(options.getAddressToLookup(), 1);
 
             if(addresses.size() > 0) {
                 result.success(AddressMapper.toHashMapList(addresses));

@@ -9,8 +9,8 @@ import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
-final class TaskContext {
-    private final Object mArguments;
+final class TaskContext<TOptions> {
+    private final TOptions mOptions;
     private final OnCompletionListener mCompletionListener;
     private final PluginRegistry.Registrar mRegistrar;
     private final Result mResult;
@@ -19,16 +19,16 @@ final class TaskContext {
     private TaskContext(
             PluginRegistry.Registrar registrar,
             Result result,
-            Object arguments,
+            TOptions options,
             OnCompletionListener completionListener) {
         mRegistrar = registrar;
         mResult = result;
-        mArguments = arguments;
+        mOptions = options;
         mCompletionListener = completionListener;
     }
 
-    public Object getArguments() {
-        return mArguments;
+    public TOptions getOptions() {
+        return mOptions;
     }
 
     public OnCompletionListener getCompletionListener() {
@@ -45,31 +45,31 @@ final class TaskContext {
         return mResult;
     }
 
-    public static TaskContext buildFromMethodResult(
+    public static <TOptions> TaskContext<TOptions> buildForMethodResult(
             PluginRegistry.Registrar registrar,
             MethodChannel.Result methodResult,
-            Object arguments,
+            TOptions options,
             OnCompletionListener completionListener) {
         Result result = new Result(methodResult);
 
         return new TaskContext(
                 registrar,
                 result,
-                arguments,
+                options,
                 completionListener);
     }
 
-    public static TaskContext buildFromEventSink(
+    public static <TOptions> TaskContext<TOptions> buildForEventSink(
             PluginRegistry.Registrar registrar,
             EventChannel.EventSink eventSink,
-            Object arguments,
+            TOptions options,
             OnCompletionListener completionListener) {
         Result result = new Result(eventSink);
 
         return new TaskContext(
                 registrar,
                 result,
-                arguments,
+                options,
                 completionListener);
     }
 }

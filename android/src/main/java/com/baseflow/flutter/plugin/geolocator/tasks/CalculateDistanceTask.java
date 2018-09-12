@@ -2,46 +2,24 @@ package com.baseflow.flutter.plugin.geolocator.tasks;
 
 import android.location.Location;
 
+import com.baseflow.flutter.plugin.geolocator.data.CalculateDistanceOptions;
 import com.baseflow.flutter.plugin.geolocator.data.Coordinate;
 import com.baseflow.flutter.plugin.geolocator.data.Result;
 
 import java.util.Map;
 
-class CalculateDistanceTask extends Task {
-    private Coordinate mStartCoordinate;
-    private Coordinate mEndCoordinate;
+class CalculateDistanceTask extends Task<CalculateDistanceOptions> {
 
-    CalculateDistanceTask(TaskContext context) {
+    CalculateDistanceTask(TaskContext<CalculateDistanceOptions> context) {
         super(context);
-
-        parseCoordinates(context.getArguments());
-    }
-
-    private void parseCoordinates(Object arguments) {
-        if(arguments == null) {
-            mStartCoordinate = null;
-            mEndCoordinate = null;
-        }
-
-        @SuppressWarnings("unchecked")
-        Map<String, Double> coordinates = (Map<String, Double>)arguments;
-
-        if(coordinates == null)
-            throw new IllegalArgumentException("No coordinates supplied to calculate distance between.");
-
-        mStartCoordinate = new Coordinate(
-                coordinates.get("startLatitude"),
-                coordinates.get("startLongitude"));
-        mEndCoordinate = new Coordinate(
-                coordinates.get("endLatitude"),
-                coordinates.get("endLongitude"));
     }
 
     @Override
     public void startTask() {
         Result flutterResult = getTaskContext().getResult();
+        CalculateDistanceOptions options = getTaskContext().getOptions();
 
-        if(mStartCoordinate == null || mEndCoordinate == null) {
+        if(options.getSourceCoordinates() == null || options.getDestinationCoordinates() == null) {
             flutterResult.error(
                     "ERROR_CALCULATE_DISTANCE_INVALID_PARAMS",
                     "Please supply start and end coordinates.",
@@ -52,10 +30,10 @@ class CalculateDistanceTask extends Task {
 
         try {
             Location.distanceBetween(
-                    mStartCoordinate.latitude,
-                    mStartCoordinate.longitude,
-                    mEndCoordinate.latitude,
-                    mEndCoordinate.longitude,
+                    options.getSourceCoordinates().latitude,
+                    options.getSourceCoordinates().longitude,
+                    options.getDestinationCoordinates().latitude,
+                    options.getDestinationCoordinates().longitude,
                     results);
 
             // According to the Android documentation the distance is
