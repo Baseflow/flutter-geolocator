@@ -60,7 +60,7 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
 
         locationManager.requestLocationUpdates(
                 mActiveProvider,
-                0,
+                mLocationOptions.timeInterval,
                 mLocationOptions.distanceFilter,
                 this,
                 looper);

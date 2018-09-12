@@ -10,10 +10,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import io.flutter.plugin.common.PluginRegistry;
 
-class CheckPlayServicesAvailabilityTask extends Task {
+class CheckPlayServicesAvailabilityTask extends Task<Object> {
     private final Context mContext;
 
-    CheckPlayServicesAvailabilityTask(TaskContext taskContext) {
+    CheckPlayServicesAvailabilityTask(TaskContext<Object> taskContext) {
         super(taskContext);
 
         PluginRegistry.Registrar registry = taskContext.getRegistrar();

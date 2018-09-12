@@ -1,8 +1,13 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
 import android.content.Context;
+import android.location.LocationProvider;
 
 import com.baseflow.flutter.plugin.geolocator.OnCompletionListener;
+import com.baseflow.flutter.plugin.geolocator.data.CalculateDistanceOptions;
+import com.baseflow.flutter.plugin.geolocator.data.ForwardGeocodingOptions;
+import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
+import com.baseflow.flutter.plugin.geolocator.data.ReverseGeocodingOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -17,10 +22,11 @@ public class TaskFactory {
             Object arguments,
             OnCompletionListener completionListener) {
 
-        TaskContext taskContext = TaskContext.buildFromMethodResult(
+        CalculateDistanceOptions options = CalculateDistanceOptions.parseArguments(arguments);
+        TaskContext taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
-                arguments,
+                options,
                 completionListener);
 
         return new CalculateDistanceTask(taskContext);
@@ -32,13 +38,14 @@ public class TaskFactory {
             Object arguments,
             OnCompletionListener completionListener) {
 
-        TaskContext taskContext = TaskContext.buildFromMethodResult(
+        LocationOptions options = LocationOptions.parseArguments(arguments);
+        TaskContext taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
-                arguments,
+                options,
                 completionListener);
 
-        if (isGooglePlayServicesAvailable(registrar)) {
+        if (!options.forceAndroidLocationManager && isGooglePlayServicesAvailable(registrar)) {
             return new LocationUpdatesUsingLocationServicesTask(
                     taskContext,
                     true);
@@ -55,10 +62,11 @@ public class TaskFactory {
             Object arguments,
             OnCompletionListener completionListener) {
 
-        TaskContext taskContext = TaskContext.buildFromMethodResult(
+        ForwardGeocodingOptions options = ForwardGeocodingOptions.parseArguments(arguments);
+        TaskContext taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
-                arguments,
+                options,
                 completionListener);
 
         return new ForwardGeocodingTask(taskContext);
@@ -70,13 +78,14 @@ public class TaskFactory {
             Object arguments,
             OnCompletionListener completionListener) {
 
-        TaskContext taskContext = TaskContext.buildFromMethodResult(
+        LocationOptions options = LocationOptions.parseArguments(arguments);
+        TaskContext taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
-                arguments,
+                options,
                 completionListener);
 
-        if (isGooglePlayServicesAvailable(registrar)) {
+        if (!options.forceAndroidLocationManager && isGooglePlayServicesAvailable(registrar)) {
             return new LastKnownLocationUsingLocationServicesTask(taskContext);
         } else {
             return new LastKnownLocationUsingLocationManagerTask(taskContext);
@@ -89,10 +98,11 @@ public class TaskFactory {
             Object arguments,
             OnCompletionListener completionListener) {
 
-        TaskContext taskContext = TaskContext.buildFromMethodResult(
+        ReverseGeocodingOptions options = ReverseGeocodingOptions.parseArguments(arguments);
+        TaskContext taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
-                arguments,
+                options,
                 completionListener);
 
         return new ReverseGeocodingTask(taskContext);
@@ -104,13 +114,14 @@ public class TaskFactory {
             Object arguments,
             OnCompletionListener completionListener) {
 
-        TaskContext taskContext = TaskContext.buildFromEventSink(
+        LocationOptions options = LocationOptions.parseArguments(arguments);
+        TaskContext taskContext = TaskContext.buildForEventSink(
                 registrar,
                 result,
-                arguments,
+                options,
                 completionListener);
 
-        if (isGooglePlayServicesAvailable(registrar)) {
+        if (!options.forceAndroidLocationManager && isGooglePlayServicesAvailable(registrar)) {
             return new LocationUpdatesUsingLocationServicesTask(
                     taskContext,
                     false);
@@ -124,13 +135,12 @@ public class TaskFactory {
     public static Task createCheckPlayServicesAvailabilityTask(
             PluginRegistry.Registrar registrar,
             MethodChannel.Result result,
-            Object arguments,
             OnCompletionListener completionListener) {
 
-        TaskContext taskContext = TaskContext.buildFromMethodResult(
+        TaskContext taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
-                arguments,
+                null,
                 completionListener);
 
         return new CheckPlayServicesAvailabilityTask(taskContext);
