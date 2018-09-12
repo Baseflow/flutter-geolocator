@@ -6,7 +6,8 @@ class LocationOptions {
   const LocationOptions(
       {this.accuracy = LocationAccuracy.best,
       this.distanceFilter = 0,
-      this.forceAndroidLocationManager = false});
+      this.forceAndroidLocationManager = false,
+      this.timeInterval = 0});
 
   /// Defines the desired accuracy that should be used to determine the location data.
   ///
@@ -22,4 +23,9 @@ class LocationOptions {
   ///
   /// On platforms other then Android this parameter is ignored.
   final bool forceAndroidLocationManager;
+
+  /// The desired interval for active location updates, in milliseconds (Android only).
+  ///
+  /// On iOS this value is ignored since position updates based on time intervals are not supported.
+  final int timeInterval;
 }

@@ -84,8 +84,8 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
         LocationRequest locationRequest = new LocationRequest();
 
         locationRequest
-                .setInterval(0)
-                .setFastestInterval(0)
+                .setInterval(mLocationOptions.timeInterval)
+                .setFastestInterval(mLocationOptions.timeInterval)
                 .setSmallestDisplacement(mLocationOptions.distanceFilter);
 
         switch(mLocationOptions.accuracy) {

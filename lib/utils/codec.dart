@@ -23,6 +23,7 @@ class Codec {
         "accuracy": Codec.encodeEnum(locationOptions.accuracy),
         "distanceFilter": locationOptions.distanceFilter,
         "forceAndroidLocationManager":
-            locationOptions.forceAndroidLocationManager
+            locationOptions.forceAndroidLocationManager,
+        "timeInterval": locationOptions.timeInterval
       };
 }
