@@ -14,12 +14,12 @@ class LocationStreamState extends State<LocationStreamWidget> {
   StreamSubscription<Position> _positionStreamSubscription;
   List<Position> _positions = <Position>[];
 
-  void _toggleListening() async {
+  void _toggleListening() {
     if (_positionStreamSubscription == null) {
       final LocationOptions locationOptions = const LocationOptions(
           accuracy: LocationAccuracy.best, distanceFilter: 10);
       final Stream<Position> positionStream =
-          await Geolocator().getPositionStream(locationOptions);
+          Geolocator().getPositionStream(locationOptions);
       _positionStreamSubscription = positionStream
           .listen((position) => setState(() => _positions.add(position)));
       _positionStreamSubscription.pause();
