@@ -147,8 +147,8 @@ class Geolocator {
   /// You can customize the behaviour of the location updates by supplying an
   /// instance [LocationOptions] class. When you don't supply any specific
   /// options, default values will be used for each setting.
-  Future<Stream<Position>> getPositionStream(
-      [LocationOptions locationOptions = const LocationOptions()]) async {
+  Stream<Position> getPositionStream(
+      [LocationOptions locationOptions = const LocationOptions()]) async* {
     PermissionStatus permission = await _getLocationPermission();
 
     if (permission == PermissionStatus.granted) {
@@ -160,12 +160,10 @@ class Geolocator {
                 Position._fromMap(element.cast<String, dynamic>()));
       }
 
-      return _onPositionChanged;
+      yield* _onPositionChanged;
     } else {
       _handleInvalidPermissions(permission);
     }
-
-    return null;
   }
 
   Future<PermissionStatus> _getLocationPermission() async {
