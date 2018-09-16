@@ -6,7 +6,7 @@ class LocationOptions {
   const LocationOptions(
       {this.accuracy = LocationAccuracy.best,
       this.distanceFilter = 0,
-      this.useFusedLocationProvider = true,
+      this.forceAndroidLocationManager = false,
       this.timeInterval = 0});
 
   /// Defines the desired accuracy that should be used to determine the location data.
@@ -22,7 +22,7 @@ class LocationOptions {
   /// Uses [FusedLocationProviderClient] by default and falls back to [LocationManager] when set to false.
   ///
   /// On platforms other then Android this parameter is ignored.
-  final bool useFusedLocationProvider;
+  final bool forceAndroidLocationManager;
 
   /// The desired interval for active location updates, in milliseconds (Android only).
   ///

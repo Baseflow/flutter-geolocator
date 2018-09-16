@@ -60,11 +60,22 @@ class Geolocator {
     return _GeolocationStatusConverter.fromPermissionStatus(permissionStatus);
   }
 
-  /// Returns [true] when Google Play Services are installed on device.
-  /// You can override behaviour by setting this property manually.
-  /// When [true] on Android [FusedLocationProviderClient] will be used.
-  /// Falls back to [LocationManager] when set to [false].
-  bool useFusedLocationProvider = GoogleApiAvailability().checkGooglePlayServicesAvailability() == GooglePlayServicesAvailability.success;
+  bool _forceAndroidLocationManager = false;
+  bool _checkedGooglePlayServicesAvailability = false;
+
+  /// Returns a bool to indicate if [LocationManager] should be used.
+  ///
+  /// On Android devices you can set the parameter [forceAndroidLocationManager]	
+  /// to true to force the plugin to use the [LocationManager] to determine the	
+  /// position instead of the [FusedLocationProviderClient]. On iOS this is ignored.
+  Future<bool> forceAndroidLocationManager([bool forceAndroidLocationManager = false, bool showDialogIfNecessary = false]) async {
+    if(!_checkedGooglePlayServicesAvailability){
+      _forceAndroidLocationManager = await GoogleApiAvailability().checkGooglePlayServicesAvailability(showDialogIfNecessary) == GooglePlayServicesAvailability.success;
+      _checkedGooglePlayServicesAvailability = true;
+    }
+
+    return forceAndroidLocationManager && _forceAndroidLocationManager;
+  }
 
   /// Returns the current position taking the supplied [desiredAccuracy] into account.
   ///
@@ -77,7 +88,7 @@ class Geolocator {
       LocationOptions locationOptions = LocationOptions(
           accuracy: desiredAccuracy,
           distanceFilter: 0,
-          useFusedLocationProvider: useFusedLocationProvider);
+          forceAndroidLocationManager: await forceAndroidLocationManager());
       Map<dynamic, dynamic> positionMap = await _methodChannel.invokeMethod(
           'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
 
@@ -106,7 +117,7 @@ class Geolocator {
       LocationOptions locationOptions = LocationOptions(
           accuracy: desiredAccuracy,
           distanceFilter: 0,
-          useFusedLocationProvider: useFusedLocationProvider);
+          forceAndroidLocationManager: await forceAndroidLocationManager());
       Map<dynamic, dynamic> positionMap = await _methodChannel.invokeMethod(
           'getLastKnownPosition', Codec.encodeLocationOptions(locationOptions));
 

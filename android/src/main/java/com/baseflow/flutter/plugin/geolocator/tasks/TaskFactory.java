@@ -43,7 +43,7 @@ public class TaskFactory {
                 options,
                 completionListener);
 
-        if (options.useFusedLocationProvider) {
+        if (!options.forceAndroidLocationManager) {
             return new LocationUpdatesUsingLocationServicesTask(
                     taskContext,
                     true);
@@ -83,7 +83,7 @@ public class TaskFactory {
                 options,
                 completionListener);
 
-        if (options.useFusedLocationProvider) {
+        if (!options.forceAndroidLocationManager) {
             return new LastKnownLocationUsingLocationServicesTask(taskContext);
         } else {
             return new LastKnownLocationUsingLocationManagerTask(taskContext);
@@ -119,7 +119,7 @@ public class TaskFactory {
                 options,
                 completionListener);
 
-        if (options.useFusedLocationProvider) {
+        if (!options.forceAndroidLocationManager) {
             return new LocationUpdatesUsingLocationServicesTask(
                     taskContext,
                     false);
