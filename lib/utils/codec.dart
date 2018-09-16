@@ -14,8 +14,8 @@ class Codec {
       <String, dynamic>{
         "accuracy": Codec.encodeEnum(locationOptions.accuracy),
         "distanceFilter": locationOptions.distanceFilter,
-        "forceAndroidLocationManager":
-            locationOptions.forceAndroidLocationManager,
+        "useFusedLocationProvider":
+            locationOptions.useFusedLocationProvider,
         "timeInterval": locationOptions.timeInterval
       };
 }

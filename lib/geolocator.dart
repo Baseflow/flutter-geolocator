@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:google_api_availability/google_api_availability.dart';
 import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -59,24 +60,24 @@ class Geolocator {
     return _GeolocationStatusConverter.fromPermissionStatus(permissionStatus);
   }
 
+  /// Returns [true] when Google Play Services are installed on device.
+  /// You can override behaviour by setting this property manually.
+  /// When [true] on Android [FusedLocationProviderClient] will be used.
+  /// Falls back to [LocationManager] when set to [false].
+  bool useFusedLocationProvider = GoogleApiAvailability().checkGooglePlayServicesAvailability() == GooglePlayServicesAvailability.success;
+
   /// Returns the current position taking the supplied [desiredAccuracy] into account.
   ///
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
-  ///
-  /// On Android devices you can set the parameter [forceAndroidLocationManager]
-  /// to true to force the plugin to use the [LocationManager] to determine the
-  /// position instead of the [FusedLocationProviderClient]. On iOS this
-  /// parameter is ignored.
   Future<Position> getCurrentPosition(
-      {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-      bool forceAndroidLocationManager = false}) async {
+      {LocationAccuracy desiredAccuracy = LocationAccuracy.best}) async {
     PermissionStatus permission = await _getLocationPermission();
 
     if (permission == PermissionStatus.granted) {
       LocationOptions locationOptions = LocationOptions(
           accuracy: desiredAccuracy,
           distanceFilter: 0,
-          forceAndroidLocationManager: forceAndroidLocationManager);
+          useFusedLocationProvider: useFusedLocationProvider);
       Map<dynamic, dynamic> positionMap = await _methodChannel.invokeMethod(
           'getCurrentPosition', Codec.encodeLocationOptions(locationOptions));
 
@@ -97,21 +98,15 @@ class Geolocator {
   /// On Android we look for the location provider matching best with the
   /// supplied [desiredAccuracy]. On iOS this parameter is ignored.
   /// When no position is available, null is returned.
-  ///
-  /// On Android devices you can set the parameter [forceAndroidLocationManager]
-  /// to true to force the plugin to use the [LocationManager] to determine the
-  /// position instead of the [FusedLocationProviderClient]. On iOS this
-  /// parameter is ignored.
   Future<Position> getLastKnownPosition(
-      {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-      bool forceAndroidLocationManager = false}) async {
+      {LocationAccuracy desiredAccuracy = LocationAccuracy.best}) async {
     PermissionStatus permission = await _getLocationPermission();
 
     if (permission == PermissionStatus.granted) {
       LocationOptions locationOptions = LocationOptions(
           accuracy: desiredAccuracy,
           distanceFilter: 0,
-          forceAndroidLocationManager: forceAndroidLocationManager);
+          useFusedLocationProvider: useFusedLocationProvider);
       Map<dynamic, dynamic> positionMap = await _methodChannel.invokeMethod(
           'getLastKnownPosition', Codec.encodeLocationOptions(locationOptions));
 

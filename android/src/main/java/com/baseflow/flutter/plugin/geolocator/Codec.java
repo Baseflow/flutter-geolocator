@@ -2,7 +2,6 @@ package com.baseflow.flutter.plugin.geolocator;
 
 import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
 
-import com.baseflow.flutter.plugin.geolocator.data.PlayServicesAvailability;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

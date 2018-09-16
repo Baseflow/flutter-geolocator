@@ -8,8 +8,6 @@ import com.baseflow.flutter.plugin.geolocator.data.CalculateDistanceOptions;
 import com.baseflow.flutter.plugin.geolocator.data.ForwardGeocodingOptions;
 import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
 import com.baseflow.flutter.plugin.geolocator.data.ReverseGeocodingOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
@@ -45,7 +43,7 @@ public class TaskFactory {
                 options,
                 completionListener);
 
-        if (!options.forceAndroidLocationManager && isGooglePlayServicesAvailable(registrar)) {
+        if (options.useFusedLocationProvider) {
             return new LocationUpdatesUsingLocationServicesTask(
                     taskContext,
                     true);
@@ -85,7 +83,7 @@ public class TaskFactory {
                 options,
                 completionListener);
 
-        if (!options.forceAndroidLocationManager && isGooglePlayServicesAvailable(registrar)) {
+        if (options.useFusedLocationProvider) {
             return new LastKnownLocationUsingLocationServicesTask(taskContext);
         } else {
             return new LastKnownLocationUsingLocationManagerTask(taskContext);
@@ -121,7 +119,7 @@ public class TaskFactory {
                 options,
                 completionListener);
 
-        if (!options.forceAndroidLocationManager && isGooglePlayServicesAvailable(registrar)) {
+        if (options.useFusedLocationProvider) {
             return new LocationUpdatesUsingLocationServicesTask(
                     taskContext,
                     false);
@@ -130,31 +128,5 @@ public class TaskFactory {
                     taskContext,
                     false);
         }
-    }
-
-    public static Task createCheckPlayServicesAvailabilityTask(
-            PluginRegistry.Registrar registrar,
-            MethodChannel.Result result,
-            OnCompletionListener completionListener) {
-
-        TaskContext taskContext = TaskContext.buildForMethodResult(
-                registrar,
-                result,
-                null,
-                completionListener);
-
-        return new CheckPlayServicesAvailabilityTask(taskContext);
-    }
-
-    private static boolean isGooglePlayServicesAvailable(PluginRegistry.Registrar registrar) {
-        Context context = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
-
-        if (context == null) {
-            return false;
-        }
-
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-
-        return googleApiAvailability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
     }
 }
