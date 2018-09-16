@@ -73,6 +73,14 @@ import 'package:geolocator/geolocator.dart';
 GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
 ```
 
+By default `Geolocator` will use `FusedLocationProviderClient` on Android when Google Play Services are available. It will fall back to `LocationManager` when it is not available. You can override this behaviour by setting `useFusedLocationProvider`.
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+bool Geolocator().useFusedLocationProvider = false;
+```
+
 ### Geocoding
 
 To translate an address into latitude and longitude coordinates you can use the `placemarkFromAddress` method:
