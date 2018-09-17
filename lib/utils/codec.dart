@@ -1,7 +1,6 @@
 part of geolocator;
 
 class Codec {
-
   static String encodeLocationOptions(LocationOptions locationOptions) =>
       json.encode(_locationOptionsMap(locationOptions));
 
