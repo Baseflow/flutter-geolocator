@@ -19,7 +19,7 @@ class LocationOptions {
   /// Supply 0 when you want to be notified of all movements. The default is 0.
   final int distanceFilter;
 
-  /// Uses [FusedLocationProviderClient] by default and falls back to [LocationManager] when set to false.
+  /// Uses [FusedLocationProviderClient] by default and falls back to [LocationManager] when set to true.
   ///
   /// On platforms other then Android this parameter is ignored.
   final bool forceAndroidLocationManager;
