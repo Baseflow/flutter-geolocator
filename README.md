@@ -73,6 +73,15 @@ import 'package:geolocator/geolocator.dart';
 GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
 ```
 
+By default `Geolocator` will use `FusedLocationProviderClient` on Android when Google Play Services are available. It will fall back to `LocationManager` when it is not available. You can override the behaviour by setting `forceAndroidLocationManager`.
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
+GeolocationStatus geolocationStatus  = await geolocator.checkGeolocationPermissionStatus();
+```
+
 ### Geocoding
 
 To translate an address into latitude and longitude coordinates you can use the `placemarkFromAddress` method:
@@ -116,17 +125,6 @@ endLongitude | double | Longitude of the destination position
 import 'package:geolocator/geolocator.dart';
 
 double distanceInMeters = await Geolocator().distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
-```
-
-### Check the availability of Google Play services
-
-To check the availability of Google Play services on the current device, you can use the `checkGooglePlayServicesAvailability` method. This could be helpful to provide a more friendly experience to users in case an user-action is required to enable support for Google Play services (More information can be found [here](https://developers.google.com/android/guides/setup)). 
-
-``` dart
-import `package:geolocator/geolocator.dart`;
-
-GooglePlayServicesAvailability availability = 
-  await Geolocator().checkGooglePlayServicesAvailability();
 ```
 
 See also the [example](example/lib/main.dart) project for a complete implementation.

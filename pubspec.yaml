@@ -9,6 +9,7 @@ dependencies:
   flutter:
     sdk: flutter
   permission_handler: ">=2.0.0 <3.0.0"
+  google_api_availability: ">=1.0.1 <2.0.0"
 dev_dependencies:
   flutter_test:
     sdk: flutter
