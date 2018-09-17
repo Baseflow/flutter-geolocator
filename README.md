@@ -78,7 +78,8 @@ By default `Geolocator` will use `FusedLocationProviderClient` on Android when G
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-bool Geolocator().forceAndroidLocationManager = true;
+Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
+GeolocationStatus geolocationStatus  = await geolocator.checkGeolocationPermissionStatus();
 ```
 
 ### Geocoding
