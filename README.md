@@ -73,12 +73,12 @@ import 'package:geolocator/geolocator.dart';
 GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
 ```
 
-By default `Geolocator` will use `FusedLocationProviderClient` on Android when Google Play Services are available. It will fall back to `LocationManager` when it is not available.
+By default `Geolocator` will use `FusedLocationProviderClient` on Android when Google Play Services are available. It will fall back to `LocationManager` when it is not available. You can override the behaviour by setting `forceAndroidLocationManager`.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-bool Geolocator().forceAndroidLocationManager(true);
+bool Geolocator().forceAndroidLocationManager = true;
 ```
 
 ### Geocoding
