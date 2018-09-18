@@ -1,9 +1,8 @@
 ## [2.0.0]
 
-* **breaking** Allow developers to force Android to use the `LocationManager` instead of using the `FusedLocationProviderClient`. This can be accomplished by setting the (optional) `forceAndroidLocationManager` parameter of the `getLastKnowPosition` and `getCurrentPosition` to `true`. For the `getPositionStream` method you can set the `forceAndroidLocationManager` property of the `LocationOptions` class to `true`. Note that we had to change the signatures of the `getLastKnownPosition` and `getCurrentPosition` methods from using positional optional parameters to named optional parameters which is causing the breaking change;
 * **breaking** The `getPositionStream` method now directly returns an instance of the `Stream<Position>` class, meaning there is no need to `await` the method before being able to access the stream;
+* By default Geolocator will use FusedLocationProviderClient on Android when Google Play Services are available. It will fall back to LocationManager when it is not available. You can override the behaviour by setting `Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;`
 * Allow developers to specify a desired interval for active location updates, in milliseconds (Android only).
-
 
 ## [1.7.0]
 
