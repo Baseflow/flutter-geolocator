@@ -21,9 +21,9 @@ extension CLLocation {
         ]
     }
     
-    private static func currentTimeInMilliSeconds(dateToConvert: Date)-> Int
+    private static func currentTimeInMilliSeconds(dateToConvert: Date)-> Double
     {
         let since1970 = dateToConvert.timeIntervalSince1970
-        return Int(since1970 * 1000)
+        return since1970 * 1000
     }
 }
