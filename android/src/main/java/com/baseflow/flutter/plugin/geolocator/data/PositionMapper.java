@@ -6,7 +6,7 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LocationMapper {
+public class PositionMapper {
 
     public static Map<String, Object> toHashMap(Location location)
     {

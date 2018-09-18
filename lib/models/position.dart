@@ -78,7 +78,7 @@ class Position {
       throw new ArgumentError.value(positionMap, 'positionMap',
           'The supplied map doesn\'t contain the mandatory key `longitude`.');
 
-    final int timestamp = positionMap['timestamp'];
+    final int timestamp = positionMap['timestamp'].toInt();
 
     return new Position._(
         latitude: positionMap['latitude'],

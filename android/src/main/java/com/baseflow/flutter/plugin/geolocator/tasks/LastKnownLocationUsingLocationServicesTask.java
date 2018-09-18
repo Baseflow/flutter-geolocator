@@ -3,7 +3,7 @@ package com.baseflow.flutter.plugin.geolocator.tasks;
 import android.location.Location;
 import android.support.annotation.NonNull;
 
-import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
+import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,7 +27,7 @@ class LastKnownLocationUsingLocationServicesTask extends LocationUsingLocationSe
                     @Override
                     public void onSuccess(Location location) {
                         Map<String, Object> locationMap = location != null
-                                ? LocationMapper.toHashMap(location)
+                                ? PositionMapper.toHashMap(location)
                                 : null;
 
                         getTaskContext().getResult().success(locationMap);
