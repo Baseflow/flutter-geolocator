@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.os.Looper;
 
 import com.baseflow.flutter.plugin.geolocator.data.GeolocationAccuracy;
-import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
+import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.google.android.gms.common.util.Strings;
 
 import java.util.List;
@@ -176,7 +176,7 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
     }
 
     private void reportLocationUpdate(Location location) {
-        Map<String, Object> locationMap = LocationMapper.toHashMap(location);
+        Map<String, Object> locationMap = PositionMapper.toHashMap(location);
 
         getTaskContext().getResult().success(locationMap);
     }

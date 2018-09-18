@@ -3,7 +3,7 @@ package com.baseflow.flutter.plugin.geolocator.tasks;
 import android.location.Location;
 import android.location.LocationManager;
 
-import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
+import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.baseflow.flutter.plugin.geolocator.data.Result;
 
 class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationManagerTask {
@@ -33,7 +33,7 @@ class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationMan
             return;
         }
 
-        result.success(LocationMapper.toHashMap(bestLocation));
+        result.success(PositionMapper.toHashMap(bestLocation));
         stopTask();
     }
 }
