@@ -1,3 +1,9 @@
+## [2.0.0]
+
+* **breaking** The `getPositionStream` method now directly returns an instance of the `Stream<Position>` class, meaning there is no need to `await` the method before being able to access the stream;
+* By default Geolocator will use FusedLocationProviderClient on Android when Google Play Services are available. It will fall back to LocationManager when it is not available. You can override the behaviour by setting `Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;`
+* Allow developers to specify a desired interval for active location updates, in milliseconds (Android only).
+
 ## [1.7.0]
 
 * Added timestamp to instances of the `Position` class indicating when the GPS fix was acquired;
