@@ -4,7 +4,7 @@ import android.location.Location;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 
-import com.baseflow.flutter.plugin.geolocator.data.LocationMapper;
+import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -84,8 +84,8 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
         LocationRequest locationRequest = new LocationRequest();
 
         locationRequest
-                .setInterval(0)
-                .setFastestInterval(0)
+                .setInterval(mLocationOptions.timeInterval)
+                .setFastestInterval(mLocationOptions.timeInterval)
                 .setSmallestDisplacement(mLocationOptions.distanceFilter);
 
         switch(mLocationOptions.accuracy) {
@@ -103,7 +103,7 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
     }
 
     private void reportLocationUpdate(Location location) {
-        Map<String, Object> locationMap = LocationMapper.toHashMap(location);
+        Map<String, Object> locationMap = PositionMapper.toHashMap(location);
 
         getTaskContext().getResult().success(locationMap);
     }

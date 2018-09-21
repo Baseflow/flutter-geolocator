@@ -25,7 +25,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^1.7.0'
+  geolocator: '^2.0.0'
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
@@ -39,7 +39,7 @@ To query the current location of the device simply make a call to the `getCurren
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator().getCurrentPosition(LocationAccuracy.high);
+Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 ```
 
 To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
@@ -47,7 +47,7 @@ To query the last known location retrieved stored on the device you can use the 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator().getLastKnownPosition(LocationAccuracy.high);
+Position position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
 ```
 
 To listen for location changes you can subscribe to the `onPositionChanged` stream. Supply an instance of the `LocationOptions` class to configure
@@ -71,6 +71,15 @@ To check if location services are enabled you can call the `checkGeolocationPerm
 import 'package:geolocator/geolocator.dart';
 
 GeolocationStatus geolocationStatus  = await Geolocator().checkGeolocationPermissionStatus();
+```
+
+By default `Geolocator` will use `FusedLocationProviderClient` on Android when Google Play Services are available. It will fall back to `LocationManager` when it is not available. You can override the behaviour by setting `forceAndroidLocationManager`.
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
+GeolocationStatus geolocationStatus  = await geolocator.checkGeolocationPermissionStatus();
 ```
 
 ### Geocoding
@@ -116,17 +125,6 @@ endLongitude | double | Longitude of the destination position
 import 'package:geolocator/geolocator.dart';
 
 double distanceInMeters = await Geolocator().distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
-```
-
-### Check the availability of Google Play services
-
-To check the availability of Google Play services on the current device, you can use the `checkGooglePlayServicesAvailability` method. This could be helpful to provide a more friendly experience to users in case an user-action is required to enable support for Google Play services (More information can be found [here](https://developers.google.com/android/guides/setup)). 
-
-``` dart
-import `package:geolocator/geolocator.dart`;
-
-GooglePlayServicesAvailability availability = 
-  await Geolocator().checkGooglePlayServicesAvailability();
 ```
 
 See also the [example](example/lib/main.dart) project for a complete implementation.

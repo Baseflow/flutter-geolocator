@@ -4,11 +4,11 @@ import com.baseflow.flutter.plugin.geolocator.OnCompletionListener;
 
 import java.util.UUID;
 
-public abstract class Task {
+public abstract class Task<TOptions> {
     private final UUID mTaskID;
-    private final TaskContext mTaskContext;
+    private final TaskContext<TOptions> mTaskContext;
 
-    Task(TaskContext context) {
+    Task(TaskContext<TOptions> context) {
         mTaskID = UUID.randomUUID();
         mTaskContext = context;
     }
@@ -17,7 +17,7 @@ public abstract class Task {
         return mTaskID;
     }
 
-    TaskContext getTaskContext() {
+    TaskContext<TOptions> getTaskContext() {
         return mTaskContext;
     }
 

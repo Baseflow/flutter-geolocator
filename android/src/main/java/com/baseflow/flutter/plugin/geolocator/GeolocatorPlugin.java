@@ -82,13 +82,6 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
                 task.startTask();
                 break;
             }
-            case "checkPlayServicesAvailability": {
-                Task task = TaskFactory.createCheckPlayServicesAvailabilityTask(
-                        mRegistrar, result, call.arguments, this);
-                mTasks.put(task.getTaskID(), task);
-                task.startTask();
-                break;
-            }
             default:
                 result.notImplemented();
                 break;

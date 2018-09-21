@@ -10,25 +10,25 @@ import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
 
 import io.flutter.plugin.common.PluginRegistry;
 
-abstract class LocationUsingLocationManagerTask extends Task {
+abstract class LocationUsingLocationManagerTask extends Task<LocationOptions> {
     private static final long TWO_MINUTES = 120000;
 
-    private final Context mContext;
+    private final Context mAndroidContext;
     final LocationOptions mLocationOptions;
 
-    LocationUsingLocationManagerTask(TaskContext context) {
+    LocationUsingLocationManagerTask(TaskContext<LocationOptions> context) {
         super(context);
 
         PluginRegistry.Registrar registrar = context.getRegistrar();
 
-        mContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
-        mLocationOptions = Codec.decodeLocationOptions(context.getArguments());
+        mAndroidContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
+        mLocationOptions = context.getOptions();
     }
 
     public abstract void startTask();
 
     LocationManager getLocationManager() {
-        return (LocationManager) mContext.getSystemService(Activity.LOCATION_SERVICE);
+        return (LocationManager) mAndroidContext.getSystemService(Activity.LOCATION_SERVICE);
     }
 
     public static boolean isBetterLocation(Location location, Location bestLocation) {

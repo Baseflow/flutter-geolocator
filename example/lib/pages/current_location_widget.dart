@@ -23,8 +23,9 @@ class _LocationState extends State<CurrentLocationWidget> {
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      position = await Geolocator()
-          .getCurrentPosition(LocationAccuracy.bestForNavigation);
+      Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
+      position = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.bestForNavigation);
     } on PlatformException {
       position = null;
     }
