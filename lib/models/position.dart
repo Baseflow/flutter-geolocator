@@ -77,10 +77,11 @@ class Position {
     if (!positionMap.containsKey('longitude'))
       throw new ArgumentError.value(positionMap, 'positionMap',
           'The supplied map doesn\'t contain the mandatory key `longitude`.');
-    
-    final DateTime timestamp = positionMap['timestamp'] != null ? DateTime
-        .fromMillisecondsSinceEpoch(
-        positionMap['timestamp'].toInt(), isUtc: true) : null;
+
+    final DateTime timestamp = positionMap['timestamp'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(positionMap['timestamp'].toInt(),
+            isUtc: true)
+        : null;
 
     return new Position._(
         latitude: positionMap['latitude'],
