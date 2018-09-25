@@ -1,3 +1,7 @@
+## [2.0.1]
+
+* Bug fix where a null reference exception occurs because the timestamp of the `Position` could be `null` when fetching a `Placemark` using the `placemarkFromAddress` or `placemarkFromCoordinates` methods.
+
 ## [2.0.0]
 
 * **breaking** The `getPositionStream` method now directly returns an instance of the `Stream<Position>` class, meaning there is no need to `await` the method before being able to access the stream;
