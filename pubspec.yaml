@@ -8,8 +8,8 @@ dependencies:
   meta: "^1.0.5"
   flutter:
     sdk: flutter
-  permission_handler: ">=2.0.0 <3.0.0"
-  google_api_availability: ">=1.0.1 <2.0.0"
+  permission_handler: "^2.0.2"
+  google_api_availability: "^1.0.4"
 dev_dependencies:
   flutter_test:
     sdk: flutter
