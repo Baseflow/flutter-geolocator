@@ -1,3 +1,7 @@
+## [2.0.3]
+
+* Updated dependencies on Permission Handler and Google API Availability plugins.
+
 ## [2.0.2]
 
 * Updated Gradle version
