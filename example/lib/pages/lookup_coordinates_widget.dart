@@ -13,17 +13,17 @@ class _LookupCoordinatesState extends State<LookupCoordinatesWidget> {
 
   String _placemark = '';
 
-  void _onLookupAddressPressed() async {
-    var coords = _coordinatesTextController.text.split(',');
-    var latitude = double.parse(coords[0]);
-    var longitude = double.parse(coords[1]);
-    List<Placemark> placemarks =
+  Future<void> _onLookupAddressPressed() async {
+    final List<String> coords = _coordinatesTextController.text.split(',');
+    final double latitude = double.parse(coords[0]);
+    final double longitude = double.parse(coords[1]);
+    final List<Placemark> placemarks =
         await _geolocator.placemarkFromCoordinates(latitude, longitude);
 
-    if (placemarks != null && placemarks.length >= 1) {
-      var pos = placemarks[0];
+    if (placemarks != null && placemarks.isNotEmpty) {
+      final Placemark pos = placemarks[0];
       setState(() {
-        _placemark = pos.thoroughfare + ", " + pos.locality;
+        _placemark = pos.thoroughfare + ', ' + pos.locality;
       });
     }
   }
@@ -32,17 +32,17 @@ class _LookupCoordinatesState extends State<LookupCoordinatesWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        new TextField(
-          decoration: new InputDecoration(hintText: "latitude,longitude"),
+        TextField(
+          decoration: const InputDecoration(hintText: 'latitude,longitude'),
           controller: _coordinatesTextController,
         ),
-        new RaisedButton(
-          child: new Text('Look up...'),
+        RaisedButton(
+          child: const Text('Look up...'),
           onPressed: () {
             _onLookupAddressPressed();
           },
         ),
-        new Text(_placemark),
+        Text(_placemark),
       ],
     );
   }

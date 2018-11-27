@@ -1,3 +1,8 @@
+## [2.1.1]
+
+* Updated iOS code to Swift 4.2
+* Updated to latest version of the permission_handler plugin (v2.1.2)
+
 ## [2.1.0]
 
 * Updated dependencies on Permission Handler and Google API Availability plugins.
