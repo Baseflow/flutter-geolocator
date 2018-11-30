@@ -55,27 +55,27 @@ class Position {
   /// Converts a collection of [Map] objects into a collection of [Position] objects.
   static List<Position> _fromMaps(dynamic message) {
     if (message == null) {
-      throw new ArgumentError("The parameter 'message' should not be null.");
+      throw ArgumentError('The parameter \'message\' should not be null.');
     }
 
-    List<Position> list = message.map<Position>(_fromMap).toList();
+    final List<Position> list = message.map<Position>(_fromMap).toList();
     return list;
   }
 
   /// Converts the supplied [Map] to an instance of the [Position] class.
   static Position _fromMap(dynamic message) {
     if (message == null) {
-      throw new ArgumentError("The parameter 'message' should not be null.");
+      throw ArgumentError('The parameter \'message\' should not be null.');
     }
 
     final Map<dynamic, dynamic> positionMap = message;
 
     if (!positionMap.containsKey('latitude'))
-      throw new ArgumentError.value(positionMap, 'positionMap',
+      throw ArgumentError.value(positionMap, 'positionMap',
           'The supplied map doesn\'t contain the mandatory key `latitude`.');
 
     if (!positionMap.containsKey('longitude'))
-      throw new ArgumentError.value(positionMap, 'positionMap',
+      throw ArgumentError.value(positionMap, 'positionMap',
           'The supplied map doesn\'t contain the mandatory key `longitude`.');
 
     final DateTime timestamp = positionMap['timestamp'] != null
@@ -83,7 +83,7 @@ class Position {
             isUtc: true)
         : null;
 
-    return new Position._(
+    return Position._(
         latitude: positionMap['latitude'],
         longitude: positionMap['longitude'],
         timestamp: timestamp,

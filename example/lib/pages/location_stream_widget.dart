@@ -12,16 +12,16 @@ class LocationStreamWidget extends StatefulWidget {
 
 class LocationStreamState extends State<LocationStreamWidget> {
   StreamSubscription<Position> _positionStreamSubscription;
-  List<Position> _positions = <Position>[];
+  final List<Position> _positions = <Position>[];
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      final LocationOptions locationOptions = const LocationOptions(
-          accuracy: LocationAccuracy.best, distanceFilter: 10);
+      const LocationOptions locationOptions =
+          LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 10);
       final Stream<Position> positionStream =
           Geolocator().getPositionStream(locationOptions);
-      _positionStreamSubscription = positionStream
-          .listen((position) => setState(() => _positions.add(position)));
+      _positionStreamSubscription = positionStream.listen(
+          (Position position) => setState(() => _positions.add(position)));
       _positionStreamSubscription.pause();
     }
 
@@ -46,17 +46,17 @@ class LocationStreamState extends State<LocationStreamWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<GeolocationStatus>(
         future: Geolocator().checkGeolocationPermissionStatus(),
         builder:
             (BuildContext context, AsyncSnapshot<GeolocationStatus> snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.data == GeolocationStatus.denied) {
-            return PlaceholderWidget("Location services disabled",
-                "Enable location services for this App using the device settings.");
+            return const PlaceholderWidget('Location services disabled',
+                'Enable location services for this App using the device settings.');
           }
 
           return _buildListView();
@@ -64,19 +64,20 @@ class LocationStreamState extends State<LocationStreamWidget> {
   }
 
   Widget _buildListView() {
-    List<Widget> listItems = <Widget>[
+    final List<Widget> listItems = <Widget>[
       ListTile(
         title: RaisedButton(
           child: _buildButtonText(),
           color: _determineButtonColor(),
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           onPressed: _toggleListening,
         ),
       ),
     ];
 
-    listItems.addAll(
-        _positions.map((position) => PositionListItem(position)).toList());
+    listItems.addAll(_positions
+        .map((Position position) => PositionListItem(position))
+        .toList());
 
     return ListView(
       children: listItems,
@@ -87,7 +88,7 @@ class LocationStreamState extends State<LocationStreamWidget> {
       _positionStreamSubscription.isPaused);
 
   Widget _buildButtonText() {
-    return Text(_isListening() ? "Stop listening" : "Start listening");
+    return Text(_isListening() ? 'Stop listening' : 'Start listening');
   }
 
   Color _determineButtonColor() {
@@ -96,7 +97,7 @@ class LocationStreamState extends State<LocationStreamWidget> {
 }
 
 class PositionListItem extends StatefulWidget {
-  PositionListItem(this._position);
+  const PositionListItem(this._position);
 
   final Position _position;
 
@@ -108,23 +109,23 @@ class PositionListItemState extends State<PositionListItem> {
   PositionListItemState(this._position);
 
   final Position _position;
-  String _address = "";
+  String _address = '';
 
   @override
   Widget build(BuildContext context) {
-    Row row = Row(
+    final Row row = Row(
       children: <Widget>[
         Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text(
-                "Lat: ${_position.latitude}",
-                style: TextStyle(fontSize: 16.0, color: Colors.black),
+                'Lat: ${_position.latitude}',
+                style: const TextStyle(fontSize: 16.0, color: Colors.black),
               ),
               Text(
-                "Lon: ${_position.longitude}",
-                style: TextStyle(fontSize: 16.0, color: Colors.black),
+                'Lon: ${_position.longitude}',
+                style: const TextStyle(fontSize: 16.0, color: Colors.black),
               ),
             ]),
         Expanded(
@@ -134,7 +135,7 @@ class PositionListItemState extends State<PositionListItem> {
               children: <Widget>[
                 Text(
                   _position.timestamp.toLocal().toString(),
-                  style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                  style: const TextStyle(fontSize: 14.0, color: Colors.grey),
                 )
               ]),
         ),
@@ -148,26 +149,26 @@ class PositionListItemState extends State<PositionListItem> {
     );
   }
 
-  void _onTap() async {
-    String address = "unknown";
-    List<Placemark> placemarks = await Geolocator()
+  Future<void> _onTap() async {
+    String address = 'unknown';
+    final List<Placemark> placemarks = await Geolocator()
         .placemarkFromCoordinates(_position.latitude, _position.longitude);
 
-    if (placemarks != null && placemarks.length > 0) {
+    if (placemarks != null && placemarks.isNotEmpty) {
       address = _buildAddressString(placemarks.first);
     }
 
     setState(() {
-      _address = "$address";
+      _address = '$address';
     });
   }
 
   static String _buildAddressString(Placemark placemark) {
-    String name = placemark.name ?? "";
-    String city = placemark.locality ?? "";
-    String state = placemark.administrativeArea ?? "";
-    String country = placemark.country ?? "";
+    final String name = placemark.name ?? '';
+    final String city = placemark.locality ?? '';
+    final String state = placemark.administrativeArea ?? '';
+    final String country = placemark.country ?? '';
 
-    return "$name, $city, $state, $country";
+    return '$name, $city, $state, $country';
   }
 }

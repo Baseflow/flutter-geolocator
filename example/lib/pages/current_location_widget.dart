@@ -19,11 +19,12 @@ class _LocationState extends State<CurrentLocationWidget> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  void _initPlatformState() async {
+  Future<void> _initPlatformState() async {
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
+      final Geolocator geolocator = Geolocator()
+        ..forceAndroidLocationManager = true;
       position = await geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.bestForNavigation);
     } on PlatformException {
@@ -33,7 +34,9 @@ class _LocationState extends State<CurrentLocationWidget> {
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
 
     setState(() {
       _position = position;
@@ -42,25 +45,25 @@ class _LocationState extends State<CurrentLocationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<GeolocationStatus>(
         future: Geolocator().checkGeolocationPermissionStatus(),
         builder:
             (BuildContext context, AsyncSnapshot<GeolocationStatus> snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.data == GeolocationStatus.disabled) {
-            return PlaceholderWidget("Location services disabled",
-                "Enable location services for this App using the device settings.");
+            return const PlaceholderWidget('Location services disabled',
+                'Enable location services for this App using the device settings.');
           }
 
           if (snapshot.data == GeolocationStatus.denied) {
-            return PlaceholderWidget("Access to location denied",
-                "Allow access to the location services for this App using the device settings.");
+            return const PlaceholderWidget('Access to location denied',
+                'Allow access to the location services for this App using the device settings.');
           }
 
-          return PlaceholderWidget("Current location:", _position.toString());
+          return PlaceholderWidget('Current location:', _position.toString());
         });
   }
 }
