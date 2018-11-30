@@ -4,7 +4,7 @@ import 'pages/calculate_distance_widget.dart';
 import 'pages/current_location_widget.dart';
 import 'pages/location_stream_widget.dart';
 
-void main() => runApp(new GeolocatorExampleApp());
+void main() => runApp(GeolocatorExampleApp());
 
 enum TabItem { singleLocation, locationStream, distance }
 
@@ -18,10 +18,10 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Geolocator Example App'),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Geolocator Example App'),
         ),
         body: _buildBody(),
         bottomNavigationBar: _buildBottomNavigationBar(),
@@ -44,7 +44,7 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      items: [
+      items: <BottomNavigationBarItem>[
         _buildBottomNavigationBarItem(
             Icons.location_on, TabItem.singleLocation),
         _buildBottomNavigationBarItem(Icons.clear_all, TabItem.locationStream),
@@ -56,8 +56,8 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(
       IconData icon, TabItem tabItem) {
-    String text = tabItem.toString().split('.').last;
-    Color color =
+    final String text = tabItem.toString().split('.').last;
+    final Color color =
         _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
 
     return BottomNavigationBarItem(

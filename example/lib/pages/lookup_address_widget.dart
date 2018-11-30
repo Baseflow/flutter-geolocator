@@ -12,12 +12,12 @@ class _LookupAddressState extends State<LookupAddressWidget> {
 
   String _placemarkCoords = '';
 
-  void _onLookupCoordinatesPressed() async {
-    List<Placemark> placemarks =
+  Future<void> _onLookupCoordinatesPressed() async {
+    final List<Placemark> placemarks =
         await _geolocator.placemarkFromAddress(_addressTextController.text);
 
-    if (placemarks != null && placemarks.length >= 1) {
-      var pos = placemarks[0];
+    if (placemarks != null && placemarks.isNotEmpty) {
+      final Placemark pos = placemarks[0];
       setState(() {
         _placemarkCoords = pos.position.latitude.toString() +
             ', ' +
@@ -30,17 +30,18 @@ class _LookupAddressState extends State<LookupAddressWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        new TextField(
-          decoration: new InputDecoration(hintText: "Please enter an address"),
+        TextField(
+          decoration:
+              const InputDecoration(hintText: 'Please enter an address'),
           controller: _addressTextController,
         ),
-        new RaisedButton(
-          child: new Text('Look up...'),
+        RaisedButton(
+          child: const Text('Look up...'),
           onPressed: () {
             _onLookupCoordinatesPressed();
           },
         ),
-        new Text(_placemarkCoords),
+        Text(_placemarkCoords),
       ],
     );
   }

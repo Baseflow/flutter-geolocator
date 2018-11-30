@@ -12,20 +12,22 @@ class _CalculateDistanceState extends State<CalculateDistanceWidget> {
   final TextEditingController _endCoordinatesTextController =
       TextEditingController();
 
-  void _onCalculatePressed() async {
-    var startCoords = _startCoordinatesTextController.text.split(',');
-    var endCoords = _endCoordinatesTextController.text.split(',');
-    var startLatitude = double.parse(startCoords[0]);
-    var startLongitude = double.parse(startCoords[1]);
-    var endLatitude = double.parse(endCoords[0]);
-    var endLongitude = double.parse(endCoords[1]);
+  Future<void> _onCalculatePressed() async {
+    final List<String> startCoords =
+        _startCoordinatesTextController.text.split(',');
+    final List<String> endCoords =
+        _endCoordinatesTextController.text.split(',');
+    final double startLatitude = double.parse(startCoords[0]);
+    final double startLongitude = double.parse(startCoords[1]);
+    final double endLatitude = double.parse(endCoords[0]);
+    final double endLongitude = double.parse(endCoords[1]);
 
-    double distance = await Geolocator().distanceBetween(
+    final double distance = await Geolocator().distanceBetween(
         startLatitude, startLongitude, endLatitude, endLongitude);
 
     Scaffold.of(context).showSnackBar(SnackBar(
       backgroundColor: Theme.of(context).primaryColorDark,
-      content: new Text("The distance is: $distance"),
+      content: Text('The distance is: $distance'),
     ));
   }
 
@@ -35,27 +37,28 @@ class _CalculateDistanceState extends State<CalculateDistanceWidget> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: TextField(
-            decoration:
-                InputDecoration(hintText: "start latitude,start longitude"),
+            decoration: const InputDecoration(
+                hintText: 'start latitude,start longitude'),
             controller: _startCoordinatesTextController,
           ),
         ),
         Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: TextField(
-            decoration: InputDecoration(hintText: "end latitude,end longitude"),
+            decoration:
+                const InputDecoration(hintText: 'end latitude,end longitude'),
             controller: _endCoordinatesTextController,
           ),
         ),
         RaisedButton(
-          child: Text(
-            "Calculate",
+          child: const Text(
+            'Calculate',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
           color: Theme.of(context).primaryColor,
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           onPressed: () {
             _onCalculatePressed();
           },
