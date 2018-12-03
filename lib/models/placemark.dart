@@ -8,7 +8,7 @@ class Placemark {
       this.country,
       this.postalCode,
       this.administrativeArea,
-      this.subAdministratieArea,
+      this.subAdministrativeArea,
       this.locality,
       this.subLocality,
       this.thoroughfare,
@@ -31,7 +31,7 @@ class Placemark {
   final String administrativeArea;
 
   /// Additional administrative area information for the placemark.
-  final String subAdministratieArea;
+  final String subAdministrativeArea;
 
   /// The name of the city associated with the placemark.
   final String locality;
@@ -72,7 +72,7 @@ class Placemark {
       country: placemarkMap['country'] ?? '',
       postalCode: placemarkMap['postalCode'] ?? '',
       administrativeArea: placemarkMap['administrativeArea'] ?? '',
-      subAdministratieArea: placemarkMap['subAdministrativeArea'] ?? '',
+      subAdministrativeArea: placemarkMap['subAdministrativeArea'] ?? '',
       locality: placemarkMap['locality'] ?? '',
       subLocality: placemarkMap['subLocality'] ?? '',
       thoroughfare: placemarkMap['thoroughfare'] ?? '',
