@@ -82,6 +82,8 @@ Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
 GeolocationStatus geolocationStatus  = await geolocator.checkGeolocationPermissionStatus();
 ```
 
+To check if location services are enabled(Location Service(GPS) turned on) on the device `checkGeolocationPermissionStatus` will return `disabled` state if location service feature is disabled (or not available) on the device.
+
 ### Geocoding
 
 To translate an address into latitude and longitude coordinates you can use the `placemarkFromAddress` method:
