@@ -1,3 +1,11 @@
+## [2.1.2]
+
+* Updated to support AndroidX and latest Gradle versions;
+* Updated to latest version of Permission Handler plugin to solve some small issues on iOS;
+* Added Swift version number to podspec file;
+* Added ProGuard support for Android;
+* Updated static code analyses to confirm to latest recommendations from Flutter team.
+
 ## [2.1.1]
 
 * Updated iOS code to Swift 4.2
