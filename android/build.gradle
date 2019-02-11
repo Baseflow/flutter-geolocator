@@ -22,22 +22,21 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 16
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'lib-proguard-rules.txt'
     }
     lintOptions {
         disable 'InvalidPackage'
     }
 
-    buildToolsVersion '28.0.2'
 }
 
 dependencies {
-    api 'com.android.support:support-v4:27.1.1'
+    api 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     api 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
 }
