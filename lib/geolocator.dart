@@ -51,8 +51,8 @@ class Geolocator {
 
   /// Returns a [bool] value indicating whether location services are enabled on the device.
   Future<bool> isLocationServiceEnabled() async {
-    final ServiceStatus serviceStatus = await PermissionHandler()
-        .checkServiceStatus(PermissionGroup.location);
+    final ServiceStatus serviceStatus =
+        await PermissionHandler().checkServiceStatus(PermissionGroup.location);
 
     return serviceStatus == ServiceStatus.enabled ? true : false;
   }
