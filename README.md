@@ -25,7 +25,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^2.1.1'
+  geolocator: '^3.0.0'
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
@@ -81,6 +81,8 @@ import 'package:geolocator/geolocator.dart';
 Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
 GeolocationStatus geolocationStatus  = await geolocator.checkGeolocationPermissionStatus();
 ```
+
+To check if location services are enabled(Location Service(GPS) turned on) on the device `checkGeolocationPermissionStatus` will return `disabled` state if location service feature is disabled (or not available) on the device.
 
 ### Geocoding
 

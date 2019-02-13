@@ -39,16 +39,6 @@ class Geolocator {
   Stream<Position> _onPositionChanged;
 
   /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.
-  @Deprecated(
-      'This static method will be removed in version 2.0. Please use the `checkGeolocationPermissionStatus` instance method instead.')
-  static Future<GeolocationStatus> checkGeolocationStatus(
-      [GeolocationPermission locationPermission =
-          GeolocationPermission.location]) {
-    return Geolocator().checkGeolocationPermissionStatus(
-        locationPermission: locationPermission);
-  }
-
-  /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.
   Future<GeolocationStatus> checkGeolocationPermissionStatus(
       {GeolocationPermission locationPermission =
           GeolocationPermission.location}) async {
@@ -57,6 +47,14 @@ class Geolocator {
             _GeolocationStatusConverter.toPermissionGroup(locationPermission));
 
     return _GeolocationStatusConverter.fromPermissionStatus(permissionStatus);
+  }
+
+  /// Returns a [bool] value indicating whether location services are enabled on the device.
+  Future<bool> isLocationServiceEnabled() async {
+    final ServiceStatus serviceStatus = await PermissionHandler()
+        .checkServiceStatus(PermissionGroup.location);
+
+    return serviceStatus == ServiceStatus.enabled ? true : false;
   }
 
   /// On Android devices you can set [forceAndroidLocationManager]

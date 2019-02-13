@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'geolocator'
-  s.version          = '2.1.1'
+  s.version          = '3.0.0'
   s.summary          = 'Geolocation plugin for Flutter. This plugin provides a cross-platform API for generic location (GPS etc.) functions.'
   s.description      = <<-DESC
 Geolocation plugin for Flutter.
@@ -15,7 +15,7 @@ Geolocation plugin for Flutter.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  
+  s.swift_version = '4.2'
   s.ios.deployment_target = '8.0'
   s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
 end
