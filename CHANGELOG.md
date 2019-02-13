@@ -1,8 +1,8 @@
-## [2.2.0]
+## [3.0.0]
 
+* **breaking** Updated to support AndroidX;
 * Added API method `isLocationServiceEnabled` to check if location services are enabled or disabled
 * Removed method `checkGeolocationStatus` (marked deprecated in version 1.6.4);
-* Updated to support AndroidX and latest Gradle versions;
 * Updated to latest version of Permission Handler plugin to solve some small issues on iOS;
 * Added Swift version number to podspec file;
 * Added ProGuard support for Android;
