@@ -82,15 +82,16 @@ class Position {
     final Map<dynamic, dynamic> positionMap = message;
 
     if (!positionMap.containsKey('latitude'))
-      throw ArgumentError.value(
-          positionMap, 'positionMap', 'The supplied map doesn\'t contain the mandatory key `latitude`.');
+      throw ArgumentError.value(positionMap, 'positionMap',
+          'The supplied map doesn\'t contain the mandatory key `latitude`.');
 
     if (!positionMap.containsKey('longitude'))
-      throw ArgumentError.value(
-          positionMap, 'positionMap', 'The supplied map doesn\'t contain the mandatory key `longitude`.');
+      throw ArgumentError.value(positionMap, 'positionMap',
+          'The supplied map doesn\'t contain the mandatory key `longitude`.');
 
     final DateTime timestamp = positionMap['timestamp'] != null
-        ? DateTime.fromMillisecondsSinceEpoch(positionMap['timestamp'].toInt(), isUtc: true)
+        ? DateTime.fromMillisecondsSinceEpoch(positionMap['timestamp'].toInt(),
+            isUtc: true)
         : null;
 
     return Position._(
