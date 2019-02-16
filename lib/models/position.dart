@@ -2,6 +2,17 @@ part of geolocator;
 
 /// Contains detail location information.
 class Position {
+  Position({
+    this.longitude,
+    this.latitude,
+    this.timestamp,
+    this.accuracy,
+    this.altitude,
+    this.heading,
+    this.speed,
+    this.speedAccuracy,
+  });
+
   Position._({
     this.longitude,
     this.latitude,
