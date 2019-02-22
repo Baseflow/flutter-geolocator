@@ -71,8 +71,8 @@ class Geolocator {
       return true;
     }
 
-    _googlePlayServicesAvailability ??=
-        await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
+    _googlePlayServicesAvailability ??= await GoogleApiAvailability.instance
+        .checkGooglePlayServicesAvailability();
 
     return _googlePlayServicesAvailability !=
         GooglePlayServicesAvailability.success;
