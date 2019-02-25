@@ -2,6 +2,19 @@ part of geolocator;
 
 /// Contains detailed placemark information.
 class Placemark {
+  Placemark(
+      {this.name,
+      this.isoCountryCode,
+      this.country,
+      this.postalCode,
+      this.administrativeArea,
+      this.subAdministrativeArea,
+      this.locality,
+      this.subLocality,
+      this.thoroughfare,
+      this.subThoroughfare,
+      this.position});
+
   Placemark._(
       {this.name,
       this.isoCountryCode,
