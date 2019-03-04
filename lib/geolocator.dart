@@ -72,7 +72,7 @@ class Geolocator {
     }
 
     _googlePlayServicesAvailability ??=
-        await GoogleApiAvailability().checkGooglePlayServicesAvailability();
+        await GoogleApiAvailability.instance.checkGooglePlayServicesAvailability();
 
     return _googlePlayServicesAvailability !=
         GooglePlayServicesAvailability.success;
@@ -259,7 +259,7 @@ class Geolocator {
   /// Returns the distance between the supplied coordinates in meters.
   Future<double> distanceBetween(double startLatitude, double startLongitude,
           double endLatitude, double endLongitude) =>
-      _methodChannel.invokeMethod('distanceBetween', <String, double>{
+      _methodChannel.invokeMethod<dynamic>('distanceBetween', <String, double>{
         'startLatitude': startLatitude,
         'startLongitude': startLongitude,
         'endLatitude': endLatitude,
