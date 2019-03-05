@@ -1,3 +1,7 @@
+## [3.0.1]
+
+* Updated dependencies on Permission Handler and Google API Availability to remove Kotlin dependency.
+
 ## [3.0.0]
 
 * **breaking** Updated to support AndroidX;
