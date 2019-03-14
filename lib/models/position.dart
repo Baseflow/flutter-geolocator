@@ -60,7 +60,7 @@ class Position {
 
   @override
   String toString() {
-    return 'Lat: $latitude, Long: $longitude';
+    return 'Lat: $latitude, Long: $longitude, Heading: $heading';
   }
 
   /// Converts a collection of [Map] objects into a collection of [Position] objects.
