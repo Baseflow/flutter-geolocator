@@ -31,11 +31,13 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    api 'androidx.appcompat:appcompat:1.0.1'
+    api 'androidx.appcompat:appcompat:1.0.2'
     api 'com.google.android.gms:play-services-location:16.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
 }

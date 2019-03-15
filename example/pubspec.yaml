@@ -1,5 +1,9 @@
 name: geolocator_example
 description: Demonstrates how to use the geolocator plugin.
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.0.0 <3.0.0"
 
 dependencies:
   flutter:

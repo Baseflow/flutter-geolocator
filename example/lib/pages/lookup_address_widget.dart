@@ -7,14 +7,13 @@ class LookupAddressWidget extends StatefulWidget {
 }
 
 class _LookupAddressState extends State<LookupAddressWidget> {
-  final Geolocator _geolocator = Geolocator();
   final TextEditingController _addressTextController = TextEditingController();
 
   String _placemarkCoords = '';
 
   Future<void> _onLookupCoordinatesPressed() async {
-    final List<Placemark> placemarks =
-        await _geolocator.placemarkFromAddress(_addressTextController.text);
+    final List<Placemark> placemarks = await Geolocator.instance
+        .placemarkFromAddress(_addressTextController.text);
 
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];

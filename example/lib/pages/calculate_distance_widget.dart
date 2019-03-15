@@ -22,8 +22,12 @@ class _CalculateDistanceState extends State<CalculateDistanceWidget> {
     final double endLatitude = double.parse(endCoords[0]);
     final double endLongitude = double.parse(endCoords[1]);
 
-    final double distance = await Geolocator().distanceBetween(
-        startLatitude, startLongitude, endLatitude, endLongitude);
+    final double distance = await Geolocator.instance.distanceBetween(
+      startLatitude,
+      startLongitude,
+      endLatitude,
+      endLongitude,
+    );
 
     Scaffold.of(context).showSnackBar(SnackBar(
       backgroundColor: Theme.of(context).primaryColorDark,

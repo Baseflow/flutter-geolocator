@@ -7,7 +7,6 @@ class LookupCoordinatesWidget extends StatefulWidget {
 }
 
 class _LookupCoordinatesState extends State<LookupCoordinatesWidget> {
-  final Geolocator _geolocator = Geolocator();
   final TextEditingController _coordinatesTextController =
       TextEditingController();
 
@@ -18,7 +17,7 @@ class _LookupCoordinatesState extends State<LookupCoordinatesWidget> {
     final double latitude = double.parse(coords[0]);
     final double longitude = double.parse(coords[1]);
     final List<Placemark> placemarks =
-        await _geolocator.placemarkFromCoordinates(latitude, longitude);
+        await Geolocator.instance.placemarkFromCoordinates(latitude, longitude);
 
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];

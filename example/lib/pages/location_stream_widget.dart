@@ -16,10 +16,10 @@ class LocationStreamState extends State<LocationStreamWidget> {
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      const LocationOptions locationOptions =
-          LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 10);
+      final LocationOptions locationOptions = LocationOptions.fromValues(
+          accuracy: LocationAccuracy.best, distanceFilter: 10);
       final Stream<Position> positionStream =
-          Geolocator().getPositionStream(locationOptions);
+          Geolocator.instance.getPosition(locationOptions);
       _positionStreamSubscription = positionStream.listen(
           (Position position) => setState(() => _positions.add(position)));
       _positionStreamSubscription.pause();
@@ -47,7 +47,7 @@ class LocationStreamState extends State<LocationStreamWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<GeolocationStatus>(
-        future: Geolocator().checkGeolocationPermissionStatus(),
+        future: Geolocator.instance.checkGeolocationPermissionStatus(),
         builder:
             (BuildContext context, AsyncSnapshot<GeolocationStatus> snapshot) {
           if (!snapshot.hasData) {
@@ -151,7 +151,7 @@ class PositionListItemState extends State<PositionListItem> {
 
   Future<void> _onTap() async {
     String address = 'unknown';
-    final List<Placemark> placemarks = await Geolocator()
+    final List<Placemark> placemarks = await Geolocator.instance
         .placemarkFromCoordinates(_position.latitude, _position.longitude);
 
     if (placemarks != null && placemarks.isNotEmpty) {
