@@ -18,7 +18,7 @@ class LastKnownLocationTask : Task, TaskProtocol {
         let locationManager = CLLocationManager.init()
         let location = locationManager.location;
         
-        guard let lastKnownPosition = location?.toDictionary() else {
+        guard let lastKnownPosition = location?.toDictionary(heading: 0.0) else {
             context.resultHandler(nil)
             return
         }
