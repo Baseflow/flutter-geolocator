@@ -24,7 +24,7 @@ extension CLPlacemark {
         ]
         
         if let location = self.location {
-            dict["location"] = location.toDictionary(heading:0.0)
+            dict["location"] = location.toDictionary()
         }
         
         return dict as NSDictionary
