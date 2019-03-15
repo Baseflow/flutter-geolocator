@@ -127,6 +127,10 @@ class PositionListItemState extends State<PositionListItem> {
                 'Lon: ${_position.longitude}',
                 style: const TextStyle(fontSize: 16.0, color: Colors.black),
               ),
+              Text(
+                'Head: ${_position.heading}',
+                style: const TextStyle(fontSize: 16.0, color: Colors.black),
+              ),
             ]),
         Expanded(
           child: Column(

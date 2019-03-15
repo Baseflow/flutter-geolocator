@@ -9,13 +9,14 @@ import Foundation
 import CoreLocation
 
 extension CLLocation {
-    public func toDictionary() -> NSDictionary {
+    public func toDictionary(heading: Double) -> NSDictionary {
         return [
             "latitude" : self.coordinate.latitude,
             "longitude" : self.coordinate.longitude,
             "timestamp" : CLLocation.currentTimeInMilliSeconds(dateToConvert: self.timestamp),
             "altitude" : self.altitude,
             "accuracy" : self.horizontalAccuracy,
+            "heading" : heading,
             "speed" : self.speed,
             "speed_accuracy" : 0.0
         ]
