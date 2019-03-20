@@ -2,9 +2,12 @@ package com.baseflow.flutter.plugin.geolocator.tasks;
 
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 
 import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.baseflow.flutter.plugin.geolocator.data.Result;
+
+import androidx.annotation.RequiresApi;
 
 class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationManagerTask {
 
@@ -12,6 +15,7 @@ class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationMan
         super(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void startTask() {
         LocationManager locationManager = getLocationManager();
