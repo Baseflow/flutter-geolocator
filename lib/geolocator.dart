@@ -9,10 +9,15 @@ import 'package:meta/meta.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'models/geolocation_enums.dart';
+
 part 'models/location_accuracy.dart';
+
 part 'models/location_options.dart';
+
 part 'models/placemark.dart';
+
 part 'models/position.dart';
+
 part 'utils/codec.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
@@ -255,6 +260,11 @@ class Geolocator {
       return null;
     }
   }
+
+  /// Convenience method to access [placemarkFromCoordinates()] using an
+  /// instance of [Position].
+  Future<List<Placemark>> placemarkFromPosition(Position position) =>
+      placemarkFromCoordinates(position.latitude, position.longitude);
 
   /// Returns the distance between the supplied coordinates in meters.
   Future<double> distanceBetween(double startLatitude, double startLongitude,
