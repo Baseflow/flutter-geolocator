@@ -256,6 +256,11 @@ class Geolocator {
     }
   }
 
+  /// Convenience method to access [placemarkFromCoordinates()] using an
+  /// instance of [Position].
+  Future<List<Placemark>> placemarkFromPosition(Position position) =>
+      placemarkFromCoordinates(position.latitude, position.longitude);
+
   /// Returns the distance between the supplied coordinates in meters.
   Future<double> distanceBetween(double startLatitude, double startLongitude,
           double endLatitude, double endLongitude) =>
