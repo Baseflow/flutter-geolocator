@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 
@@ -14,6 +15,8 @@ import com.google.android.gms.common.util.Strings;
 
 import java.util.List;
 import java.util.Map;
+
+import androidx.annotation.RequiresApi;
 
 class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManagerTask implements LocationListener {
     private final boolean mStopAfterFirstLocationUpdate;
@@ -175,6 +178,7 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void reportLocationUpdate(Location location) {
         Map<String, Object> locationMap = PositionMapper.toHashMap(location);
 

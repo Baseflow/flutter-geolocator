@@ -6,8 +6,11 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.RequiresApi;
+
 public class PositionMapper {
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static Map<String, Object> toHashMap(Location location)
     {
         Map<String, Object> position = new HashMap<>();
@@ -15,6 +18,7 @@ public class PositionMapper {
         position.put("latitude", location.getLatitude());
         position.put("longitude", location.getLongitude());
         position.put("timestamp", location.getTime());
+        position.put("mocked", location.isFromMockProvider());
 
         if(location.hasAltitude())
             position.put("altitude", location.getAltitude());
@@ -26,7 +30,6 @@ public class PositionMapper {
             position.put("speed", (double) location.getSpeed());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasSpeedAccuracy())
             position.put("speed_accuracy", (double) location.getSpeedAccuracyMetersPerSecond());
-
         return position;
     }
 }

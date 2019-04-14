@@ -6,6 +6,7 @@ class Position {
     this.longitude,
     this.latitude,
     this.timestamp,
+    this.mocked,
     this.accuracy,
     this.altitude,
     this.heading,
@@ -17,6 +18,7 @@ class Position {
     this.longitude,
     this.latitude,
     this.timestamp,
+    this.mocked,
     this.accuracy,
     this.altitude,
     this.heading,
@@ -32,6 +34,11 @@ class Position {
 
   /// The time at which this position was determined.
   final DateTime timestamp;
+
+  ///Indicate if position was created from a mock provider.
+  ///
+  /// The mock information is not available on all devices. In these cases the returned value is false.
+  final bool mocked;
 
   /// The altitude of the device in meters.
   ///
@@ -98,6 +105,7 @@ class Position {
         latitude: positionMap['latitude'],
         longitude: positionMap['longitude'],
         timestamp: timestamp,
+        mocked: positionMap['mocked'] ?? false,
         altitude: positionMap['altitude'] ?? 0.0,
         accuracy: positionMap['accuracy'] ?? 0.0,
         heading: positionMap['heading'] ?? 0.0,
