@@ -53,11 +53,6 @@ class _LocationState extends State<CurrentLocationWidget> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (snapshot.data == GeolocationStatus.disabled) {
-            return const PlaceholderWidget('Location services disabled',
-                'Enable location services for this App using the device settings.');
-          }
-
           if (snapshot.data == GeolocationStatus.denied) {
             return const PlaceholderWidget('Access to location denied',
                 'Allow access to the location services for this App using the device settings.');

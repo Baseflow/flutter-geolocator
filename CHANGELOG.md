@@ -1,3 +1,8 @@
+## [4.0.0]
+
+* Overhauled the permissions system to make sure the plugin only depends on the location API. This means when using this version of the plugin Apple requires only entries for the `NSLocationWhenInUseUsageDescription` and/ or `NSLocationAlwaysUsageDescription` in the `Info.plist`.
+* **breaking** As part of the permission system overhaul, we removed the `disabled` permission status. To check if the location services are running you should call the `isLocationServiceEnabled` method. This means you can now also request permissions when the location services are disabled.
+
 ## [3.0.1]
 
 * Updated dependencies on Permission Handler and Google API Availability to remove Kotlin dependency.
