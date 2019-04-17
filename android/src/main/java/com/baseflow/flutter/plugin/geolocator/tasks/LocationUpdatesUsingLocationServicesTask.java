@@ -1,8 +1,10 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
 import android.location.Location;
+import android.os.Build;
 import android.os.Looper;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -102,6 +104,7 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
         return locationRequest;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void reportLocationUpdate(Location location) {
         Map<String, Object> locationMap = PositionMapper.toHashMap(location);
 

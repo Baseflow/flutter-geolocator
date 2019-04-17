@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:meta/meta.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:location_permissions/location_permissions.dart';
 
 part 'models/geolocation_enums.dart';
 part 'models/location_accuracy.dart';
@@ -42,9 +42,10 @@ class Geolocator {
   Future<GeolocationStatus> checkGeolocationPermissionStatus(
       {GeolocationPermission locationPermission =
           GeolocationPermission.location}) async {
-    final PermissionStatus permissionStatus = await PermissionHandler()
-        .checkPermissionStatus(
-            _GeolocationStatusConverter.toPermissionGroup(locationPermission));
+    final PermissionStatus permissionStatus =
+        await LocationPermissions.checkPermissionStatus(
+            level: _GeolocationStatusConverter.toPermissionLevel(
+                locationPermission));
 
     return _GeolocationStatusConverter.fromPermissionStatus(permissionStatus);
   }
@@ -52,7 +53,7 @@ class Geolocator {
   /// Returns a [bool] value indicating whether location services are enabled on the device.
   Future<bool> isLocationServiceEnabled() async {
     final ServiceStatus serviceStatus =
-        await PermissionHandler().checkServiceStatus(PermissionGroup.location);
+        await LocationPermissions.checkServiceStatus();
 
     return serviceStatus == ServiceStatus.enabled ? true : false;
   }
@@ -174,17 +175,15 @@ class Geolocator {
   }
 
   Future<PermissionStatus> _getLocationPermission() async {
-    final PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.location);
+    final PermissionStatus permission = await LocationPermissions
+        .checkPermissionStatus(level: LocationPermissionLevel.location);
 
-    if (permission != PermissionStatus.granted &&
-        permission != PermissionStatus.disabled) {
-      final Map<PermissionGroup, PermissionStatus> permissionStatus =
-          await PermissionHandler()
-              .requestPermissions(<PermissionGroup>[PermissionGroup.location]);
+    if (permission != PermissionStatus.granted) {
+      final PermissionStatus permissionStatus =
+          await LocationPermissions
+              .requestPermissions(permissionLevel: LocationPermissionLevel.location);
 
-      return permissionStatus[PermissionGroup.location] ??
-          PermissionStatus.unknown;
+      return permissionStatus;
     } else {
       return permission;
     }
@@ -195,11 +194,6 @@ class Geolocator {
       throw PlatformException(
           code: 'PERMISSION_DENIED',
           message: 'Access to location data denied',
-          details: null);
-    } else if (permission == PermissionStatus.disabled) {
-      throw PlatformException(
-          code: 'PERMISSION_DISABLED',
-          message: 'Location data is not available on device',
           details: null);
     }
   }
@@ -255,6 +249,11 @@ class Geolocator {
       return null;
     }
   }
+
+  /// Convenience method to access [placemarkFromCoordinates()] using an
+  /// instance of [Position].
+  Future<List<Placemark>> placemarkFromPosition(Position position) =>
+      placemarkFromCoordinates(position.latitude, position.longitude);
 
   /// Returns the distance between the supplied coordinates in meters.
   Future<double> distanceBetween(double startLatitude, double startLongitude,

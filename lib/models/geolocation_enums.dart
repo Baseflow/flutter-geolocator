@@ -18,9 +18,6 @@ enum GeolocationStatus {
   /// Permission to access the requested feature is denied by the user.
   denied,
 
-  /// The feature is disabled (or not available) on the device.
-  disabled,
-
   /// Permission to access the requested feature is granted by the user.
   granted,
 
@@ -37,8 +34,6 @@ class _GeolocationStatusConverter {
     switch (permissionStatus) {
       case PermissionStatus.denied:
         return GeolocationStatus.denied;
-      case PermissionStatus.disabled:
-        return GeolocationStatus.disabled;
       case PermissionStatus.granted:
         return GeolocationStatus.granted;
       case PermissionStatus.restricted:
@@ -48,15 +43,15 @@ class _GeolocationStatusConverter {
     }
   }
 
-  static PermissionGroup toPermissionGroup(
+  static LocationPermissionLevel toPermissionLevel(
       GeolocationPermission geolocationPermission) {
     switch (geolocationPermission) {
       case GeolocationPermission.locationAlways:
-        return PermissionGroup.locationAlways;
+        return LocationPermissionLevel.locationAlways;
       case GeolocationPermission.locationWhenInUse:
-        return PermissionGroup.locationWhenInUse;
+        return LocationPermissionLevel.locationWhenInUse;
       default:
-        return PermissionGroup.location;
+        return LocationPermissionLevel.location;
     }
   }
 }
