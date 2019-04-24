@@ -1,3 +1,7 @@
+## [4.0.1]
+
+* Updated to latest version of the Location Permissions plugin (1.1.0).
+
 ## [4.0.0]
 
 * Overhauled the permissions system to make sure the plugin only depends on the location API. This means when using this version of the plugin Apple requires only entries for the `NSLocationWhenInUseUsageDescription` and/ or `NSLocationAlwaysUsageDescription` in the `Info.plist`.
