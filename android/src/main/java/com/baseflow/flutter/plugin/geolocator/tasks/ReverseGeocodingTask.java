@@ -6,7 +6,7 @@ import android.location.Geocoder;
 
 import com.baseflow.flutter.plugin.geolocator.data.AddressMapper;
 import com.baseflow.flutter.plugin.geolocator.data.Coordinate;
-import com.baseflow.flutter.plugin.geolocator.data.Result;
+import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
 import com.baseflow.flutter.plugin.geolocator.data.ReverseGeocodingOptions;
 
 import java.io.IOException;
@@ -37,22 +37,22 @@ class ReverseGeocodingTask extends Task<ReverseGeocodingOptions> {
                 ? new Geocoder(mAndroidContext, mLocale)
                 : new Geocoder(mAndroidContext);
 
-        Result result = getTaskContext().getResult();
+        ChannelResponse channelResponse = getTaskContext().getResult();
 
         try {
             List<Address> addresses = geocoder.getFromLocation(mCoordinatesToLookup.latitude, mCoordinatesToLookup.longitude, 1);
 
             if(addresses.size() > 0) {
-                result.success(AddressMapper.toHashMapList(addresses));
+                channelResponse.success(AddressMapper.toHashMapList(addresses));
             } else {
-                result.error(
+                channelResponse.error(
                         "ERROR_GEOCODING_INVALID_COORDINATES",
                         "Unable to find an address for the supplied coordinates.",
                         null);
             }
 
         } catch (IOException e) {
-            result.error(
+            channelResponse.error(
                     "ERROR_GEOCODING_COORDINATES",
                     e.getLocalizedMessage(),
                     null);

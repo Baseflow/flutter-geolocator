@@ -3,7 +3,7 @@ package com.baseflow.flutter.plugin.geolocator.tasks;
 import android.content.Context;
 
 import com.baseflow.flutter.plugin.geolocator.OnCompletionListener;
-import com.baseflow.flutter.plugin.geolocator.data.Result;
+import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
@@ -13,62 +13,62 @@ final class TaskContext<TOptions> {
     private final TOptions mOptions;
     private final OnCompletionListener mCompletionListener;
     private final PluginRegistry.Registrar mRegistrar;
-    private final Result mResult;
+    private final ChannelResponse mChannelResponse;
 
 
     private TaskContext(
             PluginRegistry.Registrar registrar,
-            Result result,
+            ChannelResponse channelResponse,
             TOptions options,
             OnCompletionListener completionListener) {
         mRegistrar = registrar;
-        mResult = result;
+        mChannelResponse = channelResponse;
         mOptions = options;
         mCompletionListener = completionListener;
     }
 
-    public TOptions getOptions() {
+    TOptions getOptions() {
         return mOptions;
     }
 
-    public OnCompletionListener getCompletionListener() {
+    OnCompletionListener getCompletionListener() {
         return mCompletionListener;
     }
 
-    public PluginRegistry.Registrar getRegistrar() {
+    PluginRegistry.Registrar getRegistrar() {
         return mRegistrar;
     }
 
-    public Context getAndroidContext() { return mRegistrar.activity() != null ? mRegistrar.activity() : mRegistrar.activeContext(); }
+    Context getAndroidContext() { return mRegistrar.activity() != null ? mRegistrar.activity() : mRegistrar.activeContext(); }
 
-    public Result getResult() {
-        return mResult;
+    ChannelResponse getResult() {
+        return mChannelResponse;
     }
 
-    public static <TOptions> TaskContext<TOptions> buildForMethodResult(
+    static <TOptions> TaskContext<TOptions> buildForMethodResult(
             PluginRegistry.Registrar registrar,
             MethodChannel.Result methodResult,
             TOptions options,
             OnCompletionListener completionListener) {
-        Result result = new Result(methodResult);
+        ChannelResponse channelResponse = ChannelResponse.wrap(methodResult);
 
-        return new TaskContext(
+        return new TaskContext<>(
                 registrar,
-                result,
+                channelResponse,
                 options,
                 completionListener);
     }
 
-    public static <TOptions> TaskContext<TOptions> buildForEventSink(
+    static <TOptions> TaskContext<TOptions> buildForEventSink(
             PluginRegistry.Registrar registrar,
             EventChannel.EventSink eventSink,
             TOptions options,
             OnCompletionListener completionListener) {
-        Result result = new Result(eventSink);
+        ChannelResponse channelResponse = ChannelResponse.wrap(eventSink);
 
-        return new TaskContext(
+        return new TaskContext<>(
                 registrar,
-                result,
+                channelResponse,
                 options,
                 completionListener);
     }
