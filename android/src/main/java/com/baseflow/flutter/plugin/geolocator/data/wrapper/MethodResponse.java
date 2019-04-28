@@ -8,18 +8,18 @@ import io.flutter.plugin.common.MethodChannel;
  */
 public class MethodResponse extends ChannelResponse {
 
-    private MethodChannel.Result result;
+    private MethodChannel.Result mResult;
 
     MethodResponse(MethodChannel.Result result) {
-        this.result = result;
+        this.mResult = result;
     }
 
     @Override
     public void success(Object object) {
         synchronized (this) {
-            if (result != null) {
-                result.success(object);
-                result = null;
+            if (mResult != null) {
+                mResult.success(object);
+                mResult = null;
             }
         }
     }
@@ -27,9 +27,9 @@ public class MethodResponse extends ChannelResponse {
     @Override
     public void error(String code, String message, Object details) {
         synchronized (this) {
-            if (result != null) {
-                result.error(code, message, details);
-                result = null;
+            if (mResult != null) {
+                mResult.error(code, message, details);
+                mResult = null;
             }
         }
     }
