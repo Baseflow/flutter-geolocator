@@ -8,20 +8,18 @@ import io.flutter.plugin.common.MethodChannel;
  */
 public class MethodResponse extends ChannelResponse {
 
-    private final MethodChannel.Result result;
-    private boolean responseSent;
+    private MethodChannel.Result result;
 
     MethodResponse(MethodChannel.Result result) {
         this.result = result;
-        responseSent = false;
     }
 
     @Override
     public void success(Object object) {
         synchronized (this) {
-            if (!responseSent) {
+            if (result != null) {
                 result.success(object);
-                responseSent = true;
+                result = null;
             }
         }
     }
@@ -29,9 +27,9 @@ public class MethodResponse extends ChannelResponse {
     @Override
     public void error(String code, String message, Object details) {
         synchronized (this) {
-            if (!responseSent) {
+            if (result != null) {
                 result.error(code, message, details);
-                responseSent = true;
+                result = null;
             }
         }
     }
