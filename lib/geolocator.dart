@@ -43,7 +43,7 @@ class Geolocator {
       {GeolocationPermission locationPermission =
           GeolocationPermission.location}) async {
     final PermissionStatus permissionStatus =
-        await LocationPermissions.checkPermissionStatus(
+        await LocationPermissions().checkPermissionStatus(
             level: _GeolocationStatusConverter.toPermissionLevel(
                 locationPermission));
 
@@ -53,7 +53,7 @@ class Geolocator {
   /// Returns a [bool] value indicating whether location services are enabled on the device.
   Future<bool> isLocationServiceEnabled() async {
     final ServiceStatus serviceStatus =
-        await LocationPermissions.checkServiceStatus();
+        await LocationPermissions().checkServiceStatus();
 
     return serviceStatus == ServiceStatus.enabled ? true : false;
   }
@@ -175,12 +175,12 @@ class Geolocator {
   }
 
   Future<PermissionStatus> _getLocationPermission() async {
-    final PermissionStatus permission = await LocationPermissions
+    final PermissionStatus permission = await LocationPermissions()
         .checkPermissionStatus(level: LocationPermissionLevel.location);
 
     if (permission != PermissionStatus.granted) {
       final PermissionStatus permissionStatus =
-          await LocationPermissions
+          await LocationPermissions()
               .requestPermissions(permissionLevel: LocationPermissionLevel.location);
 
       return permissionStatus;
