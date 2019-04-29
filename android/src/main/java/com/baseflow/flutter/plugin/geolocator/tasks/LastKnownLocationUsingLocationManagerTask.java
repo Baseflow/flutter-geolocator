@@ -5,7 +5,7 @@ import android.location.LocationManager;
 import android.os.Build;
 
 import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
-import com.baseflow.flutter.plugin.geolocator.data.Result;
+import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
 
 import androidx.annotation.RequiresApi;
 
@@ -30,14 +30,14 @@ class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationMan
             }
         }
 
-        Result result = getTaskContext().getResult();
+        ChannelResponse channelResponse = getTaskContext().getResult();
         if(bestLocation == null) {
-            result.success(null);
+            channelResponse.success(null);
             stopTask();
             return;
         }
 
-        result.success(PositionMapper.toHashMap(bestLocation));
+        channelResponse.success(PositionMapper.toHashMap(bestLocation));
         stopTask();
     }
 }
