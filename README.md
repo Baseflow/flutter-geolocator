@@ -61,7 +61,7 @@ var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceF
 
 StreamSubscription<Position> positionStream = geolocator.getPositionStream(locationOptions).listen(
     (Position position) {
-        print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
+        print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
     });
 ```
 
