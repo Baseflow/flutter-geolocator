@@ -1,3 +1,7 @@
+## [4.0.3]
+
+* Update to latest version of the Location Permissions plugin to solve a bug when permissions are sometimes not requested.
+
 ## [4.0.2]
 
 * Bug fix on Android which causing the `Reply already submitted` error;

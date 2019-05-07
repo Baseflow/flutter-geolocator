@@ -25,7 +25,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^4.0.0'
+  geolocator: '^4.0.3'
 ```
 
 > **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
@@ -61,7 +61,7 @@ var locationOptions = LocationOptions(accuracy: LocationAccuracy.high, distanceF
 
 StreamSubscription<Position> positionStream = geolocator.getPositionStream(locationOptions).listen(
     (Position position) {
-        print(_position == null ? 'Unknown' : _position.latitude.toString() + ', ' + _position.longitude.toString());
+        print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
     });
 ```
 
