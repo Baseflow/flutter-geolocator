@@ -162,6 +162,11 @@ If you would like to access the device's location when your App is running in th
 <string>This app needs access to location when open and in the background.</string>
 ```
 
+Make sure on your Podfile you have 
+```
+use_frameworks!
+```
+
 ### Location accuracy
 
 The table below outlines the accuracy options per platform:
