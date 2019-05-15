@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.4.0'
     }
 }
 
@@ -26,9 +26,14 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'lib-proguard-rules.txt'
     }
     lintOptions {
         disable 'InvalidPackage'
     }
+}
+
+dependencies {
+    api 'androidx.core:core:1.0.2'
+    api 'com.google.android.gms:play-services-location:16.0.0'
 }
