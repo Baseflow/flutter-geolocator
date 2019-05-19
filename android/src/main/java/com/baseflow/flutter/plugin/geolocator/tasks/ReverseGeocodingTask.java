@@ -4,12 +4,12 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.baseflow.flutter.plugin.geolocator.data.AddressMapper;
 import com.baseflow.flutter.plugin.geolocator.data.Coordinate;
-import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
 import com.baseflow.flutter.plugin.geolocator.data.ReverseGeocodingOptions;
+import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
+import com.baseflow.flutter.plugin.geolocator.utils.MainThreadDispatcher;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,20 +48,23 @@ class ReverseGeocodingTask extends Task<ReverseGeocodingOptions> {
                 try {
                     List<Address> addresses = geocoder.getFromLocation(mCoordinatesToLookup.latitude, mCoordinatesToLookup.longitude, 1);
 
-                    if(addresses.size() > 0) {
-                        channelResponse.success(AddressMapper.toHashMapList(addresses));
+                    if (addresses.size() > 0) {
+                        MainThreadDispatcher.dispatchGeocodeResult(channelResponse, AddressMapper.toHashMapList(addresses));
                     } else {
-                        channelResponse.error(
+                        MainThreadDispatcher.dispatchError(
+                                channelResponse,
                                 "ERROR_GEOCODING_INVALID_COORDINATES",
                                 "Unable to find an address for the supplied coordinates.",
-                                null);
+                                null
+                        );
                     }
-
                 } catch (IOException e) {
-                    channelResponse.error(
+                    MainThreadDispatcher.dispatchError(
+                            channelResponse,
                             "ERROR_GEOCODING_COORDINATES",
                             e.getLocalizedMessage(),
-                            null);
+                            null
+                    );
                 } finally {
                     stopTask();
                 }

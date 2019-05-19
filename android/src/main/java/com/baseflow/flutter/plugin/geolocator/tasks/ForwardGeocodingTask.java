@@ -9,6 +9,7 @@ import android.util.Log;
 import com.baseflow.flutter.plugin.geolocator.data.AddressMapper;
 import com.baseflow.flutter.plugin.geolocator.data.ForwardGeocodingOptions;
 import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
+import com.baseflow.flutter.plugin.geolocator.utils.MainThreadDispatcher;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,20 +44,23 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
                 try {
                     List<Address> addresses = geocoder.getFromLocationName(options.getAddressToLookup(), 1);
 
-                    if(addresses.size() > 0) {
-                        channelResponse.success(AddressMapper.toHashMapList(addresses));
+                    if (addresses.size() > 0) {
+                        MainThreadDispatcher.dispatchGeocodeResult(channelResponse, AddressMapper.toHashMapList(addresses));
                     } else {
-                        channelResponse.error(
+                        MainThreadDispatcher.dispatchError(
+                                channelResponse,
                                 "ERROR_GEOCODNG_ADDRESSNOTFOUND",
                                 "Unable to find coordinates matching the supplied address.",
-                                null);
+                                null
+                        );
                     }
-
                 } catch (IOException e) {
-                    channelResponse.error(
+                    MainThreadDispatcher.dispatchError(
+                            channelResponse,
                             "ERROR_GEOCODING_ADDRESS",
                             e.getLocalizedMessage(),
-                            null);
+                            null
+                    );
                 } finally {
                     stopTask();
                 }
