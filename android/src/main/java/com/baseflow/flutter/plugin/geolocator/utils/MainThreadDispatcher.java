@@ -33,7 +33,7 @@ public class MainThreadDispatcher {
         });
     }
 
-    public static void dispatchGeocodeResult(@NonNull final ChannelResponse channelResponse, final Object result) {
+    public static void dispatchSuccess(@NonNull final ChannelResponse channelResponse, final Object result) {
         initHandlerIfNull();
         handler.post(new Runnable() {
             @Override
