@@ -45,7 +45,7 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
                     List<Address> addresses = geocoder.getFromLocationName(options.getAddressToLookup(), 1);
 
                     if (addresses.size() > 0) {
-                        MainThreadDispatcher.dispatchGeocodeResult(channelResponse, AddressMapper.toHashMapList(addresses));
+                        MainThreadDispatcher.dispatchSuccess(channelResponse, AddressMapper.toHashMapList(addresses));
                     } else {
                         MainThreadDispatcher.dispatchError(
                                 channelResponse,

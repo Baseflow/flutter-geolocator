@@ -49,7 +49,7 @@ class ReverseGeocodingTask extends Task<ReverseGeocodingOptions> {
                     List<Address> addresses = geocoder.getFromLocation(mCoordinatesToLookup.latitude, mCoordinatesToLookup.longitude, 1);
 
                     if (addresses.size() > 0) {
-                        MainThreadDispatcher.dispatchGeocodeResult(channelResponse, AddressMapper.toHashMapList(addresses));
+                        MainThreadDispatcher.dispatchSuccess(channelResponse, AddressMapper.toHashMapList(addresses));
                     } else {
                         MainThreadDispatcher.dispatchError(
                                 channelResponse,
