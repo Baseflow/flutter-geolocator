@@ -3,11 +3,13 @@ package com.baseflow.flutter.plugin.geolocator.tasks;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 
 import com.baseflow.flutter.plugin.geolocator.data.AddressMapper;
 import com.baseflow.flutter.plugin.geolocator.data.Coordinate;
-import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
 import com.baseflow.flutter.plugin.geolocator.data.ReverseGeocodingOptions;
+import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
+import com.baseflow.flutter.plugin.geolocator.utils.MainThreadDispatcher;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,31 +35,40 @@ class ReverseGeocodingTask extends Task<ReverseGeocodingOptions> {
 
     @Override
     public void startTask() {
-        Geocoder geocoder = (mLocale != null)
+        final Geocoder geocoder = (mLocale != null)
                 ? new Geocoder(mAndroidContext, mLocale)
                 : new Geocoder(mAndroidContext);
 
-        ChannelResponse channelResponse = getTaskContext().getResult();
+        final ChannelResponse channelResponse = getTaskContext().getResult();
 
-        try {
-            List<Address> addresses = geocoder.getFromLocation(mCoordinatesToLookup.latitude, mCoordinatesToLookup.longitude, 1);
+        // let android handle the thread pool (uses shared serial executor)
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(mCoordinatesToLookup.latitude, mCoordinatesToLookup.longitude, 1);
 
-            if(addresses.size() > 0) {
-                channelResponse.success(AddressMapper.toHashMapList(addresses));
-            } else {
-                channelResponse.error(
-                        "ERROR_GEOCODING_INVALID_COORDINATES",
-                        "Unable to find an address for the supplied coordinates.",
-                        null);
+                    if (addresses.size() > 0) {
+                        MainThreadDispatcher.dispatchSuccess(channelResponse, AddressMapper.toHashMapList(addresses));
+                    } else {
+                        MainThreadDispatcher.dispatchError(
+                                channelResponse,
+                                "ERROR_GEOCODING_INVALID_COORDINATES",
+                                "Unable to find an address for the supplied coordinates.",
+                                null
+                        );
+                    }
+                } catch (IOException e) {
+                    MainThreadDispatcher.dispatchError(
+                            channelResponse,
+                            "ERROR_GEOCODING_COORDINATES",
+                            e.getLocalizedMessage(),
+                            null
+                    );
+                } finally {
+                    stopTask();
+                }
             }
-
-        } catch (IOException e) {
-            channelResponse.error(
-                    "ERROR_GEOCODING_COORDINATES",
-                    e.getLocalizedMessage(),
-                    null);
-        } finally {
-            stopTask();
-        }
+        });
     }
 }
