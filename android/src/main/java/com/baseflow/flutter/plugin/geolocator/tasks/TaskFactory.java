@@ -1,14 +1,10 @@
 package com.baseflow.flutter.plugin.geolocator.tasks;
 
-import android.content.Context;
-import android.location.LocationProvider;
-
 import com.baseflow.flutter.plugin.geolocator.OnCompletionListener;
 import com.baseflow.flutter.plugin.geolocator.data.CalculateDistanceOptions;
 import com.baseflow.flutter.plugin.geolocator.data.ForwardGeocodingOptions;
 import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
 import com.baseflow.flutter.plugin.geolocator.data.ReverseGeocodingOptions;
-
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
@@ -21,7 +17,7 @@ public class TaskFactory {
             OnCompletionListener completionListener) {
 
         CalculateDistanceOptions options = CalculateDistanceOptions.parseArguments(arguments);
-        TaskContext taskContext = TaskContext.buildForMethodResult(
+        TaskContext<CalculateDistanceOptions> taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
                 options,
@@ -37,7 +33,7 @@ public class TaskFactory {
             OnCompletionListener completionListener) {
 
         LocationOptions options = LocationOptions.parseArguments(arguments);
-        TaskContext taskContext = TaskContext.buildForMethodResult(
+        TaskContext<LocationOptions> taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
                 options,
@@ -61,7 +57,7 @@ public class TaskFactory {
             OnCompletionListener completionListener) {
 
         ForwardGeocodingOptions options = ForwardGeocodingOptions.parseArguments(arguments);
-        TaskContext taskContext = TaskContext.buildForMethodResult(
+        TaskContext<ForwardGeocodingOptions> taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
                 options,
@@ -77,7 +73,7 @@ public class TaskFactory {
             OnCompletionListener completionListener) {
 
         LocationOptions options = LocationOptions.parseArguments(arguments);
-        TaskContext taskContext = TaskContext.buildForMethodResult(
+        TaskContext<LocationOptions> taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
                 options,
@@ -97,7 +93,7 @@ public class TaskFactory {
             OnCompletionListener completionListener) {
 
         ReverseGeocodingOptions options = ReverseGeocodingOptions.parseArguments(arguments);
-        TaskContext taskContext = TaskContext.buildForMethodResult(
+        TaskContext<ReverseGeocodingOptions> taskContext = TaskContext.buildForMethodResult(
                 registrar,
                 result,
                 options,
@@ -113,7 +109,7 @@ public class TaskFactory {
             OnCompletionListener completionListener) {
 
         LocationOptions options = LocationOptions.parseArguments(arguments);
-        TaskContext taskContext = TaskContext.buildForEventSink(
+        TaskContext<LocationOptions> taskContext = TaskContext.buildForEventSink(
                 registrar,
                 result,
                 options,
