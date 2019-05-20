@@ -1,56 +1,95 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
+import 'pages/calculate_distance_widget.dart';
+import 'pages/current_location_widget.dart';
+import 'pages/location_stream_widget.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(GeolocatorExampleApp());
 
-class MyApp extends StatefulWidget {
+enum TabItem { singleLocation, locationStream, distance }
+
+class GeolocatorExampleApp extends StatefulWidget {
   @override
-  _MyAppState createState() => _MyAppState();
+  State<GeolocatorExampleApp> createState() => BottomNavigationState();
 }
 
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await Geolocator.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
+class BottomNavigationState extends State<GeolocatorExampleApp> {
+  TabItem _currentItem = TabItem.singleLocation;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Geolocator Example App'),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: _buildBody(),
+        bottomNavigationBar: _buildBottomNavigationBar(),
+      ),
+    );
+  }
+
+  Widget _buildBody() {
+    switch (_currentItem) {
+      case TabItem.locationStream:
+        return LocationStreamWidget();
+      case TabItem.distance:
+        return CalculateDistanceWidget();
+      case TabItem.singleLocation:
+      default:
+        return CurrentLocationWidget();
+    }
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      items: <BottomNavigationBarItem>[
+        _buildBottomNavigationBarItem(
+            Icons.location_on, TabItem.singleLocation),
+        _buildBottomNavigationBarItem(Icons.clear_all, TabItem.locationStream),
+        _buildBottomNavigationBarItem(Icons.redo, TabItem.distance),
+      ],
+      onTap: _onSelectTab,
+    );
+  }
+
+  BottomNavigationBarItem _buildBottomNavigationBarItem(
+      IconData icon, TabItem tabItem) {
+    final String text = tabItem.toString().split('.').last;
+    final Color color =
+    _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
+
+    return BottomNavigationBarItem(
+      icon: Icon(
+        icon,
+        color: color,
+      ),
+      title: Text(
+        text,
+        style: TextStyle(
+          color: color,
         ),
       ),
     );
+  }
+
+  void _onSelectTab(int index) {
+    TabItem selectedTabItem;
+
+    switch (index) {
+      case 1:
+        selectedTabItem = TabItem.locationStream;
+        break;
+      case 2:
+        selectedTabItem = TabItem.distance;
+        break;
+      default:
+        selectedTabItem = TabItem.singleLocation;
+    }
+
+    setState(() {
+      _currentItem = selectedTabItem;
+    });
   }
 }

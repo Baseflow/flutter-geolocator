@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  google_api_availability: ^2.0.1
+  location_permissions: ^2.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
