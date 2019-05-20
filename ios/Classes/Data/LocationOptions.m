@@ -33,7 +33,6 @@
     self = [super init];
     if (self) {
         NSDictionary *args = [GeolocationCodec decodeLocationOptions:arguments];
-        //NSDictionary *args = arguments;
         
         NSNumber *accuracy = args[@"accuracy"];
         NSNumber *distanceFilter = args[@"distanceFilter"];

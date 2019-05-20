@@ -44,10 +44,9 @@ class Geolocator {
           GeolocationPermission.location}) async {
     final PermissionStatus permissionStatus = await LocationPermissions()
         .checkPermissionStatus(
-        level: _GeolocationStatusConverter.toPermissionLevel(
-            locationPermission));
+        level: toPermissionLevel(locationPermission));
 
-    return _GeolocationStatusConverter.fromPermissionStatus(permissionStatus);
+    return fromPermissionStatus(permissionStatus);
   }
 
   /// Returns a [bool] value indicating whether location services are enabled on the device.
