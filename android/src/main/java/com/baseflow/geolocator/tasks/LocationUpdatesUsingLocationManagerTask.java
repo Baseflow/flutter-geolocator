@@ -71,8 +71,9 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
 
     // If we are listening to multiple location updates we can go ahead
     // and report back the last known location (if we have one).
-    if (!mStopAfterFirstLocationUpdate && mBestLocation != null) {
+    if (mStopAfterFirstLocationUpdate && mBestLocation != null) {
       reportLocationUpdate(mBestLocation);
+      return;
     }
 
     Looper looper = Looper.myLooper();
@@ -127,10 +128,6 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
         criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
         break;
       case GEOLOCATION_ACCURACY_HIGH:
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-        criteria.setPowerRequirement(Criteria.POWER_HIGH);
-        break;
       case GEOLOCATION_ACCURACY_BEST:
       case GEOLOCATION_ACCURACY_BEST_FOR_NAVIGATION:
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -195,8 +192,6 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
         return 500;
       case GEOLOCATION_ACCURACY_MEDIUM:
         return 250;
-      case GEOLOCATION_ACCURACY_HIGH:
-        return 100;
       case GEOLOCATION_ACCURACY_BEST:
       case GEOLOCATION_ACCURACY_BEST_FOR_NAVIGATION:
         return 50;

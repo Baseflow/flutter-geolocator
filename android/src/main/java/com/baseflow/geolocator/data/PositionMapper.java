@@ -2,6 +2,8 @@ package com.baseflow.geolocator.data;
 
 import android.location.Location;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +16,9 @@ public class PositionMapper {
     position.put("latitude", location.getLatitude());
     position.put("longitude", location.getLongitude());
     position.put("timestamp", location.getTime());
+    if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
+      position.put("mocked", location.isFromMockProvider());
+    }
 
     if (location.hasAltitude())
       position.put("altitude", location.getAltitude());
@@ -23,7 +28,7 @@ public class PositionMapper {
       position.put("heading", (double) location.getBearing());
     if (location.hasSpeed())
       position.put("speed", (double) location.getSpeed());
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasSpeedAccuracy())
+    if (VERSION.SDK_INT >= VERSION_CODES.O && location.hasSpeedAccuracy())
       position.put("speed_accuracy", (double) location.getSpeedAccuracyMetersPerSecond());
 
     return position;
