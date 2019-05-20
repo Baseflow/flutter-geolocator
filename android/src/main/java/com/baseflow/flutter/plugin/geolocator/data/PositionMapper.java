@@ -3,14 +3,14 @@ package com.baseflow.flutter.plugin.geolocator.data;
 import android.location.Location;
 import android.os.Build;
 
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.RequiresApi;
 
 public class PositionMapper {
-
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static Map<String, Object> toHashMap(Location location)
     {
         Map<String, Object> position = new HashMap<>();
@@ -18,7 +18,9 @@ public class PositionMapper {
         position.put("latitude", location.getLatitude());
         position.put("longitude", location.getLongitude());
         position.put("timestamp", location.getTime());
-        position.put("mocked", location.isFromMockProvider());
+        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN_MR2) {
+            position.put("mocked", location.isFromMockProvider());
+        }
 
         if(location.hasAltitude())
             position.put("altitude", location.getAltitude());
@@ -28,7 +30,7 @@ public class PositionMapper {
             position.put("heading", (double) location.getBearing());
         if(location.hasSpeed())
             position.put("speed", (double) location.getSpeed());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasSpeedAccuracy())
+        if (VERSION.SDK_INT >= VERSION_CODES.O && location.hasSpeedAccuracy())
             position.put("speed_accuracy", (double) location.getSpeedAccuracyMetersPerSecond());
         return position;
     }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Looper;
 
 import com.baseflow.flutter.plugin.geolocator.data.GeolocationAccuracy;
+import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
 import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.google.android.gms.common.util.Strings;
 
@@ -23,7 +24,7 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
     private Location mBestLocation;
     private String mActiveProvider;
 
-    LocationUpdatesUsingLocationManagerTask(TaskContext context, boolean stopAfterFirstLocationUpdate) {
+    LocationUpdatesUsingLocationManagerTask(TaskContext<LocationOptions> context, boolean stopAfterFirstLocationUpdate) {
         super(context);
 
         mStopAfterFirstLocationUpdate = stopAfterFirstLocationUpdate;
@@ -52,8 +53,9 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
 
         // If we are listening to multiple location updates we can go ahead
         // and report back the last known location (if we have one).
-        if(!mStopAfterFirstLocationUpdate && mBestLocation != null) {
+        if (mStopAfterFirstLocationUpdate && mBestLocation != null) {
             reportLocationUpdate(mBestLocation);
+            return;
         }
 
         Looper looper = Looper.myLooper();
@@ -137,7 +139,7 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
             mBestLocation = location;
             reportLocationUpdate(location);
 
-            if(mStopAfterFirstLocationUpdate) {
+            if (mStopAfterFirstLocationUpdate) {
                 this.stopTask();
             }
         }
@@ -178,7 +180,6 @@ class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManag
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void reportLocationUpdate(Location location) {
         Map<String, Object> locationMap = PositionMapper.toHashMap(location);
 

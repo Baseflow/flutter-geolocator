@@ -4,6 +4,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 
+import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
 import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.baseflow.flutter.plugin.geolocator.data.wrapper.ChannelResponse;
 
@@ -11,7 +12,7 @@ import androidx.annotation.RequiresApi;
 
 class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationManagerTask {
 
-    LastKnownLocationUsingLocationManagerTask(TaskContext context) {
+    LastKnownLocationUsingLocationManagerTask(TaskContext<LocationOptions> context) {
         super(context);
     }
 

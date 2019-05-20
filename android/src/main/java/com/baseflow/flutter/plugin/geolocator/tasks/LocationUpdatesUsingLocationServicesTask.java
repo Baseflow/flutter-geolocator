@@ -6,6 +6,7 @@ import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.baseflow.flutter.plugin.geolocator.data.LocationOptions;
 import com.baseflow.flutter.plugin.geolocator.data.PositionMapper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -24,7 +25,7 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
     private final LocationCallback mLocationCallback;
 
 
-    LocationUpdatesUsingLocationServicesTask(TaskContext taskContext, boolean stopAfterFirstLocationUpdate) {
+    LocationUpdatesUsingLocationServicesTask(TaskContext<LocationOptions> taskContext, boolean stopAfterFirstLocationUpdate) {
 
         super(taskContext);
 
@@ -104,7 +105,6 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
         return locationRequest;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void reportLocationUpdate(Location location) {
         Map<String, Object> locationMap = PositionMapper.toHashMap(location);
 
