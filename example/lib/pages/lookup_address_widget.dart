@@ -14,7 +14,7 @@ class _LookupAddressState extends State<LookupAddressWidget> {
 
   Future<void> _onLookupCoordinatesPressed() async {
     final List<Placemark> placemarks =
-    await _geolocator.placemarkFromAddress(_addressTextController.text);
+        await _geolocator.placemarkFromAddress(_addressTextController.text);
 
     if (placemarks != null && placemarks.isNotEmpty) {
       final Placemark pos = placemarks[0];
@@ -32,7 +32,7 @@ class _LookupAddressState extends State<LookupAddressWidget> {
       children: <Widget>[
         TextField(
           decoration:
-          const InputDecoration(hintText: 'Please enter an address'),
+              const InputDecoration(hintText: 'Please enter an address'),
           controller: _addressTextController,
         ),
         RaisedButton(

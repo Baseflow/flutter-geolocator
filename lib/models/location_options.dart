@@ -5,9 +5,9 @@ part of geolocator;
 class LocationOptions {
   const LocationOptions(
       {this.accuracy = LocationAccuracy.best,
-        this.distanceFilter = 0,
-        this.forceAndroidLocationManager = false,
-        this.timeInterval = 0});
+      this.distanceFilter = 0,
+      this.forceAndroidLocationManager = false,
+      this.timeInterval = 0});
 
   /// Defines the desired accuracy that should be used to determine the location data.
   ///

@@ -17,11 +17,11 @@ class LocationStreamState extends State<LocationStreamWidget> {
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
       const LocationOptions locationOptions =
-      LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 10);
+          LocationOptions(accuracy: LocationAccuracy.best, distanceFilter: 10);
       final Stream<Position> positionStream =
-      Geolocator().getPositionStream(locationOptions);
+          Geolocator().getPositionStream(locationOptions);
       _positionStreamSubscription = positionStream.listen(
-              (Position position) => setState(() => _positions.add(position)));
+          (Position position) => setState(() => _positions.add(position)));
       _positionStreamSubscription.pause();
     }
 

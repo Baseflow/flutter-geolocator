@@ -12,12 +12,12 @@ class GeolocationPermission {
   /// Android: Fine and Coarse Location
   /// iOS: CoreLocation - Always
   static const GeolocationPermission locationAlways =
-  GeolocationPermission._(1);
+      GeolocationPermission._(1);
 
   /// Android: Fine and Coarse Location
   /// iOS: CoreLocation - WhenInUse
   static const GeolocationPermission locationWhenInUse =
-  GeolocationPermission._(2);
+      GeolocationPermission._(2);
 
   static const List<GeolocationPermission> values = <GeolocationPermission>[
     location,

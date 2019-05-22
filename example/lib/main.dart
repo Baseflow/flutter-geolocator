@@ -58,7 +58,7 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
       IconData icon, TabItem tabItem) {
     final String text = tabItem.toString().split('.').last;
     final Color color =
-    _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
+        _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
 
     return BottomNavigationBarItem(
       icon: Icon(

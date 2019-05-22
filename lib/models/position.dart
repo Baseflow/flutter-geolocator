@@ -98,7 +98,7 @@ class Position {
 
     final DateTime timestamp = positionMap['timestamp'] != null
         ? DateTime.fromMillisecondsSinceEpoch(positionMap['timestamp'].toInt(),
-        isUtc: true)
+            isUtc: true)
         : null;
 
     return Position._(
