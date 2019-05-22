@@ -1,4 +1,12 @@
+#import <Foundation/Foundation.h>
 #import <Flutter/Flutter.h>
 
-@interface GeolocatorPlugin : NSObject<FlutterPlugin>
+#import "CalculateDistanceTask.h"
+#import "GeocodeTask.h"
+#import "LastKnownLocationTask.h"
+#import "LocationTask.h"
+#import "TaskProtocol.h"
+#import "Task.h"
+
+@interface GeolocatorPlugin : NSObject <FlutterPlugin, FlutterStreamHandler, CLLocationManagerDelegate>
 @end
