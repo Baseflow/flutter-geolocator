@@ -1,17 +1,10 @@
 part of geolocator;
 
 class Codec {
-  static String encodeLocationOptions(LocationOptions locationOptions) =>
-      json.encode(_locationOptionsMap(locationOptions));
-
-  static String encodeEnum(dynamic value) {
-    return value.toString().split('.').last;
-  }
-
-  static Map<String, dynamic> _locationOptionsMap(
+  static Map<String, dynamic> encodeLocationOptions(
           LocationOptions locationOptions) =>
       <String, dynamic>{
-        'accuracy': Codec.encodeEnum(locationOptions.accuracy),
+        'accuracy': locationOptions.accuracy.value,
         'distanceFilter': locationOptions.distanceFilter,
         'forceAndroidLocationManager':
             locationOptions.forceAndroidLocationManager,

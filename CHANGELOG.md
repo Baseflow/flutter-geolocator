@@ -1,3 +1,10 @@
+## [5.0.0]
+
+* Converted the iOS version from Swift to Objective-C, reducing the size of the final binary considerably, as well as solve some compatibility issues with other objective-c based plugins;
+* Fetch geocoding results on a separate thread not to slow down the main thread;
+* Bug fix where the current location could not be determined on non-GPS enabled phones;
+* Update to use latest gradle version.
+
 ## [4.0.3]
 
 * Update to latest version of the Location Permissions plugin to solve a bug when permissions are sometimes not requested.
