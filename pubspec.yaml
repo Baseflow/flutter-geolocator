@@ -11,12 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
 
+  meta: ^1.1.6
+
   google_api_availability: ^2.0.1
   location_permissions: ^2.0.1
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
+    sdk: flutter  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
