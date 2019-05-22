@@ -9,6 +9,10 @@ NSString *const EVENT_CHANNEL_NAME = @"flutter.baseflow.com/geolocator/events";
     NSMutableDictionary <NSUUID *, id <TaskProtocol>> *_tasks;
 }
 
+- (void)dealloc {
+    NSLog(@"[GeolocatorPlugin %s]", sel_getName(_cmd));
+}
+
 + (void)registerWithRegistrar:(NSObject <FlutterPluginRegistrar> *)registrar {
     FlutterMethodChannel *methodChannel = [FlutterMethodChannel methodChannelWithName:METHOD_CHANNEL_NAME binaryMessenger:registrar.messenger];
     FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:EVENT_CHANNEL_NAME binaryMessenger:registrar.messenger];
@@ -42,6 +46,10 @@ NSString *const EVENT_CHANNEL_NAME = @"flutter.baseflow.com/geolocator/events";
 
 
 - (void)executeTask:(id <TaskProtocol>)task {
+    if (_tasks == nil) {
+        _tasks = [[NSMutableDictionary <NSUUID *, id <TaskProtocol>> alloc] init];
+    }
+    
     _tasks[task.taskID] = task;
     [task startTask];
 }

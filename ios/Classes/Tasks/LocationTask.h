@@ -15,7 +15,9 @@
 #import "TaskProtocol.h"
 
 
-@interface LocationTask : Task <TaskProtocol, CLLocationManagerDelegate>
+@interface LocationTask : Task <TaskProtocol, CLLocationManagerDelegate> {
+    @protected CLLocationManager * _locationManager;
+}
 @end
 
 @interface CurrentLocationTask : LocationTask

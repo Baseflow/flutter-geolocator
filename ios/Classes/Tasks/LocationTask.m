@@ -10,7 +10,10 @@
 
 @implementation LocationTask {
     LocationOptions *_locationOptions;
-    CLLocationManager *_locationManager;
+}
+
+- (void)dealloc {
+    NSLog(@"[LocationTask %s]", sel_getName(_cmd));
 }
 
 - (instancetype)initWithContext:(TaskContext *)context completionHandler:(CompletionHandler)completionHandler {
@@ -33,10 +36,7 @@
     
     _locationManager.desiredAccuracy = accuracy;
     _locationManager.distanceFilter = distanceFilter;
-    
-    [_locationManager startUpdatingLocation];
 }
-
 
 - (void)stopTask {
     if (_locationManager != nil) {
@@ -45,6 +45,22 @@
     }
     
     [super stopTask];
+}
+
+- (void)locationManager:(CLLocationManager *)manager  didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    NSLog(@"%s", sel_getName(_cmd));
+    if ([locations lastObject]) {
+        CLLocation *location = [locations lastObject];
+        NSDictionary *positionDict = [location toDictionary];
+        
+        [[self context] resultHandler](positionDict);
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"%s", sel_getName(_cmd));
+    [[self context] resultHandler]([FlutterError errorWithCode:@"ERROR_UPDATING_LOCATION" message:error.localizedDescription details:nil]);
+    [self stopTask];
 }
 
 - (CLLocationAccuracy)clValue:(GeolocationAccuracy)accuracy {
@@ -70,21 +86,24 @@
 
 @implementation CurrentLocationTask
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    NSLog(@"%s", sel_getName(_cmd));
-    if ([locations lastObject]) {
-        CLLocation *location = [locations lastObject];
-        NSDictionary *positionDict = [location toDictionary];
-        
-        [[self context] resultHandler](positionDict);
-        [self stopTask];
-    }
+- (void)dealloc {
+    NSLog(@"[CurrentLocationTask %s]", sel_getName(_cmd));
 }
 
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    NSLog(@"%s", sel_getName(_cmd));
-    [[self context] resultHandler]([FlutterError errorWithCode:@"ERROR_UPDATING_LOCATION" message:error.localizedDescription details:nil]);
+- (void)startTask {
+    [super startTask];
+    
+    [_locationManager requestWhenInUseAuthorization];
+    
+    if (@available(iOS 9.0, *)) {
+        [_locationManager requestLocation];
+    } else {
+        [_locationManager startUpdatingLocation];
+    }
+}
+	
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    [super locationManager:manager didUpdateLocations:locations];
     [self stopTask];
 }
 
@@ -93,18 +112,14 @@
 
 @implementation StreamLocationUpdatesTask
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    if ([locations lastObject]) {
-        CLLocation *location = [locations lastObject];
-        NSDictionary *positionDict = [location toDictionary];
-        
-        [[self context] resultHandler](positionDict);
-    }
+- (void)dealloc {
+    NSLog(@"%s", sel_getName(_cmd));
 }
 
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    [[self context] resultHandler]([FlutterError errorWithCode:@"ERROR_UPDATING_LOCATION" message:error.localizedDescription details:nil]);
-    [self stopTask];
+- (void)startTask {
+    [super startTask];
+    
+    [_locationManager startUpdatingLocation];
 }
 
 @end

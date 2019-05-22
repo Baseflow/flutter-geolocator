@@ -41,7 +41,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Allow this App to access your location only when the app is in use?</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Allow this App to access your location?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow this App to access your location only when the app is in use?</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow this App to access your location?</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Allow this App to access your location?</string>
 </dict>
 </plist>

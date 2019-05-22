@@ -84,7 +84,7 @@ class _LocationState extends State<CurrentLocationWidget> {
             return const PlaceholderWidget('Access to location denied',
                 'Allow access to the location services for this App using the device settings.');
           }
-
+          
           return Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
