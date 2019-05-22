@@ -25,10 +25,8 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^4.0.3'
+  geolocator: '^5.0.0'
 ```
-
-> **NOTE:** There's a known issue with integrating plugins that use Swift into a Flutter project created with the Objective-C template. See issue [Flutter#16049](https://github.com/flutter/flutter/issues/16049) for help on integration.
 
 ## API
 
@@ -160,11 +158,6 @@ If you would like to access the device's location when your App is running in th
 <string>This app needs access to location when in the background.</string>
 <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 <string>This app needs access to location when open and in the background.</string>
-```
-
-Make sure on your Podfile you have 
-```
-use_frameworks!
 ```
 
 ### Location accuracy
