@@ -32,13 +32,13 @@
 - (instancetype)initWithArguments:(id)arguments {
     self = [super init];
     if (self) {
-        NSDictionary *args = [GeolocationCodec decodeLocationOptions:arguments];
-        
-        NSNumber *accuracy = args[@"accuracy"];
-        NSNumber *distanceFilter = args[@"distanceFilter"];
-        
-        self.accuracy = (GeolocationAccuracy) accuracy.intValue;
-        self.distanceFilter = distanceFilter.doubleValue;
+        if ([arguments isKindOfClass:[NSDictionary class]]) {
+            NSNumber *accuracy = arguments[@"accuracy"];
+            NSNumber *distanceFilter = arguments[@"distanceFilter"];
+            
+            self.accuracy = (GeolocationAccuracy) accuracy.intValue;
+            self.distanceFilter = distanceFilter.doubleValue;
+        }
     }
     
     return self;

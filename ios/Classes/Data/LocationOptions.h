@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "GeolocationCodec.h"
 
 typedef NS_ENUM(int, GeolocationAccuracy) {
     GeolocationAccuracyLowest = 0,
