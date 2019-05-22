@@ -24,12 +24,11 @@
 }
 
 - (void)parseCoordinates:(id)arguments {
-    if ([arguments isMemberOfClass:[NSDictionary class]]) {
-        NSDictionary<NSString *, NSNumber *> *location = [[NSDictionary alloc] initWithDictionary:arguments];
-        CLLocationDegrees startLatitude = location[@"startLatitude"].doubleValue;
-        CLLocationDegrees startLongitude = location[@"startLongitude"].doubleValue;
-        CLLocationDegrees endLatitude = location[@"endLatitude"].doubleValue;
-        CLLocationDegrees endLongitude = location[@"endLongitude"].doubleValue;
+    if ([arguments isKindOfClass:[NSDictionary class]]) {
+        CLLocationDegrees startLatitude = ((NSNumber *)arguments[@"startLatitude"]).doubleValue;
+        CLLocationDegrees startLongitude = ((NSNumber *)arguments[@"startLongitude"]).doubleValue;
+        CLLocationDegrees endLatitude = ((NSNumber *)arguments[@"endLatitude"]).doubleValue;
+        CLLocationDegrees endLongitude = ((NSNumber *)arguments[@"endLongitude"]).doubleValue;
         
         _startLocation = [[CLLocation alloc] initWithLatitude:startLatitude longitude:startLongitude];
         _endLocation = [[CLLocation alloc] initWithLatitude:endLatitude longitude:endLongitude];

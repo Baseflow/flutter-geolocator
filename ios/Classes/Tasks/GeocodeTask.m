@@ -72,12 +72,11 @@
 }
 
 - (void)parseArguments:(id)arguments {
-    if ([arguments isMemberOfClass:[NSDictionary class]]) {
-        NSDictionary *argumentMap = [[NSDictionary alloc] initWithDictionary:arguments];
-        _address = argumentMap[@"address"];
+    if ([arguments isKindOfClass:[NSDictionary class]]) {
+        _address = arguments[@"address"];
         
-        if (argumentMap[@"localeIdentifier"] != nil) {
-            _locale = [[NSLocale alloc] initWithLocaleIdentifier:argumentMap[@"localeIdentifier"]];
+        if (arguments[@"localeIdentifier"] != nil) {
+            _locale = [[NSLocale alloc] initWithLocaleIdentifier:arguments[@"localeIdentifier"]];
         }
     } else {
         _address = nil;
@@ -140,15 +139,14 @@
 }
 
 - (void)parseArguments:(id)arguments {
-    if ([arguments isMemberOfClass:[NSDictionary class]]) {
-        NSDictionary<NSString *, NSObject *> *argumentMap = [[NSDictionary alloc] initWithDictionary:arguments];
-        CLLocationDegrees latitude = ((NSNumber *) argumentMap[@"latitude"]).doubleValue;
-        CLLocationDegrees longitude = ((NSNumber *) argumentMap[@"longitude"]).doubleValue;
+    if ([arguments isKindOfClass:[NSDictionary class]]) {
+        CLLocationDegrees latitude = ((NSNumber *) arguments[@"latitude"]).doubleValue;
+        CLLocationDegrees longitude = ((NSNumber *) arguments[@"longitude"]).doubleValue;
         
         _location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
         
-        if (argumentMap[@"localeIdentifier"] != nil) {
-            _locale = [[NSLocale alloc] initWithLocaleIdentifier:(NSString *) argumentMap[@"localeIdentifier"]];
+        if (arguments[@"localeIdentifier"] != nil) {
+            _locale = [[NSLocale alloc] initWithLocaleIdentifier:(NSString *) arguments[@"localeIdentifier"]];
         }
     } else {
         _location = nil;
