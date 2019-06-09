@@ -14,11 +14,16 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
+import io.flutter.view.FlutterNativeView;
 
 /**
  * GeolocatorPlugin
  */
-public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamHandler, OnCompletionListener {
+public class GeolocatorPlugin implements
+  MethodCallHandler,
+  EventChannel.StreamHandler,
+  OnCompletionListener,
+  PluginRegistry.ViewDestroyListener {
 
   private static final String METHOD_CHANNEL_NAME = "flutter.baseflow.com/geolocator/methods";
   private static final String EVENT_CHANNEL_NAME = "flutter.baseflow.com/geolocator/events";
@@ -43,6 +48,8 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
     final EventChannel eventChannel = new EventChannel(registrar.messenger(), EVENT_CHANNEL_NAME);
     methodChannel.setMethodCallHandler(geolocatorPlugin);
     eventChannel.setStreamHandler(geolocatorPlugin);
+
+    registrar.addViewDestroyListener(geolocatorPlugin);
   }
 
   @Override
@@ -115,5 +122,11 @@ public class GeolocatorPlugin implements MethodCallHandler, EventChannel.StreamH
 
   public void onCompletion(UUID taskID) {
     mTasks.remove(taskID);
+  }
+
+  @Override
+  public boolean onViewDestroy(FlutterNativeView flutterNativeView) {
+    onCancel(null);
+    return false;
   }
 }
