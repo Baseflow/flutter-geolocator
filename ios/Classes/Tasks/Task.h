@@ -17,6 +17,7 @@
 @property TaskContext *context;
 @property CompletionHandler completionHandler;
 
+- (instancetype)initWithTaskID:(NSUUID*)taskID context:(TaskContext *)context completionHandler:(CompletionHandler)completionHandler;
 - (instancetype)initWithContext:(TaskContext *)context completionHandler:(CompletionHandler)completionHandler;
 
 - (void)stopTask;

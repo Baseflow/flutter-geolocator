@@ -9,6 +9,17 @@
 
 @implementation Task
 
+- (instancetype)initWithTaskID:(NSUUID *)taskID context:(TaskContext *)context completionHandler:(CompletionHandler)completionHandler {
+    self = [super init];
+    if (self) {
+        self.context = context;
+        self.completionHandler = completionHandler;
+        self.taskID = taskID;
+    }
+    
+    return self;
+}
+
 - (instancetype)initWithContext:(TaskContext *)context completionHandler:(CompletionHandler)completionHandler {
     self = [super init];
     if (self) {

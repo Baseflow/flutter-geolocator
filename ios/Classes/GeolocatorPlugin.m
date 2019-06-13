@@ -29,7 +29,21 @@ NSString *const EVENT_CHANNEL_NAME = @"flutter.baseflow.com/geolocator/events";
         [self->_tasks removeObjectForKey:taskID];
     };
     
-    if ([call.method isEqualToString:@"getCurrentPosition"]) {
+    if ([call.method isEqualToString:@"_createTask"]) {
+        result([[[NSUUID alloc] init] UUIDString]);
+    } else if ([call.method isEqualToString:@"_stopTask"]) {
+        NSString *taskID = call.arguments;
+        if (taskID != nil) {
+            NSUUID *uuid = [[NSUUID alloc] initWithUUIDString:taskID];
+            if (_tasks[uuid] != nil) {
+                NSLog(@"got one!");
+                [_tasks[uuid] stopTask];
+            }
+            result([NSNumber numberWithBool:_tasks[uuid] != nil]);
+        } else {
+            result([FlutterError errorWithCode:@"INVALID_TASK_ID" message:@"This is a internal Geolocator error." details:nil]);
+        }
+    } else if ([call.method isEqualToString:@"getCurrentPosition"]) {
         [self executeTask:[[CurrentLocationTask alloc] initWithContext:[self buildTaskContext:call.arguments resultHandler:result] completionHandler:completionAction]];
     } else if ([call.method isEqualToString:@"getLastKnownPosition"]) {
         [self executeTask:[[LastKnownLocationTask alloc] initWithContext:[self buildTaskContext:call.arguments resultHandler:result] completionHandler:completionAction]];
