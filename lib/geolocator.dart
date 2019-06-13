@@ -79,33 +79,41 @@ class Geolocator {
   /// Returns the current position taking the supplied [desiredAccuracy] into account.
   ///
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
-  Future<Position> getCurrentPosition(
-      {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-      LocationPermissionLevel locationPermissionLevel =
-          LocationPermissionLevel.location}) async {
+  Future<Position> getCurrentPosition({
+    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    LocationPermissionLevel locationPermissionLevel =
+        LocationPermissionLevel.location,
+
+    /// Specify a timeout for the position request.
+    /// If no location has been determined until the timeout ends, `null` will be returned.
+    /// If the value is set to [Duration.zero], the request will run until a location is available (potentially forever).
+    Duration timeout = Duration.zero,
+  }) async {
     final PermissionStatus permission =
         await _getLocationPermission(locationPermissionLevel);
 
-    if (permission == PermissionStatus.granted) {
-      final LocationOptions locationOptions = LocationOptions(
-          accuracy: desiredAccuracy,
-          distanceFilter: 0,
-          forceAndroidLocationManager:
-              await _shouldForceAndroidLocationManager());
-      final Map<dynamic, dynamic> positionMap =
-          await _methodChannel.invokeMethod('getCurrentPosition',
-              Codec.encodeLocationOptions(locationOptions));
+    if (permission != PermissionStatus.granted) {
+      _handleInvalidPermissions(permission);
+      return null;
+    }
 
+    final LocationOptions locationOptions = LocationOptions(
+      accuracy: desiredAccuracy,
+      distanceFilter: 0,
+      forceAndroidLocationManager: await _shouldForceAndroidLocationManager(),
+      timeout: timeout.inSeconds,
+    );
+
+    return _methodChannel
+        .invokeMethod<Map<dynamic, dynamic>>(
+            'getCurrentPosition', Codec.encodeLocationOptions(locationOptions))
+        .then((positionMap) {
       try {
         return Position._fromMap(positionMap);
       } on ArgumentError {
         return null;
       }
-    } else {
-      _handleInvalidPermissions(permission);
-    }
-
-    return null;
+    });
   }
 
   /// Returns the last known position stored on the users device.
