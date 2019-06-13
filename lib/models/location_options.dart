@@ -8,7 +8,6 @@ class LocationOptions {
     this.distanceFilter = 0,
     this.forceAndroidLocationManager = false,
     this.timeInterval = 0,
-    this.timeout = 0,
   });
 
   /// Defines the desired accuracy that should be used to determine the location data.
@@ -30,11 +29,4 @@ class LocationOptions {
   ///
   /// On iOS this value is ignored since position updates based on time intervals are not supported.
   final int timeInterval;
-
-  /// The timeout for a single location request.
-  ///
-  /// The request will either finish successfully within the timeout, or return `null` when its expired.
-  ///
-  /// On iOS this value currently ignored.
-  final int timeout;
 }

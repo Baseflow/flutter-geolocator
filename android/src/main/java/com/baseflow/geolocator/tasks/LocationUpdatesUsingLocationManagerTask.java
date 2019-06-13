@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.annotation.Nullable;
 import com.baseflow.geolocator.data.LocationOptions;
 import com.baseflow.geolocator.data.PositionMapper;
 import com.google.android.gms.common.util.Strings;
@@ -19,12 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.IntDef;
+import java.util.UUID;
 
 public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocationManagerTask implements LocationListener {
   private final boolean mStopAfterFirstLocationUpdate;
   private Location mBestLocation;
   private String mActiveProvider;
-  private Handler mTimeoutHandler;
 
   final static int GEOLOCATION_ACCURACY_LOWEST = 0;
   final static int GEOLOCATION_ACCURACY_LOW = 1;
@@ -46,8 +47,8 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
   }
 
 
-  LocationUpdatesUsingLocationManagerTask(TaskContext<LocationOptions> context, boolean stopAfterFirstLocationUpdate) {
-    super(context);
+  LocationUpdatesUsingLocationManagerTask(@Nullable UUID taskID, TaskContext<LocationOptions> context, boolean stopAfterFirstLocationUpdate) {
+    super(taskID, context);
 
     mStopAfterFirstLocationUpdate = stopAfterFirstLocationUpdate;
   }
@@ -84,16 +85,6 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
       looper = Looper.getMainLooper();
     }
 
-    if (mStopAfterFirstLocationUpdate && mLocationOptions.getTimeout() > 0) {
-      mTimeoutHandler = new Handler(looper);
-      mTimeoutHandler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          onTimeout();
-        }
-      }, mLocationOptions.getTimeout() * 1000);
-    }
-
     locationManager.requestLocationUpdates(
         mActiveProvider,
         mLocationOptions.getTimeInterval(),
@@ -108,11 +99,6 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
 
     LocationManager locationManager = getLocationManager();
     locationManager.removeUpdates(this);
-
-    if (mTimeoutHandler != null) {
-      mTimeoutHandler.removeCallbacksAndMessages(null);
-      mTimeoutHandler = null;
-    }
   }
 
   private void handleError() {
@@ -201,15 +187,6 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
           "The active location provider was disabled. Check if the location services are enabled in the device settings.",
           null);
     }
-  }
-
-  private void onTimeout() {
-    if (isStopped()) {
-      return;
-    }
-
-    reportLocationUpdate(null);
-    stopTask();
   }
 
   private float accuracyToFloat(@GeolocationAccuracy int accuracy) {

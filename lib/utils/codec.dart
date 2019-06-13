@@ -9,6 +9,5 @@ class Codec {
         'forceAndroidLocationManager':
             locationOptions.forceAndroidLocationManager,
         'timeInterval': locationOptions.timeInterval,
-        'timeout': locationOptions.timeout,
       };
 }

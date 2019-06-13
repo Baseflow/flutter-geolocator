@@ -24,7 +24,7 @@ class ReverseGeocodingTask extends Task<ReverseGeocodingOptions> {
   private Locale mLocale;
 
   ReverseGeocodingTask(TaskContext<ReverseGeocodingOptions> context) {
-    super(context);
+    super(null, context);
 
     PluginRegistry.Registrar registrar = context.getRegistrar();
 

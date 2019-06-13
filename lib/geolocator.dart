@@ -84,10 +84,9 @@ class Geolocator {
     LocationPermissionLevel locationPermissionLevel =
         LocationPermissionLevel.location,
 
-    /// Specify a timeout for the position request.
-    /// If no location has been determined until the timeout ends, `null` will be returned.
-    /// If the value is set to [Duration.zero], the request will run until a location is available (potentially forever).
-    Duration timeout = Duration.zero,
+    /// If specified, [timeout] will be attached to the returned Future using [Future.timeout].
+    /// If the App runs into the timeout, you will receive a TimeoutException.
+    Duration timeout,
   }) async {
     final PermissionStatus permission =
         await _getLocationPermission(locationPermissionLevel);
@@ -101,12 +100,15 @@ class Geolocator {
       accuracy: desiredAccuracy,
       distanceFilter: 0,
       forceAndroidLocationManager: await _shouldForceAndroidLocationManager(),
-      timeout: timeout.inSeconds,
     );
 
-    return _methodChannel
+    final String taskID = await _createTask();
+
+    var future = _methodChannel
         .invokeMethod<Map<dynamic, dynamic>>(
-            'getCurrentPosition', Codec.encodeLocationOptions(locationOptions))
+      'getCurrentPosition',
+      Codec.encodeLocationOptions(locationOptions)..['taskID'] = taskID,
+    )
         .then((positionMap) {
       try {
         return Position._fromMap(positionMap);
@@ -114,6 +116,11 @@ class Geolocator {
         return null;
       }
     });
+    if (timeout != null) {
+      future = future.timeout(timeout);
+    }
+
+    return future.whenComplete(() => _stopTask(taskID));
   }
 
   /// Returns the last known position stored on the users device.
@@ -121,33 +128,49 @@ class Geolocator {
   /// On Android we look for the location provider matching best with the
   /// supplied [desiredAccuracy]. On iOS this parameter is ignored.
   /// When no position is available, null is returned.
-  Future<Position> getLastKnownPosition(
-      {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-      LocationPermissionLevel locationPermissionLevel =
-          LocationPermissionLevel.location}) async {
+  Future<Position> getLastKnownPosition({
+    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    LocationPermissionLevel locationPermissionLevel =
+        LocationPermissionLevel.location,
+
+    /// If specified, [timeout] will be attached to the returned Future using [Future.timeout].
+    /// If the App runs into the timeout, you will receive a TimeoutException.
+    Duration timeout,
+  }) async {
     final PermissionStatus permission =
         await _getLocationPermission(locationPermissionLevel);
 
-    if (permission == PermissionStatus.granted) {
-      final LocationOptions locationOptions = LocationOptions(
-          accuracy: desiredAccuracy,
-          distanceFilter: 0,
-          forceAndroidLocationManager:
-              await _shouldForceAndroidLocationManager());
-      final Map<dynamic, dynamic> positionMap =
-          await _methodChannel.invokeMethod('getLastKnownPosition',
-              Codec.encodeLocationOptions(locationOptions));
+    if (permission != PermissionStatus.granted) {
+      _handleInvalidPermissions(permission);
+      return null;
+    }
 
+    final LocationOptions locationOptions = LocationOptions(
+      accuracy: desiredAccuracy,
+      distanceFilter: 0,
+      forceAndroidLocationManager: await _shouldForceAndroidLocationManager(),
+    );
+
+    final String taskID = await _createTask();
+
+    var future = _methodChannel
+        .invokeMethod<Map<dynamic, dynamic>>(
+      'getLastKnownPosition',
+      Codec.encodeLocationOptions(locationOptions)..['taskID'] = taskID,
+    )
+        .then((positionMap) {
       try {
         return Position._fromMap(positionMap);
       } on ArgumentError {
         return null;
       }
-    } else {
-      _handleInvalidPermissions(permission);
+    });
+
+    if (timeout != null) {
+      future = future.timeout(timeout);
     }
 
-    return null;
+    return future.whenComplete(() => _stopTask(taskID));
   }
 
   /// Fires whenever the location changes outside the bounds of the [desiredAccuracy].
@@ -279,4 +302,12 @@ class Geolocator {
         'endLatitude': endLatitude,
         'endLongitude': endLongitude
       }).then<double>((dynamic result) => result);
+
+  Future<String> _createTask() {
+    return _methodChannel.invokeMethod<String>('_createTask');
+  }
+
+  Future<bool> _stopTask(String taskID) {
+    return _methodChannel.invokeMethod<bool>('_stopTask', taskID);
+  }
 }

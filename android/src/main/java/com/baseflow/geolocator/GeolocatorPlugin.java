@@ -55,16 +55,35 @@ public class GeolocatorPlugin implements
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     switch (call.method) {
+      case "_createTask":
+        result.success(UUID.randomUUID().toString());
+        break;
+      case "_stopTask":
+        if (call.arguments instanceof String) {
+          UUID taskID = UUID.fromString((String) call.arguments);
+          Task task = mTasks.get(taskID);
+
+          if (task != null) {
+            task.stopTask();
+          }
+          // FWIW, return whether the task has been tracked before.
+          result.success(task != null);
+        } else {
+          result.error("INVALID_TASK_ID", "This is a internal Geolocator error.", null);
+        }
+        break;
       case "getLastKnownPosition": {
+        String taskID = call.argument("taskID");
         Task task = TaskFactory.createLastKnownLocationTask(
-                mRegistrar, result, call.arguments, this);
+            taskID, mRegistrar, result, call.arguments, this);
         mTasks.put(task.getTaskID(), task);
         task.startTask();
         break;
       }
       case "getCurrentPosition": {
+        String taskID = call.argument("taskID");
         Task task = TaskFactory.createCurrentLocationTask(
-                mRegistrar, result, call.arguments, this);
+                taskID, mRegistrar, result, call.arguments, this);
         mTasks.put(task.getTaskID(), task);
         task.startTask();
         break;

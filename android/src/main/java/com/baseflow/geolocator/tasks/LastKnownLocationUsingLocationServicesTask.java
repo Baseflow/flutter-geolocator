@@ -10,12 +10,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Map;
+import java.util.UUID;
 
 class LastKnownLocationUsingLocationServicesTask extends LocationUsingLocationServicesTask {
   private final FusedLocationProviderClient mFusedLocationProviderClient;
 
-  LastKnownLocationUsingLocationServicesTask(TaskContext<LocationOptions> taskContext) {
-    super(taskContext);
+  LastKnownLocationUsingLocationServicesTask(@NonNull UUID taskID, TaskContext<LocationOptions> taskContext) {
+    super(taskID, taskContext);
 
     mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(taskContext.getAndroidContext());
   }

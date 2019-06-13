@@ -3,14 +3,16 @@ package com.baseflow.geolocator.tasks;
 import android.location.Location;
 import android.location.LocationManager;
 
+import androidx.annotation.NonNull;
 import com.baseflow.geolocator.data.LocationOptions;
 import com.baseflow.geolocator.data.PositionMapper;
 import com.baseflow.geolocator.data.wrapper.ChannelResponse;
+import java.util.UUID;
 
 class LastKnownLocationUsingLocationManagerTask extends LocationUsingLocationManagerTask {
 
-  LastKnownLocationUsingLocationManagerTask(TaskContext<LocationOptions> context) {
-    super(context);
+  LastKnownLocationUsingLocationManagerTask(@NonNull UUID taskID, TaskContext<LocationOptions> context) {
+    super(taskID, context);
   }
 
   @Override

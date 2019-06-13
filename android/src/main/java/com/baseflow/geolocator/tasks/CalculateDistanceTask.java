@@ -8,7 +8,7 @@ import com.baseflow.geolocator.data.wrapper.ChannelResponse;
 class CalculateDistanceTask extends Task<CalculateDistanceOptions> {
 
   CalculateDistanceTask(TaskContext<CalculateDistanceOptions> context) {
-    super(context);
+    super(null, context);
   }
 
   @Override

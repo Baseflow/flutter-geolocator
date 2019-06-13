@@ -5,9 +5,11 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 
+import androidx.annotation.Nullable;
 import com.baseflow.geolocator.data.LocationOptions;
 
 import io.flutter.plugin.common.PluginRegistry;
+import java.util.UUID;
 
 abstract class LocationUsingLocationManagerTask extends Task<LocationOptions> {
   private static final long TWO_MINUTES = 120000;
@@ -15,8 +17,8 @@ abstract class LocationUsingLocationManagerTask extends Task<LocationOptions> {
   private final Context mAndroidContext;
   final LocationOptions mLocationOptions;
 
-  LocationUsingLocationManagerTask(TaskContext<LocationOptions> context) {
-    super(context);
+  LocationUsingLocationManagerTask(@Nullable UUID taskID, TaskContext<LocationOptions> context) {
+    super(taskID, context);
 
     PluginRegistry.Registrar registrar = context.getRegistrar();
 

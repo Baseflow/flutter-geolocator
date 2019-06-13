@@ -47,41 +47,27 @@ class _LocationState extends State<CurrentLocationWidget> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> _initLastKnownLocation() async {
-    Position position;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = !widget.androidFusedLocation;
-      position = await geolocator.getLastKnownPosition(
-          desiredAccuracy: LocationAccuracy.best);
-    } on PlatformException {
-      position = null;
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _lastKnownPosition = position;
-    });
+    Geolocator()
+      ..forceAndroidLocationManager = !widget.androidFusedLocation
+      ..getLastKnownPosition(
+        desiredAccuracy: LocationAccuracy.best,
+        timeout: Duration(seconds: 5),
+      ).then((position) {
+        if (mounted) {
+          setState(() => _lastKnownPosition = position);
+        }
+      }).catchError((e) {
+        //
+      });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> _initCurrentLocation() async {
-    // This timeout is managed by the Geolocator plugin internally.
-    // The FusedLocationProvider in Android will account for accurate & quick readings - therefore timeouts are not needed.
-    // If Geolocator uses the raw GPS sensor though, no data can be returned until the phone has an GPS signal (line of sight with the satellites).
-    final Duration timeout =
-        widget.androidFusedLocation ? Duration.zero : Duration(seconds: 5);
     Geolocator()
       ..forceAndroidLocationManager = !widget.androidFusedLocation
       ..getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-        timeout: timeout,
+        timeout: Duration(seconds: 5),
       ).then((position) {
         if (mounted) {
           setState(() => _currentPosition = position);

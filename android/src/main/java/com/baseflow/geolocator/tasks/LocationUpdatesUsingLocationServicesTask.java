@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.baseflow.geolocator.data.LocationOptions;
 import com.baseflow.geolocator.data.PositionMapper;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -14,6 +15,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.util.Map;
+import java.util.UUID;
 
 
 class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServicesTask {
@@ -22,8 +24,8 @@ class LocationUpdatesUsingLocationServicesTask extends LocationUsingLocationServ
   private final LocationCallback mLocationCallback;
 
 
-  LocationUpdatesUsingLocationServicesTask(TaskContext<LocationOptions> taskContext, boolean stopAfterFirstLocationUpdate) {
-    super(taskContext);
+  LocationUpdatesUsingLocationServicesTask(@Nullable UUID taskID, TaskContext<LocationOptions> taskContext, boolean stopAfterFirstLocationUpdate) {
+    super(taskID, taskContext);
 
     mStopAfterFirstLocationUpdate = stopAfterFirstLocationUpdate;
     mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(taskContext.getAndroidContext());

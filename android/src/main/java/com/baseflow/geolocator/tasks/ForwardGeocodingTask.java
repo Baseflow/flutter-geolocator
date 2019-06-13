@@ -19,7 +19,7 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
   private final Context mContext;
 
   ForwardGeocodingTask(TaskContext<ForwardGeocodingOptions> context) {
-    super(context);
+    super(null, context);
 
     PluginRegistry.Registrar registrar = context.getRegistrar();
 

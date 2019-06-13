@@ -1,5 +1,6 @@
 package com.baseflow.geolocator.tasks;
 
+import androidx.annotation.Nullable;
 import com.baseflow.geolocator.OnCompletionListener;
 
 import java.util.UUID;
@@ -8,10 +9,12 @@ public abstract class Task<TOptions> {
     private final UUID mTaskID;
     private final TaskContext<TOptions> mTaskContext;
 
-    private boolean stopped = false;
-
-    Task(TaskContext<TOptions> context) {
-        mTaskID = UUID.randomUUID();
+    Task(@Nullable UUID taskID, TaskContext<TOptions> context) {
+        if (taskID == null) {
+            mTaskID = UUID.randomUUID();
+        } else {
+            mTaskID = taskID;
+        }
         mTaskContext = context;
     }
 
@@ -31,11 +34,5 @@ public abstract class Task<TOptions> {
         if(completionListener != null) {
             completionListener.onCompletion(getTaskID());
         }
-
-        stopped = true;
-    }
-
-    public boolean isStopped() {
-        return stopped;
     }
 }

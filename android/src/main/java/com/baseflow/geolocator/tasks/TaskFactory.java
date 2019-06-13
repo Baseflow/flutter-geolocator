@@ -9,6 +9,7 @@ import com.baseflow.geolocator.data.ReverseGeocodingOptions;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
+import java.util.UUID;
 
 public class TaskFactory {
   public static Task<CalculateDistanceOptions> createCalculateDistanceTask(
@@ -28,6 +29,7 @@ public class TaskFactory {
   }
 
   public static Task<LocationOptions> createCurrentLocationTask(
+      String taskID,
       PluginRegistry.Registrar registrar,
       MethodChannel.Result result,
       Object arguments,
@@ -42,10 +44,12 @@ public class TaskFactory {
 
     if (!options.isForceAndroidLocationManager()) {
       return new LocationUpdatesUsingLocationServicesTask(
+          UUID.fromString(taskID),
           taskContext,
           true);
     } else {
       return new LocationUpdatesUsingLocationManagerTask(
+          UUID.fromString(taskID),
           taskContext,
           true);
     }
@@ -68,6 +72,7 @@ public class TaskFactory {
   }
 
   public static Task<LocationOptions> createLastKnownLocationTask(
+      String taskID,
       PluginRegistry.Registrar registrar,
       MethodChannel.Result result,
       Object arguments,
@@ -81,9 +86,9 @@ public class TaskFactory {
         completionListener);
 
     if (!options.isForceAndroidLocationManager()) {
-      return new LastKnownLocationUsingLocationServicesTask(taskContext);
+      return new LastKnownLocationUsingLocationServicesTask(UUID.fromString(taskID), taskContext);
     } else {
-      return new LastKnownLocationUsingLocationManagerTask(taskContext);
+      return new LastKnownLocationUsingLocationManagerTask(UUID.fromString(taskID), taskContext);
     }
   }
 
@@ -118,10 +123,12 @@ public class TaskFactory {
 
     if (!options.isForceAndroidLocationManager()) {
       return new LocationUpdatesUsingLocationServicesTask(
+          null,
           taskContext,
           false);
     } else {
       return new LocationUpdatesUsingLocationManagerTask(
+          null,
           taskContext,
           false);
     }

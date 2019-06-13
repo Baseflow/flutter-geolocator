@@ -11,7 +11,6 @@ public class LocationOptions {
   private final long distanceFilter;
   private final boolean forceAndroidLocationManager;
   private final long timeInterval;
-  private final long timeout;
 
   public static LocationOptions parseArguments(Object arguments) {
     @SuppressWarnings("unchecked")
@@ -21,20 +20,17 @@ public class LocationOptions {
     final long distanceFilter = (int) map.get("distanceFilter");
     final boolean forceAndroidLocationManager = (boolean) map.get("forceAndroidLocationManager");
     final long timeInterval = (int) map.get("timeInterval");
-    final long timeout = (int) map.get("timeout");
 
-    return new LocationOptions(accuracy, distanceFilter, forceAndroidLocationManager, timeInterval,
-        timeout);
+    return new LocationOptions(accuracy, distanceFilter, forceAndroidLocationManager, timeInterval);
   }
 
 
   private LocationOptions(@GeolocationAccuracy int accuracy, long distanceFilter,
-      boolean forceAndroidLocationManager, long timeInterval, long timeout) {
+      boolean forceAndroidLocationManager, long timeInterval) {
     this.accuracy = accuracy;
     this.distanceFilter = distanceFilter;
     this.forceAndroidLocationManager = forceAndroidLocationManager;
     this.timeInterval = timeInterval;
-    this.timeout = timeout;
   }
 
   @GeolocationAccuracy
@@ -52,13 +48,5 @@ public class LocationOptions {
 
   public long getTimeInterval() {
     return timeInterval;
-  }
-
-  /**
-   * @return The timeout for a single location request. May be {@code 0} if no timeout has been
-   * set.
-   */
-  public long getTimeout() {
-    return timeout;
   }
 }
