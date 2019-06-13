@@ -6,7 +6,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.Nullable;
@@ -76,7 +75,6 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
     // and report back the last known location (if we have one).
     if (mStopAfterFirstLocationUpdate && mBestLocation != null) {
       reportLocationUpdate(mBestLocation);
-      stopTask();
       return;
     }
 
