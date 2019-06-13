@@ -6,6 +6,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 
 import com.baseflow.geolocator.data.LocationOptions;
@@ -23,6 +24,7 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
   private final boolean mStopAfterFirstLocationUpdate;
   private Location mBestLocation;
   private String mActiveProvider;
+  private Handler mTimeoutHandler;
 
   final static int GEOLOCATION_ACCURACY_LOWEST = 0;
   final static int GEOLOCATION_ACCURACY_LOW = 1;
@@ -73,12 +75,23 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
     // and report back the last known location (if we have one).
     if (mStopAfterFirstLocationUpdate && mBestLocation != null) {
       reportLocationUpdate(mBestLocation);
+      stopTask();
       return;
     }
 
     Looper looper = Looper.myLooper();
     if (looper == null) {
       looper = Looper.getMainLooper();
+    }
+
+    if (mStopAfterFirstLocationUpdate && mLocationOptions.getTimeout() > 0) {
+      mTimeoutHandler = new Handler(looper);
+      mTimeoutHandler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          onTimeout();
+        }
+      }, mLocationOptions.getTimeout() * 1000);
     }
 
     locationManager.requestLocationUpdates(
@@ -95,6 +108,11 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
 
     LocationManager locationManager = getLocationManager();
     locationManager.removeUpdates(this);
+
+    if (mTimeoutHandler != null) {
+      mTimeoutHandler.removeCallbacksAndMessages(null);
+      mTimeoutHandler = null;
+    }
   }
 
   private void handleError() {
@@ -183,6 +201,15 @@ public class LocationUpdatesUsingLocationManagerTask extends LocationUsingLocati
           "The active location provider was disabled. Check if the location services are enabled in the device settings.",
           null);
     }
+  }
+
+  private void onTimeout() {
+    if (isStopped()) {
+      return;
+    }
+
+    reportLocationUpdate(null);
+    stopTask();
   }
 
   private float accuracyToFloat(@GeolocationAccuracy int accuracy) {
