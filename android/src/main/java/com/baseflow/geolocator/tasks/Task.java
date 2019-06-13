@@ -8,6 +8,8 @@ public abstract class Task<TOptions> {
     private final UUID mTaskID;
     private final TaskContext<TOptions> mTaskContext;
 
+    private boolean stopped = false;
+
     Task(TaskContext<TOptions> context) {
         mTaskID = UUID.randomUUID();
         mTaskContext = context;
@@ -29,5 +31,11 @@ public abstract class Task<TOptions> {
         if(completionListener != null) {
             completionListener.onCompletion(getTaskID());
         }
+
+        stopped = true;
+    }
+
+    public boolean isStopped() {
+        return stopped;
     }
 }
