@@ -63,7 +63,7 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(
       IconData icon, TabItem tabItem) {
-    final String text = tabItem.toString().split('.').last;
+    final String text = _title(tabItem);
     final Color color =
         _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
 
@@ -104,5 +104,20 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
     setState(() {
       _currentItem = selectedTabItem;
     });
+  }
+
+  String _title(TabItem item) {
+    switch (item) {
+      case TabItem.singleLocation:
+        return 'Single';
+      case TabItem.singleFusedLocation:
+        return 'Single (Fused)';
+      case TabItem.locationStream:
+        return 'Stream';
+      case TabItem.distance:
+        return 'Distance';
+      default:
+        throw 'Unknown: $item';
+    }
   }
 }
