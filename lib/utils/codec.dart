@@ -8,6 +8,7 @@ class Codec {
         'distanceFilter': locationOptions.distanceFilter,
         'forceAndroidLocationManager':
             locationOptions.forceAndroidLocationManager,
-        'timeInterval': locationOptions.timeInterval
+        'timeInterval': locationOptions.timeInterval,
+        'timeout': locationOptions.timeout,
       };
 }
