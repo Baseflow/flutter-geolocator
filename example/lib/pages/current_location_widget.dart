@@ -71,17 +71,11 @@ class _LocationState extends State<CurrentLocationWidget> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> _initCurrentLocation() async {
-    // This timeout is managed by the Geolocator plugin internally.
-    // The FusedLocationProvider in Android will account for accurate & quick readings - therefore timeouts are not needed.
-    // If Geolocator uses the raw GPS sensor though, no data can be returned until the phone has an GPS signal (line of sight with the satellites).
-    final Duration timeout =
-        widget.androidFusedLocation ? Duration.zero : Duration(seconds: 5);
+  _initCurrentLocation() {
     Geolocator()
       ..forceAndroidLocationManager = !widget.androidFusedLocation
       ..getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-        timeout: timeout,
       ).then((position) {
         if (mounted) {
           setState(() => _currentPosition = position);
