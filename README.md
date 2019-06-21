@@ -28,6 +28,27 @@ dependencies:
   geolocator: '^5.0.0'
 ```
 
+> **NOTE:** As of version 3.0.0 the geolocator plugin switched to the AndroidX version of the Android Support Libraries. This means you need to make sure your Android project is also upgraded to support AndroidX. Detailed instructions can be found [here](https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility). 
+>
+>The TL;DR version is:
+>
+>1. Add the following to your "gradle.properties" file:
+>
+>```
+>android.useAndroidX=true
+>android.enableJetifier=true
+>```
+>2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 28:
+>
+>```
+>android {
+>  compileSdkVersion 28
+>
+>  ...
+>}
+>```
+>3. Make sure you replace all the `android.` dependencies to their AndroidX counterparts (a full list can be found here: https://developer.android.com/jetpack/androidx/migrate).
+
 ## API
 
 ### Geolocation
