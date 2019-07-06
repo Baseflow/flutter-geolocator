@@ -188,12 +188,11 @@ class Geolocator {
   Future<PermissionStatus> _getLocationPermission(
       LocationPermissionLevel locationPermissionLevel) async {
     final PermissionStatus permission = await LocationPermissions()
-        .checkPermissionStatus(level: LocationPermissionLevel.location);
+        .checkPermissionStatus(level: locationPermissionLevel);
 
     if (permission != PermissionStatus.granted) {
       final PermissionStatus permissionStatus = await LocationPermissions()
-          .requestPermissions(
-              permissionLevel: LocationPermissionLevel.location);
+          .requestPermissions(permissionLevel: locationPermissionLevel);
 
       return permissionStatus;
     } else {
