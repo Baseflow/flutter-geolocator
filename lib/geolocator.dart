@@ -8,10 +8,15 @@ import 'package:meta/meta.dart';
 import 'package:location_permissions/location_permissions.dart';
 
 part 'models/geolocation_enums.dart';
+
 part 'models/location_accuracy.dart';
+
 part 'models/location_options.dart';
+
 part 'models/placemark.dart';
+
 part 'models/position.dart';
+
 part 'utils/codec.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
@@ -80,8 +85,11 @@ class Geolocator {
   ///
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
   Future<Position> getCurrentPosition(
-      {LocationAccuracy desiredAccuracy = LocationAccuracy.best}) async {
-    final PermissionStatus permission = await _getLocationPermission();
+      {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+      GeolocationPermission locationPermissionLevel =
+          GeolocationPermission.location}) async {
+    final PermissionStatus permission = await _getLocationPermission(
+        toPermissionLevel(locationPermissionLevel));
 
     if (permission == PermissionStatus.granted) {
       final LocationOptions locationOptions = LocationOptions(
@@ -111,8 +119,11 @@ class Geolocator {
   /// supplied [desiredAccuracy]. On iOS this parameter is ignored.
   /// When no position is available, null is returned.
   Future<Position> getLastKnownPosition(
-      {LocationAccuracy desiredAccuracy = LocationAccuracy.best}) async {
-    final PermissionStatus permission = await _getLocationPermission();
+      {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+      GeolocationPermission locationPermissionLevel =
+          GeolocationPermission.location}) async {
+    final PermissionStatus permission = await _getLocationPermission(
+        toPermissionLevel(locationPermissionLevel));
 
     if (permission == PermissionStatus.granted) {
       final LocationOptions locationOptions = LocationOptions(
@@ -156,8 +167,11 @@ class Geolocator {
   /// instance [LocationOptions] class. When you don't supply any specific
   /// options, default values will be used for each setting.
   Stream<Position> getPositionStream(
-      [LocationOptions locationOptions = const LocationOptions()]) async* {
-    final PermissionStatus permission = await _getLocationPermission();
+      [LocationOptions locationOptions = const LocationOptions(),
+      GeolocationPermission locationPermissionLevel =
+          GeolocationPermission.location]) async* {
+    final PermissionStatus permission = await _getLocationPermission(
+        toPermissionLevel(locationPermissionLevel));
 
     if (permission == PermissionStatus.granted) {
       _onPositionChanged ??= _eventChannel
@@ -171,14 +185,14 @@ class Geolocator {
     }
   }
 
-  Future<PermissionStatus> _getLocationPermission() async {
+  Future<PermissionStatus> _getLocationPermission(
+      LocationPermissionLevel locationPermissionLevel) async {
     final PermissionStatus permission = await LocationPermissions()
-        .checkPermissionStatus(level: LocationPermissionLevel.location);
+        .checkPermissionStatus(level: locationPermissionLevel);
 
     if (permission != PermissionStatus.granted) {
       final PermissionStatus permissionStatus = await LocationPermissions()
-          .requestPermissions(
-              permissionLevel: LocationPermissionLevel.location);
+          .requestPermissions(permissionLevel: locationPermissionLevel);
 
       return permissionStatus;
     } else {

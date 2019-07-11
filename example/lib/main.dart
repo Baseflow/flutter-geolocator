@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'pages/calculate_distance_widget.dart';
@@ -6,7 +8,7 @@ import 'pages/location_stream_widget.dart';
 
 void main() => runApp(GeolocatorExampleApp());
 
-enum TabItem { singleLocation, locationStream, distance }
+enum TabItem { singleLocation, singleFusedLocation, locationStream, distance }
 
 class GeolocatorExampleApp extends StatefulWidget {
   @override
@@ -35,9 +37,11 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
         return LocationStreamWidget();
       case TabItem.distance:
         return CalculateDistanceWidget();
+      case TabItem.singleFusedLocation:
+        return CurrentLocationWidget(androidFusedLocation: true);
       case TabItem.singleLocation:
       default:
-        return CurrentLocationWidget();
+        return CurrentLocationWidget(androidFusedLocation: false);
     }
   }
 
@@ -47,6 +51,9 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
       items: <BottomNavigationBarItem>[
         _buildBottomNavigationBarItem(
             Icons.location_on, TabItem.singleLocation),
+        if (Platform.isAndroid)
+          _buildBottomNavigationBarItem(
+              Icons.location_on, TabItem.singleFusedLocation),
         _buildBottomNavigationBarItem(Icons.clear_all, TabItem.locationStream),
         _buildBottomNavigationBarItem(Icons.redo, TabItem.distance),
       ],
@@ -56,7 +63,7 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(
       IconData icon, TabItem tabItem) {
-    final String text = tabItem.toString().split('.').last;
+    final String text = _title(tabItem);
     final Color color =
         _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
 
@@ -78,18 +85,39 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
     TabItem selectedTabItem;
 
     switch (index) {
+      case 0:
+        selectedTabItem = TabItem.singleLocation;
+        break;
       case 1:
-        selectedTabItem = TabItem.locationStream;
+        selectedTabItem = Platform.isAndroid
+            ? TabItem.singleFusedLocation
+            : TabItem.locationStream;
         break;
       case 2:
-        selectedTabItem = TabItem.distance;
+        selectedTabItem =
+            Platform.isAndroid ? TabItem.locationStream : TabItem.distance;
         break;
       default:
-        selectedTabItem = TabItem.singleLocation;
+        selectedTabItem = TabItem.distance;
     }
 
     setState(() {
       _currentItem = selectedTabItem;
     });
+  }
+
+  String _title(TabItem item) {
+    switch (item) {
+      case TabItem.singleLocation:
+        return 'Single';
+      case TabItem.singleFusedLocation:
+        return 'Single (Fused)';
+      case TabItem.locationStream:
+        return 'Stream';
+      case TabItem.distance:
+        return 'Distance';
+      default:
+        throw 'Unknown: $item';
+    }
   }
 }

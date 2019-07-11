@@ -1,3 +1,8 @@
+## [5.0.1]
+
+* Make sure the stream channel is closed when Android activity is destroyed;
+* Allow developers to specify the permission level they want to use when requesting permissions on iOS.
+
 ## [5.0.0]
 
 * Converted the iOS version from Swift to Objective-C, reducing the size of the final binary considerably, as well as solve some compatibility issues with other objective-c based plugins;
