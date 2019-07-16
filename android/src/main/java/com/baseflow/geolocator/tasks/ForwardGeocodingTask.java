@@ -41,7 +41,7 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
       @Override
       public void run() {
         try {
-          List<Address> addresses = geocoder.getFromLocationName(options.getAddressToLookup(), 1);
+          List<Address> addresses = geocoder.getFromLocationName(options.getAddressToLookup(), 5);
 
           if (addresses.size() > 0) {
             MainThreadDispatcher.dispatchSuccess(
