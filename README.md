@@ -25,8 +25,29 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^5.0.0'
+  geolocator: '^5.1.0'
 ```
+
+> **NOTE:** As of version 3.0.0 the geolocator plugin switched to the AndroidX version of the Android Support Libraries. This means you need to make sure your Android project is also upgraded to support AndroidX. Detailed instructions can be found [here](https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility). 
+>
+>The TL;DR version is:
+>
+>1. Add the following to your "gradle.properties" file:
+>
+>```
+>android.useAndroidX=true
+>android.enableJetifier=true
+>```
+>2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 28:
+>
+>```
+>android {
+>  compileSdkVersion 28
+>
+>  ...
+>}
+>```
+>3. Make sure you replace all the `android.` dependencies to their AndroidX counterparts (a full list can be found here: https://developer.android.com/jetpack/androidx/migrate).
 
 ## API
 
@@ -133,7 +154,7 @@ See also the [example](example/lib/main.dart) project for a complete implementat
 
 ### Android
 
-On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission to your Android Manifest. Todo so open the AndroidManifest.xml file and one of the following two lines as direct children of the `<manifest>` tag:
+On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission to your Android Manifest. To do so open the AndroidManifest.xml file (located under android/app/src/main) and add one of the following two lines as direct children of the `<manifest>` tag:
 
 ``` xml
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -144,7 +165,7 @@ On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS
 
 ### iOS
 
-On iOS you'll need to add the `NSLocationWhenInUseUsageDescription` to your Info.plist file in order to access the device's location. Simply open your Info.plist file and add the following:
+On iOS you'll need to add the `NSLocationWhenInUseUsageDescription` to your Info.plist file (located under ios/Runner/Base.lproj) in order to access the device's location. Simply open your Info.plist file and add the following:
 
 ``` xml
 <key>NSLocationWhenInUseUsageDescription</key>

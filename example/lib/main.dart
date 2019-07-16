@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator_example/pages/lookup_address_widget.dart';
 
 import 'pages/calculate_distance_widget.dart';
 import 'pages/current_location_widget.dart';
@@ -6,7 +9,13 @@ import 'pages/location_stream_widget.dart';
 
 void main() => runApp(GeolocatorExampleApp());
 
-enum TabItem { singleLocation, locationStream, distance }
+enum TabItem {
+  singleLocation,
+  singleFusedLocation,
+  locationStream,
+  distance,
+  geocode
+}
 
 class GeolocatorExampleApp extends StatefulWidget {
   @override
@@ -15,6 +24,13 @@ class GeolocatorExampleApp extends StatefulWidget {
 
 class BottomNavigationState extends State<GeolocatorExampleApp> {
   TabItem _currentItem = TabItem.singleLocation;
+  final List<TabItem> _bottomTabs = [
+    TabItem.singleLocation,
+    if (Platform.isAndroid) TabItem.singleFusedLocation,
+    TabItem.locationStream,
+    TabItem.distance,
+    TabItem.geocode,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -35,28 +51,30 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
         return LocationStreamWidget();
       case TabItem.distance:
         return CalculateDistanceWidget();
+      case TabItem.singleFusedLocation:
+        return CurrentLocationWidget(androidFusedLocation: true);
+      case TabItem.geocode:
+        return LookupAddressWidget();
       case TabItem.singleLocation:
       default:
-        return CurrentLocationWidget();
+        return CurrentLocationWidget(androidFusedLocation: false);
     }
   }
 
   Widget _buildBottomNavigationBar() {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      items: <BottomNavigationBarItem>[
-        _buildBottomNavigationBarItem(
-            Icons.location_on, TabItem.singleLocation),
-        _buildBottomNavigationBarItem(Icons.clear_all, TabItem.locationStream),
-        _buildBottomNavigationBarItem(Icons.redo, TabItem.distance),
-      ],
+      items: _bottomTabs
+          .map((tabItem) =>
+              _buildBottomNavigationBarItem(_icon(tabItem), tabItem))
+          .toList(),
       onTap: _onSelectTab,
     );
   }
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(
       IconData icon, TabItem tabItem) {
-    final String text = tabItem.toString().split('.').last;
+    final String text = _title(tabItem);
     final Color color =
         _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
 
@@ -75,21 +93,44 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
   }
 
   void _onSelectTab(int index) {
-    TabItem selectedTabItem;
-
-    switch (index) {
-      case 1:
-        selectedTabItem = TabItem.locationStream;
-        break;
-      case 2:
-        selectedTabItem = TabItem.distance;
-        break;
-      default:
-        selectedTabItem = TabItem.singleLocation;
-    }
+    TabItem selectedTabItem = _bottomTabs[index];
 
     setState(() {
       _currentItem = selectedTabItem;
     });
+  }
+
+  String _title(TabItem item) {
+    switch (item) {
+      case TabItem.singleLocation:
+        return 'Single';
+      case TabItem.singleFusedLocation:
+        return 'Single (Fused)';
+      case TabItem.locationStream:
+        return 'Stream';
+      case TabItem.distance:
+        return 'Distance';
+      case TabItem.geocode:
+        return 'Geocode';
+      default:
+        throw 'Unknown: $item';
+    }
+  }
+
+  IconData _icon(TabItem item) {
+    switch (item) {
+      case TabItem.singleLocation:
+        return Icons.location_on;
+      case TabItem.singleFusedLocation:
+        return Icons.location_on;
+      case TabItem.locationStream:
+        return Icons.clear_all;
+      case TabItem.distance:
+        return Icons.redo;
+      case TabItem.geocode:
+        return Icons.compare_arrows;
+      default:
+        throw 'Unknown: $item';
+    }
   }
 }
