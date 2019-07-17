@@ -1,3 +1,11 @@
+## [5.1.0]
+
+* Change geocoding results on Android to return multiple records;
+* Extended the example application;
+* Use the correct permission level enumeration;
+# Added documentation regarding AndroidX support.
+
+
 ## [5.0.1]
 
 * Make sure the stream channel is closed when Android activity is destroyed;
