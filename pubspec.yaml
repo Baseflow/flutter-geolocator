@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  meta: ^1.1.6
+  meta: ^1.1.7
 
   google_api_availability: ^2.0.1
   location_permissions: ^2.0.1
