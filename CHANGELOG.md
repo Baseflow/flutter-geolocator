@@ -1,3 +1,7 @@
+## [5.1.1]
+
+* Updated dependency on 'meta' plugin to latest version.
+
 ## [5.1.0]
 
 * Change geocoding results on Android to return multiple records;
