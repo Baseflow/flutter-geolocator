@@ -1,3 +1,7 @@
+## [5.1.1+1]
+
+* Reverted the update of the 'meta' plugin as Flutter SDK depends on old version.
+
 ## [5.1.1]
 
 * Updated dependency on 'meta' plugin to latest version.
