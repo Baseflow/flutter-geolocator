@@ -278,6 +278,8 @@ class Geolocator {
         'endLongitude': endLongitude
       }).then<double>((dynamic result) => result);
 
+  /// Returns the initial bearing between two points
+  /// The initial bearing will most of the time be different than the end bearing, see [https://www.movable-type.co.uk/scripts/latlong.html#bearing]
   Future<double> bearingBetween(double startLatitude, double startLongitude,
       double endLatitude, double endLongitude) {
 
