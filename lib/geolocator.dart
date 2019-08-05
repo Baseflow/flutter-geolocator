@@ -1,11 +1,13 @@
 library geolocator;
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:meta/meta.dart';
 import 'package:location_permissions/location_permissions.dart';
+import 'package:vector_math/vector_math.dart';
 
 part 'models/geolocation_enums.dart';
 
@@ -275,4 +277,25 @@ class Geolocator {
         'endLatitude': endLatitude,
         'endLongitude': endLongitude
       }).then<double>((dynamic result) => result);
+
+  /// Returns the initial bearing between two points
+  /// The initial bearing will most of the time be different than the end bearing, see [https://www.movable-type.co.uk/scripts/latlong.html#bearing]
+  Future<double> bearingBetween(double startLatitude, double startLongitude,
+      double endLatitude, double endLongitude) {
+
+    var startLongtitudeRadians = radians(startLongitude);
+    var startLatitudeRadians = radians(startLatitude);
+
+    var endLongtitudeRadians = radians(endLongitude);
+    var endLattitudeRadians = radians(endLatitude);
+
+    var y = sin(endLongtitudeRadians - startLongtitudeRadians) *
+        cos(endLattitudeRadians);
+    var x = cos(startLatitudeRadians) * sin(endLattitudeRadians) -
+        sin(startLatitudeRadians) *
+            cos(endLattitudeRadians) *
+            cos(endLongtitudeRadians - startLongtitudeRadians);
+
+    return Future.value(degrees(atan2(y, x)));
+  }
 }
