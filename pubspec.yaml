@@ -15,6 +15,7 @@ dependencies:
 
   google_api_availability: ^2.0.1
   location_permissions: ^2.0.1
+  vector_math: ^2.0.8
 
 dev_dependencies:
   flutter_test:
