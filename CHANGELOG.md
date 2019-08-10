@@ -1,3 +1,7 @@
+## [5.1.2]
+
+* Added new method to calculate bearing given two points.
+
 ## [5.1.1+1]
 
 * Reverted the update of the 'meta' plugin as Flutter SDK depends on old version.
