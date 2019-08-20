@@ -1,17 +1,24 @@
 library geolocator;
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:meta/meta.dart';
 import 'package:location_permissions/location_permissions.dart';
+import 'package:vector_math/vector_math.dart';
 
 part 'models/geolocation_enums.dart';
+
 part 'models/location_accuracy.dart';
+
 part 'models/location_options.dart';
+
 part 'models/placemark.dart';
+
 part 'models/position.dart';
+
 part 'utils/codec.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
@@ -81,15 +88,15 @@ class Geolocator {
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    LocationPermissionLevel locationPermissionLevel =
-        LocationPermissionLevel.location,
+    GeolocationPermission locationPermissionLevel =
+        GeolocationPermission.location,
 
     /// If specified, [timeout] will be attached to the returned Future using [Future.timeout].
     /// If the App runs into the timeout, you will receive a TimeoutException.
     Duration timeout,
   }) async {
-    final PermissionStatus permission =
-        await _getLocationPermission(locationPermissionLevel);
+    final PermissionStatus permission = await _getLocationPermission(
+        toPermissionLevel(locationPermissionLevel));
 
     if (permission != PermissionStatus.granted) {
       _handleInvalidPermissions(permission);
@@ -130,15 +137,15 @@ class Geolocator {
   /// When no position is available, null is returned.
   Future<Position> getLastKnownPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    LocationPermissionLevel locationPermissionLevel =
-        LocationPermissionLevel.location,
+    GeolocationPermission locationPermissionLevel =
+        GeolocationPermission.location,
 
     /// If specified, [timeout] will be attached to the returned Future using [Future.timeout].
     /// If the App runs into the timeout, you will receive a TimeoutException.
     Duration timeout,
   }) async {
-    final PermissionStatus permission =
-        await _getLocationPermission(locationPermissionLevel);
+    final PermissionStatus permission = await _getLocationPermission(
+        toPermissionLevel(locationPermissionLevel));
 
     if (permission != PermissionStatus.granted) {
       _handleInvalidPermissions(permission);
@@ -194,10 +201,10 @@ class Geolocator {
   /// options, default values will be used for each setting.
   Stream<Position> getPositionStream(
       [LocationOptions locationOptions = const LocationOptions(),
-      LocationPermissionLevel locationPermissionLevel =
-          LocationPermissionLevel.location]) async* {
-    final PermissionStatus permission =
-        await _getLocationPermission(locationPermissionLevel);
+      GeolocationPermission locationPermissionLevel =
+          GeolocationPermission.location]) async* {
+    final PermissionStatus permission = await _getLocationPermission(
+        toPermissionLevel(locationPermissionLevel));
 
     if (permission == PermissionStatus.granted) {
       _onPositionChanged ??= _eventChannel
@@ -214,12 +221,11 @@ class Geolocator {
   Future<PermissionStatus> _getLocationPermission(
       LocationPermissionLevel locationPermissionLevel) async {
     final PermissionStatus permission = await LocationPermissions()
-        .checkPermissionStatus(level: LocationPermissionLevel.location);
+        .checkPermissionStatus(level: locationPermissionLevel);
 
     if (permission != PermissionStatus.granted) {
       final PermissionStatus permissionStatus = await LocationPermissions()
-          .requestPermissions(
-              permissionLevel: LocationPermissionLevel.location);
+          .requestPermissions(permissionLevel: locationPermissionLevel);
 
       return permissionStatus;
     } else {
@@ -309,5 +315,25 @@ class Geolocator {
 
   Future<bool> _stopTask(String taskID) {
     return _methodChannel.invokeMethod<bool>('_stopTask', taskID);
+  }
+
+  /// Returns the initial bearing between two points
+  /// The initial bearing will most of the time be different than the end bearing, see [https://www.movable-type.co.uk/scripts/latlong.html#bearing]
+  Future<double> bearingBetween(double startLatitude, double startLongitude,
+      double endLatitude, double endLongitude) {
+    var startLongtitudeRadians = radians(startLongitude);
+    var startLatitudeRadians = radians(startLatitude);
+
+    var endLongtitudeRadians = radians(endLongitude);
+    var endLattitudeRadians = radians(endLatitude);
+
+    var y = sin(endLongtitudeRadians - startLongtitudeRadians) *
+        cos(endLattitudeRadians);
+    var x = cos(startLatitudeRadians) * sin(endLattitudeRadians) -
+        sin(startLatitudeRadians) *
+            cos(endLattitudeRadians) *
+            cos(endLongtitudeRadians - startLongtitudeRadians);
+
+    return Future.value(degrees(atan2(y, x)));
   }
 }
