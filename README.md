@@ -6,8 +6,8 @@ A Flutter geolocation plugin which provides easy access to the platform specific
 
 Branch  | Build Status 
 ------- | ------------
-develop | ![Build Status](https://app.bitrise.io/app/f1a8874632302ca9/status.svg?token=ZPO4BWcxWAUQMY5UvpxFPw&branch=develop)
-master  | ![Build Status](https://app.bitrise.io/app/f1a8874632302ca9/status.svg?token=ZPO4BWcxWAUQMY5UvpxFPw&branch=master)
+develop | [![Build Status](https://app.bitrise.io/app/b0e244f2c82e1678/status.svg?token=x6sBRHLW05ymIpW-dVJlgQ&branch=develop)](https://app.bitrise.io/app/b0e244f2c82e1678)
+master  | [![Build Status](https://app.bitrise.io/app/b0e244f2c82e1678/status.svg?token=x6sBRHLW05ymIpW-dVJlgQ&branch=master)](https://app.bitrise.io/app/b0e244f2c82e1678)
 
 ## Features
 
