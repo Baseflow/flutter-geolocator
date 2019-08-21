@@ -282,7 +282,6 @@ class Geolocator {
   /// The initial bearing will most of the time be different than the end bearing, see [https://www.movable-type.co.uk/scripts/latlong.html#bearing]
   Future<double> bearingBetween(double startLatitude, double startLongitude,
       double endLatitude, double endLongitude) {
-
     var startLongtitudeRadians = radians(startLongitude);
     var startLatitudeRadians = radians(startLatitude);
 
