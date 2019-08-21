@@ -6,8 +6,8 @@ A Flutter geolocation plugin which provides easy access to the platform specific
 
 Branch  | Build Status 
 ------- | ------------
-develop | ![Build Status](https://app.bitrise.io/app/f1a8874632302ca9/status.svg?token=ZPO4BWcxWAUQMY5UvpxFPw&branch=develop)
-master  | ![Build Status](https://app.bitrise.io/app/f1a8874632302ca9/status.svg?token=ZPO4BWcxWAUQMY5UvpxFPw&branch=master)
+develop | [![Build Status](https://app.bitrise.io/app/b0e244f2c82e1678/status.svg?token=x6sBRHLW05ymIpW-dVJlgQ&branch=develop)](https://app.bitrise.io/app/b0e244f2c82e1678)
+master  | [![Build Status](https://app.bitrise.io/app/b0e244f2c82e1678/status.svg?token=x6sBRHLW05ymIpW-dVJlgQ&branch=master)](https://app.bitrise.io/app/b0e244f2c82e1678)
 
 ## Features
 
@@ -25,7 +25,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: '^5.1.1'
+  geolocator: ^5.1.3
 ```
 
 > **NOTE:** As of version 3.0.0 the geolocator plugin switched to the AndroidX version of the Android Support Libraries. This means you need to make sure your Android project is also upgraded to support AndroidX. Detailed instructions can be found [here](https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility). 

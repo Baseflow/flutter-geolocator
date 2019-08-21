@@ -23,7 +23,7 @@ class LocationAccuracy {
   /// 100m on Android
   static const LocationAccuracy best = LocationAccuracy._(4);
 
-  /// Location is accuracy is optimized for navigation on iOS and matches the
+  /// Location accuracy is optimized for navigation on iOS and matches the
   /// [LocationAccuracy.best] on Android
   static const LocationAccuracy bestForNavigation = LocationAccuracy._(5);
 

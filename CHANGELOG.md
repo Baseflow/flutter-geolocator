@@ -1,3 +1,9 @@
+## [5.1.3]
+
+* Added integration with public Bitrise CI project;
+* Fixed two analysis warnings;
+* Fixed a spelling error in docs.
+
 ## [5.1.2]
 
 * Added new method to calculate bearing given two points.
