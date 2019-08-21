@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../common_widgets/placeholder_widget.dart';
@@ -47,34 +46,40 @@ class _LocationState extends State<CurrentLocationWidget> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> _initLastKnownLocation() async {
-    Geolocator()
-      ..forceAndroidLocationManager = !widget.androidFusedLocation
-      ..getLastKnownPosition(
-        desiredAccuracy: LocationAccuracy.best,
-        timeout: Duration(seconds: 5),
-      ).then((position) {
-        if (mounted) {
-          setState(() => _lastKnownPosition = position);
-        }
-      }).catchError((e) {
-        //
-      });
+    final geolocator = Geolocator()
+      ..forceAndroidLocationManager = !widget.androidFusedLocation;
+
+    await geolocator
+        .getLastKnownPosition(
+      desiredAccuracy: LocationAccuracy.best,
+      timeout: Duration(seconds: 5),
+    )
+        .then((position) {
+      if (mounted) {
+        setState(() => _lastKnownPosition = position);
+      }
+    }).catchError((e) {
+      //
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> _initCurrentLocation() async {
-    Geolocator()
-      ..forceAndroidLocationManager = !widget.androidFusedLocation
-      ..getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-        timeout: Duration(seconds: 5),
-      ).then((position) {
-        if (mounted) {
-          setState(() => _currentPosition = position);
-        }
-      }).catchError((e) {
-        //
-      });
+    final geolocator = Geolocator()
+      ..forceAndroidLocationManager = !widget.androidFusedLocation;
+
+    await geolocator
+        .getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+      timeout: Duration(seconds: 5),
+    )
+        .then((position) {
+      if (mounted) {
+        setState(() => _currentPosition = position);
+      }
+    }).catchError((e) {
+      //
+    });
   }
 
   @override
