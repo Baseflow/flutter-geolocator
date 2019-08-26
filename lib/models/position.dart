@@ -114,4 +114,15 @@ class Position {
         speed: positionMap['speed'] ?? 0.0,
         speedAccuracy: positionMap['speed_accuracy'] ?? 0.0);
   }
+  Map<String, dynamic> toJson() => {
+    'longitude': longitude,
+    'latitude': latitude,
+    'timestamp': timestamp,
+    'mocked': mocked,
+    'accuracy': accuracy,
+    'altitude': altitude,
+    'heading': heading,
+    'speed': speed,
+    'speedAccuracy': speedAccuracy,
+  };
 }
