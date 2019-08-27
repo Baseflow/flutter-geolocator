@@ -71,17 +71,17 @@ class Position {
   }
 
   /// Converts a collection of [Map] objects into a collection of [Position] objects.
-  static List<Position> _fromMaps(dynamic message) {
+  static List<Position> fromMaps(dynamic message) {
     if (message == null) {
       throw ArgumentError('The parameter \'message\' should not be null.');
     }
 
-    final List<Position> list = message.map<Position>(_fromMap).toList();
+    final List<Position> list = message.map<Position>(fromMap).toList();
     return list;
   }
 
   /// Converts the supplied [Map] to an instance of the [Position] class.
-  static Position _fromMap(dynamic message) {
+  static Position fromMap(dynamic message) {
     if (message == null) {
       throw ArgumentError('The parameter \'message\' should not be null.');
     }
@@ -114,6 +114,7 @@ class Position {
         speed: positionMap['speed'] ?? 0.0,
         speedAccuracy: positionMap['speed_accuracy'] ?? 0.0);
   }
+
   Map<String, dynamic> toJson() => {
     'longitude': longitude,
     'latitude': latitude,
@@ -125,4 +126,5 @@ class Position {
     'speed': speed,
     'speedAccuracy': speedAccuracy,
   };
+
 }
