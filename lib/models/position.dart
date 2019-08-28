@@ -118,7 +118,7 @@ class Position {
   Map<String, dynamic> toJson() => {
     'longitude': longitude,
     'latitude': latitude,
-    'timestamp': timestamp,
+    'timestamp': timestamp.millisecondsSinceEpoch,
     'mocked': mocked,
     'accuracy': accuracy,
     'altitude': altitude,
