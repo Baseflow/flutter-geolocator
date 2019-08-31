@@ -104,7 +104,7 @@ class Geolocator {
               Codec.encodeLocationOptions(locationOptions));
 
       try {
-        return Position._fromMap(positionMap);
+        return Position.fromMap(positionMap);
       } on ArgumentError {
         return null;
       }
@@ -138,7 +138,7 @@ class Geolocator {
               Codec.encodeLocationOptions(locationOptions));
 
       try {
-        return Position._fromMap(positionMap);
+        return Position.fromMap(positionMap);
       } on ArgumentError {
         return null;
       }
@@ -179,7 +179,7 @@ class Geolocator {
       _onPositionChanged ??= _eventChannel
           .receiveBroadcastStream(Codec.encodeLocationOptions(locationOptions))
           .map<Position>((dynamic element) =>
-              Position._fromMap(element.cast<String, dynamic>()));
+              Position.fromMap(element.cast<String, dynamic>()));
 
       yield* _onPositionChanged;
     } else {
@@ -229,7 +229,7 @@ class Geolocator {
 
     final List<dynamic> placemarks =
         await _methodChannel.invokeMethod('placemarkFromAddress', parameters);
-    return Placemark._fromMaps(placemarks);
+    return Placemark.fromMaps(placemarks);
   }
 
   /// Returns a list of [Placemark] instances found for the supplied coordinates.
@@ -257,7 +257,7 @@ class Geolocator {
         'placemarkFromCoordinates', parameters);
 
     try {
-      return Placemark._fromMaps(placemarks);
+      return Placemark.fromMaps(placemarks);
     } on ArgumentError {
       return null;
     }
