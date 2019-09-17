@@ -62,17 +62,17 @@ class Placemark {
   final Position position;
 
   /// Converts a list of [Map] instances to a list of [Placemark] instances.
-  static List<Placemark> _fromMaps(dynamic message) {
+  static List<Placemark> fromMaps(dynamic message) {
     if (message == null) {
       throw ArgumentError('The parameter \'message\' should not be null.');
     }
 
-    final List<Placemark> list = message.map<Placemark>(_fromMap).toList();
+    final List<Placemark> list = message.map<Placemark>(fromMap).toList();
     return list;
   }
 
   /// Converts the supplied [Map] to an instance of the [Placemark] class.
-  static Placemark _fromMap(dynamic message) {
+  static Placemark fromMap(dynamic message) {
     if (message == null) {
       throw ArgumentError('The parameter \'message\' should not be null.');
     }
@@ -90,7 +90,22 @@ class Placemark {
       subLocality: placemarkMap['subLocality'] ?? '',
       thoroughfare: placemarkMap['thoroughfare'] ?? '',
       subThoroughfare: placemarkMap['subThoroughfare'] ?? '',
-      position: Position._fromMap(placemarkMap['location']),
+      position: Position.fromMap(placemarkMap['location']),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'isoCountryCode': isoCountryCode,
+    'country': country,
+    'postalCode': postalCode,
+    'administrativeArea': administrativeArea,
+    'subAdministrativeArea': subAdministrativeArea,
+    'locality': locality,
+    'subLocality': subLocality,
+    'thoroughfare': thoroughfare,
+    'subThoroughfare': subThoroughfare,
+    'position': position
+  };
+
 }
