@@ -1,3 +1,7 @@
+## [5.1.3]
+
+* Added support for Android 10’s background location permission
+
 ## [5.1.2]
 
 * Added new method to calculate bearing given two points.
