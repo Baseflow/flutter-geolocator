@@ -95,17 +95,16 @@ class Placemark {
   }
 
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'isoCountryCode': isoCountryCode,
-    'country': country,
-    'postalCode': postalCode,
-    'administrativeArea': administrativeArea,
-    'subAdministrativeArea': subAdministrativeArea,
-    'locality': locality,
-    'subLocality': subLocality,
-    'thoroughfare': thoroughfare,
-    'subThoroughfare': subThoroughfare,
-    'position': position
-  };
-
+        'name': name,
+        'isoCountryCode': isoCountryCode,
+        'country': country,
+        'postalCode': postalCode,
+        'administrativeArea': administrativeArea,
+        'subAdministrativeArea': subAdministrativeArea,
+        'locality': locality,
+        'subLocality': subLocality,
+        'thoroughfare': thoroughfare,
+        'subThoroughfare': subThoroughfare,
+        'position': position
+      };
 }
