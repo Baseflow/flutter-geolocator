@@ -1,3 +1,8 @@
+## [5.1.4]
+
+* Added support for Android 10’s background location permission;
+* Return heading as part of the position on iOS.
+
 ## [5.1.3]
 
 * Added integration with public Bitrise CI project;

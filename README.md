@@ -28,6 +28,8 @@ dependencies:
   geolocator: ^5.1.3
 ```
 
+Paul Halliday wrote a nice introductory article on [getting the user's location using the Geolocator plugin](https://alligator.io/flutter/geolocator-plugin/). If you are new to the plugin this would be a great place to get started. 
+
 > **NOTE:** As of version 3.0.0 the geolocator plugin switched to the AndroidX version of the Android Support Libraries. This means you need to make sure your Android project is also upgraded to support AndroidX. Detailed instructions can be found [here](https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility). 
 >
 >The TL;DR version is:
