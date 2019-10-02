@@ -16,7 +16,7 @@
              @"altitude": @(self.altitude),
              @"accuracy": @(self.horizontalAccuracy),
              @"speed": @(self.speed),
-             @"speed_accuracy": @0.0,
+             @"speed_accuracy": @(self.course),
              };
 }
 
