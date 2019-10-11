@@ -19,7 +19,7 @@ master  | [![Build Status](https://app.bitrise.io/app/b0e244f2c82e1678/status.sv
 * Calculate the distance (in meters) between two geocoordinates;
 * Check the availability of Google Play services (on Android only).
 
-Note: The availability of the Google Play Services depends on your country. If your country doesn't support a connection with the Google Play Services, you need to try a VPN to establish a connection. 
+*Note*: The availability of the Google Play Services depends on your country. If your country doesn't support a connection with the Google Play Services, you need to try a VPN to establish a connection. 
 
 ## Usage
 
