@@ -27,7 +27,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: ^5.1.4+1
+  geolocator: ^5.1.4+2
 ```
 
 Paul Halliday wrote a nice introductory article on [getting the user's location using the Geolocator plugin](https://alligator.io/flutter/geolocator-plugin/). If you are new to the plugin this would be a great place to get started. 
