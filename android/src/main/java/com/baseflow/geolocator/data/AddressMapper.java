@@ -35,12 +35,12 @@ public class AddressMapper {
     placemark.put("subLocality", address.getSubLocality());
 
     if (address.hasLatitude() && address.hasLongitude()) {
-      Map<String, Double> locationMap = new HashMap<>();
+      Map<String, Double> positionMap = new HashMap<>();
 
-      locationMap.put("latitude", address.getLatitude());
-      locationMap.put("longitude", address.getLongitude());
+      positionMap.put("latitude", address.getLatitude());
+      positionMap.put("longitude", address.getLongitude());
 
-      placemark.put("location", locationMap);
+      placemark.put("position", positionMap);
     }
 
     return placemark;
