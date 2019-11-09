@@ -168,7 +168,8 @@ class PositionListItemState extends State<PositionListItem> {
     final String city = placemark.locality ?? '';
     final String state = placemark.administrativeArea ?? '';
     final String country = placemark.country ?? '';
+    final Position position = placemark.position;
 
-    return '$name, $city, $state, $country';
+    return '$name, $city, $state, $country\n$position';
   }
 }

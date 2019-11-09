@@ -90,7 +90,9 @@ class Placemark {
       subLocality: placemarkMap['subLocality'] ?? '',
       thoroughfare: placemarkMap['thoroughfare'] ?? '',
       subThoroughfare: placemarkMap['subThoroughfare'] ?? '',
-      position: Position.fromMap(placemarkMap['location']),
+      position: placemarkMap['position'] != null
+          ? Position.fromMap(placemarkMap['position'])
+          : null,
     );
   }
 

@@ -25,7 +25,7 @@
     
     
     if ([self location] != nil) {
-        dict[@"location"] = [[self location] toDictionary];
+        dict[@"position"] = [[self location] toDictionary];
     }
     
     return dict;
