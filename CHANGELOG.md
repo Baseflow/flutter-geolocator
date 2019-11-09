@@ -1,3 +1,7 @@
+## [5.1.5]
+
+* Android: Fixes bug where latitude and longitude are not returned as part of the placemark (thanks to @slightfood).
+
 ## [5.1.4+2]
 
 * Return the heading on iOS correctly.
