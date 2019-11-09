@@ -26,9 +26,9 @@ class _LookupAddressState extends State<LookupAddressWidget> {
       final Placemark pos = placemarks[0];
       final List<String> coords = placemarks
           .map((placemark) =>
-              pos.position.latitude.toString() +
+              pos.position?.latitude.toString() +
               ', ' +
-              pos.position.longitude.toString())
+              pos.position?.longitude.toString())
           .toList();
       setState(() {
         _placemarkCoords = coords;
