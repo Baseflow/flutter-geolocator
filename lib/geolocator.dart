@@ -10,37 +10,43 @@ import 'package:location_permissions/location_permissions.dart';
 import 'package:vector_math/vector_math.dart';
 
 part 'models/geolocation_enums.dart';
-
 part 'models/location_accuracy.dart';
-
 part 'models/location_options.dart';
-
 part 'models/placemark.dart';
-
 part 'models/position.dart';
-
 part 'utils/codec.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
 class Geolocator {
+  /// Constructs a singleton instance of [Geolocator].
+  ///
+  /// [Geolocator] is designed to work as a singleton.
+  /// When a second instance is created, the first instance will not be able to listen to the
+  /// EventChannel because it is overridden. Forcing the class to be a singleton class can prevent
+  /// misuse of creating a second instance from a programmer.
   factory Geolocator() {
-    if (_instance == null) {
-      const MethodChannel methodChannel =
-          MethodChannel('flutter.baseflow.com/geolocator/methods');
-      const EventChannel eventChannel =
-          EventChannel('flutter.baseflow.com/geolocator/events');
-      _instance = Geolocator.private(methodChannel, eventChannel);
+    if (_singleton == null) {
+      _singleton = Geolocator.private(LocationPermissions());
     }
-    return _instance;
+    return _singleton;
   }
 
   @visibleForTesting
-  Geolocator.private(this._methodChannel, this._eventChannel);
+  Geolocator.private(this._permissionHandler);
 
-  static Geolocator _instance;
+  static Geolocator _singleton;
 
-  final MethodChannel _methodChannel;
-  final EventChannel _eventChannel;
+  /// Exposed for testing purposes and should not be used by users of the plugin.
+  @visibleForTesting
+  static const MethodChannel methodChannel =
+      MethodChannel('flutter.baseflow.com/geolocator/methods');
+
+  /// Exposed for testing purposes and should not be used by users of the plugin.
+  @visibleForTesting
+  static const EventChannel eventChannel =
+      EventChannel('flutter.baseflow.com/geolocator/events');
+
+  final LocationPermissions _permissionHandler;
 
   Stream<Position> _onPositionChanged;
 
@@ -48,7 +54,7 @@ class Geolocator {
   Future<GeolocationStatus> checkGeolocationPermissionStatus(
       {GeolocationPermission locationPermission =
           GeolocationPermission.location}) async {
-    final PermissionStatus permissionStatus = await LocationPermissions()
+    final PermissionStatus permissionStatus = await _permissionHandler
         .checkPermissionStatus(level: toPermissionLevel(locationPermission));
 
     return fromPermissionStatus(permissionStatus);
@@ -57,7 +63,7 @@ class Geolocator {
   /// Returns a [bool] value indicating whether location services are enabled on the device.
   Future<bool> isLocationServiceEnabled() async {
     final ServiceStatus serviceStatus =
-        await LocationPermissions().checkServiceStatus();
+        await _permissionHandler.checkServiceStatus();
 
     return serviceStatus == ServiceStatus.enabled ? true : false;
   }
@@ -86,10 +92,11 @@ class Geolocator {
   /// Returns the current position taking the supplied [desiredAccuracy] into account.
   ///
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
-  Future<Position> getCurrentPosition(
-      {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-      GeolocationPermission locationPermissionLevel =
-          GeolocationPermission.location}) async {
+  Future<Position> getCurrentPosition({
+    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    GeolocationPermission locationPermissionLevel =
+        GeolocationPermission.location,
+  }) async {
     final PermissionStatus permission = await _getLocationPermission(
         toPermissionLevel(locationPermissionLevel));
 
@@ -100,7 +107,7 @@ class Geolocator {
           forceAndroidLocationManager:
               await _shouldForceAndroidLocationManager());
       final Map<dynamic, dynamic> positionMap =
-          await _methodChannel.invokeMethod('getCurrentPosition',
+          await methodChannel.invokeMethod('getCurrentPosition',
               Codec.encodeLocationOptions(locationOptions));
 
       try {
@@ -134,7 +141,7 @@ class Geolocator {
           forceAndroidLocationManager:
               await _shouldForceAndroidLocationManager());
       final Map<dynamic, dynamic> positionMap =
-          await _methodChannel.invokeMethod('getLastKnownPosition',
+          await methodChannel.invokeMethod('getLastKnownPosition',
               Codec.encodeLocationOptions(locationOptions));
 
       try {
@@ -176,7 +183,7 @@ class Geolocator {
         toPermissionLevel(locationPermissionLevel));
 
     if (permission == PermissionStatus.granted) {
-      _onPositionChanged ??= _eventChannel
+      _onPositionChanged ??= eventChannel
           .receiveBroadcastStream(Codec.encodeLocationOptions(locationOptions))
           .map<Position>((dynamic element) =>
               Position.fromMap(element.cast<String, dynamic>()));
@@ -189,11 +196,11 @@ class Geolocator {
 
   Future<PermissionStatus> _getLocationPermission(
       LocationPermissionLevel locationPermissionLevel) async {
-    final PermissionStatus permission = await LocationPermissions()
+    final PermissionStatus permission = await _permissionHandler
         .checkPermissionStatus(level: locationPermissionLevel);
 
     if (permission != PermissionStatus.granted) {
-      final PermissionStatus permissionStatus = await LocationPermissions()
+      final PermissionStatus permissionStatus = await _permissionHandler
           .requestPermissions(permissionLevel: locationPermissionLevel);
 
       return permissionStatus;
@@ -228,7 +235,7 @@ class Geolocator {
     }
 
     final List<dynamic> placemarks =
-        await _methodChannel.invokeMethod('placemarkFromAddress', parameters);
+        await methodChannel.invokeMethod('placemarkFromAddress', parameters);
     return Placemark.fromMaps(placemarks);
   }
 
@@ -253,7 +260,7 @@ class Geolocator {
       parameters['localeIdentifier'] = localeIdentifier;
     }
 
-    final List<dynamic> placemarks = await _methodChannel.invokeMethod(
+    final List<dynamic> placemarks = await methodChannel.invokeMethod(
         'placemarkFromCoordinates', parameters);
 
     try {
@@ -271,7 +278,7 @@ class Geolocator {
   /// Returns the distance between the supplied coordinates in meters.
   Future<double> distanceBetween(double startLatitude, double startLongitude,
           double endLatitude, double endLongitude) =>
-      _methodChannel.invokeMethod<dynamic>('distanceBetween', <String, double>{
+      methodChannel.invokeMethod<dynamic>('distanceBetween', <String, double>{
         'startLatitude': startLatitude,
         'startLongitude': startLongitude,
         'endLatitude': endLatitude,
