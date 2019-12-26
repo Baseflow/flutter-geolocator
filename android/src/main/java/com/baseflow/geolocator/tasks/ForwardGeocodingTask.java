@@ -31,18 +31,32 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
     final ForwardGeocodingOptions options = getTaskContext().getOptions();
 
     final Geocoder geocoder = (options.getLocale() != null)
-        ? new Geocoder(mContext, options.getLocale())
-        : new Geocoder(mContext);
+            ? new Geocoder(mContext, options.getLocale())
+            : new Geocoder(mContext);
 
     final ChannelResponse channelResponse = getTaskContext().getResult();
 
     // let android handle the thread pool (uses shared serial executor)
+    execute(options, geocoder, channelResponse);
+  }
+
+  private void execute(final ForwardGeocodingOptions options, final Geocoder geocoder, final ChannelResponse channelResponse) {
     AsyncTask.execute(new Runnable() {
       @Override
       public void run() {
         try {
-          List<Address> addresses = geocoder.getFromLocationName(options.getAddressToLookup(), 5);
-
+          List<Address> addresses;
+          if (shouldCallWithBoundingBox(options)) {
+            addresses = geocoder.getFromLocationName(
+                    options.getAddressToLookup(),
+                    options.getMaxResults(),
+                    options.getLowerLeftLatitude(),
+                    options.getLowerLeftLongitude(),
+                    options.getUpperRightLatitude(),
+                    options.getUpperRightLongitude());
+          } else {
+            addresses = geocoder.getFromLocationName(options.getAddressToLookup(), options.getMaxResults());
+          }
           if (addresses.size() > 0) {
             MainThreadDispatcher.dispatchSuccess(
                     channelResponse,
@@ -66,5 +80,10 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
         }
       }
     });
+  }
+
+  private boolean shouldCallWithBoundingBox(ForwardGeocodingOptions options) {
+    return options.getLowerLeftLatitude() != null && options.getLowerLeftLongitude() != null
+            && options.getUpperRightLatitude() != null && options.getUpperRightLongitude() != null;
   }
 }

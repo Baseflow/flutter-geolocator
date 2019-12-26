@@ -26,9 +26,9 @@ class Geolocator {
   factory Geolocator() {
     if (_instance == null) {
       const MethodChannel methodChannel =
-          MethodChannel('flutter.baseflow.com/geolocator/methods');
+      MethodChannel('flutter.baseflow.com/geolocator/methods');
       const EventChannel eventChannel =
-          EventChannel('flutter.baseflow.com/geolocator/events');
+      EventChannel('flutter.baseflow.com/geolocator/events');
       _instance = Geolocator.private(methodChannel, eventChannel);
     }
     return _instance;
@@ -57,7 +57,7 @@ class Geolocator {
   /// Returns a [bool] value indicating whether location services are enabled on the device.
   Future<bool> isLocationServiceEnabled() async {
     final ServiceStatus serviceStatus =
-        await LocationPermissions().checkServiceStatus();
+    await LocationPermissions().checkServiceStatus();
 
     return serviceStatus == ServiceStatus.enabled ? true : false;
   }
@@ -88,8 +88,8 @@ class Geolocator {
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
   Future<Position> getCurrentPosition(
       {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-      GeolocationPermission locationPermissionLevel =
-          GeolocationPermission.location}) async {
+        GeolocationPermission locationPermissionLevel =
+            GeolocationPermission.location}) async {
     final PermissionStatus permission = await _getLocationPermission(
         toPermissionLevel(locationPermissionLevel));
 
@@ -98,10 +98,10 @@ class Geolocator {
           accuracy: desiredAccuracy,
           distanceFilter: 0,
           forceAndroidLocationManager:
-              await _shouldForceAndroidLocationManager());
+          await _shouldForceAndroidLocationManager());
       final Map<dynamic, dynamic> positionMap =
-          await _methodChannel.invokeMethod('getCurrentPosition',
-              Codec.encodeLocationOptions(locationOptions));
+      await _methodChannel.invokeMethod('getCurrentPosition',
+          Codec.encodeLocationOptions(locationOptions));
 
       try {
         return Position.fromMap(positionMap);
@@ -122,8 +122,8 @@ class Geolocator {
   /// When no position is available, null is returned.
   Future<Position> getLastKnownPosition(
       {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-      GeolocationPermission locationPermissionLevel =
-          GeolocationPermission.location}) async {
+        GeolocationPermission locationPermissionLevel =
+            GeolocationPermission.location}) async {
     final PermissionStatus permission = await _getLocationPermission(
         toPermissionLevel(locationPermissionLevel));
 
@@ -132,10 +132,10 @@ class Geolocator {
           accuracy: desiredAccuracy,
           distanceFilter: 0,
           forceAndroidLocationManager:
-              await _shouldForceAndroidLocationManager());
+          await _shouldForceAndroidLocationManager());
       final Map<dynamic, dynamic> positionMap =
-          await _methodChannel.invokeMethod('getLastKnownPosition',
-              Codec.encodeLocationOptions(locationOptions));
+      await _methodChannel.invokeMethod('getLastKnownPosition',
+          Codec.encodeLocationOptions(locationOptions));
 
       try {
         return Position.fromMap(positionMap);
@@ -170,8 +170,8 @@ class Geolocator {
   /// options, default values will be used for each setting.
   Stream<Position> getPositionStream(
       [LocationOptions locationOptions = const LocationOptions(),
-      GeolocationPermission locationPermissionLevel =
-          GeolocationPermission.location]) async* {
+        GeolocationPermission locationPermissionLevel =
+            GeolocationPermission.location]) async* {
     final PermissionStatus permission = await _getLocationPermission(
         toPermissionLevel(locationPermissionLevel));
 
@@ -179,7 +179,7 @@ class Geolocator {
       _onPositionChanged ??= _eventChannel
           .receiveBroadcastStream(Codec.encodeLocationOptions(locationOptions))
           .map<Position>((dynamic element) =>
-              Position.fromMap(element.cast<String, dynamic>()));
+          Position.fromMap(element.cast<String, dynamic>()));
 
       yield* _onPositionChanged;
     } else {
@@ -220,15 +220,26 @@ class Geolocator {
   /// Optionally you can specify a locale in which the results are returned.
   /// When not supplied the currently active locale of the device will be used.
   /// The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode] (eg. en_US or nl_NL).
-  Future<List<Placemark>> placemarkFromAddress(String address,
-      {String localeIdentifier}) async {
-    final Map<String, String> parameters = <String, String>{'address': address};
+  Future<List<Placemark>> placemarkFromAddress(
+      String address, {String localeIdentifier,
+        int maxResults,
+        double lowerLeftLatitude,
+        double lowerLeftLongitude,
+        double upperRightLatitude,
+        double upperRightLongitude,
+      }) async {
+    final Map<String, Object> parameters = <String, Object>{'address': address};
     if (localeIdentifier != null) {
       parameters['localeIdentifier'] = localeIdentifier;
     }
+    if (maxResults != null) parameters['maxResults'] = maxResults;
+    if (lowerLeftLatitude != null) parameters['lowerLeftLatitude'] = lowerLeftLatitude;
+    if (lowerLeftLongitude != null) parameters['lowerLeftLongitude'] = lowerLeftLongitude;
+    if (upperRightLatitude != null) parameters['upperRightLatitude'] = upperRightLatitude;
+    if (upperRightLongitude != null) parameters['upperRightLongitude'] = upperRightLongitude;
 
     final List<dynamic> placemarks =
-        await _methodChannel.invokeMethod('placemarkFromAddress', parameters);
+    await _methodChannel.invokeMethod('placemarkFromAddress', parameters);
     return Placemark.fromMaps(placemarks);
   }
 
@@ -270,7 +281,7 @@ class Geolocator {
 
   /// Returns the distance between the supplied coordinates in meters.
   Future<double> distanceBetween(double startLatitude, double startLongitude,
-          double endLatitude, double endLongitude) =>
+      double endLatitude, double endLongitude) =>
       _methodChannel.invokeMethod<dynamic>('distanceBetween', <String, double>{
         'startLatitude': startLatitude,
         'startLongitude': startLongitude,
