@@ -1,3 +1,11 @@
+## [5.1.5]
+
+* Android: Fixes bug where latitude and longitude are not returned as part of the placemark (thanks to @slightfood).
+
+## [5.1.4+2]
+
+* Return the heading on iOS correctly.
+
 ## [5.1.4+1]
 
 * Downgrade the "meta" package to version 1.7.0 since pub.dev static code analysis reports errors.

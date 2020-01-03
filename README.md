@@ -19,13 +19,15 @@ master  | [![Build Status](https://app.bitrise.io/app/b0e244f2c82e1678/status.sv
 * Calculate the distance (in meters) between two geocoordinates;
 * Check the availability of Google Play services (on Android only).
 
+**Note**: The availability of the Google Play Services depends on your country. If your country doesn't support a connection with the Google Play Services, you need to try a VPN to establish a connection. For more information about how to work with Google Play Services visit the following link: https://developers.google.com/android/guides/overview 
+
 ## Usage
 
 To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/). For example:
 
 ```yaml
 dependencies:
-  geolocator: ^5.1.4+1
+  geolocator: ^5.1.5
 ```
 
 Paul Halliday wrote a nice introductory article on [getting the user's location using the Geolocator plugin](https://alligator.io/flutter/geolocator-plugin/). If you are new to the plugin this would be a great place to get started. 
