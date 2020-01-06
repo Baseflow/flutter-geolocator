@@ -13,15 +13,15 @@ dependencies:
 
   meta: ^1.1.6
 
-  google_api_availability: ^2.0.1
-  location_permissions: ^2.0.3
+  google_api_availability: ^2.0.2
+  location_permissions: ^2.0.4
   vector_math: ^2.0.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter  
 
-  pedantic: ^1.7.0
+  pedantic: ^1.8.0+1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
