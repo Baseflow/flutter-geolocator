@@ -3,6 +3,7 @@ library geolocator;
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:meta/meta.dart';
@@ -37,13 +38,11 @@ class Geolocator {
   static Geolocator _singleton;
 
   /// Exposed for testing purposes and should not be used by users of the plugin.
-  @visibleForTesting
-  static const MethodChannel methodChannel =
+  static const MethodChannel _methodChannel =
       MethodChannel('flutter.baseflow.com/geolocator/methods');
 
   /// Exposed for testing purposes and should not be used by users of the plugin.
-  @visibleForTesting
-  static const EventChannel eventChannel =
+  static const EventChannel _eventChannel =
       EventChannel('flutter.baseflow.com/geolocator/events');
 
   final LocationPermissions _permissionHandler;
@@ -60,7 +59,7 @@ class Geolocator {
     return fromPermissionStatus(permissionStatus);
   }
 
-  /// Returns a [bool] value indicating whether location services are enabled on the device.
+  /// Returns a [Future] containing a [bool] value indicating whether location services are enabled on the device.
   Future<bool> isLocationServiceEnabled() async {
     final ServiceStatus serviceStatus =
         await _permissionHandler.checkServiceStatus();
@@ -107,7 +106,7 @@ class Geolocator {
           forceAndroidLocationManager:
               await _shouldForceAndroidLocationManager());
       final Map<dynamic, dynamic> positionMap =
-          await methodChannel.invokeMethod('getCurrentPosition',
+          await _methodChannel.invokeMethod('getCurrentPosition',
               Codec.encodeLocationOptions(locationOptions));
 
       try {
@@ -141,7 +140,7 @@ class Geolocator {
           forceAndroidLocationManager:
               await _shouldForceAndroidLocationManager());
       final Map<dynamic, dynamic> positionMap =
-          await methodChannel.invokeMethod('getLastKnownPosition',
+          await _methodChannel.invokeMethod('getLastKnownPosition',
               Codec.encodeLocationOptions(locationOptions));
 
       try {
@@ -183,7 +182,7 @@ class Geolocator {
         toPermissionLevel(locationPermissionLevel));
 
     if (permission == PermissionStatus.granted) {
-      _onPositionChanged ??= eventChannel
+      _onPositionChanged ??= _eventChannel
           .receiveBroadcastStream(Codec.encodeLocationOptions(locationOptions))
           .map<Position>((dynamic element) =>
               Position.fromMap(element.cast<String, dynamic>()));
@@ -235,7 +234,7 @@ class Geolocator {
     }
 
     final List<dynamic> placemarks =
-        await methodChannel.invokeMethod('placemarkFromAddress', parameters);
+        await _methodChannel.invokeMethod('placemarkFromAddress', parameters);
     return Placemark.fromMaps(placemarks);
   }
 
@@ -260,7 +259,7 @@ class Geolocator {
       parameters['localeIdentifier'] = localeIdentifier;
     }
 
-    final List<dynamic> placemarks = await methodChannel.invokeMethod(
+    final List<dynamic> placemarks = await _methodChannel.invokeMethod(
         'placemarkFromCoordinates', parameters);
 
     try {
@@ -278,7 +277,7 @@ class Geolocator {
   /// Returns the distance between the supplied coordinates in meters.
   Future<double> distanceBetween(double startLatitude, double startLongitude,
           double endLatitude, double endLongitude) =>
-      methodChannel.invokeMethod<dynamic>('distanceBetween', <String, double>{
+      _methodChannel.invokeMethod<dynamic>('distanceBetween', <String, double>{
         'startLatitude': startLatitude,
         'startLongitude': startLongitude,
         'endLatitude': endLatitude,
@@ -289,18 +288,18 @@ class Geolocator {
   /// The initial bearing will most of the time be different than the end bearing, see [https://www.movable-type.co.uk/scripts/latlong.html#bearing]
   Future<double> bearingBetween(double startLatitude, double startLongitude,
       double endLatitude, double endLongitude) {
-    var startLongtitudeRadians = radians(startLongitude);
+    var startLongitudeRadians = radians(startLongitude);
     var startLatitudeRadians = radians(startLatitude);
 
-    var endLongtitudeRadians = radians(endLongitude);
-    var endLattitudeRadians = radians(endLatitude);
+    var endLongitudeRadians = radians(endLongitude);
+    var endLatitudeRadians = radians(endLatitude);
 
-    var y = sin(endLongtitudeRadians - startLongtitudeRadians) *
-        cos(endLattitudeRadians);
-    var x = cos(startLatitudeRadians) * sin(endLattitudeRadians) -
+    var y = sin(endLongitudeRadians - startLongitudeRadians) *
+        cos(endLatitudeRadians);
+    var x = cos(startLatitudeRadians) * sin(endLatitudeRadians) -
         sin(startLatitudeRadians) *
-            cos(endLattitudeRadians) *
-            cos(endLongtitudeRadians - startLongtitudeRadians);
+            cos(endLatitudeRadians) *
+            cos(endLongitudeRadians - startLongitudeRadians);
 
     return Future.value(degrees(atan2(y, x)));
   }

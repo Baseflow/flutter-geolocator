@@ -66,6 +66,31 @@ class Position {
   final double speedAccuracy;
 
   @override
+  bool operator == (o) {
+    var areEqual = o is Position
+        && o.accuracy == accuracy
+        && o.altitude == altitude
+        && o.heading == heading
+        && o.latitude == latitude
+        && o.longitude == longitude
+        && o.speed == speed
+        && o.speedAccuracy == speedAccuracy
+        && o.timestamp == timestamp;
+
+    return areEqual;
+  }
+
+  @override
+  int get hashCode => accuracy.hashCode
+    ^ altitude.hashCode
+    ^ heading.hashCode
+    ^ latitude.hashCode
+    ^ longitude.hashCode
+    ^ speed.hashCode
+    ^ speedAccuracy.hashCode
+    ^ timestamp.hashCode;
+
+  @override
   String toString() {
     return 'Lat: $latitude, Long: $longitude';
   }
