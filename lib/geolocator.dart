@@ -230,18 +230,25 @@ class Geolocator {
     double upperRightLongitude,
   }) async {
     final Map<String, Object> parameters = <String, Object>{'address': address};
+    
     if (localeIdentifier != null) {
       parameters['localeIdentifier'] = localeIdentifier;
     }
-    if (maxResults != null) parameters['maxResults'] = maxResults;
-    if (lowerLeftLatitude != null)
+    if (maxResults != null) {
+      parameters['maxResults'] = maxResults;
+    }
+    if (lowerLeftLatitude != null) {
       parameters['lowerLeftLatitude'] = lowerLeftLatitude;
-    if (lowerLeftLongitude != null)
+    }
+    if (lowerLeftLongitude != null) {
       parameters['lowerLeftLongitude'] = lowerLeftLongitude;
-    if (upperRightLatitude != null)
+    }
+    if (upperRightLatitude != null) {
       parameters['upperRightLatitude'] = upperRightLatitude;
-    if (upperRightLongitude != null)
+    }
+    if (upperRightLongitude != null) {
       parameters['upperRightLongitude'] = upperRightLongitude;
+    }
 
     final List<dynamic> placemarks =
         await _methodChannel.invokeMethod('placemarkFromAddress', parameters);
