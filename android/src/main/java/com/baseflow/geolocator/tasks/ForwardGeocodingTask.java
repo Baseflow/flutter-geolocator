@@ -31,8 +31,8 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
     final ForwardGeocodingOptions options = getTaskContext().getOptions();
 
     final Geocoder geocoder = (options.getLocale() != null)
-            ? new Geocoder(mContext, options.getLocale())
-            : new Geocoder(mContext);
+        ? new Geocoder(mContext, options.getLocale())
+        : new Geocoder(mContext);
 
     final ChannelResponse channelResponse = getTaskContext().getResult();
 
