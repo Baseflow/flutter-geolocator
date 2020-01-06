@@ -48,33 +48,33 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
           List<Address> addresses;
           if (shouldCallWithBoundingBox(options)) {
             addresses = geocoder.getFromLocationName(
-                    options.getAddressToLookup(),
-                    options.getMaxResults(),
-                    options.getLowerLeftLatitude(),
-                    options.getLowerLeftLongitude(),
-                    options.getUpperRightLatitude(),
-                    options.getUpperRightLongitude());
+                options.getAddressToLookup(),
+                options.getMaxResults(),
+                options.getLowerLeftLatitude(),
+                options.getLowerLeftLongitude(),
+                options.getUpperRightLatitude(),
+                options.getUpperRightLongitude());
           } else {
             addresses = geocoder.getFromLocationName(options.getAddressToLookup(), options.getMaxResults());
           }
           if (addresses.size() > 0) {
             MainThreadDispatcher.dispatchSuccess(
-                    channelResponse,
-                    AddressMapper.toHashMapList(addresses));
+                channelResponse,
+                AddressMapper.toHashMapList(addresses));
           } else {
             MainThreadDispatcher.dispatchError(
-                    channelResponse,
-                    "ERROR_GEOCODNG_ADDRESSNOTFOUND",
-                    "Unable to find coordinates matching the supplied address.",
-                    null);
+                channelResponse,
+                "ERROR_GEOCODNG_ADDRESSNOTFOUND",
+                "Unable to find coordinates matching the supplied address.",
+                null);
           }
 
         } catch (IOException e) {
           MainThreadDispatcher.dispatchError(
-                  channelResponse,
-                  "ERROR_GEOCODING_ADDRESS",
-                  e.getLocalizedMessage(),
-                  null);
+              channelResponse,
+              "ERROR_GEOCODING_ADDRESS",
+              e.getLocalizedMessage(),
+              null);
         } finally {
           stopTask();
         }
@@ -83,7 +83,9 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
   }
 
   private boolean shouldCallWithBoundingBox(ForwardGeocodingOptions options) {
-    return options.getLowerLeftLatitude() != null && options.getLowerLeftLongitude() != null
-            && options.getUpperRightLatitude() != null && options.getUpperRightLongitude() != null;
+    return options.getLowerLeftLatitude() != null && 
+           options.getLowerLeftLongitude() != null && 
+           options.getUpperRightLatitude() != null && 
+           options.getUpperRightLongitude() != null;
   }
 }
