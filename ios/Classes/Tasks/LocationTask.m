@@ -59,7 +59,10 @@
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
     NSLog(@"%s", sel_getName(_cmd));
-    if([error.domain isEqualToString:kCLErrorDomain] && error.code == kCLErrorLocationUnknown) return;
+    if([error.domain isEqualToString:kCLErrorDomain] && error.code == kCLErrorLocationUnknown) {
+        return;
+    }
+    
     [[self context] resultHandler]([FlutterError errorWithCode:@"ERROR_UPDATING_LOCATION" message:error.localizedDescription details:@(error.code)]);
     [self stopTask];
 }
