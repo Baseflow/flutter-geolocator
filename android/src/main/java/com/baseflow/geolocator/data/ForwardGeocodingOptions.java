@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ForwardGeocodingOptions extends GeocodingOptions {
-  public static final String LOCALE_IDENTIFIER = "localeIdentifier";
+  private static final String LOCALE_IDENTIFIER = "localeIdentifier";
   private static final String ADDRESS = "address";
   private static final String MAX_RESULTS = "maxResults";
   private static final String LOWER_LEFT_LATITUDE = "lowerLeftLatitude";
@@ -14,29 +14,31 @@ public class ForwardGeocodingOptions extends GeocodingOptions {
   private static final String UPPER_RIGHT_LATITUDE = "upperRightLatitude";
   private static final String UPPER_RIGHT_LONGITUE = "upperRightLongitude";
   private static final int DEFAULT_MAX_RESULTS = 5;
+  
   private String mAddressToLookup;
-  private int maxResults;
-  private Double lowerLeftLatitude;
-  private Double lowerLeftLongitude;
-  private Double upperRightLatitude;
-  private Double upperRightLongitude;
+  private int mMaxResults;
+  private Double mLowerLeftLatitude;
+  private Double mLowerLeftLongitude;
+  private Double mUpperRightLatitude;
+  private Double mUpperRightLongitude;
 
-  public ForwardGeocodingOptions(Locale locale, String mAddressToLookup, int maxResults) {
+  private ForwardGeocodingOptions(Locale locale, String addressToLookup, int maxResults) {
     super(locale);
-    this.mAddressToLookup = mAddressToLookup;
-    this.maxResults = maxResults;
+    
+    this.mAddressToLookup = addressToLookup;
+    this.mMaxResults = maxResults;
   }
 
-  public ForwardGeocodingOptions(Locale locale, String mAddressToLookup, int maxResults,
+  private ForwardGeocodingOptions(Locale locale, String addressToLookup, int maxResults,
                                  double lowerLeftLatitude, double lowerLeftLongitude,
                                  double upperRightLatitude, double upperRightLongitude) {
     super(locale);
-    this.mAddressToLookup = mAddressToLookup;
-    this.maxResults = maxResults;
-    this.lowerLeftLatitude = lowerLeftLatitude;
-    this.lowerLeftLongitude = lowerLeftLongitude;
-    this.upperRightLatitude = upperRightLatitude;
-    this.upperRightLongitude = upperRightLongitude;
+    this.mAddressToLookup = addressToLookup;
+    this.mMaxResults = maxResults;
+    this.mLowerLeftLatitude = lowerLeftLatitude;
+    this.mLowerLeftLongitude = lowerLeftLongitude;
+    this.mUpperRightLatitude = upperRightLatitude;
+    this.mUpperRightLongitude = upperRightLongitude;
   }
 
   public static ForwardGeocodingOptions parseArguments(Object arguments) {
@@ -78,22 +80,22 @@ public class ForwardGeocodingOptions extends GeocodingOptions {
   }
 
   public int getMaxResults() {
-    return maxResults;
+    return mMaxResults;
   }
 
   public Double getLowerLeftLatitude() {
-    return lowerLeftLatitude;
+    return mLowerLeftLatitude;
   }
 
   public Double getLowerLeftLongitude() {
-    return lowerLeftLongitude;
+    return mLowerLeftLongitude;
   }
 
   public Double getUpperRightLatitude() {
-    return upperRightLatitude;
+    return mUpperRightLatitude;
   }
 
   public Double getUpperRightLongitude() {
-    return upperRightLongitude;
+    return mUpperRightLongitude;
   }
 }
