@@ -107,6 +107,6 @@ class Placemark {
         'subLocality': subLocality,
         'thoroughfare': thoroughfare,
         'subThoroughfare': subThoroughfare,
-        'position': position
+        'position': position.toJson()
       };
 }
