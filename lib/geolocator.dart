@@ -23,6 +23,7 @@ part 'utils/codec.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
 class Geolocator {
+  /// Initializes the Geolocator plugin
   factory Geolocator() {
     if (_instance == null) {
       const MethodChannel methodChannel =
@@ -34,6 +35,8 @@ class Geolocator {
     return _instance;
   }
 
+  /// This constructor is only used for testing and shouldn't be accessed by
+  /// users of the plugin.
   @visibleForTesting
   Geolocator.private(this._methodChannel, this._eventChannel);
 

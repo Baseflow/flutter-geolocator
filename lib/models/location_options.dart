@@ -3,6 +3,13 @@ part of geolocator;
 /// Represents different options to configure the quality and frequency
 /// of location updates.
 class LocationOptions {
+  /// Initializes a new [LocationOptions] instance with default values.
+  ///
+  /// The following default values are used:
+  /// - accuracy: best
+  /// - distanceFilter: 0
+  /// - forceAndroidLocationManager: false
+  /// - timeInterval: 0
   const LocationOptions(
       {this.accuracy = LocationAccuracy.best,
       this.distanceFilter = 0,
