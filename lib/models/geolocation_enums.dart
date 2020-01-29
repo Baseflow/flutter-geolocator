@@ -1,8 +1,10 @@
 part of geolocator;
 
+/// Represents all possible permission values used by the [Geolocation] plugin.
 class GeolocationPermission {
   const GeolocationPermission._(this.value);
 
+  /// The current permission value.
   final int value;
 
   /// Android: Fine and Coarse Location
@@ -19,6 +21,7 @@ class GeolocationPermission {
   static const GeolocationPermission locationWhenInUse =
       GeolocationPermission._(2);
 
+  /// List with all possible permission values 
   static const List<GeolocationPermission> values = <GeolocationPermission>[
     location,
     locationAlways,
@@ -35,9 +38,11 @@ class GeolocationPermission {
   String toString() => 'GeolocationPermission.${_names[value]}';
 }
 
+/// Represents all possible permission states.
 class GeolocationStatus {
   const GeolocationStatus._(this.value);
 
+  /// The current permission status.
   final int value;
 
   /// Permission to access the requested feature is denied by the user.
@@ -55,6 +60,7 @@ class GeolocationStatus {
   /// Permission is in an unknown state
   static const GeolocationStatus unknown = GeolocationStatus._(4);
 
+  /// A list containing all possible permission states.
   static const List<GeolocationStatus> values = <GeolocationStatus>[
     denied,
     disabled,
@@ -75,6 +81,7 @@ class GeolocationStatus {
   String toString() => 'GeolocationStatus.${_names[value]}';
 }
 
+/// Translates the [PermissionStatus] object to a [GeolocationStatus] object.
 GeolocationStatus fromPermissionStatus(PermissionStatus status) {
   switch (status) {
     case PermissionStatus.denied:
@@ -88,6 +95,7 @@ GeolocationStatus fromPermissionStatus(PermissionStatus status) {
   }
 }
 
+/// Translates a [GeolocationPermission] object to a [LocationPermissionLevel] object.
 LocationPermissionLevel toPermissionLevel(GeolocationPermission permission) {
   switch (permission) {
     case GeolocationPermission.locationAlways:

@@ -1,3 +1,8 @@
+## [5.2.1]
+
+* Fixes a bug where `Placemark` instances where not correctly converted to json (thanks to @efraimrodrigues);
+* Corrected a spelling mistake in the `CONTRIBUTING.md` file.
+
 ## [5.2.0]
 
 * iOS: keep trying to get the location when a `kCLErrorLocationUnknow` error is received (as per Apple's [documentation](https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate/1423786-locationmanager));

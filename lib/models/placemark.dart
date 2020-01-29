@@ -2,6 +2,9 @@ part of geolocator;
 
 /// Contains detailed placemark information.
 class Placemark {
+  /// Constructs an instance with the given values for testing. [Placemark]
+  /// instances constructed this way won't actually reflect any real information
+  /// from the platform, just whatever was passed in at construction time.
   Placemark(
       {this.name,
       this.isoCountryCode,
@@ -96,6 +99,7 @@ class Placemark {
     );
   }
 
+  /// Converts the [Placemark] instance into a [Map] instance that can be serialized to JSON.
   Map<String, dynamic> toJson() => {
         'name': name,
         'isoCountryCode': isoCountryCode,
