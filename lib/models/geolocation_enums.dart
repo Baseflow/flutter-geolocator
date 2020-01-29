@@ -21,7 +21,7 @@ class GeolocationPermission {
   static const GeolocationPermission locationWhenInUse =
       GeolocationPermission._(2);
 
-  /// List with all possible permission values 
+  /// List with all possible permission values
   static const List<GeolocationPermission> values = <GeolocationPermission>[
     location,
     locationAlways,

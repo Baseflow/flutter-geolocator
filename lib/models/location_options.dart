@@ -4,7 +4,7 @@ part of geolocator;
 /// of location updates.
 class LocationOptions {
   /// Initializes a new [LocationOptions] instance with default values.
-  /// 
+  ///
   /// The following default values are used:
   /// - accuracy: best
   /// - distanceFilter: 0
