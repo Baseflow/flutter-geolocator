@@ -1,8 +1,10 @@
 part of geolocator;
 
+/// Represent the possible location accuracy values.
 class LocationAccuracy {
   const LocationAccuracy._(this.value);
 
+  /// The current location accuracy value.
   final int value;
 
   /// Location is accurate within a distance of 3000m on iOS and 500m on Android
@@ -27,6 +29,7 @@ class LocationAccuracy {
   /// [LocationAccuracy.best] on Android
   static const LocationAccuracy bestForNavigation = LocationAccuracy._(5);
 
+  /// List of all possible location accuracy values.
   static const List<LocationAccuracy> values = <LocationAccuracy>[
     lowest,
     low,

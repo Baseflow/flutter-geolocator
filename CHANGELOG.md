@@ -1,3 +1,13 @@
+## [5.2.1]
+
+* Fixes a bug where `Placemark` instances where not correctly converted to json (thanks to @efraimrodrigues);
+* Corrected a spelling mistake in the `CONTRIBUTING.md` file.
+
+## [5.2.0]
+
+* iOS: keep trying to get the location when a `kCLErrorLocationUnknow` error is received (as per Apple's [documentation](https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate/1423786-locationmanager));
+* Android: synchronize gradle versions with current stable version of Flutter (1.12.13+hotfix.5).
+
 ## [5.1.5]
 
 * Android: Fixes bug where latitude and longitude are not returned as part of the placemark (thanks to @slightfood).

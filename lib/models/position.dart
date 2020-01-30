@@ -1,7 +1,10 @@
 part of geolocator;
 
-/// Contains detail location information.
+/// Contains detailed location information.
 class Position {
+  /// Constructs an instance with the given values for testing. [Position]
+  /// instances constructed this way won't actually reflect any real information
+  /// from the platform, just whatever was passed in at construction time.
   Position({
     this.longitude,
     this.latitude,
@@ -140,6 +143,7 @@ class Position {
         speedAccuracy: positionMap['speed_accuracy'] ?? 0.0);
   }
 
+  /// Converts the [Position] instance into a [Map] instance that can be serialized to JSON.
   Map<String, dynamic> toJson() => {
         'longitude': longitude,
         'latitude': latitude,

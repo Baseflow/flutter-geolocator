@@ -2,8 +2,6 @@ library geolocator;
 
 import 'dart:async';
 import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:meta/meta.dart';
@@ -21,32 +19,33 @@ part 'utils/codec.dart';
 class Geolocator {
   /// Constructs a singleton instance of [Geolocator].
   ///
-  /// [Geolocator] is designed to work as a singleton.
   /// When a second instance is created, the first instance will not be able to listen to the
   /// EventChannel because it is overridden. Forcing the class to be a singleton class can prevent
   /// misuse of creating a second instance from a programmer.
   factory Geolocator() {
     if (_singleton == null) {
-      _singleton = Geolocator.private(LocationPermissions());
+      const MethodChannel methodChannel =
+          MethodChannel('flutter.baseflow.com/geolocator/methods');
+      const EventChannel eventChannel =
+          EventChannel('flutter.baseflow.com/geolocator/events');
+	  
+      _singleton = Geolocator.private(methodChannel, eventChannel, LocationPermissions());
     }
     return _singleton;
   }
 
+  /// This constructor is only used for testing and shouldn't be accessed by
+  /// users of the plugin.
   @visibleForTesting
-  Geolocator.private(this._permissionHandler);
+  Geolocator.private(
+  	this._methodChannel, 
+	this._eventChannel, 
+	this._permissionHandler,);
 
   static Geolocator _singleton;
-
-  /// Exposed for testing purposes and should not be used by users of the plugin.
-  static const MethodChannel _methodChannel =
-      MethodChannel('flutter.baseflow.com/geolocator/methods');
-
-  /// Exposed for testing purposes and should not be used by users of the plugin.
-  static const EventChannel _eventChannel =
-      EventChannel('flutter.baseflow.com/geolocator/events');
-
+  final MethodChannel _methodChannel;
+  final EventChannel _eventChannel;
   final LocationPermissions _permissionHandler;
-
   Stream<Position> _onPositionChanged;
 
   /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.

@@ -41,8 +41,7 @@ class _LocationState extends State<CurrentLocationWidget> {
       _currentPosition = null;
     });
 
-    _initLastKnownLocation();
-    _initCurrentLocation();
+    _initLastKnownLocation().then((_) => _initCurrentLocation());
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -75,7 +74,7 @@ class _LocationState extends State<CurrentLocationWidget> {
     Geolocator()
       ..forceAndroidLocationManager = !widget.androidFusedLocation
       ..getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
+        desiredAccuracy: LocationAccuracy.medium,
       ).then((position) {
         if (mounted) {
           setState(() => _currentPosition = position);
