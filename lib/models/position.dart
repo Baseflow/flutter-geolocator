@@ -1,7 +1,7 @@
 part of geolocator;
 
 /// Contains detailed location information.
-class Position {
+class Position extends Equatable {
   /// Constructs an instance with the given values for testing. [Position]
   /// instances constructed this way won't actually reflect any real information
   /// from the platform, just whatever was passed in at construction time.
@@ -28,6 +28,19 @@ class Position {
     this.speed,
     this.speedAccuracy,
   });
+
+  @override
+  List<Object> get props => [
+        longitude,
+        latitude,
+        timestamp,
+        mocked,
+        accuracy,
+        altitude,
+        heading,
+        speed,
+        speedAccuracy,
+      ];
 
   /// The latitude of this position in degrees normalized to the interval -90.0 to +90.0 (both inclusive).
   final double latitude;
@@ -69,29 +82,30 @@ class Position {
   final double speedAccuracy;
 
   @override
-  bool operator == (o) {
-    var areEqual = o is Position
-        && o.accuracy == accuracy
-        && o.altitude == altitude
-        && o.heading == heading
-        && o.latitude == latitude
-        && o.longitude == longitude
-        && o.speed == speed
-        && o.speedAccuracy == speedAccuracy
-        && o.timestamp == timestamp;
+  bool operator ==(o) {
+    var areEqual = o is Position &&
+        o.accuracy == accuracy &&
+        o.altitude == altitude &&
+        o.heading == heading &&
+        o.latitude == latitude &&
+        o.longitude == longitude &&
+        o.speed == speed &&
+        o.speedAccuracy == speedAccuracy &&
+        o.timestamp == timestamp;
 
     return areEqual;
   }
 
   @override
-  int get hashCode => accuracy.hashCode
-    ^ altitude.hashCode
-    ^ heading.hashCode
-    ^ latitude.hashCode
-    ^ longitude.hashCode
-    ^ speed.hashCode
-    ^ speedAccuracy.hashCode
-    ^ timestamp.hashCode;
+  int get hashCode =>
+      accuracy.hashCode ^
+      altitude.hashCode ^
+      heading.hashCode ^
+      latitude.hashCode ^
+      longitude.hashCode ^
+      speed.hashCode ^
+      speedAccuracy.hashCode ^
+      timestamp.hashCode;
 
   @override
   String toString() {

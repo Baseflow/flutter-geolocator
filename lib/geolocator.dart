@@ -7,6 +7,7 @@ import 'package:google_api_availability/google_api_availability.dart';
 import 'package:meta/meta.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:equatable/equatable.dart';
 
 part 'models/geolocation_enums.dart';
 part 'models/location_accuracy.dart';
@@ -28,8 +29,9 @@ class Geolocator {
           MethodChannel('flutter.baseflow.com/geolocator/methods');
       const EventChannel eventChannel =
           EventChannel('flutter.baseflow.com/geolocator/events');
-	  
-      _singleton = Geolocator.private(methodChannel, eventChannel, LocationPermissions());
+
+      _singleton = Geolocator.private(
+          methodChannel, eventChannel, LocationPermissions());
     }
     return _singleton;
   }
@@ -38,9 +40,10 @@ class Geolocator {
   /// users of the plugin.
   @visibleForTesting
   Geolocator.private(
-  	this._methodChannel, 
-	this._eventChannel, 
-	this._permissionHandler,);
+    this._methodChannel,
+    this._eventChannel,
+    this._permissionHandler,
+  );
 
   static Geolocator _singleton;
   final MethodChannel _methodChannel;
@@ -247,8 +250,10 @@ class Geolocator {
   /// When not supplied the currently active locale of the device will be used.
   /// The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode] (eg. en_US or nl_NL).
   Future<List<Placemark>> placemarkFromCoordinates(
-      double latitude, double longitude,
-      {String localeIdentifier}) async {
+    double latitude,
+    double longitude, {
+    String localeIdentifier,
+  }) async {
     final Map<String, dynamic> parameters = <String, dynamic>{
       'latitude': latitude,
       'longitude': longitude
@@ -261,21 +266,32 @@ class Geolocator {
     final List<dynamic> placemarks = await _methodChannel.invokeMethod(
         'placemarkFromCoordinates', parameters);
 
-    try {
-      return Placemark.fromMaps(placemarks);
-    } on ArgumentError {
-      return null;
-    }
+    return Placemark.fromMaps(placemarks);
   }
 
   /// Convenience method to access [placemarkFromCoordinates()] using an
   /// instance of [Position].
-  Future<List<Placemark>> placemarkFromPosition(Position position) =>
-      placemarkFromCoordinates(position.latitude, position.longitude);
+  ///
+  /// Optionally you can specify a locale in which the results are returned.
+  /// When not supplied the currently active locale of the device will be used.
+  /// The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode] (eg. en_US or nl_NL).
+  Future<List<Placemark>> placemarkFromPosition(
+    Position position, {
+    String localeIdentifier,
+  }) =>
+      placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+        localeIdentifier: localeIdentifier,
+      );
 
   /// Returns the distance between the supplied coordinates in meters.
-  Future<double> distanceBetween(double startLatitude, double startLongitude,
-          double endLatitude, double endLongitude) =>
+  Future<double> distanceBetween(
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) =>
       _methodChannel.invokeMethod<dynamic>('distanceBetween', <String, double>{
         'startLatitude': startLatitude,
         'startLongitude': startLongitude,
@@ -285,11 +301,14 @@ class Geolocator {
 
   /// Returns the initial bearing between two points
   /// The initial bearing will most of the time be different than the end bearing, see [https://www.movable-type.co.uk/scripts/latlong.html#bearing]
-  Future<double> bearingBetween(double startLatitude, double startLongitude,
-      double endLatitude, double endLongitude) {
+  Future<double> bearingBetween(
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) {
     var startLongitudeRadians = radians(startLongitude);
     var startLatitudeRadians = radians(startLatitude);
-
     var endLongitudeRadians = radians(endLongitude);
     var endLatitudeRadians = radians(endLatitude);
 

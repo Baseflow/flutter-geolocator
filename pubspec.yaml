@@ -12,6 +12,7 @@ dependencies:
 
   meta: ^1.1.6
 
+  equatable: ^1.0.3
   google_api_availability: ^2.0.2
   location_permissions: ^2.0.4+1
   vector_math: ^2.0.8

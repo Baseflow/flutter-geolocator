@@ -1,3 +1,8 @@
+## [x.x.x]
+
+* Added support to supply a locale identifier when requesting a placemark using a [Position](https://pub.dev/documentation/geolocator/latest/geolocator/Position-class.html) instance;
+* Stop hiding parsing exceptions when converting coordinates into an address.
+
 ## [5.2.1]
 
 * Fixes a bug where `Placemark` instances where not correctly converted to json (thanks to @efraimrodrigues);
