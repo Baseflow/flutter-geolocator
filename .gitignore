@@ -11,6 +11,7 @@
 .project
 .svn/
 bin/
+coverage/
 
 # IntelliJ related
 *.iml
@@ -21,6 +22,7 @@ bin/
 # Android Studio related
 android/.classpath
 android/.settings/
+example/android/.settings/
 
 # Visual Studio Code related
 .vscode/
@@ -85,6 +87,7 @@ flutter_export_environment.sh
 **/ios/Flutter/flutter_assets/
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/Flutter/Flutter.podspec
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3

@@ -2,65 +2,69 @@ library geolocator;
 
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/services.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:meta/meta.dart';
 import 'package:location_permissions/location_permissions.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:equatable/equatable.dart';
 
 part 'models/geolocation_enums.dart';
-
 part 'models/location_accuracy.dart';
-
 part 'models/location_options.dart';
-
 part 'models/placemark.dart';
-
 part 'models/position.dart';
-
 part 'utils/codec.dart';
 
 /// Provides easy access to the platform specific location services (CLLocationManager on iOS and FusedLocationProviderClient on Android)
 class Geolocator {
-  /// Initializes the Geolocator plugin
+  /// Constructs a singleton instance of [Geolocator].
+  ///
+  /// When a second instance is created, the first instance will not be able to listen to the
+  /// EventChannel because it is overridden. Forcing the class to be a singleton class can prevent
+  /// misuse of creating a second instance from a programmer.
   factory Geolocator() {
-    if (_instance == null) {
+    if (_singleton == null) {
       const MethodChannel methodChannel =
           MethodChannel('flutter.baseflow.com/geolocator/methods');
       const EventChannel eventChannel =
           EventChannel('flutter.baseflow.com/geolocator/events');
-      _instance = Geolocator.private(methodChannel, eventChannel);
+
+      _singleton = Geolocator.private(
+          methodChannel, eventChannel, LocationPermissions());
     }
-    return _instance;
+    return _singleton;
   }
 
   /// This constructor is only used for testing and shouldn't be accessed by
   /// users of the plugin.
   @visibleForTesting
-  Geolocator.private(this._methodChannel, this._eventChannel);
+  Geolocator.private(
+    this._methodChannel,
+    this._eventChannel,
+    this._permissionHandler,
+  );
 
-  static Geolocator _instance;
-
+  static Geolocator _singleton;
   final MethodChannel _methodChannel;
   final EventChannel _eventChannel;
-
+  final LocationPermissions _permissionHandler;
   Stream<Position> _onPositionChanged;
 
   /// Returns a [Future] containing the current [GeolocationStatus] indicating the availability of location services on the device.
   Future<GeolocationStatus> checkGeolocationPermissionStatus(
       {GeolocationPermission locationPermission =
           GeolocationPermission.location}) async {
-    final PermissionStatus permissionStatus = await LocationPermissions()
+    final PermissionStatus permissionStatus = await _permissionHandler
         .checkPermissionStatus(level: toPermissionLevel(locationPermission));
 
     return fromPermissionStatus(permissionStatus);
   }
 
-  /// Returns a [bool] value indicating whether location services are enabled on the device.
+  /// Returns a [Future] containing a [bool] value indicating whether location services are enabled on the device.
   Future<bool> isLocationServiceEnabled() async {
     final ServiceStatus serviceStatus =
-        await LocationPermissions().checkServiceStatus();
+        await _permissionHandler.checkServiceStatus();
 
     return serviceStatus == ServiceStatus.enabled ? true : false;
   }
@@ -89,10 +93,11 @@ class Geolocator {
   /// Returns the current position taking the supplied [desiredAccuracy] into account.
   ///
   /// When the [desiredAccuracy] is not supplied, it defaults to best.
-  Future<Position> getCurrentPosition(
-      {LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-      GeolocationPermission locationPermissionLevel =
-          GeolocationPermission.location}) async {
+  Future<Position> getCurrentPosition({
+    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    GeolocationPermission locationPermissionLevel =
+        GeolocationPermission.location,
+  }) async {
     final PermissionStatus permission = await _getLocationPermission(
         toPermissionLevel(locationPermissionLevel));
 
@@ -192,11 +197,11 @@ class Geolocator {
 
   Future<PermissionStatus> _getLocationPermission(
       LocationPermissionLevel locationPermissionLevel) async {
-    final PermissionStatus permission = await LocationPermissions()
+    final PermissionStatus permission = await _permissionHandler
         .checkPermissionStatus(level: locationPermissionLevel);
 
     if (permission != PermissionStatus.granted) {
-      final PermissionStatus permissionStatus = await LocationPermissions()
+      final PermissionStatus permissionStatus = await _permissionHandler
           .requestPermissions(permissionLevel: locationPermissionLevel);
 
       return permissionStatus;
@@ -245,8 +250,10 @@ class Geolocator {
   /// When not supplied the currently active locale of the device will be used.
   /// The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode] (eg. en_US or nl_NL).
   Future<List<Placemark>> placemarkFromCoordinates(
-      double latitude, double longitude,
-      {String localeIdentifier}) async {
+    double latitude,
+    double longitude, {
+    String localeIdentifier,
+  }) async {
     final Map<String, dynamic> parameters = <String, dynamic>{
       'latitude': latitude,
       'longitude': longitude
@@ -259,21 +266,32 @@ class Geolocator {
     final List<dynamic> placemarks = await _methodChannel.invokeMethod(
         'placemarkFromCoordinates', parameters);
 
-    try {
-      return Placemark.fromMaps(placemarks);
-    } on ArgumentError {
-      return null;
-    }
+    return Placemark.fromMaps(placemarks);
   }
 
   /// Convenience method to access [placemarkFromCoordinates()] using an
   /// instance of [Position].
-  Future<List<Placemark>> placemarkFromPosition(Position position) =>
-      placemarkFromCoordinates(position.latitude, position.longitude);
+  ///
+  /// Optionally you can specify a locale in which the results are returned.
+  /// When not supplied the currently active locale of the device will be used.
+  /// The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode] (eg. en_US or nl_NL).
+  Future<List<Placemark>> placemarkFromPosition(
+    Position position, {
+    String localeIdentifier,
+  }) =>
+      placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+        localeIdentifier: localeIdentifier,
+      );
 
   /// Returns the distance between the supplied coordinates in meters.
-  Future<double> distanceBetween(double startLatitude, double startLongitude,
-          double endLatitude, double endLongitude) =>
+  Future<double> distanceBetween(
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) =>
       _methodChannel.invokeMethod<dynamic>('distanceBetween', <String, double>{
         'startLatitude': startLatitude,
         'startLongitude': startLongitude,
@@ -283,20 +301,23 @@ class Geolocator {
 
   /// Returns the initial bearing between two points
   /// The initial bearing will most of the time be different than the end bearing, see [https://www.movable-type.co.uk/scripts/latlong.html#bearing]
-  Future<double> bearingBetween(double startLatitude, double startLongitude,
-      double endLatitude, double endLongitude) {
-    var startLongtitudeRadians = radians(startLongitude);
+  Future<double> bearingBetween(
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) {
+    var startLongitudeRadians = radians(startLongitude);
     var startLatitudeRadians = radians(startLatitude);
+    var endLongitudeRadians = radians(endLongitude);
+    var endLatitudeRadians = radians(endLatitude);
 
-    var endLongtitudeRadians = radians(endLongitude);
-    var endLattitudeRadians = radians(endLatitude);
-
-    var y = sin(endLongtitudeRadians - startLongtitudeRadians) *
-        cos(endLattitudeRadians);
-    var x = cos(startLatitudeRadians) * sin(endLattitudeRadians) -
+    var y = sin(endLongitudeRadians - startLongitudeRadians) *
+        cos(endLatitudeRadians);
+    var x = cos(startLatitudeRadians) * sin(endLatitudeRadians) -
         sin(startLatitudeRadians) *
-            cos(endLattitudeRadians) *
-            cos(endLongtitudeRadians - startLongtitudeRadians);
+            cos(endLatitudeRadians) *
+            cos(endLongitudeRadians - startLongitudeRadians);
 
     return Future.value(degrees(atan2(y, x)));
   }
