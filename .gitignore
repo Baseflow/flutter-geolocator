@@ -52,6 +52,7 @@ linked_*.ds
 unlinked.ds
 unlinked_spec.ds
 flutter_export_environment.sh
+**/.flutter-plugins-dependencies
 
 # Android related
 **/android/**/gradle-wrapper.jar
