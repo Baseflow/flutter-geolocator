@@ -51,7 +51,9 @@ void main() {
     });
   };
 
-  test('When calling the constructor a second time we should retrieve the same instance (test singleton pattern)', () {
+  test(
+      'When calling the constructor a second time we should retrieve the same instance (test singleton pattern)',
+      () {
     final firstInstance = Geolocator();
     final secondInstance = Geolocator();
 
@@ -573,12 +575,17 @@ void main() {
     });
   });
 
-  group('When requesting the bearing between', (){
+  group('When requesting the bearing between', () {
     test('the same points the bearing should be 0', () async {
       final latitude = 56.0;
       final longitude = 5.6;
 
-      final bearing = await geolocator.bearingBetween(latitude, longitude, latitude, longitude,);
+      final bearing = await geolocator.bearingBetween(
+        latitude,
+        longitude,
+        latitude,
+        longitude,
+      );
 
       expect(bearing, 0.0);
     });
@@ -590,10 +597,11 @@ void main() {
       final endLongitude = 0.0;
 
       final bearing = await geolocator.bearingBetween(
-        startLatitude, 
-        startLongitude, 
-        endLatitude, 
-        endLongitude,);
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude,
+      );
 
       expect(bearing, 180.0);
     });
@@ -605,10 +613,11 @@ void main() {
       final endLongitude = 0.0;
 
       final bearing = await geolocator.bearingBetween(
-        startLatitude, 
-        startLongitude, 
-        endLatitude, 
-        endLongitude,);
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude,
+      );
 
       expect(bearing, 0.0);
     });
@@ -620,10 +629,11 @@ void main() {
       final endLongitude = -180.0;
 
       final bearing = await geolocator.bearingBetween(
-        startLatitude, 
-        startLongitude, 
-        endLatitude, 
-        endLongitude,);
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude,
+      );
 
       expect(bearing, 90.0);
     });
@@ -635,10 +645,11 @@ void main() {
       final endLongitude = 180.0;
 
       final bearing = await geolocator.bearingBetween(
-        startLatitude, 
-        startLongitude, 
-        endLatitude, 
-        endLongitude,);
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude,
+      );
 
       expect(bearing, -90.0);
     });

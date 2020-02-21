@@ -1,7 +1,8 @@
-## [x.x.x]
+## [5.3.0]
 
+* Added unit-tests to guard for breaking API changes;
 * Added support to supply a locale identifier when requesting a placemark using a [Position](https://pub.dev/documentation/geolocator/latest/geolocator/Position-class.html) instance;
-* Stop hiding parsing exceptions when converting coordinates into an address.
+* **breaking** Stop hiding parsing exceptions when converting coordinates into an address. Instead of returning `null` the `placemarkFromCoordinates` method will now throw and `ArgumentError` if illigal values are returned (which should never happen).
 
 ## [5.2.1]
 

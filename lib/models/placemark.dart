@@ -65,31 +65,33 @@ class Placemark {
   final Position position;
 
   @override
-  bool operator == (o) => o is Placemark
-      && o.administrativeArea == administrativeArea
-      && o.country == country
-      && o.isoCountryCode == isoCountryCode
-      && o.locality == locality
-      && o.name == name
-      && o.position == position
-      && o.postalCode == postalCode
-      && o.subAdministrativeArea == subAdministrativeArea
-      && o.subLocality == subLocality
-      && o.subThoroughfare == subThoroughfare
-      && o.thoroughfare == thoroughfare;
+  bool operator ==(o) =>
+      o is Placemark &&
+      o.administrativeArea == administrativeArea &&
+      o.country == country &&
+      o.isoCountryCode == isoCountryCode &&
+      o.locality == locality &&
+      o.name == name &&
+      o.position == position &&
+      o.postalCode == postalCode &&
+      o.subAdministrativeArea == subAdministrativeArea &&
+      o.subLocality == subLocality &&
+      o.subThoroughfare == subThoroughfare &&
+      o.thoroughfare == thoroughfare;
 
   @override
-  int get hashCode => administrativeArea.hashCode
-      ^ country.hashCode
-      ^ isoCountryCode.hashCode
-      ^ locality.hashCode
-      ^ name.hashCode
-      ^ position.hashCode
-      ^ postalCode.hashCode
-      ^ subAdministrativeArea.hashCode
-      ^ subLocality.hashCode
-      ^ subThoroughfare.hashCode
-      ^ thoroughfare.hashCode;
+  int get hashCode =>
+      administrativeArea.hashCode ^
+      country.hashCode ^
+      isoCountryCode.hashCode ^
+      locality.hashCode ^
+      name.hashCode ^
+      position.hashCode ^
+      postalCode.hashCode ^
+      subAdministrativeArea.hashCode ^
+      subLocality.hashCode ^
+      subThoroughfare.hashCode ^
+      thoroughfare.hashCode;
 
   /// Converts a list of [Map] instances to a list of [Placemark] instances.
   static List<Placemark> fromMaps(dynamic message) {
