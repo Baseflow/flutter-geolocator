@@ -18,9 +18,7 @@ abstract class LocationUsingLocationManagerTask extends Task<LocationOptions> {
   LocationUsingLocationManagerTask(TaskContext<LocationOptions> context) {
     super(context);
 
-    PluginRegistry.Registrar registrar = context.getRegistrar();
-
-    mAndroidContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
+    mAndroidContext = context.getAndroidContext();
     mLocationOptions = context.getOptions();
   }
 

@@ -1,5 +1,7 @@
 package com.baseflow.geolocator.tasks;
 
+import android.content.Context;
+
 import com.baseflow.geolocator.OnCompletionListener;
 import com.baseflow.geolocator.data.CalculateDistanceOptions;
 import com.baseflow.geolocator.data.ForwardGeocodingOptions;
@@ -12,14 +14,14 @@ import io.flutter.plugin.common.PluginRegistry;
 
 public class TaskFactory {
   public static Task<CalculateDistanceOptions> createCalculateDistanceTask(
-      PluginRegistry.Registrar registrar,
+      Context context,
       MethodChannel.Result result,
       Object arguments,
       OnCompletionListener completionListener) {
 
     CalculateDistanceOptions options = CalculateDistanceOptions.parseArguments(arguments);
     TaskContext<CalculateDistanceOptions> taskContext = TaskContext.buildForMethodResult(
-        registrar,
+        context,
         result,
         options,
         completionListener);
@@ -28,14 +30,14 @@ public class TaskFactory {
   }
 
   public static Task<LocationOptions> createCurrentLocationTask(
-      PluginRegistry.Registrar registrar,
+      Context context,
       MethodChannel.Result result,
       Object arguments,
       OnCompletionListener completionListener) {
 
     LocationOptions options = LocationOptions.parseArguments(arguments);
     TaskContext<LocationOptions> taskContext = TaskContext.buildForMethodResult(
-        registrar,
+        context,
         result,
         options,
         completionListener);
@@ -52,14 +54,14 @@ public class TaskFactory {
   }
 
   public static Task<ForwardGeocodingOptions> createForwardGeocodingTask(
-      PluginRegistry.Registrar registrar,
+      Context context,
       MethodChannel.Result result,
       Object arguments,
       OnCompletionListener completionListener) {
 
     ForwardGeocodingOptions options = ForwardGeocodingOptions.parseArguments(arguments);
     TaskContext<ForwardGeocodingOptions> taskContext = TaskContext.buildForMethodResult(
-        registrar,
+        context,
         result,
         options,
         completionListener);
@@ -68,14 +70,14 @@ public class TaskFactory {
   }
 
   public static Task<LocationOptions> createLastKnownLocationTask(
-      PluginRegistry.Registrar registrar,
+      Context context,
       MethodChannel.Result result,
       Object arguments,
       OnCompletionListener completionListener) {
 
     LocationOptions options = LocationOptions.parseArguments(arguments);
     TaskContext<LocationOptions> taskContext = TaskContext.buildForMethodResult(
-        registrar,
+        context,
         result,
         options,
         completionListener);
@@ -88,14 +90,14 @@ public class TaskFactory {
   }
 
   public static Task<ReverseGeocodingOptions> createReverseGeocodingTask(
-      PluginRegistry.Registrar registrar,
+      Context context,
       MethodChannel.Result result,
       Object arguments,
       OnCompletionListener completionListener) {
 
     ReverseGeocodingOptions options = ReverseGeocodingOptions.parseArguments(arguments);
     TaskContext<ReverseGeocodingOptions> taskContext = TaskContext.buildForMethodResult(
-        registrar,
+        context,
         result,
         options,
         completionListener);
@@ -104,14 +106,14 @@ public class TaskFactory {
   }
 
   public static Task<LocationOptions> createStreamLocationUpdatesTask(
-      PluginRegistry.Registrar registrar,
+      Context context,
       EventChannel.EventSink result,
       Object arguments,
       OnCompletionListener completionListener) {
 
     LocationOptions options = LocationOptions.parseArguments(arguments);
     TaskContext<LocationOptions> taskContext = TaskContext.buildForEventSink(
-        registrar,
+        context,
         result,
         options,
         completionListener);
