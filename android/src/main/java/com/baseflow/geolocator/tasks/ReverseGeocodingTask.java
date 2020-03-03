@@ -26,9 +26,7 @@ class ReverseGeocodingTask extends Task<ReverseGeocodingOptions> {
   ReverseGeocodingTask(TaskContext<ReverseGeocodingOptions> context) {
     super(context);
 
-    PluginRegistry.Registrar registrar = context.getRegistrar();
-
-    mAndroidContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
+    mAndroidContext = context.getAndroidContext();
     mCoordinatesToLookup = context.getOptions().getCoordinate();
     mLocale = context.getOptions().getLocale();
   }
