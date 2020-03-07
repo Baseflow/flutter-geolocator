@@ -165,7 +165,7 @@ On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS
 
 ### iOS
 
-On iOS you'll need to add the `NSLocationWhenInUseUsageDescription` to your Info.plist file (located under ios/Runner/Base.lproj) in order to access the device's location. Simply open your Info.plist file and add the following:
+On iOS you'll need to add the `NSLocationWhenInUseUsageDescription` to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following:
 
 ``` xml
 <key>NSLocationWhenInUseUsageDescription</key>
