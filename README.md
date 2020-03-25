@@ -165,22 +165,18 @@ On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS
 
 ### iOS
 
-On iOS you'll need to add the `NSLocationWhenInUseUsageDescription` to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following:
+On iOS you'll need to add the following entries to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following:
 
 ``` xml
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>This app needs access to location when open.</string>
-```
-
-If you would like to access the device's location when your App is running in the background, you should also add the `NSLocationAlwaysAndWhenInUseUsageDescription` (if your App support iOS 10 or earlier you should also add the key `NSLocationAlwaysUsageDescription`) key to your Info.plist file:
-
-``` xml
 <key>NSLocationAlwaysUsageDescription</key>
 <string>This app needs access to location when in the background.</string>
 <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 <string>This app needs access to location when open and in the background.</string>
 ```
 
+In addition, you need to add the `Background Modes` capability to your XCode project (Project > Signing and Capabilties > "+ Capability" button) and select `Location Updates`.
 ### Location accuracy
 
 The table below outlines the accuracy options per platform:
