@@ -1,3 +1,7 @@
+## [5.3.1]
+
+* Update to `google_api_availability: 2.0.4`
+
 ## [5.3.0]
 
 * Added unit-tests to guard for breaking API changes;

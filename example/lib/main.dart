@@ -7,31 +7,39 @@ import 'pages/calculate_distance_widget.dart';
 import 'pages/current_location_widget.dart';
 import 'pages/location_stream_widget.dart';
 
-void main() => runApp(GeolocatorExampleApp());
+void main() => runApp(_GeolocatorExampleApp());
+  enum _TabItem {
+    singleLocation,
+    singleFusedLocation,
+    locationStream,
+    distance,
+    geocode
+  }
 
-enum TabItem {
-  singleLocation,
-  singleFusedLocation,
-  locationStream,
-  distance,
-  geocode
-}
-
-class GeolocatorExampleApp extends StatefulWidget {
+class _GeolocatorExampleApp extends StatefulWidget {
   @override
-  State<GeolocatorExampleApp> createState() => BottomNavigationState();
+  State<_GeolocatorExampleApp> createState() => _BottomNavigationState();
 }
 
-class BottomNavigationState extends State<GeolocatorExampleApp> {
-  TabItem _currentItem = TabItem.singleLocation;
-  final List<TabItem> _bottomTabs = [
-    TabItem.singleLocation,
-    if (Platform.isAndroid) TabItem.singleFusedLocation,
-    TabItem.locationStream,
-    TabItem.distance,
-    TabItem.geocode,
+class _BottomNavigationState extends State<_GeolocatorExampleApp> {
+
+
+  _TabItem _currentItem = _TabItem.singleLocation;
+  final List<_TabItem> _bottomTabs = [
+    _TabItem.singleLocation,
+    _TabItem.locationStream,
+    _TabItem.distance,
+    _TabItem.geocode,
   ];
 
+  @override
+  void initState() {
+    if (Platform.isAndroid) {
+      _bottomTabs.insert(1, _TabItem.singleFusedLocation);
+    } 
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,15 +55,15 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
 
   Widget _buildBody() {
     switch (_currentItem) {
-      case TabItem.locationStream:
+      case _TabItem.locationStream:
         return LocationStreamWidget();
-      case TabItem.distance:
+      case _TabItem.distance:
         return CalculateDistanceWidget();
-      case TabItem.singleFusedLocation:
+      case _TabItem.singleFusedLocation:
         return CurrentLocationWidget(androidFusedLocation: true);
-      case TabItem.geocode:
+      case _TabItem.geocode:
         return LookupAddressWidget();
-      case TabItem.singleLocation:
+      case _TabItem.singleLocation:
       default:
         return CurrentLocationWidget(androidFusedLocation: false);
     }
@@ -73,7 +81,7 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
   }
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(
-      IconData icon, TabItem tabItem) {
+      IconData icon, _TabItem tabItem) {
     final String text = _title(tabItem);
     final Color color =
         _currentItem == tabItem ? Theme.of(context).primaryColor : Colors.grey;
@@ -93,41 +101,41 @@ class BottomNavigationState extends State<GeolocatorExampleApp> {
   }
 
   void _onSelectTab(int index) {
-    TabItem selectedTabItem = _bottomTabs[index];
+    _TabItem selectedTabItem = _bottomTabs[index];
 
     setState(() {
       _currentItem = selectedTabItem;
     });
   }
 
-  String _title(TabItem item) {
+  String _title(_TabItem item) {
     switch (item) {
-      case TabItem.singleLocation:
+      case _TabItem.singleLocation:
         return 'Single';
-      case TabItem.singleFusedLocation:
+      case _TabItem.singleFusedLocation:
         return 'Single (Fused)';
-      case TabItem.locationStream:
+      case _TabItem.locationStream:
         return 'Stream';
-      case TabItem.distance:
+      case _TabItem.distance:
         return 'Distance';
-      case TabItem.geocode:
+      case _TabItem.geocode:
         return 'Geocode';
       default:
         throw 'Unknown: $item';
     }
   }
 
-  IconData _icon(TabItem item) {
+  IconData _icon(_TabItem item) {
     switch (item) {
-      case TabItem.singleLocation:
+      case _TabItem.singleLocation:
         return Icons.location_on;
-      case TabItem.singleFusedLocation:
+      case _TabItem.singleFusedLocation:
         return Icons.location_on;
-      case TabItem.locationStream:
+      case _TabItem.locationStream:
         return Icons.clear_all;
-      case TabItem.distance:
+      case _TabItem.distance:
         return Icons.redo;
-      case TabItem.geocode:
+      case _TabItem.geocode:
         return Icons.compare_arrows;
       default:
         throw 'Unknown: $item';
