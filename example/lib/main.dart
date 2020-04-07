@@ -8,13 +8,14 @@ import 'pages/current_location_widget.dart';
 import 'pages/location_stream_widget.dart';
 
 void main() => runApp(_GeolocatorExampleApp());
-  enum _TabItem {
-    singleLocation,
-    singleFusedLocation,
-    locationStream,
-    distance,
-    geocode
-  }
+
+enum _TabItem {
+  singleLocation,
+  singleFusedLocation,
+  locationStream,
+  distance,
+  geocode
+}
 
 class _GeolocatorExampleApp extends StatefulWidget {
   @override
@@ -22,8 +23,6 @@ class _GeolocatorExampleApp extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<_GeolocatorExampleApp> {
-
-
   _TabItem _currentItem = _TabItem.singleLocation;
   final List<_TabItem> _bottomTabs = [
     _TabItem.singleLocation,
@@ -36,10 +35,10 @@ class _BottomNavigationState extends State<_GeolocatorExampleApp> {
   void initState() {
     if (Platform.isAndroid) {
       _bottomTabs.insert(1, _TabItem.singleFusedLocation);
-    } 
+    }
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
