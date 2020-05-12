@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator_platform_interface/src/errors/permission_denied_exception.dart';
 import 'package:location_permissions/location_permissions.dart'
-    as permissionLib;
+    as permission_lib;
 import 'package:meta/meta.dart';
 
 import '../../geolocator_platform_interface.dart';
 import '../enums/enums.dart';
+import '../errors/permission_denied_exception.dart';
 import '../geolocator_platform_interface.dart';
 import '../models/position.dart';
 import 'location_options.dart';
@@ -29,12 +29,13 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   /// The permission handler which is used to handle requests to access
   /// the location on the device.
   @visibleForTesting
-  permissionLib.LocationPermissions permissionHandler =
-      permissionLib.LocationPermissions();
+  permission_lib.LocationPermissions permissionHandler =
+      permission_lib.LocationPermissions();
 
   /// On Android devices you can set [forceAndroidLocationManager]
   /// to true to force the plugin to use the [LocationManager] to determine the
-  /// position instead of the [FusedLocationProviderClient]. On iOS this is ignored.
+  /// position instead of the [FusedLocationProviderClient]. On iOS this is 
+  /// ignored.
   bool forceAndroidLocationManager = false;
 
   Stream<Position> _onPositionChanged;
@@ -51,10 +52,10 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<bool> isLocationServiceEnabled() async {
-    final permissionLib.ServiceStatus serviceStatus =
+    final serviceStatus =
         await permissionHandler.checkServiceStatus();
 
-    return serviceStatus == permissionLib.ServiceStatus.enabled ? true : false;
+    return serviceStatus == permission_lib.ServiceStatus.enabled ? true : false;
   }
 
   @override
@@ -73,11 +74,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       final positionMap = await methodChannel.invokeMethod(
           'getLastKnownPosition', locationOptions.toJson());
 
-      try {
-        return Position.fromMap(positionMap);
-      } on ArgumentError {
-        return null;
-      }
+      return Position.fromMap(positionMap);
     } else {
       throw PermissionDeniedException(permission);
     }
@@ -146,7 +143,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     var permissionStatus = await permissionHandler.checkPermissionStatus(
         level: locationPermissionLevel);
 
-    if (permissionStatus != permissionLib.PermissionStatus.granted) {
+    if (permissionStatus != permission_lib.PermissionStatus.granted) {
       permissionStatus = await permissionHandler.requestPermissions(
           permissionLevel: locationPermissionLevel);
     }
@@ -154,28 +151,28 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     return _fromLocationPermissionStatus(permissionStatus);
   }
 
-  static permissionLib.LocationPermissionLevel _toLocationPermissionLevel(
+  static permission_lib.LocationPermissionLevel _toLocationPermissionLevel(
     Permission permission,
   ) {
     switch (permission) {
       case Permission.locationAlways:
-        return permissionLib.LocationPermissionLevel.locationAlways;
+        return permission_lib.LocationPermissionLevel.locationAlways;
       case Permission.locationWhenInUse:
-        return permissionLib.LocationPermissionLevel.locationWhenInUse;
+        return permission_lib.LocationPermissionLevel.locationWhenInUse;
       default:
-        return permissionLib.LocationPermissionLevel.location;
+        return permission_lib.LocationPermissionLevel.location;
     }
   }
 
   static PermissionStatus _fromLocationPermissionStatus(
-    permissionLib.PermissionStatus status,
+    permission_lib.PermissionStatus status,
   ) {
     switch (status) {
-      case permissionLib.PermissionStatus.denied:
+      case permission_lib.PermissionStatus.denied:
         return PermissionStatus.denied;
-      case permissionLib.PermissionStatus.granted:
+      case permission_lib.PermissionStatus.granted:
         return PermissionStatus.granted;
-      case permissionLib.PermissionStatus.restricted:
+      case permission_lib.PermissionStatus.restricted:
         return PermissionStatus.restricted;
       default:
         return PermissionStatus.unknown;

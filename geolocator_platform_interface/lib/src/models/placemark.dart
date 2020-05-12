@@ -1,6 +1,9 @@
+import 'package:meta/meta.dart';
+
 import 'position.dart';
 
 /// Contains detailed placemark information.
+@immutable
 class Placemark {
   /// Constructs an instance with the given values for testing. [Placemark]
   /// instances constructed this way won't actually reflect any real information
@@ -65,7 +68,7 @@ class Placemark {
   final Position position;
 
   @override
-  bool operator ==(o) =>
+  bool operator == (dynamic o) =>
       o is Placemark &&
       o.administrativeArea == administrativeArea &&
       o.country == country &&
@@ -128,7 +131,8 @@ class Placemark {
     );
   }
 
-  /// Converts the [Placemark] instance into a [Map] instance that can be serialized to JSON.
+  /// Converts the [Placemark] instance into a [Map] instance that can be 
+  /// serialized to JSON.
   Map<String, dynamic> toJson() => {
         'name': name,
         'isoCountryCode': isoCountryCode,

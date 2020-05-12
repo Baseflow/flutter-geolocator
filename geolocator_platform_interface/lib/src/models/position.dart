@@ -1,4 +1,7 @@
+import 'package:meta/meta.dart';
+
 /// Contains detailed location information.
+@immutable
 class Position {
   /// Constructs an instance with the given values for testing. [Position]
   /// instances constructed this way won't actually reflect any real information
@@ -25,10 +28,12 @@ class Position {
     this.speedAccuracy,
   });
 
-  /// The latitude of this position in degrees normalized to the interval -90.0 to +90.0 (both inclusive).
+  /// The latitude of this position in degrees normalized to the interval -90.0
+  /// to +90.0 (both inclusive).
   final double latitude;
 
-  /// The longitude of the position in degrees normalized to the interval -180 (exclusive) to +180 (inclusive).
+  /// The longitude of the position in degrees normalized to the interval -180
+  /// (exclusive) to +180 (inclusive).
   final double longitude;
 
   /// The time at which this position was determined.
@@ -36,31 +41,37 @@ class Position {
 
   /// The altitude of the device in meters.
   ///
-  /// The altitude is not available on all devices. In these cases the returned value is 0.0.
+  /// The altitude is not available on all devices. In these cases the returned
+  /// value is 0.0.
   final double altitude;
 
   /// The estimated horizontal accuracy of the position in meters.
   ///
-  /// The accuracy is not available on all devices. In these cases the value is 0.0.
+  /// The accuracy is not available on all devices. In these cases the value is
+  /// 0.0.
   final double accuracy;
 
   /// The heading in which the device is traveling in degrees.
   ///
-  /// The heading is not available on all devices. In these cases the value is 0.0.
+  /// The heading is not available on all devices. In these cases the value is
+  /// 0.0.
   final double heading;
 
-  /// The speed at which the devices is traveling in meters per second over ground.
+  /// The speed at which the devices is traveling in meters per second over 
+  /// ground.
   ///
-  /// The speed is not available on all devices. In these cases the value is 0.0.
+  /// The speed is not available on all devices. In these cases the value is 
+  /// 0.0.
   final double speed;
 
   /// The estimated speed accuracy of this position, in meters per second.
   ///
-  /// The speedAccuracy is not available on all devices. In these cases the value is 0.0.
+  /// The speedAccuracy is not available on all devices. In these cases the 
+  /// value is 0.0.
   final double speedAccuracy;
 
   @override
-  bool operator ==(o) {
+  bool operator == (dynamic o) {
     var areEqual = o is Position &&
         o.accuracy == accuracy &&
         o.altitude == altitude &&
@@ -90,7 +101,8 @@ class Position {
     return 'Lat: $latitude, Long: $longitude';
   }
 
-  /// Converts a collection of [Map] objects into a collection of [Position] objects.
+  /// Converts a collection of [Map] objects into a collection of [Position] 
+  /// objects.
   static List<Position> fromMaps(dynamic message) {
     if (message == null) {
       throw ArgumentError('The parameter \'message\' should not be null.');
@@ -118,7 +130,7 @@ class Position {
           'The supplied map doesn\'t contain the mandatory key `longitude`.');
     }
 
-    final DateTime timestamp = positionMap['timestamp'] != null
+    final timestamp = positionMap['timestamp'] != null
         ? DateTime.fromMillisecondsSinceEpoch(positionMap['timestamp'].toInt(),
             isUtc: true)
         : null;
@@ -134,7 +146,8 @@ class Position {
         speedAccuracy: positionMap['speed_accuracy'] ?? 0.0);
   }
 
-  /// Converts the [Position] instance into a [Map] instance that can be serialized to JSON.
+  /// Converts the [Position] instance into a [Map] instance that can be
+  /// serialized to JSON.
   Map<String, dynamic> toJson() => {
         'longitude': longitude,
         'latitude': latitude,
