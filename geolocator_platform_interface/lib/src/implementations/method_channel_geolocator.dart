@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator_platform_interface/src/errors/permission_denied_exception.dart';
@@ -56,36 +58,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
-  Future<Position> getCurrentPosition({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    Permission permission = Permission.location,
-  }) async {
-    final PermissionStatus permissionStatus =
-        await _getLocationPermission(permission);
-
-    if (permissionStatus == PermissionStatus.granted) {
-      final locationOptions = LocationOptions(
-          accuracy: desiredAccuracy,
-          distanceFilter: 0,
-          forceAndroidLocationManager: forceAndroidLocationManager);
-
-      final Map<dynamic, dynamic> positionMap =
-          await methodChannel.invokeMethod(
-        'getCurrentPosition',
-        locationOptions.toJson(),
-      );
-
-      try {
-        return Position.fromMap(positionMap);
-      } on ArgumentError {
-        return null;
-      }
-    } else {
-      throw PermissionDeniedException(permission);
-    }
-  }
-
-  @override
   Future<Position> getLastKnownPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     Permission permission = Permission.location,
@@ -112,11 +84,24 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
+  Future<Position> getCurrentPosition({
+    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    Permission permission = Permission.location,
+    Duration timeLimit,
+  }) =>
+      getPositionStream(
+              desiredAccuracy: desiredAccuracy,
+              permission: permission,
+              timeLimit: timeLimit)
+          .first;
+
+  @override
   Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     int timeInterval = 0,
     Permission permission = Permission.location,
+    Duration timeLimit,
   }) async* {
     final permissionStatus = await _getLocationPermission(permission);
     final locationOptions = LocationOptions(
@@ -127,13 +112,24 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     );
 
     if (permissionStatus == PermissionStatus.granted) {
-      _onPositionChanged ??= eventChannel
-          .receiveBroadcastStream(
-            locationOptions.toJson(),
-          )
-          .map<Position>((dynamic element) =>
-              Position.fromMap(element.cast<String, dynamic>()));
+      if (_onPositionChanged == null) {
+        final positionStream = eventChannel.receiveBroadcastStream(
+          locationOptions.toJson(),
+        );
 
+        if (timeLimit != null) {
+          positionStream.timeout(
+            timeLimit,
+            onTimeout: (s) {
+              s.close();
+              throw TimeoutException('Time limit reached while waiting for position update.', timeLimit,);
+            },
+          );
+        }
+
+        _onPositionChanged = positionStream.map<Position>((dynamic element) =>
+            Position.fromMap(element.cast<String, dynamic>()));
+      }
       yield* _onPositionChanged;
     } else {
       throw PermissionDeniedException(permission);

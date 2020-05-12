@@ -47,17 +47,6 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError('isLocationServiceEnabled() has not been implemented.');
   }
 
-  /// Returns the current position taking the supplied [desiredAccuracy] into 
-  /// account.
-  ///
-  /// When the [desiredAccuracy] is not supplied, it defaults to best.
-  Future<Position> getCurrentPosition({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    Permission permission = Permission.location,
-  }) {
-    throw UnimplementedError('getCurrentPosition() has not been implemented.');
-  }
-
   /// Returns the last known position stored on the users device.
   ///
   /// On Android we look for the location provider matching best with the
@@ -68,6 +57,18 @@ abstract class GeolocatorPlatform extends PlatformInterface {
       Permission permission = Permission.location,
   }) {
     throw UnimplementedError('getLastKnownPosition() has not been implemented.');
+  }
+
+  /// Returns the current position taking the supplied [desiredAccuracy] into 
+  /// account.
+  ///
+  /// When the [desiredAccuracy] is not supplied, it defaults to best.
+  Future<Position> getCurrentPosition({
+    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    Permission permission = Permission.location,
+    Duration timeLimit,
+  }) {
+    throw UnimplementedError('getCurrentPosition() has not been implemented.');
   }
 
   /// Fires whenever the location changes inside the bounds of the [desiredAccuracy].
@@ -94,6 +95,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
       int distanceFilter = 0,
       int timeInterval = 0,
       Permission permission = Permission.location,
+      Duration timeLimit,
   }) {
     throw UnimplementedError('getPositionStream() has not been implemented.');
   }
