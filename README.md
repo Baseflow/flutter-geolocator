@@ -17,6 +17,13 @@ A Flutter geolocation plugin which provides easy access to platform specific loc
 
 **Note**: The availability of the Google Play Services depends on your country. If your country doesn't support a connection with the Google Play Services, you'll need to try a VPN to establish a connection. For more information about how to work with Google Play Services visit the following link: https://developers.google.com/android/guides/overview 
 
+# Support
+
+* Feel free to open an issue. Make sure to use one of the templates!
+* Commercial support is available. Integration with your app or services, samples, feature request, etc. Email: [hello@baseflow.com](mailto:hello@baseflow.com)
+* Powered by: [baseflow.com](https://baseflow.com)
+
+
 ## Usage
 
 To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/). For example:
