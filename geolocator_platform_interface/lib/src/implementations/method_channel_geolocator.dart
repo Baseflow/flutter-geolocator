@@ -10,8 +10,8 @@ import '../../geolocator_platform_interface.dart';
 import '../enums/enums.dart';
 import '../errors/permission_denied_exception.dart';
 import '../geolocator_platform_interface.dart';
+import '../models/location_options.dart';
 import '../models/position.dart';
-import 'location_options.dart';
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class MethodChannelGeolocator extends GeolocatorPlatform {
@@ -68,8 +68,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     if (permissionStatus == PermissionStatus.granted) {
       final locationOptions = LocationOptions(
           accuracy: desiredAccuracy,
-          distanceFilter: 0,
-          forceAndroidLocationManager: forceAndroidLocationManager);
+          distanceFilter: 0);
 
       final positionMap = await methodChannel.invokeMethod(
           'getLastKnownPosition', locationOptions.toJson());
@@ -105,7 +104,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       accuracy: desiredAccuracy,
       distanceFilter: distanceFilter,
       timeInterval: timeInterval,
-      forceAndroidLocationManager: forceAndroidLocationManager,
     );
 
     if (permissionStatus == PermissionStatus.granted) {

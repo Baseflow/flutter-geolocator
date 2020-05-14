@@ -6,7 +6,7 @@ import 'package:geolocator_platform_interface/src/implementations/method_channel
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final mockPosition = Position(
+  final _mockPosition = Position(
       latitude: 52.561270,
       longitude: 5.639382,
       timestamp: DateTime.fromMillisecondsSinceEpoch(
@@ -19,13 +19,13 @@ void main() {
       speed: 0.0,
       speedAccuracy: 0.0);
 
-  final mockPlacemark = Placemark(
+  final _mockPlacemark = Placemark(
       administrativeArea: 'Overijssel',
       country: 'Netherlands',
       isoCountryCode: 'NL',
       locality: 'Enschede',
       name: 'Gronausestraat',
-      position: mockPosition,
+      position: _mockPosition,
       postalCode: '',
       subAdministrativeArea: 'Enschede',
       subLocality: 'Enschmarke',
@@ -45,9 +45,9 @@ void main() {
 
         switch (call.method) {
           case 'placemarkFromAddress':
-            return [mockPlacemark.toJson()];
+            return [_mockPlacemark.toJson()];
           case 'placemarkFromCoordinates':
-            return [mockPlacemark.toJson()];
+            return [_mockPlacemark.toJson()];
           default:
             return null;
         }
@@ -69,7 +69,7 @@ void main() {
 
           // Assert
           expect(placemarks.length, 1);
-          expect(placemarks.first, mockPlacemark);
+          expect(placemarks.first, _mockPlacemark);
         });
 
         test(
@@ -106,7 +106,7 @@ void main() {
           );
 
           expect(placemarks.length, 1);
-          expect(placemarks.first, mockPlacemark);
+          expect(placemarks.first, _mockPlacemark);
         });
 
         test('the localeIdentifier parameter should be send to the platform',
@@ -148,7 +148,7 @@ void main() {
               await methodChannelGeocoder.placemarkFromPosition(position);
 
           expect(placemarks.length, 1);
-          expect(placemarks.first, mockPlacemark);
+          expect(placemarks.first, _mockPlacemark);
         });
 
         test(
@@ -186,7 +186,7 @@ void main() {
 
           // Assert
           expect(placemarks.length, 1);
-          expect(placemarks.first, mockPlacemark);
+          expect(placemarks.first, _mockPlacemark);
         });
 
         test('the localeIdentifier parameter should be send to the platform',
