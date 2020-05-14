@@ -191,7 +191,7 @@ The table below outlines the accuracy options per platform:
 
 ## Issues
 
-Please file any issues, bugs or feature requests as an issue on our [GitHub](https://github.com/BaseflowIT/flutter-geolocator/issues) page.
+Please file any issues, bugs or feature requests as an issue on our [GitHub](https://github.com/BaseflowIT/flutter-geolocator/issues) page. Commercial support is available, you can contact us at <hello@baseflow.com>.
 
 ## Want to contribute
 
@@ -199,4 +199,4 @@ If you would like to contribute to the plugin (e.g. by improving the documentati
 
 ## Author
 
-This Geolocator plugin for Flutter is developed by [Baseflow](https://baseflow.com). Commercial support is available if you need helpt with integration with your app or services. You can contact us at <hello@baseflow.com>.
+This Geolocator plugin for Flutter is developed by [Baseflow](https://baseflow.com).
