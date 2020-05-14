@@ -4,6 +4,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geocoder_platform_interface.dart';
+import 'package:geolocator_platform_interface/src/implementations/method_channel_geocoder.dart';
 import 'package:mockito/mockito.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
