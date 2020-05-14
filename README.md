@@ -4,7 +4,6 @@
 
 A Flutter geolocation plugin which provides easy access to platform specific location services ([FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient) or if not available the [LocationManager](https://developer.android.com/reference/android/location/LocationManager) on Android and [CLLocationManager](https://developer.apple.com/documentation/corelocation/cllocationmanager) on iOS).
 
-
 ## Features
 
 * Get the current location of the device;
@@ -16,13 +15,6 @@ A Flutter geolocation plugin which provides easy access to platform specific loc
 * Check the availability of Google Play Services (on Android only).
 
 **Note**: The availability of the Google Play Services depends on your country. If your country doesn't support a connection with the Google Play Services, you'll need to try a VPN to establish a connection. For more information about how to work with Google Play Services visit the following link: https://developers.google.com/android/guides/overview 
-
-# Support
-
-* Feel free to open an issue. Make sure to use one of the templates!
-* Commercial support is available. Integration with your app or services, samples, feature request, etc. Email: [hello@baseflow.com](mailto:hello@baseflow.com)
-* Powered by: [baseflow.com](https://baseflow.com)
-
 
 ## Usage
 
@@ -207,4 +199,4 @@ If you would like to contribute to the plugin (e.g. by improving the documentati
 
 ## Author
 
-This Geolocator plugin for Flutter is developed by [Baseflow](https://baseflow.com). You can contact us at <hello@baseflow.com>
+This Geolocator plugin for Flutter is developed by [Baseflow](https://baseflow.com). Commercial support is available if you need helpt with integration with your app or services. You can contact us at <hello@baseflow.com>.
