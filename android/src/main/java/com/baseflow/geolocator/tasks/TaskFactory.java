@@ -6,11 +6,11 @@ import com.baseflow.geolocator.OnCompletionListener;
 import com.baseflow.geolocator.data.CalculateDistanceOptions;
 import com.baseflow.geolocator.data.ForwardGeocodingOptions;
 import com.baseflow.geolocator.data.LocationOptions;
+import com.baseflow.geolocator.data.LocationSettingsOptions;
 import com.baseflow.geolocator.data.ReverseGeocodingOptions;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
 
 public class TaskFactory {
   public static Task<CalculateDistanceOptions> createCalculateDistanceTask(
@@ -127,5 +127,21 @@ public class TaskFactory {
           taskContext,
           false);
     }
+  }
+
+  public static Task<LocationSettingsOptions> createChangeLocationSettingsTask(
+        Context context,
+        MethodChannel.Result result,
+        Object arguments,
+        OnCompletionListener completionListener) {
+
+    LocationSettingsOptions options = LocationSettingsOptions.parseArguments(arguments);
+    TaskContext<LocationSettingsOptions> taskContext = TaskContext.buildForMethodResult(
+            context,
+            result,
+            options,
+            completionListener);
+
+    return new ChangeLocationSettingsTask(taskContext);
   }
 }

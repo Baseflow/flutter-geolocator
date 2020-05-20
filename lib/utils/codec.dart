@@ -12,4 +12,12 @@ class Codec {
             locationOptions.forceAndroidLocationManager,
         'timeInterval': locationOptions.timeInterval
       };
+
+  static Map<String, dynamic> encodeLocationSettingsOptions(
+          LocationSettingsOptions locationOptions) =>
+      <String, dynamic>{
+        'priority': locationOptions.priority.value,
+        'timeInterval': locationOptions.timeInterval,
+        'fastestTimeInterval': locationOptions.fastestTimeInterval
+      };
 }

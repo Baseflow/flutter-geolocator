@@ -1,17 +1,21 @@
 library geolocator;
 
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'dart:math';
+
+import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:google_api_availability/google_api_availability.dart';
-import 'package:meta/meta.dart';
 import 'package:location_permissions/location_permissions.dart';
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:equatable/equatable.dart';
 
 part 'models/geolocation_enums.dart';
 part 'models/location_accuracy.dart';
 part 'models/location_options.dart';
+part 'models/location_priority.dart';
+part 'models/location_settings_options.dart';
 part 'models/placemark.dart';
 part 'models/position.dart';
 part 'utils/codec.dart';
@@ -59,6 +63,30 @@ class Geolocator {
         .checkPermissionStatus(level: toPermissionLevel(locationPermission));
 
     return fromPermissionStatus(permissionStatus);
+  }
+
+  /// Prompt user with a dialog asking user's permission to change location settings,
+  /// returns a [Future] containing a [bool] value indicating user's response, iOS always
+  /// returns false.
+  Future<bool> requestLocationSettingsChange({
+    LocationPriority locationPriority = LocationPriority.balanced,
+    timeInterval = 5000,
+    fastestTimeInterval = 1000,
+  }) async {
+    if (!Platform.isAndroid) return false;
+
+    final LocationSettingsOptions locationOptions = LocationSettingsOptions(
+      priority: locationPriority,
+      timeInterval: timeInterval,
+      fastestTimeInterval: fastestTimeInterval,
+    );
+    if (await _methodChannel.invokeMethod('requestLocationSettingsChange',
+            Codec.encodeLocationSettingsOptions(locationOptions)) ==
+        1) {
+      return true;
+    }
+
+    return false;
   }
 
   /// Returns a [Future] containing a [bool] value indicating whether location services are enabled on the device.

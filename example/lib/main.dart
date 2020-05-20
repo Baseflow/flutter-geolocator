@@ -1,20 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator_example/pages/request_location_settings_widget.dart';
 
-import 'pages/lookup_address_widget.dart';
 import 'pages/calculate_distance_widget.dart';
 import 'pages/current_location_widget.dart';
 import 'pages/location_stream_widget.dart';
+import 'pages/lookup_address_widget.dart';
 
 void main() => runApp(_GeolocatorExampleApp());
-  enum _TabItem {
-    singleLocation,
-    singleFusedLocation,
-    locationStream,
-    distance,
-    geocode
-  }
+enum _TabItem {
+  singleLocation,
+  singleFusedLocation,
+  locationStream,
+  distance,
+  geocode,
+  requestLocationSettings
+}
 
 class _GeolocatorExampleApp extends StatefulWidget {
   @override
@@ -22,8 +24,6 @@ class _GeolocatorExampleApp extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<_GeolocatorExampleApp> {
-
-
   _TabItem _currentItem = _TabItem.singleLocation;
   final List<_TabItem> _bottomTabs = [
     _TabItem.singleLocation,
@@ -36,10 +36,11 @@ class _BottomNavigationState extends State<_GeolocatorExampleApp> {
   void initState() {
     if (Platform.isAndroid) {
       _bottomTabs.insert(1, _TabItem.singleFusedLocation);
-    } 
+      _bottomTabs.add(_TabItem.requestLocationSettings);
+    }
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -63,6 +64,8 @@ class _BottomNavigationState extends State<_GeolocatorExampleApp> {
         return CurrentLocationWidget(androidFusedLocation: true);
       case _TabItem.geocode:
         return LookupAddressWidget();
+      case _TabItem.requestLocationSettings:
+        return RequestLocationSettingsWidget();
       case _TabItem.singleLocation:
       default:
         return CurrentLocationWidget(androidFusedLocation: false);
@@ -120,6 +123,8 @@ class _BottomNavigationState extends State<_GeolocatorExampleApp> {
         return 'Distance';
       case _TabItem.geocode:
         return 'Geocode';
+      case _TabItem.requestLocationSettings:
+        return 'Request Location';
       default:
         throw 'Unknown: $item';
     }
@@ -137,6 +142,8 @@ class _BottomNavigationState extends State<_GeolocatorExampleApp> {
         return Icons.redo;
       case _TabItem.geocode:
         return Icons.compare_arrows;
+      case _TabItem.requestLocationSettings:
+        return Icons.gps_fixed;
       default:
         throw 'Unknown: $item';
     }
