@@ -55,10 +55,11 @@ public class GeolocatorPlugin implements
 
   private UUID ChangeLocationSettingsTaskUUID = null;
 
-  public void registerPlugin(Context context, BinaryMessenger messenger) {
+  public void registerPlugin(Context context, BinaryMessenger messenger, Activity activity) {
     final MethodChannel methodChannel = new MethodChannel(messenger, METHOD_CHANNEL_NAME);
     final EventChannel eventChannel = new EventChannel(messenger, EVENT_CHANNEL_NAME);
     this.setContext(context);
+    this.setActivity(activity);
     methodChannel.setMethodCallHandler(this);
     eventChannel.setStreamHandler(this);
   }
@@ -74,14 +75,14 @@ public class GeolocatorPlugin implements
    */
   public static void registerWith(Registrar registrar) {
     GeolocatorPlugin geolocatorPlugin = new GeolocatorPlugin();
-    geolocatorPlugin.registerPlugin(registrar.context(), registrar.messenger());
+    geolocatorPlugin.registerPlugin(registrar.context(), registrar.messenger(), registrar.activity());
     registrar.addViewDestroyListener(geolocatorPlugin);
     registrar.addActivityResultListener(geolocatorPlugin);
   }
 
   @Override
   public void onAttachedToEngine(FlutterPluginBinding binding) {
-    this.registerPlugin(binding.getApplicationContext(), binding.getBinaryMessenger());
+    this.registerPlugin(binding.getApplicationContext(), binding.getBinaryMessenger(), null);
   }
 
   @Override
