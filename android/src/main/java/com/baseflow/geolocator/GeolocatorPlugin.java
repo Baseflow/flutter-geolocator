@@ -3,21 +3,14 @@ package com.baseflow.geolocator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.tasks.ChangeLocationSettingsTask;
 import com.baseflow.geolocator.tasks.Task;
 import com.baseflow.geolocator.tasks.TaskFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,7 +27,6 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.view.FlutterNativeView;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * GeolocatorPlugin

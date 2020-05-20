@@ -7,7 +7,6 @@ import com.baseflow.geolocator.data.wrapper.ChannelResponse;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
 
 final class TaskContext<TOptions> {
   private final TOptions mOptions;
