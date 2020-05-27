@@ -34,10 +34,9 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Returns a [Future] containing the current [PermissionStatus] indicating
-  /// if access to the device's location is allowed.
-  Future<PermissionStatus> checkPermissions(
-      {Permission locationPermission = Permission.location}) {
+  /// Returns a [Future] indicating if permissions to access the device's 
+  /// location has been granted.
+  Future<bool> hasPermission() {
     throw UnimplementedError(
       'checkPermissions() has not been implementated.',
     );
@@ -56,9 +55,10 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// On Android we look for the location provider matching best with the
   /// supplied [desiredAccuracy]. On iOS this parameter is ignored.
   /// When no position is available, null is returned.
+  /// Throws a [PermissionDeniedException] when trying to request the device's
+  /// location when the user denied access.
   Future<Position> getLastKnownPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    Permission permission = Permission.location,
   }) {
     throw UnimplementedError(
       'getLastKnownPosition() has not been implemented.',
@@ -68,10 +68,13 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Returns the current position taking the supplied [desiredAccuracy] into
   /// account.
   ///
-  /// When the [desiredAccuracy] is not supplied, it defaults to best.
+  /// When the [desiredAccuracy] is not supplied, it defaults to best. 
+  /// Throws a [TimeoutException] when no location is received within the 
+  /// supplied [timeLimit] duration.
+  /// Throws a [PermissionDeniedException] when trying to request the device's
+  /// location when the user denied access.
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    Permission permission = Permission.location,
     Duration timeLimit,
   }) {
     throw UnimplementedError('getCurrentPosition() has not been implemented.');
@@ -98,11 +101,15 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// You can customize the behaviour of the location updates by supplying an
   /// instance [LocationOptions] class. When you don't supply any specific
   /// options, default values will be used for each setting.
+  /// 
+  /// Throws a [TimeoutException] when no location is received within the 
+  /// supplied [timeLimit] duration.
+  /// Throws a [PermissionDeniedException] when trying to request the device's
+  /// location when the user denied access.
   Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     int timeInterval = 0,
-    Permission permission = Permission.location,
     Duration timeLimit,
   }) {
     throw UnimplementedError('getPositionStream() has not been implemented.');

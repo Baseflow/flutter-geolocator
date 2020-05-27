@@ -1,16 +1,17 @@
-import '../enums/permission.dart';
-
 /// An exception thrown when trying to access the  device's location 
 /// information while access is denied.
 class PermissionDeniedException implements Exception {
   /// Constructs the [PermissionDeniedException]
-  const PermissionDeniedException(this.permission);
+  const PermissionDeniedException(this.message);
 
-  /// The [Permission] that has been requested but has been denied.
-  final Permission permission;
+  /// A [message] describing more details on the denied permission.
+  final String message;
 
   @override
   String toString() {
-    return 'Access to $permission has been requested but denied by the user.';
+    if (message == null || message == '') {
+      return 'Access to the location of the device is denied by the user.';
+    }
+    return message;
   }
 }
