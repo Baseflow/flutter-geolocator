@@ -56,10 +56,10 @@ void main() {
       log.clear();
     });
 
-    group('When requesting placemark based on Address', () {
-      group('and not specifying a locale', () {
-        test('I should receive a placemark containing the coordinates',
-            () async {
+    group('placemarkFromAddress: When requesting placemark based on Address',
+        () {
+      group('And not specifying a locale', () {
+        test('Should receive a placemark containing the coordinates', () async {
           // Arrange
           final address = 'Gronausestraat, Enschede';
 
@@ -72,8 +72,7 @@ void main() {
           expect(placemarks.first, _mockPlacemark);
         });
 
-        test(
-            'the localeIdentifier parameter should not be send to the platform',
+        test('Should not send the localeIdentifier parameter to the platform',
             () async {
           // Arrange
           final address = 'Gronausestraat, Enschede';
@@ -91,8 +90,92 @@ void main() {
         });
       });
 
-      group('and specifying a locale', () {
-        test('I should receive a placemark containing the address', () async {
+      group('And specifying a locale', () {
+        test('Should receive a placemark containing the coordinates', () async {
+          // Arrange
+          final address = 'Gronausestraat, Enschede';
+
+          // Act
+          final placemarks = await methodChannelGeocoder.placemarkFromAddress(
+            address,
+            localeIdentifier: 'nl-NL',
+          );
+
+          // Assert
+          expect(placemarks.length, 1);
+          expect(placemarks.first, _mockPlacemark);
+        });
+
+        test('Should send the localeIdentifier to the platform', () async {
+          // Arrange
+          final address = 'Gronausestraat, Enschede';
+
+          // Act
+          await methodChannelGeocoder.placemarkFromAddress(
+            address,
+            localeIdentifier: 'nl-NL',
+          );
+
+          // Assert
+          expect(log, <Matcher>[
+            isMethodCall(
+              'placemarkFromAddress',
+              arguments: <String, dynamic>{
+                'address': address,
+                'localeIdentifier': 'nl-NL',
+              },
+            ),
+          ]);
+        });
+      });
+    });
+
+    group('placemarkFromCoordinate: When requesting placemark based on Address',
+        () {
+      group('And not specifying a locale', () {
+        test('Should receive a placemark containing the address', () async {
+          // Arrange
+          final latitude = 52.561270;
+          final longitude = 5.639382;
+
+          // Act
+          final placemarks =
+              await methodChannelGeocoder.placemarkFromCoordinates(
+            latitude,
+            longitude,
+          );
+
+          expect(placemarks.length, 1);
+          expect(placemarks.first, _mockPlacemark);
+        });
+
+        test('Should not send the localeIdentifier parameter to the platform',
+            () async {
+          // Assert
+          final latitude = 52.561270;
+          final longitude = 5.639382;
+
+          // Act
+          await methodChannelGeocoder.placemarkFromCoordinates(
+            latitude,
+            longitude,
+          );
+
+          // Assert
+          expect(log, <Matcher>[
+            isMethodCall(
+              'placemarkFromCoordinates',
+              arguments: <String, dynamic>{
+                'latitude': latitude,
+                'longitude': longitude,
+              },
+            ),
+          ]);
+        });
+      });
+
+      group('And specifying a locale', () {
+        test('Should receive a placemark containing the address', () async {
           // Arrange
           final latitude = 52.561270;
           final longitude = 5.639382;
@@ -109,8 +192,7 @@ void main() {
           expect(placemarks.first, _mockPlacemark);
         });
 
-        test('the localeIdentifier parameter should be send to the platform',
-            () async {
+        test('Should send the localeIdentifier to the platform', () async {
           // Assert
           final latitude = 52.561270;
           final longitude = 5.639382;
@@ -137,9 +219,12 @@ void main() {
       });
     });
 
-    group('When requesting a placemark based on a Position', () {
-      group('and not specifying a locale', () {
-        test('I should receive a placemark containing the address', () async {
+    group(
+        // ignore: lines_longer_than_80_chars
+        'placemarkFromPosition: When requesting a placemark based on a Position',
+        () {
+      group('And not specifying a locale', () {
+        test('Should receive a placemark containing the address', () async {
           // Arrange
           final position = Position(latitude: 52.561270, longitude: 5.639382);
 
@@ -151,9 +236,7 @@ void main() {
           expect(placemarks.first, _mockPlacemark);
         });
 
-        test(
-            'the localeIdentifier parameter should not be send to the platform',
-            () async {
+        test('Should not send the localeIdentifier to the platform', () async {
           // Arrange
           final position = Position(latitude: 52.561270, longitude: 5.639382);
 
@@ -173,8 +256,8 @@ void main() {
         });
       });
 
-      group('and specifying a locale', () {
-        test('I should receive a placemark containing the address', () async {
+      group('And specifying a locale', () {
+        test('Should receive a placemark containing the address', () async {
           // Arrange
           final position = Position(latitude: 52.561270, longitude: 5.639382);
 
@@ -189,8 +272,7 @@ void main() {
           expect(placemarks.first, _mockPlacemark);
         });
 
-        test('the localeIdentifier parameter should be send to the platform',
-            () async {
+        test('Should send the localeIdentifier to the platform', () async {
           // Arrange
           final position = Position(latitude: 52.561270, longitude: 5.639382);
 

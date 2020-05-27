@@ -173,7 +173,70 @@ void main() {
       log.clear();
     });
 
-    group('When requesting the last know position', () {
+    group('hasPermission: When checking for permission', () {
+      test('Should receive true if permission is granted', () async {
+        // Arrange
+        _mockHasPermission = true;
+
+        // Act
+        final hasPermission = await methodChannelGeolocator.hasPermission();
+
+        // Assert
+        expect(
+          hasPermission,
+          true,
+        );
+      });
+
+      test('Should receive false if permission is denied', () async {
+        // Arrange
+        _mockHasPermission = false;
+
+        // Act
+        final hasPermission = await methodChannelGeolocator.hasPermission();
+
+        // Assert
+        expect(
+          hasPermission,
+          false,
+        );
+      });
+    });
+
+    group('isLocationServiceEnabled: When checking the location service status',
+        () {
+      test('Should receive true if location services are enabled', () async {
+        // Arrange
+        _mockIsLocationServiceEnabled = true;
+
+        // Act
+        final isLocationServiceEnabled =
+            await methodChannelGeolocator.isLocationServiceEnabled();
+
+        // Assert
+        expect(
+          isLocationServiceEnabled,
+          true,
+        );
+      });
+
+      test('Should receive false if location services are disabled', () async {
+        // Arrange
+        _mockIsLocationServiceEnabled = false;
+
+        // Act
+        final isLocationServiceEnabled =
+            await methodChannelGeolocator.isLocationServiceEnabled();
+
+        // Assert
+        expect(
+          isLocationServiceEnabled,
+          false,
+        );
+      });
+    });
+
+    group('getLastKnowPosition: When requesting the last know position', () {
       test('Should receive a position if permissions are granted', () async {
         // Arrange
         _mockHasPermission = true;
@@ -220,7 +283,7 @@ void main() {
       });
     });
 
-    group('When requesting the current position', () {
+    group('getCurrentPosition: When requesting the current position', () {
       test('Should receive a position if permissions are granted', () async {
         // Arrange
         _mockHasPermission = true;
@@ -326,7 +389,18 @@ void main() {
       });
     });
 
-    group('When requesting a stream of position updates', () {
+    group('getPositionStream: When requesting a stream of position updates',
+        () {
+      
+      group('And requesting for position update multiple times', (){
+        test('Should return the same stream', () {
+          final firstStream = methodChannelGeolocator.getPositionStream();
+          final secondStream = methodChannelGeolocator.getPositionStream();
+
+          expect(identical(firstStream, secondStream), true,);
+        });
+      });
+
       test(
           // ignore: lines_longer_than_80_chars
           'Should receive a stream with position updates if permissions are granted',

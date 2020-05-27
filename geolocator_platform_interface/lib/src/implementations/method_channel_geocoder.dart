@@ -10,12 +10,13 @@ import '../models/models.dart';
 class MethodChannelGeocoder extends GeocoderPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  MethodChannel methodChannel =
-    MethodChannel('flutter.baseflow.com/geocoder');
+  MethodChannel methodChannel = MethodChannel('flutter.baseflow.com/geocoder');
 
   @override
-  Future<List<Placemark>> placemarkFromAddress(String address,
-      {String localeIdentifier}) async {
+  Future<List<Placemark>> placemarkFromAddress(
+    String address, {
+    String localeIdentifier,
+  }) async {
     final parameters = <String, String>{
       'address': address,
     };
