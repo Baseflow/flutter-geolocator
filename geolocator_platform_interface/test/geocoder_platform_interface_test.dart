@@ -30,6 +30,34 @@ void main() {
       final mock = MockGeocoderPlatform();
       GeocoderPlatform.instance = mock;
     });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of placemarkFromAddress should throw unimplemented error',
+      (){
+        // Arrange
+        final geocoderPlatform = ExtendsGeocoderPlatform();
+
+        // Act & Assert
+        expect(
+          () => geocoderPlatform.placemarkFromAddress('address'),
+          throwsUnimplementedError,
+        );
+    });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of placemarkFromCoordinates should throw unimplemented error',
+      (){
+        // Arrange
+        final geocoderPlatform = ExtendsGeocoderPlatform();
+
+        // Act & Assert
+        expect(
+          () => geocoderPlatform.placemarkFromCoordinates(0, 0),
+          throwsUnimplementedError,
+        );
+    });
   });
 }
 

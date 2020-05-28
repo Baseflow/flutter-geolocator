@@ -98,18 +98,7 @@ class Position {
 
   @override
   String toString() {
-    return 'Lat: $latitude, Long: $longitude';
-  }
-
-  /// Converts a collection of [Map] objects into a collection of [Position] 
-  /// objects.
-  static List<Position> fromMaps(dynamic message) {
-    if (message == null) {
-      throw ArgumentError('The parameter \'message\' should not be null.');
-    }
-
-    final List<Position> list = message.map<Position>(fromMap).toList();
-    return list;
+    return 'Latitude: $latitude, Longitude: $longitude';
   }
 
   /// Converts the supplied [Map] to an instance of the [Position] class.

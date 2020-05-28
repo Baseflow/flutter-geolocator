@@ -30,6 +30,76 @@ void main() {
       final mock = MockGeolocatorPlatform();
       GeolocatorPlatform.instance = mock;
     });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of hasPermission should throw unimplemented error',
+      (){
+        // Arrange
+        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+        // Act & Assert
+        expect(
+          geolocatorPlatform.hasPermission,
+          throwsUnimplementedError,
+        );
+    });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of isLocationServiceDisabled should throw unimplemented error',
+      (){
+        // Arrange
+        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+        // Act & Assert
+        expect(
+          geolocatorPlatform.isLocationServiceEnabled,
+          throwsUnimplementedError,
+        );
+    });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of getCurrentPosition should throw unimplemented error',
+      (){
+        // Arrange
+        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+        // Act & Assert
+        expect(
+          geolocatorPlatform.getCurrentPosition,
+          throwsUnimplementedError,
+        );
+    });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of getLastKnownPosition should throw unimplemented error',
+      (){
+        // Arrange
+        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+        // Act & Assert
+        expect(
+          geolocatorPlatform.getLastKnownPosition,
+          throwsUnimplementedError,
+        );
+    });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of getPositionStream should throw unimplemented error',
+      (){
+        // Arrange
+        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+        // Act & Assert
+        expect(
+          geolocatorPlatform.getPositionStream,
+          throwsUnimplementedError,
+        );
+    });
   });
 }
 

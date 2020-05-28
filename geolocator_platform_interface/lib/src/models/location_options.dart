@@ -1,4 +1,5 @@
-import '../enums/location_accuracy.dart'; 
+import '../enums/enums.dart'; 
+import '../extensions/extensions.dart';
 
 /// Represents different options to configure the quality and frequency
 /// of location updates.
@@ -35,7 +36,7 @@ class LocationOptions {
 
   /// Serializes the [LocationOptions] to a map message.
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'accuracy': accuracy.value,
+        'accuracy': accuracy.toShortString(),
         'distanceFilter': distanceFilter,
         'timeInterval': timeInterval
       };
