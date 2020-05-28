@@ -8,7 +8,7 @@ version: 1.0.0
 dependencies:
   flutter:
     sdk: flutter
-  location_permissions: ^2.0.5
+  
   meta: ^1.1.8
   plugin_platform_interface: ^1.0.2
 
@@ -16,8 +16,8 @@ dev_dependencies:
   fake_async: ^1.1.0
   flutter_test:
     sdk: flutter
-  mockito: ^4.1.1
   effective_dart: ^1.2.1
+  mockito: ^4.1.1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
