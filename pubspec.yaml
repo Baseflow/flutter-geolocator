@@ -14,7 +14,7 @@ dependencies:
 
   equatable: ^1.0.3
   google_api_availability: ^2.0.4
-  location_permissions: ^2.0.4+1
+  location_permissions: ^3.0.0
   vector_math: ^2.0.8
 
 dev_dependencies:

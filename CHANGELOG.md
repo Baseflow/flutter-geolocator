@@ -1,3 +1,7 @@
+## [5.3.2]
+
+* Update to `location_permissions: 3.0.0`
+
 ## [5.3.1]
 
 * Update to `google_api_availability: 2.0.4`
