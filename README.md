@@ -27,26 +27,44 @@ dependencies:
 
 Paul Halliday wrote a nice introductory article on [getting the user's location using the Geolocator plugin](https://alligator.io/flutter/geolocator-plugin/). If you are new to the plugin this would be a great place to get started. 
 
-> **NOTE:** As of version 3.0.0 the geolocator plugin switched to the AndroidX version of the Android Support Libraries. This means you need to make sure your Android project is also upgraded to support AndroidX. Detailed instructions can be found [here](https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility). 
->
->The TL;DR version is:
->
->1. Add the following to your "gradle.properties" file:
->
->```
->android.useAndroidX=true
->android.enableJetifier=true
->```
->2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 28:
->
->```
->android {
->  compileSdkVersion 28
->
->  ...
->}
->```
->3. Make sure you replace all the `android.` dependencies to their AndroidX counterparts (a full list can be found here: https://developer.android.com/jetpack/androidx/migrate).
+<details>
+<summary>Android</summary>
+
+As of version 3.0.0 the geolocator plugin switched to the AndroidX version of the Android Support Libraries. This means you need to make sure your Android project is also upgraded to support AndroidX. Detailed instructions can be found [here](https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility). 
+
+The TL;DR version is:
+
+1. Add the following to your "gradle.properties" file:
+
+```
+android.useAndroidX=true
+android.enableJetifier=true
+```
+2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 28:
+
+```
+android {
+  compileSdkVersion 28
+
+  ...
+}
+```
+3. Make sure you replace all the `android.` dependencies to their AndroidX counterparts (a full list can be found here: https://developer.android.com/jetpack/androidx/migrate).
+</details>
+
+<details>
+<summary>iOS</summary>
+
+
+Background location updates you need to add the key `EnableBackgroundLocationUpdates` to the `Info.plist` file (located in the 'ios/Runner' directory of your Flutter App) and set it's value to `<true/>`. This should look like this:
+
+```
+	<key>EnableBackgroundLocationUpdates</key>
+	<true/>
+```
+
+In addition you will need to add the Background Modes capability to their XCode project (Project > Signing and Capabilties > "+ Capability" button) and select Location Updates. Detailed information can be found in the [Apple documentation](https://developer.apple.com/documentation/corelocation/getting_the_user_s_location/handling_location_events_in_the_background).
+</details>
 
 ## API
 

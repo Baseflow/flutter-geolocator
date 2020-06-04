@@ -1,3 +1,7 @@
+## [5.3.2+1]
+
+* iOS: Make use of background location updates configurable (default is off). Background location updates can be enabled by adding the key "EnableBackgroundLocationUpdates" to the Info.plist with the value of `<false/>`.
+
 ## [5.3.2]
 
 * Update to `location_permissions: 3.0.0`
