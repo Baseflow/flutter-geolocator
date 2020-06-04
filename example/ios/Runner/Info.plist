@@ -30,10 +30,6 @@
 	<string>Allow this App to access your location?</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow this App to access your location only when the app is in use?</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>location</string>
-	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
