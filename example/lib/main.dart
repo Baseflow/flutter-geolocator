@@ -8,6 +8,7 @@ import 'pages/current_location_widget.dart';
 import 'pages/location_stream_widget.dart';
 
 void main() => runApp(_GeolocatorExampleApp());
+
 enum _TabItem {
   singleLocation,
   singleFusedLocation,
