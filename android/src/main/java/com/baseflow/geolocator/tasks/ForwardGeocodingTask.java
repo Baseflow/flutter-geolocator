@@ -21,9 +21,7 @@ class ForwardGeocodingTask extends Task<ForwardGeocodingOptions> {
   ForwardGeocodingTask(TaskContext<ForwardGeocodingOptions> context) {
     super(context);
 
-    PluginRegistry.Registrar registrar = context.getRegistrar();
-
-    mContext = registrar.activity() != null ? registrar.activity() : registrar.activeContext();
+    mContext = context.getAndroidContext();
   }
 
   @Override

@@ -2,8 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/geolocator.svg)](https://pub.dartlang.org/packages/geolocator) [![Build Status](https://app.bitrise.io/app/b0e244f2c82e1678/status.svg?token=x6sBRHLW05ymIpW-dVJlgQ&branch=master)](https://app.bitrise.io/app/b0e244f2c82e1678) [![codecov](https://codecov.io/gh/Baseflow/flutter-geolocator/branch/master/graph/badge.svg)](https://codecov.io/gh/Baseflow/flutter-geolocator)
 
-A Flutter geolocation plugin which provides easy access to the platform specific location services ([FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient) or if not available the [LocationManager](https://developer.android.com/reference/android/location/LocationManager) on Android and [CLLocationManager](https://developer.apple.com/documentation/corelocation/cllocationmanager) on iOS).
-
+A Flutter geolocation plugin which provides easy access to platform specific location services ([FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient) or if not available the [LocationManager](https://developer.android.com/reference/android/location/LocationManager) on Android and [CLLocationManager](https://developer.apple.com/documentation/corelocation/cllocationmanager) on iOS).
 
 ## Features
 
@@ -13,9 +12,9 @@ A Flutter geolocation plugin which provides easy access to the platform specific
 * Check if location services are enabled on the device;
 * Translate an address to geocoordinates and vice verse (a.k.a. Geocoding);
 * Calculate the distance (in meters) between two geocoordinates;
-* Check the availability of Google Play services (on Android only).
+* Check the availability of Google Play Services (on Android only).
 
-**Note**: The availability of the Google Play Services depends on your country. If your country doesn't support a connection with the Google Play Services, you need to try a VPN to establish a connection. For more information about how to work with Google Play Services visit the following link: https://developers.google.com/android/guides/overview 
+**Note**: The availability of the Google Play Services depends on your country. If your country doesn't support a connection with the Google Play Services, you'll need to try a VPN to establish a connection. For more information about how to work with Google Play Services visit the following link: https://developers.google.com/android/guides/overview 
 
 ## Usage
 
@@ -23,7 +22,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: ^5.3.1
+  geolocator: ^5.3.2
 ```
 
 Paul Halliday wrote a nice introductory article on [getting the user's location using the Geolocator plugin](https://alligator.io/flutter/geolocator-plugin/). If you are new to the plugin this would be a great place to get started. 
@@ -70,7 +69,7 @@ Position position = await Geolocator().getLastKnownPosition(desiredAccuracy: Loc
 ```
 
 To listen for location changes you can subscribe to the `onPositionChanged` stream. Supply an instance of the `LocationOptions` class to configure
-the desired accuracy and the minimum distance change (in meters) before updates are send to the application.
+the desired accuracy and the minimum distance change (in meters) before updates are sent to the application.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
@@ -101,7 +100,7 @@ Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
 GeolocationStatus geolocationStatus  = await geolocator.checkGeolocationPermissionStatus();
 ```
 
-To check if location services are enabled(Location Service(GPS) turned on) on the device `checkGeolocationPermissionStatus` will return `disabled` state if location service feature is disabled (or not available) on the device.
+To check if location services are enabled (Location Service(GPS) turned on) on the device, the `checkGeolocationPermissionStatus` method will return `disabled` state if location service feature is disabled (or not available) on the device.
 
 ### Geocoding
 
@@ -121,7 +120,7 @@ import 'package:geolocator/geolocator.dart';
 List<Placemark> placemark = await Geolocator().placemarkFromCoordinates(52.2165157, 6.9437819);
 ```
 
-Both the `placemarkFromAddress` and `placemarkFromCoordinates` accept an optional `localeIdentifier` parameter. This paramter can be used to enforce the resulting placemark to be formatted (and translated) according to the specified locale. The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode]. Use the [ISO 639-1 or ISO 639-2](http://www.loc.gov/standards/iso639-2/php/English_list.php) standard for the language code and the 2 letter [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1) standard for the country code. Some examples are:
+Both the `placemarkFromAddress` and `placemarkFromCoordinates` accept an optional `localeIdentifier` parameter. This parameter can be used to enforce the resulting placemark to be formatted (and translated) according to the specified locale. The `localeIdentifier` should be formatted using the syntax: [languageCode]_[countryCode]. Use the [ISO 639-1 or ISO 639-2](http://www.loc.gov/standards/iso639-2/php/English_list.php) standard for the language code and the 2 letter [ISO 3166-1](https://en.wikipedia.org/wiki/ISO_3166-1) standard for the country code. Some examples are:
 
 Locale identifier | Description
 ----------------- | -----------
@@ -165,22 +164,18 @@ On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS
 
 ### iOS
 
-On iOS you'll need to add the `NSLocationWhenInUseUsageDescription` to your Info.plist file (located under ios/Runner/Base.lproj) in order to access the device's location. Simply open your Info.plist file and add the following:
+On iOS you'll need to add the following entries to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following:
 
 ``` xml
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>This app needs access to location when open.</string>
-```
-
-If you would like to access the device's location when your App is running in the background, you should also add the `NSLocationAlwaysAndWhenInUseUsageDescription` (if your App support iOS 10 or earlier you should also add the key `NSLocationAlwaysUsageDescription`) key to your Info.plist file:
-
-``` xml
 <key>NSLocationAlwaysUsageDescription</key>
 <string>This app needs access to location when in the background.</string>
 <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 <string>This app needs access to location when open and in the background.</string>
 ```
 
+In addition, you need to add the `Background Modes` capability to your XCode project (Project > Signing and Capabilties > "+ Capability" button) and select `Location Updates`.
 ### Location accuracy
 
 The table below outlines the accuracy options per platform:
@@ -196,7 +191,7 @@ The table below outlines the accuracy options per platform:
 
 ## Issues
 
-Please file any issues, bugs or feature request as an issue on our [GitHub](https://github.com/BaseflowIT/flutter-geolocator/issues) page.
+Please file any issues, bugs or feature requests as an issue on our [GitHub](https://github.com/BaseflowIT/flutter-geolocator/issues) page. Commercial support is available, you can contact us at <hello@baseflow.com>.
 
 ## Want to contribute
 
@@ -204,4 +199,4 @@ If you would like to contribute to the plugin (e.g. by improving the documentati
 
 ## Author
 
-This Geolocator plugin for Flutter is developed by [Baseflow](https://baseflow.com). You can contact us at <hello@baseflow.com>
+This Geolocator plugin for Flutter is developed by [Baseflow](https://baseflow.com).

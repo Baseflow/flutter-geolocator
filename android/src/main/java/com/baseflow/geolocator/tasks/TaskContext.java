@@ -12,16 +12,15 @@ import io.flutter.plugin.common.PluginRegistry;
 final class TaskContext<TOptions> {
   private final TOptions mOptions;
   private final OnCompletionListener mCompletionListener;
-  private final PluginRegistry.Registrar mRegistrar;
+  private final Context mContext;
   private final ChannelResponse mChannelResponse;
 
-
   private TaskContext(
-      PluginRegistry.Registrar registrar,
+      Context context,
       ChannelResponse channelResponse,
       TOptions options,
       OnCompletionListener completionListener) {
-    mRegistrar = registrar;
+    mContext = context;
     mChannelResponse = channelResponse;
     mOptions = options;
     mCompletionListener = completionListener;
@@ -35,12 +34,8 @@ final class TaskContext<TOptions> {
     return mCompletionListener;
   }
 
-  PluginRegistry.Registrar getRegistrar() {
-    return mRegistrar;
-  }
-
   Context getAndroidContext() {
-    return mRegistrar.context();
+    return mContext;
   }
 
   ChannelResponse getResult() {
@@ -48,28 +43,28 @@ final class TaskContext<TOptions> {
   }
 
   static <TOptions> TaskContext<TOptions> buildForMethodResult(
-      PluginRegistry.Registrar registrar,
+      Context context,
       MethodChannel.Result methodResult,
       TOptions options,
       OnCompletionListener completionListener) {
     ChannelResponse channelResponse = ChannelResponse.wrap(methodResult);
 
     return new TaskContext<>(
-        registrar,
+        context,
         channelResponse,
         options,
         completionListener);
   }
 
   static <TOptions> TaskContext<TOptions> buildForEventSink(
-      PluginRegistry.Registrar registrar,
+      Context context,
       EventChannel.EventSink eventSink,
       TOptions options,
       OnCompletionListener completionListener) {
     ChannelResponse channelResponse = ChannelResponse.wrap(eventSink);
 
     return new TaskContext<>(
-        registrar,
+        context,
         channelResponse,
         options,
         completionListener);

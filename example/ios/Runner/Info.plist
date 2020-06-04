@@ -22,6 +22,18 @@
 	<string>2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow this App to access your location?</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Allow this App to access your location?</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Allow this App to access your location?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow this App to access your location only when the app is in use?</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,13 +53,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationUsageDescription</key>
-	<string>Allow this App to access your location?</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow this App to access your location only when the app is in use?</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow this App to access your location?</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow this App to access your location?</string>
 </dict>
 </plist>
