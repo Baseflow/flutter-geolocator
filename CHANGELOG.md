@@ -1,3 +1,7 @@
+## [5.3.2+2]
+
+* iOS: Remove `UIBackgroundModes` configuration from example App. 
+
 ## [5.3.2+1]
 
 * iOS: Make use of background location updates configurable (default is off). Background location updates can be enabled by adding the key "EnableBackgroundLocationUpdates" to the Info.plist with the value of `<false/>`.
