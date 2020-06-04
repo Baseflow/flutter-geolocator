@@ -3,7 +3,8 @@ import 'package:geolocator/geolocator.dart';
 
 void main() {
   group('Given the GeolocatorPermission enum with value', () {
-    test('location the toString should return "GeolocationPermission.location"', () {
+    test('location the toString should return "GeolocationPermission.location"',
+        () {
       final permission = GeolocationPermission.location;
       final expectedString = 'GeolocationPermission.location';
       final actualString = permission.toString();
@@ -11,7 +12,9 @@ void main() {
       expect(actualString, expectedString);
     });
 
-    test('locationAlways the toString should return "GeolocationPermission.locationAlways"', () {
+    test(
+        'locationAlways the toString should return "GeolocationPermission.locationAlways"',
+        () {
       final permission = GeolocationPermission.locationAlways;
       final expectedString = 'GeolocationPermission.locationAlways';
       final actualString = permission.toString();
@@ -19,7 +22,8 @@ void main() {
       expect(actualString, expectedString);
     });
 
-    test('locationWhenInUse the toString should return "GeolocationPermission.locationWhenInUse"',
+    test(
+        'locationWhenInUse the toString should return "GeolocationPermission.locationWhenInUse"',
         () {
       final permission = GeolocationPermission.locationWhenInUse;
       final expectedString = 'GeolocationPermission.locationWhenInUse';
@@ -54,7 +58,8 @@ void main() {
       expect(actualString, expectedString);
     });
 
-    test('restricted the toString should return "GeolocationStatus.restricted"', () {
+    test('restricted the toString should return "GeolocationStatus.restricted"',
+        () {
       final status = GeolocationStatus.restricted;
       final expectedString = 'GeolocationStatus.restricted';
       final actualString = status.toString();
