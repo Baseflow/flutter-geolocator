@@ -36,7 +36,8 @@
     
     _locationManager.desiredAccuracy = accuracy;
     _locationManager.distanceFilter = distanceFilter;
-    _locationManager.allowsBackgroundLocationUpdates = YES;
+    
+    [self configureBackgroundUpdates];
 }
 
 - (void)stopTask {
@@ -46,6 +47,18 @@
     }
     
     [super stopTask];
+}
+
+- (void)configureBackgroundUpdates {
+    if (@available(iOS 9.0, *)) {
+        id config = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"EnableBackgroundLocationUpdates"];
+
+        if (config == nil) return;
+
+        BOOL enableBackgroundUpdates = [config boolValue];
+    
+        _locationManager.allowsBackgroundLocationUpdates = enableBackgroundUpdates;
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager  didUpdateLocations:(NSArray<CLLocation *> *)locations {
