@@ -23,7 +23,7 @@ Position get mockPosition => Position(
 Stream<Position> createPositionStream(
   Duration interval, {
   int maxCount,
-  bool hasPermission,
+  LocationPermission checkPermission,
   bool isLocationServiceEnabled,
 }) {
   StreamController<Position> controller;
@@ -33,13 +33,19 @@ Stream<Position> createPositionStream(
   void tick(_) {
     counter++;
 
-    if (!hasPermission) {
+    if (checkPermission == LocationPermission.denied) {
       controller.addError(PlatformException(
         code: 'PERMISSION_DENIED',
         message: 'Permission denied',
         details: null,
       ));
-    } else if (!isLocationServiceEnabled) {
+    } else if (checkPermission == LocationPermission.deniedForEver) { 
+      controller.addError(PlatformException(
+        code: 'PERMISSION_DENIED_FOREVER',
+        message: 'Permission denied forever',
+        details: null,
+      ));
+    } else if (!isLocationServiceEnabled) { 
       controller.addError(PlatformException(
         code: 'LOCATION_SERVICE_DISABLED',
         message: 'Location service disabled',
@@ -78,7 +84,7 @@ Stream<Position> createPositionStream(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  var _mockHasPermission = true;
+  var _mockPermission = LocationPermission.denied;
   var _mockIsLocationServiceEnabled = true;
 
   group('$MethodChannelGeolocator()', () {
@@ -96,16 +102,22 @@ void main() {
 
         switch (methodCall.method) {
           case 'getLastKnownPosition':
-            if (!_mockHasPermission) {
+            if (_mockPermission == LocationPermission.denied) {
               throw PlatformException(
                 code: 'PERMISSION_DENIED',
                 message: 'Permission denied',
                 details: null,
               );
+            } else if (_mockPermission == LocationPermission.deniedForEver) {
+              throw PlatformException(
+                code: 'PERMISSION_DENIED_FOREVER',
+                message: 'Permission denied forever',
+                details: null,
+              );
             }
             return mockPosition.toJson();
-          case 'hasPermission':
-            return _mockHasPermission;
+          case 'checkPermission':
+            return _mockPermission.index;
           case 'isLocationServiceEnabled':
             return _mockIsLocationServiceEnabled;
           default:
@@ -122,7 +134,7 @@ void main() {
             positionStreamSubscription = createPositionStream(
               Duration(milliseconds: 10),
               maxCount: 3,
-              hasPermission: _mockHasPermission,
+              checkPermission: _mockPermission,
               isLocationServiceEnabled: _mockIsLocationServiceEnabled,
             ).listen(
               (data) {
@@ -173,32 +185,66 @@ void main() {
       log.clear();
     });
 
-    group('hasPermission: When checking for permission', () {
-      test('Should receive true if permission is granted', () async {
+    group('checkPermission: When checking for permission', () {
+      test(
+        'Should receive whenInUse if permission is granted when App is in use', 
+        () async {
         // Arrange
-        _mockHasPermission = true;
+        _mockPermission = LocationPermission.whileInUse;
 
         // Act
-        final hasPermission = await methodChannelGeolocator.hasPermission();
+        final permission = await methodChannelGeolocator.checkPermission();
 
         // Assert
         expect(
-          hasPermission,
-          true,
+          permission,
+          LocationPermission.whileInUse,
         );
       });
 
-      test('Should receive false if permission is denied', () async {
+      test(
+        'Should receive always if permission is granted always', 
+        () async {
         // Arrange
-        _mockHasPermission = false;
+        _mockPermission = LocationPermission.always;
 
         // Act
-        final hasPermission = await methodChannelGeolocator.hasPermission();
+        final permission = await methodChannelGeolocator.checkPermission();
 
         // Assert
         expect(
-          hasPermission,
-          false,
+          permission,
+          LocationPermission.always,
+        );
+      });
+
+      test('Should receive denied if permission is denied', () async {
+        // Arrange
+        _mockPermission = LocationPermission.denied;
+
+        // Act
+        final permission = await methodChannelGeolocator.checkPermission();
+
+        // Assert
+        expect(
+          permission,
+          LocationPermission.denied,
+        );
+      });
+
+      test(
+        'Should receive deniedForEver if permission is denied for ever', 
+        () async {
+        // Arrange
+        _mockPermission = LocationPermission.deniedForEver;
+
+        // Act
+        final permission = await methodChannelGeolocator.checkPermission();
+
+        // Assert
+        expect(
+          permission,
+          LocationPermission.deniedForEver,
         );
       });
     });
@@ -239,7 +285,7 @@ void main() {
     group('getLastKnowPosition: When requesting the last know position', () {
       test('Should receive a position if permissions are granted', () async {
         // Arrange
-        _mockHasPermission = true;
+        _mockPermission = LocationPermission.whileInUse;
         final expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
           distanceFilter: 0,
@@ -262,7 +308,7 @@ void main() {
 
       test('Should receive an exception if permissions are denied', () async {
         // Arrange
-        _mockHasPermission = false;
+        _mockPermission = LocationPermission.denied;
 
         // Act
         final future = methodChannelGeolocator.getLastKnownPosition(
@@ -286,7 +332,7 @@ void main() {
     group('getCurrentPosition: When requesting the current position', () {
       test('Should receive a position if permissions are granted', () async {
         // Arrange
-        _mockHasPermission = true;
+        _mockPermission = LocationPermission.whileInUse;
         _mockIsLocationServiceEnabled = true;
         final expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
@@ -315,7 +361,7 @@ void main() {
       test('Should throw a permission denied exception if permission is denied',
           () async {
         // Arrange
-        _mockHasPermission = false;
+        _mockPermission = LocationPermission.denied;
         _mockIsLocationServiceEnabled = true;
 
         // Act
@@ -339,7 +385,7 @@ void main() {
           'Should throw a location service disabled exception if location services are disabled',
           () async {
         // Arrange
-        _mockHasPermission = true;
+        _mockPermission = LocationPermission.whileInUse;
         _mockIsLocationServiceEnabled = false;
 
         // Act
@@ -355,7 +401,7 @@ void main() {
       test('Should throw a timeout exception when timeLimit is reached',
           () async {
         // Arrange
-        _mockHasPermission = true;
+        _mockPermission = LocationPermission.whileInUse;
         _mockIsLocationServiceEnabled = true;
         final expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
@@ -406,7 +452,7 @@ void main() {
           'Should receive a stream with position updates if permissions are granted',
           () async {
         // Arrange
-        _mockHasPermission = true;
+        _mockPermission = LocationPermission.whileInUse;
         _mockIsLocationServiceEnabled = true;
 
         // Act
@@ -427,7 +473,7 @@ void main() {
           'Should receive a permission denied exception if permission is denied',
           () async {
         // Arrange
-        _mockHasPermission = false;
+        _mockPermission = LocationPermission.denied;
         _mockIsLocationServiceEnabled = true;
 
         // Act
@@ -453,7 +499,7 @@ void main() {
           'Should receive a location service disabled exception if location service is disabled',
           () async {
         // Arrange
-        _mockHasPermission = true;
+        _mockPermission = LocationPermission.whileInUse;
         _mockIsLocationServiceEnabled = false;
 
         // Act
@@ -473,7 +519,7 @@ void main() {
       test('Should throw a timeout exception when timeLimit is reached',
           () async {
         // Arrange
-        _mockHasPermission = true;
+        _mockPermission = LocationPermission.whileInUse;
         _mockIsLocationServiceEnabled = true;
         final expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,

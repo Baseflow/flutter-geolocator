@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'enums/enums.dart';
 import 'implementations/method_channel_geolocator.dart';
@@ -34,9 +35,9 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Returns a [Future] indicating if permissions to access the device's 
-  /// location has been granted.
-  Future<bool> hasPermission() {
+  /// Returns a [Future] indicating if the user allows the App to access
+  /// the device's location.
+  Future<LocationPermission> checkPermission() {
     throw UnimplementedError(
       'checkPermissions() has not been implementated.',
     );

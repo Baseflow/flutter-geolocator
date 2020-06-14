@@ -6,7 +6,8 @@ import 'package:meta/meta.dart';
 
 import '../../geolocator_platform_interface.dart';
 import '../enums/enums.dart';
-import '../errors/permission_denied_exception.dart';
+import '../errors/errors.dart';
+import '../extensions/extensions.dart';
 import '../geolocator_platform_interface.dart';
 import '../models/location_options.dart';
 import '../models/position.dart';
@@ -33,8 +34,13 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   Stream<Position> _onPositionChanged;
 
   @override
-  Future<bool> hasPermission() async =>
-      methodChannel.invokeMethod('hasPermission');
+  Future<LocationPermission> checkPermission() async {
+    // ignore: omit_local_variable_types
+    final int permission = await methodChannel
+      .invokeMethod('checkPermission');
+
+    return permission.toLocationPermission();
+  }
 
   @override
   Future<bool> isLocationServiceEnabled() async =>

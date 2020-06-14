@@ -33,14 +33,14 @@ void main() {
 
     test(
       // ignore: lines_longer_than_80_chars
-      'Default implementation of hasPermission should throw unimplemented error',
+      'Default implementation of checkPermission should throw unimplemented error',
       (){
         // Arrange
         final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
         // Act & Assert
         expect(
-          geolocatorPlatform.hasPermission,
+          geolocatorPlatform.checkPermission,
           throwsUnimplementedError,
         );
     });
