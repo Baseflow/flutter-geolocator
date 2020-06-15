@@ -16,7 +16,7 @@ dev_dependencies:
   fake_async: ^1.1.0
   flutter_test:
     sdk: flutter
-  effective_dart: ^1.2.1
+  effective_dart: ^1.2.2
   mockito: ^4.1.1
 
 environment:

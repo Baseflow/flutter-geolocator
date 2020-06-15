@@ -10,11 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  geolocator_platform_interface:
+    path: ../geolocator_platform_interface
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  effective_dart: ^1.2.1
+  effective_dart: ^1.2.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

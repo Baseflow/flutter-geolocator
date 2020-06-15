@@ -233,6 +233,7 @@ void main() {
     });
 
     test(
+        // ignore: lines_longer_than_80_chars
         'hashCode should not match when the speedAccuracy property is different',
         () {
       // Arrange
