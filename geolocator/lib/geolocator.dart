@@ -1,13 +1,83 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
+import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
-class Geolocator {
-  static const MethodChannel _channel =
-      const MethodChannel('geolocator');
+export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-}
+/// Returns a [Future] indicating if the user allows the App to access
+/// the device's location.
+Future<LocationPermission> checkPermissions() =>
+    GeolocatorPlatform.instance.checkPermission();
+
+/// Returns a [Future] containing a [bool] value indicating whether location
+/// services are enabled on the device.
+Future<bool> isLocationServiceEnabled() =>
+    GeolocatorPlatform.instance.isLocationServiceEnabled();
+
+/// Returns the last known position stored on the users device.
+///
+/// On Android we look for the location provider matching best with the
+/// supplied [desiredAccuracy]. On iOS this parameter is ignored.
+/// When no position is available, null is returned.
+/// Throws a [PermissionDeniedException] when trying to request the device's
+/// location when the user denied access.
+Future<Position> getLastKnownLocation({LocationAccuracy desiredAccuracy}) =>
+    GeolocatorPlatform
+      .instance
+      .getLastKnownPosition(desiredAccuracy: desiredAccuracy);
+      
+/// Returns the current position taking the supplied [desiredAccuracy] into
+/// account.
+///
+/// When the [desiredAccuracy] is not supplied, it defaults to best. 
+/// Throws a [TimeoutException] when no location is received within the 
+/// supplied [timeLimit] duration.
+/// Throws a [PermissionDeniedException] when trying to request the device's
+/// location when the user denied access.
+Future<Position> getCurrentPosition({
+  LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+  Duration timeLimit,
+}) =>
+    GeolocatorPlatform.instance.getCurrentPosition(
+      desiredAccuracy: desiredAccuracy, 
+      timeLimit: timeLimit,
+    );
+
+/// Fires whenever the location changes inside the bounds of the
+/// [desiredAccuracy].
+///
+/// This event starts all location sensors on the device and will keep them
+/// active until you cancel listening to the stream or when the application
+/// is killed.
+///
+/// ```
+/// StreamSubscription<Position> positionStream = Geolocator()
+///     .GetPostionStream()
+///     .listen((Position position) => {
+///       // Handle position changes
+///     });
+///
+/// // When no longer needed cancel the subscription
+/// positionStream.cancel();
+/// ```
+///
+/// You can customize the behaviour of the location updates by supplying an
+/// instance [LocationOptions] class. When you don't supply any specific
+/// options, default values will be used for each setting.
+/// 
+/// Throws a [TimeoutException] when no location is received within the 
+/// supplied [timeLimit] duration.
+/// Throws a [PermissionDeniedException] when trying to request the device's
+/// location when the user denied access.
+Stream<Position> getPositionStream({
+  LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+  int distanceFilter = 0,
+  int timeInterval = 0,
+  Duration timeLimit,
+}) =>
+    GeolocatorPlatform.instance.getPositionStream(
+      desiredAccuracy: desiredAccuracy,
+      distanceFilter: distanceFilter,
+      timeInterval: timeInterval,
+      timeLimit: timeLimit,
+    );
