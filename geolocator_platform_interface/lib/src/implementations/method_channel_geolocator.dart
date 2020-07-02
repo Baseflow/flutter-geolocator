@@ -42,6 +42,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     return permission.toLocationPermission();
   }
 
+  @override
   Future<LocationPermission> requestPermission() async {
     try {
       // ignore: omit_local_variable_types
