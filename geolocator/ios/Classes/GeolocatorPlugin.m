@@ -22,6 +22,10 @@
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([@"checkPermission" isEqualToString:call.method]) {
+        if (![PermissionHandler hasPermissionDefinitions]) {
+            [GeolocatorPlugin handleMissingPermissionDefinitions:result];
+            return;
+        }
         CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
         result([AuthorizationStatusMapper toDartIndex:(status)]);
     } else if ([@"isLocationServiceEnabled" isEqualToString:call.method]) {
@@ -36,8 +40,8 @@
 
 - (void)handleGetLastKnownPosition:(FlutterResult)result {
     
-    if (![PermissionHandler hasPermissionConfiguration]) {
-        [GeolocatorPlugin handleMissingPermissionConfiguration:result];
+    if (![PermissionHandler hasPermissionDefinitions]) {
+        [GeolocatorPlugin handleMissingPermissionDefinitions:result];
         return;
     }
     
@@ -63,7 +67,7 @@
             }];
 }
 
-+ (void)handleMissingPermissionConfiguration:(FlutterResult)result {
++ (void)handleMissingPermissionDefinitions:(FlutterResult)result {
     result([FlutterError errorWithCode: GeolocatorErrorPermissionDefinitionsNotFound
                                message: @"Permission definitions not found in the app's Info.plist. Please make sure to add either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription to the app's Info.plist file."
                                details: nil]);

@@ -35,11 +35,17 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<LocationPermission> checkPermission() async {
-    // ignore: omit_local_variable_types
-    final int permission = await methodChannel
-      .invokeMethod('checkPermission');
+    try {
+      // ignore: omit_local_variable_types
+      final int permission = await methodChannel
+        .invokeMethod('checkPermission');
 
-    return permission.toLocationPermission();
+      return permission.toLocationPermission();
+    } on PlatformException catch (e) {
+      _handlePlatformException(e);
+
+      rethrow;
+    }
   }
 
   @override
@@ -50,7 +56,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         .invokeMethod('requestPermission');
 
       return permission.toLocationPermission();
-    } on PlatformException catch (e) {
+    } on PlatformException catch (e, trace) {
       _handlePlatformException(e);
 
       rethrow;

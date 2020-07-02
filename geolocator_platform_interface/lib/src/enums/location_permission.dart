@@ -2,13 +2,17 @@
 enum LocationPermission {
   /// Permission to access the device's location is denied by the user.
   denied,
-  /// Permission to access the device's location is denied for ever. The
-  /// permission dialog will not been shown again until the user updates
-  /// the permission in the App settings.
-  deniedForEver,
+  /// Android only: Permission to access the device's location is denied
+  /// for ever. The permission dialog will not been shown again until the 
+  /// user updates the permission in the App settings.
+  deniedForever,
   /// Permission to access the device's location is allowed only while
   /// the App is in use.
   whileInUse,
+  /// Android only: Permission to access the device's location is allowed only
+  /// while the App is in use. Permission to access the device's location in the
+  /// background is denied forever.
+  whileInUseForever,
   /// Permission to access the device's location is allowed even when the 
   /// App is running in the background.
   always

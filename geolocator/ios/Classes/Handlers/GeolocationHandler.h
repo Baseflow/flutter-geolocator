@@ -13,6 +13,6 @@ typedef void (^GeolocatorResult)(CLLocation *_Nonnull location);
 
 @interface GeolocationHandler : NSObject
 
-- (CLLocation *)getLastKnownPosition;
+- (CLLocation *_Nullable)getLastKnownPosition;
 
 @end

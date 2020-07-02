@@ -12,10 +12,12 @@ extension IntergerExtensions on int {
       case 0:
         return LocationPermission.denied;
       case 1: 
-        return LocationPermission.deniedForEver;
+        return LocationPermission.deniedForever;
       case 2:
         return LocationPermission.whileInUse;
       case 3:
+        return LocationPermission.whileInUseForever;
+      case 4:
         return LocationPermission.always;
       default:
         throw InvalidPermissionException(this);

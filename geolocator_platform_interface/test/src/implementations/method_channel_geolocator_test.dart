@@ -24,6 +24,8 @@ Stream<Position> createPositionStream(
   Duration interval, {
   int maxCount,
   LocationPermission checkPermission,
+  bool isMissingPermissionDefinitions,
+  bool isAlreadyRequestingPermissions,
   bool isLocationServiceEnabled,
 }) {
   StreamController<Position> controller;
@@ -39,15 +41,27 @@ Stream<Position> createPositionStream(
         message: 'Permission denied',
         details: null,
       ));
-    } else if (checkPermission == LocationPermission.deniedForEver) { 
+    } else if (checkPermission == LocationPermission.deniedForever) {
       controller.addError(PlatformException(
         code: 'PERMISSION_DENIED_FOREVER',
         message: 'Permission denied forever',
         details: null,
       ));
-    } else if (!isLocationServiceEnabled) { 
+    } else if (isMissingPermissionDefinitions) {
       controller.addError(PlatformException(
-        code: 'LOCATION_SERVICE_DISABLED',
+        code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
+        message: 'Permission definitions are not found.',
+        details: null,
+      ));
+    } else if (isAlreadyRequestingPermissions) {
+      controller.addError(PlatformException(
+        code: 'PERMISSION_REQUEST_IN_PROGRESS',
+        message: 'Permissions already being requested.',
+        details: null,
+      ));
+    } else if (!isLocationServiceEnabled) {
+      controller.addError(PlatformException(
+        code: 'LOCATION_SERVICES_DISABLED',
         message: 'Location service disabled',
         details: null,
       ));
@@ -86,6 +100,8 @@ void main() {
 
   var _mockPermission = LocationPermission.denied;
   var _mockIsLocationServiceEnabled = true;
+  var _mockIsAlreadyRequestingPermission = false;
+  var _mockIsMissingPermissionDefinitions = false;
 
   group('$MethodChannelGeolocator()', () {
     final log = <MethodCall>[];
@@ -100,28 +116,70 @@ void main() {
           .setMockMethodCallHandler((methodCall) async {
         log.add(methodCall);
 
-        switch (methodCall.method) {
-          case 'getLastKnownPosition':
-            if (_mockPermission == LocationPermission.denied) {
-              throw PlatformException(
-                code: 'PERMISSION_DENIED',
-                message: 'Permission denied',
-                details: null,
-              );
-            } else if (_mockPermission == LocationPermission.deniedForEver) {
-              throw PlatformException(
-                code: 'PERMISSION_DENIED_FOREVER',
-                message: 'Permission denied forever',
-                details: null,
-              );
-            }
-            return mockPosition.toJson();
-          case 'checkPermission':
-            return _mockPermission.index;
-          case 'isLocationServiceEnabled':
-            return _mockIsLocationServiceEnabled;
-          default:
-            return null;
+        final method = methodCall.method;
+        if (method == 'requestPermission') {
+          if (_mockIsMissingPermissionDefinitions) {
+            throw PlatformException(
+              code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
+              message: 'Permission definitions are not found.',
+              details: null,
+            );
+          } else if (_mockIsAlreadyRequestingPermission) {
+            throw PlatformException(
+              code: 'PERMISSION_REQUEST_IN_PROGRESS',
+              message: 'Permissions already being requested.',
+              details: null,
+            );
+          }
+
+          return _mockPermission.index;
+        }
+
+        if (method == 'getLastKnownPosition') {
+          if (_mockPermission == LocationPermission.denied) {
+            throw PlatformException(
+              code: 'PERMISSION_DENIED',
+              message: 'Permission denied',
+              details: null,
+            );
+          } else if (_mockPermission == LocationPermission.deniedForever) {
+            throw PlatformException(
+              code: 'PERMISSION_DENIED_FOREVER',
+              message: 'Permission denied forever',
+              details: null,
+            );
+          } else if (_mockIsMissingPermissionDefinitions) {
+            throw PlatformException(
+              code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
+              message: 'Permission definitions are not found.',
+              details: null,
+            );
+          } else if (_mockIsAlreadyRequestingPermission) {
+            throw PlatformException(
+              code: 'PERMISSION_REQUEST_IN_PROGRESS',
+              message: 'Permissions already being requested.',
+              details: null,
+            );
+          }
+          return mockPosition.toJson();
+        }
+
+        if (method == 'checkPermission') {
+          if (_mockIsMissingPermissionDefinitions) {
+            throw PlatformException(
+              code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
+              message: 'Permission definitions are not found.',
+              details: null,
+            );
+          }
+
+          return _mockPermission.index;
+        }
+
+        if (method == 'isLocationServiceEnabled') {
+          return _mockIsLocationServiceEnabled;
+        } else {
+          return null;
         }
       });
 
@@ -135,7 +193,11 @@ void main() {
               Duration(milliseconds: 10),
               maxCount: 3,
               checkPermission: _mockPermission,
+              isAlreadyRequestingPermissions:
+                  _mockIsAlreadyRequestingPermission,
               isLocationServiceEnabled: _mockIsLocationServiceEnabled,
+              isMissingPermissionDefinitions:
+                  _mockIsMissingPermissionDefinitions,
             ).listen(
               (data) {
                 ServicesBinding.instance.defaultBinaryMessenger
@@ -187,8 +249,9 @@ void main() {
 
     group('checkPermission: When checking for permission', () {
       test(
-        'Should receive whenInUse if permission is granted when App is in use', 
-        () async {
+          // ignore: lines_longer_than_80_chars
+          'Should receive whenInUse if permission is granted when App is in use',
+          () async {
         // Arrange
         _mockPermission = LocationPermission.whileInUse;
 
@@ -202,9 +265,7 @@ void main() {
         );
       });
 
-      test(
-        'Should receive always if permission is granted always', 
-        () async {
+      test('Should receive always if permission is granted always', () async {
         // Arrange
         _mockPermission = LocationPermission.always;
 
@@ -232,11 +293,10 @@ void main() {
         );
       });
 
-      test(
-        'Should receive deniedForEver if permission is denied for ever', 
-        () async {
+      test('Should receive deniedForEver if permission is denied for ever',
+          () async {
         // Arrange
-        _mockPermission = LocationPermission.deniedForEver;
+        _mockPermission = LocationPermission.deniedForever;
 
         // Act
         final permission = await methodChannelGeolocator.checkPermission();
@@ -244,7 +304,142 @@ void main() {
         // Assert
         expect(
           permission,
-          LocationPermission.deniedForEver,
+          LocationPermission.deniedForever,
+        );
+      });
+
+      test('Should receive an exception when permission definitions not found',
+          () async {
+        // Arrange
+        _mockIsMissingPermissionDefinitions = true;
+
+        // Act
+        final permissionFuture = methodChannelGeolocator.checkPermission();
+
+        // Assert
+        expect(
+          permissionFuture,
+          throwsA(
+            isA<PermissionDefinitionsNotFoundException>().having(
+              (e) => e.message,
+              'description',
+              'Permission definitions are not found.',
+            ),
+          ),
+        );
+      });
+    });
+
+    group('requestPermission: When requesting for permission', () {
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive whenInUse if permission is granted when App is in use',
+          () async {
+        // Arrange
+        _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
+
+        // Act
+        final permission = await methodChannelGeolocator.requestPermission();
+
+        // Assert
+        expect(
+          permission,
+          LocationPermission.whileInUse,
+        );
+      });
+
+      test('Should receive always if permission is granted always', () async {
+        // Arrange
+        _mockPermission = LocationPermission.always;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
+
+        // Act
+        final permission = await methodChannelGeolocator.requestPermission();
+
+        // Assert
+        expect(
+          permission,
+          LocationPermission.always,
+        );
+      });
+
+      test('Should receive denied if permission is denied', () async {
+        // Arrange
+        _mockPermission = LocationPermission.denied;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
+
+        // Act
+        final permission = await methodChannelGeolocator.requestPermission();
+
+        // Assert
+        expect(
+          permission,
+          LocationPermission.denied,
+        );
+      });
+
+      test('Should receive deniedForEver if permission is denied for ever',
+          () async {
+        // Arrange
+        _mockPermission = LocationPermission.deniedForever;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
+
+        // Act
+        final permission = await methodChannelGeolocator.requestPermission();
+
+        // Assert
+        expect(
+          permission,
+          LocationPermission.deniedForever,
+        );
+      });
+
+      test('Should receive an exception when already requesting permission',
+          () async {
+        // Arrange
+        _mockIsAlreadyRequestingPermission = true;
+        _mockIsMissingPermissionDefinitions = false;
+
+        // Act
+        final permissionFuture = methodChannelGeolocator.requestPermission();
+
+        // Assert
+        expect(
+          permissionFuture,
+          throwsA(
+            isA<PermissionRequestInProgressException>().having(
+              (e) => e.message,
+              'description',
+              'Permissions already being requested.',
+            ),
+          ),
+        );
+      });
+
+      test('Should receive an exception when permission definitions not found',
+          () async {
+        // Arrange
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = true;
+
+        // Act
+        final permissionFuture = methodChannelGeolocator.requestPermission();
+
+        // Assert
+        expect(
+          permissionFuture,
+          throwsA(
+            isA<PermissionDefinitionsNotFoundException>().having(
+              (e) => e.message,
+              'description',
+              'Permission definitions are not found.',
+            ),
+          ),
         );
       });
     });
@@ -286,6 +481,9 @@ void main() {
       test('Should receive a position if permissions are granted', () async {
         // Arrange
         _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
+
         final expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
           distanceFilter: 0,
@@ -309,6 +507,8 @@ void main() {
       test('Should receive an exception if permissions are denied', () async {
         // Arrange
         _mockPermission = LocationPermission.denied;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
 
         // Act
         final future = methodChannelGeolocator.getLastKnownPosition(
@@ -333,7 +533,10 @@ void main() {
       test('Should receive a position if permissions are granted', () async {
         // Arrange
         _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
         _mockIsLocationServiceEnabled = true;
+
         final expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
           distanceFilter: 0,
@@ -362,6 +565,8 @@ void main() {
           () async {
         // Arrange
         _mockPermission = LocationPermission.denied;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
         _mockIsLocationServiceEnabled = true;
 
         // Act
@@ -386,6 +591,8 @@ void main() {
           () async {
         // Arrange
         _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
         _mockIsLocationServiceEnabled = false;
 
         // Act
@@ -402,6 +609,8 @@ void main() {
           () async {
         // Arrange
         _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
         _mockIsLocationServiceEnabled = true;
         final expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
@@ -437,13 +646,15 @@ void main() {
 
     group('getPositionStream: When requesting a stream of position updates',
         () {
-      
-      group('And requesting for position update multiple times', (){
+      group('And requesting for position update multiple times', () {
         test('Should return the same stream', () {
           final firstStream = methodChannelGeolocator.getPositionStream();
           final secondStream = methodChannelGeolocator.getPositionStream();
 
-          expect(identical(firstStream, secondStream), true,);
+          expect(
+            identical(firstStream, secondStream),
+            true,
+          );
         });
       });
 
@@ -453,6 +664,8 @@ void main() {
           () async {
         // Arrange
         _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
         _mockIsLocationServiceEnabled = true;
 
         // Act
@@ -474,6 +687,8 @@ void main() {
           () async {
         // Arrange
         _mockPermission = LocationPermission.denied;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
         _mockIsLocationServiceEnabled = true;
 
         // Act
@@ -500,6 +715,8 @@ void main() {
           () async {
         // Arrange
         _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
         _mockIsLocationServiceEnabled = false;
 
         // Act
@@ -520,6 +737,8 @@ void main() {
           () async {
         // Arrange
         _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
         _mockIsLocationServiceEnabled = true;
         final expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
