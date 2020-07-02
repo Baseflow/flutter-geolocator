@@ -42,6 +42,20 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     return permission.toLocationPermission();
   }
 
+  Future<LocationPermission> requestPermission() async {
+    try {
+      // ignore: omit_local_variable_types
+      final int permission = await methodChannel
+        .invokeMethod('requestPermission');
+
+      return permission.toLocationPermission();
+    } on PlatformException catch (e) {
+      _handlePlatformException(e);
+
+      rethrow;
+    }
+  }
+
   @override
   Future<bool> isLocationServiceEnabled() async =>
       methodChannel.invokeMethod('isLocationServiceEnabled');
@@ -59,9 +73,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
       return Position.fromMap(positionMap);
     } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        throw PermissionDeniedException(e.message);
-      }
+      _handlePlatformException(e);
 
       rethrow;
     }
@@ -115,16 +127,25 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       .handleError(
         (error) {
           if (error is PlatformException ) {
-            if (error.code == 'PERMISSION_DENIED') {
-              throw PermissionDeniedException(error.message);
-            } else if (error.code == 'LOCATION_SERVICE_DISABLED') {
-              throw LocationServiceDisabledException();
-            }
+            _handlePlatformException(error);
           }
           
           throw error;
         },
       );
     return _onPositionChanged;
+  }
+
+  void _handlePlatformException(PlatformException exception) {
+    switch(exception.code) {
+      case 'LOCATION_SERVICES_DISABLED':
+        throw LocationServiceDisabledException();
+      case 'PERMISSION_DEFINITIONS_NOT_FOUND':
+        throw PermissionDefinitionsNotFoundException(exception.message);
+      case 'PERMISSION_DENIED':
+        throw PermissionDeniedException(exception.message);
+      case 'PERMISSION_REQUEST_IN_PROGRESS':
+        throw PermissionRequestInProgressException(exception.message);
+    }
   }
 }

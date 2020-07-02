@@ -6,6 +6,6 @@
 //
 
 FOUNDATION_EXPORT NSString * const GeolocatorErrorLocationServicesDisabled;
-FOUNDATION_EXPORT NSString * const GeolocatorErrorPermissionConfigMissing;
+FOUNDATION_EXPORT NSString * const GeolocatorErrorPermissionDefinitionsNotFound;
 FOUNDATION_EXPORT NSString * const GeolocatorErrorPermissionDenied;
 FOUNDATION_EXPORT NSString * const GeolocatorErrorPermissionRequestInProgress;

@@ -47,6 +47,20 @@ void main() {
 
     test(
       // ignore: lines_longer_than_80_chars
+      'Default implementation of requestPermission should throw unimplemented error',
+      (){
+        // Arrange
+        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+        // Act & Assert
+        expect(
+          geolocatorPlatform.requestPermission,
+          throwsUnimplementedError,
+        );
+    });
+
+    test(
+      // ignore: lines_longer_than_80_chars
       'Default implementation of isLocationServiceDisabled should throw unimplemented error',
       (){
         // Arrange

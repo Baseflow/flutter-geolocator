@@ -48,7 +48,7 @@
     if (self.confirmationHandler) {
         // Permission request is already running, return immediatly with error
         errorHandler(GeolocatorErrorPermissionRequestInProgress,
-                     @"A request for location permissions is already running, please wait for it to finish before doing another request.");
+                     @"A request for location permissions is already running, please wait for it to complete before doing another request.");
         return;
     }
     
@@ -65,7 +65,7 @@
     }
     else {
         if (self.errorHandler) {
-            self.errorHandler(GeolocatorErrorPermissionConfigMissing,
+            self.errorHandler(GeolocatorErrorPermissionDefinitionsNotFound,
                               @"Permission definitions not found in the app's Info.plist. Please make sure to "
                                "add either NSLocationWhenInUseUsageDescription or "
                                "NSLocationAlwaysUsageDescription to the app's Info.plist file.");

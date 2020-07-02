@@ -64,7 +64,7 @@
 }
 
 + (void)handleMissingPermissionConfiguration:(FlutterResult)result {
-    result([FlutterError errorWithCode: GeolocatorErrorPermissionConfigMissing
+    result([FlutterError errorWithCode: GeolocatorErrorPermissionDefinitionsNotFound
                                message: @"Permission definitions not found in the app's Info.plist. Please make sure to add either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription to the app's Info.plist file."
                                details: nil]);
 }
