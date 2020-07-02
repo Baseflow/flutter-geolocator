@@ -11,13 +11,14 @@
 + (NSNumber *) toDartIndex: (CLAuthorizationStatus) authorizationStatus {
     switch (authorizationStatus) {
         case kCLAuthorizationStatusNotDetermined:
-        case kCLAuthorizationStatusDenied:
         case kCLAuthorizationStatusRestricted:
             return @0;
+        case kCLAuthorizationStatusDenied:
+            return @1;
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             return @2;
         case kCLAuthorizationStatusAuthorizedAlways:
-            return @3;
+            return @4;
         default:
             return @0;
     }

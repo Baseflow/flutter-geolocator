@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator_example/plugin_example/widgets/info_widget.dart';
 
@@ -7,11 +6,14 @@ import 'package:geolocator_example/plugin_example/widgets/info_widget.dart';
 /// location stored on the device.
 class LastKnownLocationWidget extends StatefulWidget {
   @override
-  _LastKnownLocationWidgetState createState() => _LastKnownLocationWidgetState();
+  _LastKnownLocationWidgetState createState() =>
+      _LastKnownLocationWidgetState();
 }
 
 class _LastKnownLocationWidgetState extends State<LastKnownLocationWidget> {
   Position _lastKnownPosition;
+  LocationPermission _locationPermission;
+  bool _shouldRequestPermission;
 
   @override
   void initState() {
@@ -26,6 +28,8 @@ class _LastKnownLocationWidgetState extends State<LastKnownLocationWidget> {
 
     setState(() {
       _lastKnownPosition = null;
+      _locationPermission = null;
+      _shouldRequestPermission = null;
     });
 
     _initLastKnownLocation();
@@ -34,11 +38,24 @@ class _LastKnownLocationWidgetState extends State<LastKnownLocationWidget> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> _initLastKnownLocation() async {
     Position position;
-    // Platform messages may fail, so we use a try/catch PlatformException.
+    LocationPermission permission;
+    bool shouldRequestPermission;
+
     try {
-      position = await getLastKnownLocation();
-    } on PlatformException catch (ex) {
-      position = null;
+      permission = await checkPermission();
+      shouldRequestPermission = permission == LocationPermission.denied;
+    } on Exception {
+      permission = null;
+    }
+
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    if (permission != LocationPermission.denied &&
+        permission != LocationPermission.deniedForever) {
+      try {
+        position = await getLastKnownLocation();
+      } on Exception {
+        position = null;
+      }
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -49,35 +66,52 @@ class _LastKnownLocationWidgetState extends State<LastKnownLocationWidget> {
     }
 
     setState(() {
+      _locationPermission = permission;
       _lastKnownPosition = position;
+      _shouldRequestPermission = shouldRequestPermission;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<LocationPermission>(
-        future: checkPermissions(),
-        builder:
-            (BuildContext context, AsyncSnapshot<LocationPermission> snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    final hasPermission = _locationPermission != null &&
+        _locationPermission != LocationPermission.denied &&
+        _locationPermission != LocationPermission.deniedForever;
 
-          if (snapshot.data == LocationPermission.denied) {
-            return const InfoWidget('Access to location denied',
-                'Allow access to the location services for this App using the device settings.');
-          }
+    if (_locationPermission == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-          return Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                InfoWidget(
-                    'Last known location:', _lastKnownPosition.toString()),
-              ],
-            ),
-          );
-        });
+    if (!hasPermission) {
+      final message = _shouldRequestPermission
+          ? 'Request permission by hitting the button below.'
+          : 'Allow access to the location services for this App using the device settings.';
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          InfoWidget(
+            'Access to location denied',
+            message,
+          ),
+          _shouldRequestPermission
+              ? RaisedButton(
+                  child: const Text('Request permission'),
+                  onPressed: () => requestPermission()
+                      .then((status) => _initLastKnownLocation()),
+                )
+              : Container(),
+        ],
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        InfoWidget('Last known location:', _lastKnownPosition.toString()),
+      ],
+    );
   }
 }

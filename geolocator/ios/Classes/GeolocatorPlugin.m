@@ -28,6 +28,8 @@
         }
         CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
         result([AuthorizationStatusMapper toDartIndex:(status)]);
+    } else if ([@"requestPermission" isEqualToString:call.method]) {
+        [self handleRequestPermission:result];
     } else if ([@"isLocationServiceEnabled" isEqualToString:call.method]) {
         BOOL isEnabled = [CLLocationManager locationServicesEnabled];
         result([NSNumber numberWithBool:isEnabled]);
@@ -38,8 +40,24 @@
     }
 }
 
-- (void)handleGetLastKnownPosition:(FlutterResult)result {
+- (void)handleRequestPermission:(FlutterResult)result {
+    if (![PermissionHandler hasPermissionDefinitions]) {
+        [GeolocatorPlugin handleMissingPermissionDefinitions:result];
+        return;
+    }
     
+    [self.permissionHandler
+        requestPermission:^(CLAuthorizationStatus status) {
+            result([AuthorizationStatusMapper toDartIndex:status]);
+        }
+            errorHandler:^(NSString *errorCode, NSString *errorDescription) {
+                result([FlutterError errorWithCode: errorCode
+                                           message: errorDescription
+                                           details: nil]);
+            }];
+}
+
+- (void)handleGetLastKnownPosition:(FlutterResult)result {
     if (![PermissionHandler hasPermissionDefinitions]) {
         [GeolocatorPlugin handleMissingPermissionDefinitions:result];
         return;
