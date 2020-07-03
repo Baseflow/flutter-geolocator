@@ -29,13 +29,8 @@ public class PermissionManager {
     }
 
     @FunctionalInterface
-    public interface RequestPermissionsSuccessCallback {
-        void onSuccess(Map<Integer, Integer> results);
-    }
-
-    @FunctionalInterface
-    public interface CheckPermissionsSuccessCallback {
-        void onSuccess(int permissionStatus);
+    public interface PermissionsSuccessCallback {
+        void onSuccess(LocationPermission permissionStatus);
     }
 
     @FunctionalInterface
