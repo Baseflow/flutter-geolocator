@@ -4,28 +4,34 @@
 #import "Handlers/GeolocationHandler.h"
 #import "Handlers/PermissionHandler.h"
 #import "Utils/AuthorizationStatusMapper.h"
+#import "Utils/LocationAccuracyMapper.h"
+#import "Utils/LocationDistanceMapper.h"
 #import "Utils/LocationMapper.h"
 
-@interface GeolocatorPlugin()
+@interface GeolocatorPlugin() <FlutterStreamHandler>
 @property (strong, nonatomic) GeolocationHandler *geolocationHandler;
 @property (strong, nonatomic) PermissionHandler *permissionHandler;
 @end
 
-@implementation GeolocatorPlugin
+@implementation GeolocatorPlugin {
+    FlutterEventSink _eventSink;
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-    FlutterMethodChannel *channel = [FlutterMethodChannel
-                                     methodChannelWithName:@"flutter.baseflow.com/geolocator"
-                                     binaryMessenger:[registrar messenger]];
+    FlutterMethodChannel *methodChannel = [FlutterMethodChannel
+                                           methodChannelWithName:@"flutter.baseflow.com/geolocator"
+                                           binaryMessenger:registrar.messenger];
+    FlutterEventChannel *eventChannel = [FlutterEventChannel
+                                         eventChannelWithName:@"flutter.baseflow.com/geolocator_updates"
+                                         binaryMessenger:registrar.messenger];
+    
     GeolocatorPlugin *instance = [[GeolocatorPlugin alloc] init];
-    [registrar addMethodCallDelegate:instance channel:channel];
+    [registrar addMethodCallDelegate:instance channel:methodChannel];
+    [eventChannel setStreamHandler:instance];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([@"checkPermission" isEqualToString:call.method]) {
-        if (![PermissionHandler hasPermissionDefinitions]) {
-            [GeolocatorPlugin handleMissingPermissionDefinitions:result];
-            return;
-        }
         CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
         result([AuthorizationStatusMapper toDartIndex:(status)]);
     } else if ([@"requestPermission" isEqualToString:call.method]) {
@@ -40,55 +46,99 @@
     }
 }
 
-- (void)handleRequestPermission:(FlutterResult)result {
-    if (![PermissionHandler hasPermissionDefinitions]) {
-        [GeolocatorPlugin handleMissingPermissionDefinitions:result];
-        return;
+- (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(FlutterEventSink)eventSink {
+    if (_eventSink) {
+        return [FlutterError errorWithCode:GeolocatorErrorLocationSubscriptionActive
+                                   message:@"Already listening for location updates. If you want to restart listening please cancel other subscriptions first"
+                                   details:nil];
     }
-    
-    [self.permissionHandler
-        requestPermission:^(CLAuthorizationStatus status) {
-            result([AuthorizationStatusMapper toDartIndex:status]);
-        }
-            errorHandler:^(NSString *errorCode, NSString *errorDescription) {
-                result([FlutterError errorWithCode: errorCode
-                                           message: errorDescription
-                                           details: nil]);
-            }];
-}
-
-- (void)handleGetLastKnownPosition:(FlutterResult)result {
-    if (![PermissionHandler hasPermissionDefinitions]) {
-        [GeolocatorPlugin handleMissingPermissionDefinitions:result];
-        return;
-    }
+    _eventSink = eventSink;
     
     __weak typeof(self) weakSelf = self;
     
     [self.permissionHandler
-        requestPermission:^(CLAuthorizationStatus status) {
-            if (status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusAuthorizedAlways) {
-                result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
-                                           message: @"User denied permissions to access the device's location."
-                                           details:nil]);
-            }
+     requestPermission:^(CLAuthorizationStatus status) {
+        if (status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusAuthorizedAlways) {
+            [weakSelf onLocationFailureWithErrorCode: GeolocatorErrorPermissionDenied
+                                    errorDescription: @"User denied permissions to access the device's location."];
+            return;
+        }
+        
+        CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
+        CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
+        
+        [[weakSelf geolocationHandler] startListeningWithDesiredAccuracy:accuracy
+                                                      distanceFilter:distanceFilter
+                                                       resultHandler:^(CLLocation *location) {
+            [weakSelf onLocationDidChange: location];
+        }
+                                                        errorHandler:^(NSString *errorCode, NSString *errorDescription){
+            [weakSelf onLocationFailureWithErrorCode:errorCode
+                                errorDescription:errorDescription];
+        }];
+    }
+     errorHandler:^(NSString *errorCode, NSString *errorDescription) {
+        [weakSelf onLocationFailureWithErrorCode:errorCode
+                                errorDescription:errorDescription];
+    }];
+    
+    return nil;
+}
+
+- (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
+    [[self geolocationHandler] stopListening];
+    _eventSink = nil;
+    
+    return nil;
+}
+
+- (void)onLocationDidChange:(CLLocation *_Nullable)location {
+    if (!_eventSink) return;
+    
+    _eventSink([LocationMapper toDictionary:location]);
+}
+
+- (void)onLocationFailureWithErrorCode:(NSString *_Nonnull)errorCode
+                      errorDescription:(NSString *_Nonnull)errorDescription {
+    if (!_eventSink) return;
+    
+    _eventSink([FlutterError errorWithCode:errorCode
+                                   message:errorDescription
+                                   details:nil]);
+    _eventSink = nil;
+}
+
+- (void)handleRequestPermission:(FlutterResult)result {
+    [self.permissionHandler
+     requestPermission:^(CLAuthorizationStatus status) {
+        result([AuthorizationStatusMapper toDartIndex:status]);
+    }
+     errorHandler:^(NSString *errorCode, NSString *errorDescription) {
+        result([FlutterError errorWithCode: errorCode
+                                   message: errorDescription
+                                   details: nil]);
+    }];
+}
+
+- (void)handleGetLastKnownPosition:(FlutterResult)result {
+    __weak typeof(self) weakSelf = self;
+    
+    [self.permissionHandler
+     requestPermission:^(CLAuthorizationStatus status) {
+        if (status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusAuthorizedAlways) {
+            result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
+                                       message: @"User denied permissions to access the device's location."
+                                       details:nil]);
+        }
         
         CLLocation *location = [weakSelf.geolocationHandler getLastKnownPosition];
         result([LocationMapper toDictionary:location]);
-        
-    
-        }
-            errorHandler:^(NSString *errorCode, NSString *errorDescription) {
-                result([FlutterError errorWithCode: errorCode
-                                           message: errorDescription
-                                           details: nil]);
-            }];
-}
-
-+ (void)handleMissingPermissionDefinitions:(FlutterResult)result {
-    result([FlutterError errorWithCode: GeolocatorErrorPermissionDefinitionsNotFound
-                               message: @"Permission definitions not found in the app's Info.plist. Please make sure to add either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription to the app's Info.plist file."
-                               details: nil]);
+    }
+     errorHandler:^(NSString *errorCode, NSString *errorDescription) {
+        result([FlutterError errorWithCode: errorCode
+                                   message: errorDescription
+                                   details: nil]);
+    }];
 }
 
 - (GeolocationHandler *) geolocationHandler {

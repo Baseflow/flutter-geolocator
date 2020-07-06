@@ -52,7 +52,8 @@ class _LastKnownLocationWidgetState extends State<LastKnownLocationWidget> {
     if (permission != LocationPermission.denied &&
         permission != LocationPermission.deniedForever) {
       try {
-        position = await getLastKnownLocation();
+        //position = await getLastKnownLocation();
+        position = await getCurrentPosition();
       } on Exception {
         position = null;
       }

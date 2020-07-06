@@ -25,13 +25,6 @@
             status == kCLAuthorizationStatusAuthorizedAlways);
 }
 
-+ (BOOL) hasPermissionDefinitions {
-    BOOL hasWhenInUseConfiguration = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil;
-    BOOL hasAlwaysConfiguration = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"] != nil;
-    
-    return hasWhenInUseConfiguration || hasAlwaysConfiguration;
-}
-
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler
               errorHandler:(PermissionError)errorHandler {
     // When we already have permission we don't have to request it again
