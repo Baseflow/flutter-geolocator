@@ -147,12 +147,16 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     switch(exception.code) {
       case 'LOCATION_SERVICES_DISABLED':
         throw LocationServiceDisabledException();
+      case 'LOCATION_SUBSCRIPTION_ACTIVE':
+        throw AlreadySubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':
         throw PermissionDefinitionsNotFoundException(exception.message);
       case 'PERMISSION_DENIED':
         throw PermissionDeniedException(exception.message);
       case 'PERMISSION_REQUEST_IN_PROGRESS':
         throw PermissionRequestInProgressException(exception.message);
+      case 'LOCATION_UPDATE_FAILURE':
+        throw PositionUpdateException(exception.message);
     }
   }
 }

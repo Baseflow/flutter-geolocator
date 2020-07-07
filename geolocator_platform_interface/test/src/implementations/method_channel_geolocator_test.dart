@@ -27,6 +27,8 @@ Stream<Position> createPositionStream(
   bool isMissingPermissionDefinitions,
   bool isAlreadyRequestingPermissions,
   bool isLocationServiceEnabled,
+  bool isAlreadySubscribed = false,
+  bool hasPositionUpdateException = false,
 }) {
   StreamController<Position> controller;
   var counter = 0;
@@ -63,6 +65,18 @@ Stream<Position> createPositionStream(
       controller.addError(PlatformException(
         code: 'LOCATION_SERVICES_DISABLED',
         message: 'Location service disabled',
+        details: null,
+      ));
+    } else if (isAlreadySubscribed) {
+      controller.addError(PlatformException(
+        code: 'LOCATION_SUBSCRIPTION_ACTIVE',
+        message: 'Position stream already active',
+        details: null,
+      ));
+    } else if (hasPositionUpdateException) {
+      controller.addError(PlatformException(
+        code: 'LOCATION_UPDATE_FAILURE',
+        message: 'Exception while listening for position updates',
         details: null,
       ));
     } else {
@@ -102,6 +116,8 @@ void main() {
   var _mockIsLocationServiceEnabled = true;
   var _mockIsAlreadyRequestingPermission = false;
   var _mockIsMissingPermissionDefinitions = false;
+  var _mockIsAlreadySubscribed = false;
+  var _mockHasPositionUpdateException = false;
 
   group('$MethodChannelGeolocator()', () {
     final log = <MethodCall>[];
@@ -198,6 +214,8 @@ void main() {
               isLocationServiceEnabled: _mockIsLocationServiceEnabled,
               isMissingPermissionDefinitions:
                   _mockIsMissingPermissionDefinitions,
+              isAlreadySubscribed: _mockIsAlreadySubscribed,
+              hasPositionUpdateException: _mockHasPositionUpdateException,
             ).listen(
               (data) {
                 ServicesBinding.instance.defaultBinaryMessenger
@@ -732,6 +750,57 @@ void main() {
           ]),
         );
       });
+
+      test(
+        // ignore: lines_longer_than_80_chars
+          'Should receive a already subscribed exception',
+              () async {
+            // Arrange
+            _mockPermission = LocationPermission.whileInUse;
+            _mockIsAlreadyRequestingPermission = false;
+            _mockIsMissingPermissionDefinitions = false;
+            _mockIsLocationServiceEnabled = true;
+            _mockIsAlreadySubscribed = true;
+
+            // Act
+            var positionStream = methodChannelGeolocator.getPositionStream();
+
+            // Assert
+            expect(
+              positionStream,
+              emitsInAnyOrder([
+                emitsError(
+                  isA<AlreadySubscribedException>(),
+                ),
+              ]),
+            );
+          });
+
+      test(
+        // ignore: lines_longer_than_80_chars
+          'Should receive a position update exception',
+              () async {
+            // Arrange
+            _mockPermission = LocationPermission.whileInUse;
+            _mockIsAlreadyRequestingPermission = false;
+            _mockIsMissingPermissionDefinitions = false;
+            _mockIsLocationServiceEnabled = true;
+            _mockIsAlreadySubscribed = false;
+            _mockHasPositionUpdateException = true;
+
+            // Act
+            var positionStream = methodChannelGeolocator.getPositionStream();
+
+            // Assert
+            expect(
+              positionStream,
+              emitsInAnyOrder([
+                emitsError(
+                  isA<PositionUpdateException>(),
+                ),
+              ]),
+            );
+          });
 
       test('Should throw a timeout exception when timeLimit is reached',
           () async {
