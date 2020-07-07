@@ -1,7 +1,8 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:geolocator_example/plugin_example/last_known_location_widget.dart';
+import 'package:geolocator_example/plugin_example/last_known_location_example_widget.dart';
+import 'package:geolocator_example/plugin_example/position_updates_example_widget.dart';
 
 import 'info_page.dart';
 
@@ -19,11 +20,13 @@ class Globals {
 
   static final icons = [
     Icons.location_on,
+    Icons.map,
     Icons.info_outline,
   ];
 
   static final pages = [
-    LastKnownLocationWidget(),
+    LastKnownLocationExampleWidget(),
+    PositionUpdatesExampleWidget(),
     InfoPage(),
   ];
 }

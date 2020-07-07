@@ -4,13 +4,13 @@ import 'package:geolocator_example/plugin_example/widgets/info_widget.dart';
 
 /// A widget that will request and display the last known
 /// location stored on the device.
-class LastKnownLocationWidget extends StatefulWidget {
+class LastKnownLocationExampleWidget extends StatefulWidget {
   @override
-  _LastKnownLocationWidgetState createState() =>
-      _LastKnownLocationWidgetState();
+  _LastKnownLocationExampleWidgetState createState() =>
+      _LastKnownLocationExampleWidgetState();
 }
 
-class _LastKnownLocationWidgetState extends State<LastKnownLocationWidget> {
+class _LastKnownLocationExampleWidgetState extends State<LastKnownLocationExampleWidget> {
   Position _lastKnownPosition;
   LocationPermission _locationPermission;
   bool _shouldRequestPermission;
