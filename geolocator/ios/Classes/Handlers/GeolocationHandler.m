@@ -34,6 +34,9 @@
     CLLocationManager *locationManager = self.locationManager;
     locationManager.desiredAccuracy = desiredAccuracy;
     locationManager.distanceFilter = distanceFilter == 0 ? kCLDistanceFilterNone : distanceFilter;
+    if (@available(iOS 9.0, *)) {
+        locationManager.allowsBackgroundLocationUpdates = [GeolocationHandler shouldEnableBackgroundLocationUpdates];
+    }
     
     [locationManager startUpdatingLocation];
 }
@@ -74,5 +77,17 @@
     
     [self stopListening];
     self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
+}
+
++ (BOOL) shouldEnableBackgroundLocationUpdates {
+    if (@available(iOS 9.0, *)) {
+        id config = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"EnableBackgroundLocationUpdates"];
+
+        if (!config) return NO;
+
+        return [config boolValue];
+    } else {
+        return NO;
+    }
 }
 @end
