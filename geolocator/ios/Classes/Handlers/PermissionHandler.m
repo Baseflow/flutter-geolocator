@@ -21,27 +21,16 @@
 + (BOOL) hasPermission {
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     
-    switch (status) {
-        case kCLAuthorizationStatusAuthorizedAlways:
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            return YES;
-        default:
-            return NO;
-    }
-}
-
-+ (BOOL) hasPermissionConfiguration {
-    BOOL hasWhenInUseConfiguration = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil;
-    BOOL hasAlwaysConfiguration = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"] != nil;
-    
-    return hasWhenInUseConfiguration || hasAlwaysConfiguration;
+    return (status == kCLAuthorizationStatusAuthorizedWhenInUse ||
+            status == kCLAuthorizationStatusAuthorizedAlways);
 }
 
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler
               errorHandler:(PermissionError)errorHandler {
     // When we already have permission we don't have to request it again
-    if ([PermissionHandler hasPermission]) {
-        confirmationHandler([CLLocationManager authorizationStatus]);
+    CLAuthorizationStatus authorizationStatus = CLLocationManager.authorizationStatus;
+    if (authorizationStatus != kCLAuthorizationStatusNotDetermined) {
+        confirmationHandler(authorizationStatus);
         return;
     }
     
@@ -67,8 +56,8 @@
         if (self.errorHandler) {
             self.errorHandler(GeolocatorErrorPermissionDefinitionsNotFound,
                               @"Permission definitions not found in the app's Info.plist. Please make sure to "
-                               "add either NSLocationWhenInUseUsageDescription or "
-                               "NSLocationAlwaysUsageDescription to the app's Info.plist file.");
+                              "add either NSLocationWhenInUseUsageDescription or "
+                              "NSLocationAlwaysUsageDescription to the app's Info.plist file.");
         }
         
         [self cleanUp];
@@ -78,7 +67,7 @@
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     if (status == kCLAuthorizationStatusNotDetermined) {
-      return;
+        return;
     }
     
     if (self.confirmationHandler) {

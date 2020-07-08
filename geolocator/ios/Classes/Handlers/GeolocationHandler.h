@@ -9,10 +9,16 @@
 #import <Foundation/Foundation.h>
 
 typedef void (^GeolocatorError)(NSString *_Nonnull errorCode, NSString *_Nonnull  errorDescription);
-typedef void (^GeolocatorResult)(CLLocation *_Nonnull location);
+typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
 
 @interface GeolocationHandler : NSObject
 
-- (CLLocation *)getLastKnownPosition;
+- (CLLocation *_Nullable)getLastKnownPosition;
 
+- (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
+                           distanceFilter:(CLLocationDistance)distanceFilter
+                            resultHandler:(GeolocatorResult _Nonnull)resultHandler
+                             errorHandler:(GeolocatorError _Nonnull)errorHandler;
+
+- (void)stopListening;
 @end

@@ -6,8 +6,20 @@ export 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 
 /// Returns a [Future] indicating if the user allows the App to access
 /// the device's location.
-Future<LocationPermission> checkPermissions() =>
+Future<LocationPermission> checkPermission() =>
     GeolocatorPlatform.instance.checkPermission();
+
+/// Request permission to access the location of the device.
+/// 
+/// Returns a [Future] which when completes indicates if the user granted
+/// permission to access the device's location.
+/// Throws a [PermissionDefinitionsNotFoundException] when the required
+/// platform specific configuration is missing (e.g. in the 
+/// AndroidManifest.xml on Android or the Info.plist on iOS).
+/// A [PermissionRequestInProgressException] is thrown if permissions are 
+/// requested while an earlier request has not yet been completed.
+Future<LocationPermission> requestPermission() =>
+    GeolocatorPlatform.instance.requestPermission();
 
 /// Returns a [Future] containing a [bool] value indicating whether location
 /// services are enabled on the device.

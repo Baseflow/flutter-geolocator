@@ -15,10 +15,10 @@ void main() {
     expect(actual, expected);
   });
 
-  test('toLocationPermission: Should return deniedForEver when 1 is supplied',
+  test('toLocationPermission: Should return deniedForever when 1 is supplied',
       () {
     // Arrange
-    final expected = LocationPermission.deniedForEver;
+    final expected = LocationPermission.deniedForever;
 
     // Act
     final actual = 1.toLocationPermission();
@@ -38,12 +38,25 @@ void main() {
     expect(actual, expected);
   });
 
-  test('toLocationPermission: Should return always when 3 is supplied', () {
+  test(
+    'toLocationPermission: Should return whenInUseForever when 3 is supplied', 
+    () {
+    // Arrange
+    final expected = LocationPermission.whileInUseForever;
+
+    // Act
+    final actual = 3.toLocationPermission();
+
+    // Assert
+    expect(actual, expected);
+  });
+
+  test('toLocationPermission: Should return always when 4 is supplied', () {
     // Arrange
     final expected = LocationPermission.always;
 
     // Act
-    final actual = 3.toLocationPermission();
+    final actual = 4.toLocationPermission();
 
     // Assert
     expect(actual, expected);

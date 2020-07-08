@@ -35,11 +35,17 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<LocationPermission> checkPermission() async {
-    // ignore: omit_local_variable_types
-    final int permission = await methodChannel
-      .invokeMethod('checkPermission');
+    try {
+      // ignore: omit_local_variable_types
+      final int permission = await methodChannel
+        .invokeMethod('checkPermission');
 
-    return permission.toLocationPermission();
+      return permission.toLocationPermission();
+    } on PlatformException catch (e) {
+      _handlePlatformException(e);
+
+      rethrow;
+    }
   }
 
   @override
@@ -50,7 +56,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         .invokeMethod('requestPermission');
 
       return permission.toLocationPermission();
-    } on PlatformException catch (e) {
+    } on PlatformException catch (e, trace) {
       _handlePlatformException(e);
 
       rethrow;
@@ -141,12 +147,16 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     switch(exception.code) {
       case 'LOCATION_SERVICES_DISABLED':
         throw LocationServiceDisabledException();
+      case 'LOCATION_SUBSCRIPTION_ACTIVE':
+        throw AlreadySubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':
         throw PermissionDefinitionsNotFoundException(exception.message);
       case 'PERMISSION_DENIED':
         throw PermissionDeniedException(exception.message);
       case 'PERMISSION_REQUEST_IN_PROGRESS':
         throw PermissionRequestInProgressException(exception.message);
+      case 'LOCATION_UPDATE_FAILURE':
+        throw PositionUpdateException(exception.message);
     }
   }
 }
