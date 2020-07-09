@@ -9,10 +9,6 @@ enum LocationPermission {
   /// Permission to access the device's location is allowed only while
   /// the App is in use.
   whileInUse,
-  /// Android only: Permission to access the device's location is allowed only
-  /// while the App is in use. Permission to access the device's location in the
-  /// background is denied forever.
-  whileInUseForever,
   /// Permission to access the device's location is allowed even when the 
   /// App is running in the background.
   always

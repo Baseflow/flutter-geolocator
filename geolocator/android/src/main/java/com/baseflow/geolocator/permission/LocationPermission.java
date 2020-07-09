@@ -10,10 +10,6 @@ public enum LocationPermission {
     /// Permission to access the device's location is allowed only while
     /// the App is in use.
     whileInUse,
-    /// Permission to access the device's location is allowed only while
-    /// the App is in use. Permission to access the device's location in the
-    /// background is denied forever.
-    whileInUseForever,
     /// Permission to access the device's location is allowed even when the
     /// App is running in the background.
     always;
@@ -26,10 +22,8 @@ public enum LocationPermission {
                 return 1;
             case whileInUse:
                 return 2;
-            case whileInUseForever:
-                return 3;
             case always:
-                return 4;
+                return 3;
             default:
                 throw new IndexOutOfBoundsException();
         }
