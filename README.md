@@ -101,7 +101,15 @@ StreamSubscription<Position> positionStream = geolocator.getPositionStream(locat
     });
 ```
 
-To check if location services are enabled you can call the `checkGeolocationPermissionStatus` method. This method returns a value of the `GeolocationStatus` enum indicating the availability of the location services on the device. Optionally you can specify if you want to test for `GeolocationPermission.locationAlways` or `GeolocationPermission.locationWhenInUse` (by default `GeolocationPermission.location` is used, which checks for either one of the previously mentioned permissions). Example usage:
+To check if location services are enabled you can call the `isLocationServiceEnabled()` method. This method will return a boolean value indicating if the location services are enabled or not. Example usage:
+
+```dart
+import 'package:geolocator/geolocator.dart';
+
+bool isEnabled = await Geolocator().isLocationServiceEnabled();
+```
+
+If you want to manually check if location permissions are granted, you can call the `checkGeolocationPermissionStatus()` method. This method returns a value of the `GeolocationStatus` enum indicating the current permissions the App has been granted by the user. Optionally you can specify if you want to test for `GeolocationPermission.locationAlways` or `GeolocationPermission.locationWhenInUse` (by default `GeolocationPermission.location` is used, which checks for either one of the previously mentioned permissions). Example usage:
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
@@ -115,10 +123,8 @@ By default `Geolocator` will use `FusedLocationProviderClient` on Android when G
 import 'package:geolocator/geolocator.dart';
 
 Geolocator geolocator = Geolocator()..forceAndroidLocationManager = true;
-GeolocationStatus geolocationStatus  = await geolocator.checkGeolocationPermissionStatus();
+GeolocationStatus geolocationStatus  = await geolocator.getCurrentLocation();
 ```
-
-To check if location services are enabled (Location Service(GPS) turned on) on the device, the `checkGeolocationPermissionStatus` method will return `disabled` state if location service feature is disabled (or not available) on the device.
 
 ### Geocoding
 
