@@ -18,7 +18,7 @@ import java.util.List;
 
 public class PermissionUtils {
 
-    public boolean hasPermissionInManifest(Context context, String permission) {
+    public static boolean hasPermissionInManifest(Context context, String permission) {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
             if (info.requestedPermissions != null) {
@@ -31,6 +31,7 @@ public class PermissionUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return false;
     }
 

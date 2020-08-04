@@ -1,27 +1,36 @@
 package com.baseflow.geolocator;
 
-import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
-import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * GeolocatorPlugin
  */
 public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
+
     private static final String TAG = "GeocodingPlugin";
+    private final PermissionManager permissionManager;
+
     @Nullable
     private MethodCallHandlerImpl methodCallHandler;
+
+    @Nullable
+    private Registrar pluginRegistrar;
+
+    @Nullable
+    private ActivityPluginBinding activityPluginBinding;
+
+    public GeolocatorPlugin() {
+        this.permissionManager = new PermissionManager();
+    }
 
     // This static function is optional and equivalent to onAttachedToEngine. It supports the old
     // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -33,21 +42,18 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     // depending on the user's project. onAttachedToEngine or registerWith must both be defined
     // in the same class.
     public static void registerWith(Registrar registrar) {
-        MethodCallHandlerImpl handler = new MethodCallHandlerImpl();
-        handler.startListening(registrar.activeContext(), registrar.messenger());
+        GeolocatorPlugin geolocatorPlugin = new GeolocatorPlugin();
+        geolocatorPlugin.pluginRegistrar = registrar;
+        geolocatorPlugin.registerListeners();
 
-        if (registrar.activeContext() instanceof Activity) {
-            handler.startListeningToActivity(
-                    registrar.activity(),
-                    registrar::addActivityResultListener,
-                    registrar::addRequestPermissionsResultListener
-            );
-        }
+        MethodCallHandlerImpl handler = new MethodCallHandlerImpl(geolocatorPlugin.permissionManager);
+        handler.startListening(registrar.context(), registrar.messenger());
+        handler.setActivity(registrar.activity());
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        methodCallHandler = new MethodCallHandlerImpl();
+        methodCallHandler = new MethodCallHandlerImpl(this.permissionManager);
         methodCallHandler.startListening(
                 flutterPluginBinding.getApplicationContext(),
                 flutterPluginBinding.getBinaryMessenger());
@@ -70,12 +76,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
             Log.wtf(TAG, "Not attached to engine while attaching to activity");
             return;
         }
+        this.activityPluginBinding = binding;
 
-        methodCallHandler.startListeningToActivity(
-                binding.getActivity(),
-                binding::addActivityResultListener,
-                binding::addRequestPermissionsResultListener
-        );
+        registerListeners();
+        methodCallHandler.setActivity(binding.getActivity());
     }
 
     @Override
@@ -95,6 +99,21 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
             return;
         }
 
-        methodCallHandler.stopListeningToActivity();
+        methodCallHandler.setActivity(null);
+        deregisterListeners();
+    }
+
+    private void registerListeners() {
+        if (this.pluginRegistrar != null) {
+            this.pluginRegistrar.addRequestPermissionsResultListener(this.permissionManager);
+        } else if (activityPluginBinding != null) {
+            this.activityPluginBinding.addRequestPermissionsResultListener(this.permissionManager);
+        }
+    }
+
+    private void deregisterListeners() {
+        if (this.activityPluginBinding != null) {
+            this.activityPluginBinding.removeRequestPermissionsResultListener(this.permissionManager);
+        }
     }
 }

@@ -22,7 +22,6 @@ import io.flutter.plugin.common.MethodChannel;
  */
 class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     private static final String TAG = "MethodCallHandlerImpl";
-    private final Geolocator geolocator;
     private final PermissionManager permissionManager;
 
     @Nullable
@@ -31,16 +30,8 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     @Nullable
     private Activity activity;
 
-    @Nullable
-    private PermissionManager.ActivityRegistry activityRegistry;
-
-    @Nullable
-    private PermissionManager.PermissionRegistry permissionRegistry;
-
-
-    MethodCallHandlerImpl() {
-        this.geolocator = new Geolocator();
-        this.permissionManager = new PermissionManager();
+    MethodCallHandlerImpl(PermissionManager permissionManager) {
+        this.permissionManager = permissionManager;
     }
 
     @Nullable
@@ -50,7 +41,10 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         switch (call.method) {
             case "checkPermission":
-                onCheckPermission(call, result);
+                onCheckPermission(result);
+                break;
+            case "requestPermission":
+                onRequestPermission(result);
                 break;
             default:
                 result.notImplemented();
@@ -91,29 +85,30 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         channel = null;
     }
 
-    void startListeningToActivity(
-            Activity activity,
-            PermissionManager.ActivityRegistry activityRegistry,
-            PermissionManager.PermissionRegistry permissionRegistry) {
+    void setActivity(Activity activity) {
         this.activity = activity;
-        this.activityRegistry = activityRegistry;
-        this.permissionRegistry = permissionRegistry;
     }
 
-    void stopListeningToActivity() {
-        activity = null;
-        activityRegistry = null;
-        permissionRegistry = null;
-    }
-
-    private void onCheckPermission(MethodCall call, MethodChannel.Result result) {
+    private void onCheckPermission(MethodChannel.Result result) {
         try {
-            LocationPermission permission = permissionManager.checkPermissionStatus(context, activity);
+            LocationPermission permission = this.permissionManager.checkPermissionStatus(context, activity);
             result.success(permission.toInt());
         } catch (PermissionUndefinedException e) {
-            result.error(ErrorCodes.GeolocatorErrorPermissionDefinitionsNotFound,
-                    "No location permissions are defined in the manifest. Make sure at least ACCESS_FINE_LOCATION or ACCESS_COARSE_LOCATION are defined in the manifest",
-                    null);
+            ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
+            result.error(errorCode.toString(), errorCode.toDescription(), null);
+        }
+    }
+
+    private void onRequestPermission(MethodChannel.Result result) {
+        try {
+            this.permissionManager.requestPermission(
+                    this.activity,
+                    (LocationPermission permission) -> result.success(permission.toInt()) ,
+                    (ErrorCodes errorCode) -> result.error(errorCode.toString(), errorCode.toDescription(), null)
+            );
+        } catch (PermissionUndefinedException e) {
+            ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
+            result.error(errorCode.toString(), errorCode.toDescription(), null);
         }
     }
 }

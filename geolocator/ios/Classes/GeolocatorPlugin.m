@@ -49,7 +49,7 @@
 - (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(FlutterEventSink)eventSink {
     if (_eventSink) {
         return [FlutterError errorWithCode:GeolocatorErrorLocationSubscriptionActive
-                                   message:@"Already listening for location updates. If you want to restart listening please cancel other subscriptions first"
+                                   message:@"Already listening for location updates. If you want to restart listening please cancel other subscriptions first."
                                    details:nil];
     }
     _eventSink = eventSink;
