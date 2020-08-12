@@ -104,7 +104,7 @@ class Position {
   /// Converts the supplied [Map] to an instance of the [Position] class.
   static Position fromMap(dynamic message) {
     if (message == null) {
-      throw ArgumentError('The parameter \'message\' should not be null.');
+      return null;
     }
 
     final Map<dynamic, dynamic> positionMap = message;

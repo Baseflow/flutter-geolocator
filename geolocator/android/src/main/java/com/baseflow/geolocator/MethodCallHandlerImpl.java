@@ -2,6 +2,7 @@ package com.baseflow.geolocator;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,8 @@ import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
+import com.baseflow.geolocator.location.GeolocationManager;
+import com.baseflow.geolocator.location.LocationMapper;
 import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 
@@ -23,6 +26,7 @@ import io.flutter.plugin.common.MethodChannel;
 class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     private static final String TAG = "MethodCallHandlerImpl";
     private final PermissionManager permissionManager;
+    private final GeolocationManager geolocationManager;
 
     @Nullable
     private Context context;
@@ -30,8 +34,11 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     @Nullable
     private Activity activity;
 
-    MethodCallHandlerImpl(PermissionManager permissionManager) {
+    MethodCallHandlerImpl(
+            PermissionManager permissionManager,
+            GeolocationManager geolocationManager) {
         this.permissionManager = permissionManager;
+        this.geolocationManager = geolocationManager;
     }
 
     @Nullable
@@ -45,6 +52,9 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
                 break;
             case "requestPermission":
                 onRequestPermission(result);
+                break;
+            case "getLastKnownPosition":
+                onGetLastKnownPosition(result);
                 break;
             default:
                 result.notImplemented();
@@ -85,7 +95,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         channel = null;
     }
 
-    void setActivity(Activity activity) {
+    void setActivity(@Nullable Activity activity) {
         this.activity = activity;
     }
 
@@ -110,5 +120,13 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
             result.error(errorCode.toString(), errorCode.toDescription(), null);
         }
+    }
+
+    private void onGetLastKnownPosition(MethodChannel.Result result) {
+        this.geolocationManager.getLastKnownPosition(
+                this.context,
+                (Location location) -> result.success(LocationMapper.toHashMap(location)),
+                (ErrorCodes errorCode) -> result.error(errorCode.toString(), errorCode.toDescription(), null)
+        );
     }
 }

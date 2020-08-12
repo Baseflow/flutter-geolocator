@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.baseflow.geolocator.location.GeolocationManager;
 import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -18,18 +19,24 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
     private static final String TAG = "GeocodingPlugin";
     private final PermissionManager permissionManager;
+    private final GeolocationManager geolocationManager;
 
     @Nullable
     private MethodCallHandlerImpl methodCallHandler;
 
     @Nullable
+    private StreamHandlerImpl streamHandler;
+
+    @Nullable
     private Registrar pluginRegistrar;
 
     @Nullable
-    private ActivityPluginBinding activityPluginBinding;
+    private ActivityPluginBinding pluginBinding;
 
     public GeolocatorPlugin() {
+
         this.permissionManager = new PermissionManager();
+        this.geolocationManager = new GeolocationManager(permissionManager);
     }
 
     // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -46,40 +53,52 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         geolocatorPlugin.pluginRegistrar = registrar;
         geolocatorPlugin.registerListeners();
 
-        MethodCallHandlerImpl handler = new MethodCallHandlerImpl(geolocatorPlugin.permissionManager);
-        handler.startListening(registrar.context(), registrar.messenger());
-        handler.setActivity(registrar.activity());
+        MethodCallHandlerImpl methodCallHandler = new MethodCallHandlerImpl(
+                geolocatorPlugin.permissionManager,
+                geolocatorPlugin.geolocationManager);
+        methodCallHandler.startListening(registrar.context(), registrar.messenger());
+        methodCallHandler.setActivity(registrar.activity());
+
+        StreamHandlerImpl streamHandler = new StreamHandlerImpl(
+                geolocatorPlugin.geolocationManager
+        );
+        streamHandler.startListening(registrar.context(), registrar.messenger());
     }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        methodCallHandler = new MethodCallHandlerImpl(this.permissionManager);
+        methodCallHandler = new MethodCallHandlerImpl(this.permissionManager, this.geolocationManager);
         methodCallHandler.startListening(
                 flutterPluginBinding.getApplicationContext(),
                 flutterPluginBinding.getBinaryMessenger());
+        streamHandler = new StreamHandlerImpl(this.geolocationManager);
+        streamHandler.startListening(
+                flutterPluginBinding.getApplicationContext(),
+                flutterPluginBinding.getBinaryMessenger()
+        );
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        if (methodCallHandler == null) {
-            Log.wtf(TAG, "Already detached from the engine.");
-            return;
+        if (methodCallHandler != null) {
+            methodCallHandler.stopListening();
+            methodCallHandler = null;
         }
 
-        methodCallHandler.stopListening();
-        methodCallHandler = null;
+        if (streamHandler != null) {
+            streamHandler.stopListening();
+            streamHandler = null;
+        }
     }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        if (methodCallHandler == null) {
-            Log.wtf(TAG, "Not attached to engine while attaching to activity");
-            return;
+        if (methodCallHandler != null) {
+            methodCallHandler.setActivity(binding.getActivity());
         }
-        this.activityPluginBinding = binding;
 
+        this.pluginBinding = binding;
         registerListeners();
-        methodCallHandler.setActivity(binding.getActivity());
     }
 
     @Override
@@ -94,26 +113,24 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onDetachedFromActivity() {
-        if (methodCallHandler == null) {
-            Log.wtf(TAG, "Not attached to engine while detaching from activity");
-            return;
+        if (methodCallHandler != null) {
+            methodCallHandler.setActivity(null);
         }
 
-        methodCallHandler.setActivity(null);
         deregisterListeners();
     }
 
     private void registerListeners() {
         if (this.pluginRegistrar != null) {
             this.pluginRegistrar.addRequestPermissionsResultListener(this.permissionManager);
-        } else if (activityPluginBinding != null) {
-            this.activityPluginBinding.addRequestPermissionsResultListener(this.permissionManager);
+        } else if (pluginBinding != null) {
+            this.pluginBinding.addRequestPermissionsResultListener(this.permissionManager);
         }
     }
 
     private void deregisterListeners() {
-        if (this.activityPluginBinding != null) {
-            this.activityPluginBinding.removeRequestPermissionsResultListener(this.permissionManager);
+        if (this.pluginBinding != null) {
+            this.pluginBinding.removeRequestPermissionsResultListener(this.permissionManager);
         }
     }
 }
