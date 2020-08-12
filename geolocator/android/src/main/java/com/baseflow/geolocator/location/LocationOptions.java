@@ -11,7 +11,7 @@ public class LocationOptions {
     public static LocationOptions parseArguments(Map<String, Object> arguments) {
         final String accuracy = (String) arguments.get("accuracy");
         final long distanceFilter = (int) arguments.get("distanceFilter");
-        final boolean forceAndroidLocationManager = false; //(boolean) arguments.get("forceAndroidLocationManager");
+        final boolean forceAndroidLocationManager = (boolean) arguments.get("forceAndroidLocationManager");
         final long timeInterval = (int) arguments.get("timeInterval");
 
         LocationAccuracy locationAccuracy = LocationAccuracy.best;
