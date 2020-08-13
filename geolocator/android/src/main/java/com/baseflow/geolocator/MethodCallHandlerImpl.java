@@ -125,6 +125,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     private void onGetLastKnownPosition(MethodChannel.Result result) {
         this.geolocationManager.getLastKnownPosition(
                 this.context,
+                this.activity,
                 (Location location) -> result.success(LocationMapper.toHashMap(location)),
                 (ErrorCodes errorCode) -> result.error(errorCode.toString(), errorCode.toDescription(), null)
         );

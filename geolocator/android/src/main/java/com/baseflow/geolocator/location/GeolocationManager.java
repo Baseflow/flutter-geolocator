@@ -1,7 +1,11 @@
 package com.baseflow.geolocator.location;
 
+import android.app.Activity;
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.PermissionChecker;
+
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
@@ -9,6 +13,8 @@ import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import java.util.function.Supplier;
 
 public class GeolocationManager {
     @NonNull
@@ -24,27 +30,35 @@ public class GeolocationManager {
 
     public void getLastKnownPosition(
             Context context,
+            Activity activity,
             PositionChangedCallback positionChangedCallback,
             ErrorCallback errorCallback) {
-        if (!hasPermissions(context, errorCallback)) {
-            return;
-        }
 
-        LocationClient locationClient = getLocationClient(context);
-        locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
+        handlePermissions(
+                context,
+                activity,
+                () -> {
+                    LocationClient locationClient = getLocationClient(context);
+                    locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
+                },
+                errorCallback);
     }
 
     public void startPositionUpdates(
             Context context,
+            Activity activity,
             LocationOptions options,
             PositionChangedCallback positionChangedCallback,
             ErrorCallback errorCallback) {
-        if (!hasPermissions(context, errorCallback)) {
-            return;
-        }
 
-        LocationClient locationClient = getLocationClient(context);
-        locationClient.startPositionUpdates(options, positionChangedCallback, errorCallback);
+        handlePermissions(
+                context,
+                activity,
+                () -> {
+                    LocationClient locationClient = getLocationClient(context);
+                    locationClient.startPositionUpdates(options, positionChangedCallback, errorCallback);
+                },
+                errorCallback);
     }
 
     public void stopPositionUpdates(Context context) {
@@ -72,19 +86,36 @@ public class GeolocationManager {
         return resultCode == ConnectionResult.SUCCESS;
     }
 
-    private boolean hasPermissions(Context context, ErrorCallback errorCallback) {
+    private void handlePermissions(Context context, @Nullable Activity activity, Runnable hasPermissionCallback, ErrorCallback errorCallback) {
         try {
             LocationPermission permissionStatus = permissionManager.checkPermissionStatus(context, null);
 
-            if (permissionStatus == LocationPermission.denied || permissionStatus == LocationPermission.deniedForever) {
+            if (permissionStatus == LocationPermission.deniedForever) {
                 errorCallback.onError(ErrorCodes.permissionDenied);
-                return false;
+                return;
+            }
+
+            if (permissionStatus == LocationPermission.whileInUse || permissionStatus == LocationPermission.always) {
+                hasPermissionCallback.run();
+                return;
+            }
+
+            if (permissionStatus == LocationPermission.denied && activity != null) {
+                permissionManager.requestPermission(
+                        activity,
+                        (permission) -> {
+                            if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+                                hasPermissionCallback.run();
+                            } else {
+                                errorCallback.onError(ErrorCodes.permissionDenied);
+                            }
+                        },
+                        errorCallback);
+            } else {
+                errorCallback.onError(ErrorCodes.permissionDenied);
             }
         } catch (PermissionUndefinedException ex) {
             errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
-            return false;
         }
-
-        return true;
     }
 }

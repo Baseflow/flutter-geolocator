@@ -43,8 +43,6 @@ class _PositionUpdatesExampleWidgetState
                 ),
               ],
             );
-            return const InfoWidget('Access to location denied',
-                'Allow access to the location services for this App using the device settings.');
           }
 
           if (snapshot.data == LocationPermission.deniedForever) {

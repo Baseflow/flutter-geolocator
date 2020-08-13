@@ -29,9 +29,14 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
     @Nullable
     private Context context;
 
+    @Nullable
+    private Activity activity;
+
     public StreamHandlerImpl(GeolocationManager geolocationManager) {
         this.geolocationManager = geolocationManager;
     }
+
+    void setActivity(@Nullable Activity activity) { this.activity = activity; }
 
     /**
      * Registers this instance as event stream handler on the given {@code messenger}.
@@ -74,6 +79,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
 
         geolocationManager.startPositionUpdates(
                 context,
+                activity,
                 locationOptions,
                 (Location location) -> events.success(LocationMapper.toHashMap(location)),
                 (ErrorCodes errorCodes) -> events.error(errorCodes.toString(), errorCodes.toDescription(), null));

@@ -63,6 +63,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
                 geolocatorPlugin.geolocationManager
         );
         streamHandler.startListening(registrar.context(), registrar.messenger());
+        streamHandler.setActivity(registrar.activity());
     }
 
     @Override
@@ -96,6 +97,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         if (methodCallHandler != null) {
             methodCallHandler.setActivity(binding.getActivity());
         }
+        if (streamHandler != null) {
+            streamHandler.setActivity(binding.getActivity());
+        }
 
         this.pluginBinding = binding;
         registerListeners();
@@ -115,6 +119,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     public void onDetachedFromActivity() {
         if (methodCallHandler != null) {
             methodCallHandler.setActivity(null);
+        }
+        if (streamHandler != null) {
+            streamHandler.setActivity(null);
         }
 
         deregisterListeners();
