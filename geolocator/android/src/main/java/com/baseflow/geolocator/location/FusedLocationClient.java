@@ -64,6 +64,7 @@ class FusedLocationClient implements LocationClient {
         locationRequest.setPriority(toPriority(options.getAccuracy()));
         locationRequest.setInterval(options.getTimeInterval());
         locationRequest.setFastestInterval(options.getTimeInterval() / 2);
+        locationRequest.setSmallestDisplacement(options.getDistanceFilter());
 
         fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,

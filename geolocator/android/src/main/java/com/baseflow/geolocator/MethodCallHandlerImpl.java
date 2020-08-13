@@ -50,6 +50,9 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             case "checkPermission":
                 onCheckPermission(result);
                 break;
+            case "isLocationServiceEnabled":
+                onIsLocationServiceEnabled(result);
+                break;
             case "requestPermission":
                 onRequestPermission(result);
                 break;
@@ -107,6 +110,11 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
             result.error(errorCode.toString(), errorCode.toDescription(), null);
         }
+    }
+
+    private void onIsLocationServiceEnabled(MethodChannel.Result result) {
+        boolean isEnabled = geolocationManager.isLocationServiceEnabled(context);
+        result.success(isEnabled);
     }
 
     private void onRequestPermission(MethodChannel.Result result) {
