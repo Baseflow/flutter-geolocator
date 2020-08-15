@@ -47,7 +47,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
      */
     void startListening(Context context, BinaryMessenger messenger) {
         if (channel != null) {
-            Log.wtf(TAG, "Setting a event call handler before the last was disposed.");
+            Log.d(TAG, "Setting a event call handler before the last was disposed.");
             stopListening();
         }
 
@@ -87,6 +87,6 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
 
     @Override
     public void onCancel(Object arguments) {
-        geolocationManager.stopPositionUpdates(context);
+        geolocationManager.stopPositionUpdates();
     }
 }

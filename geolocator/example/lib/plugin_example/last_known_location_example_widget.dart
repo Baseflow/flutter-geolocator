@@ -11,44 +11,46 @@ class LastKnownLocationExampleWidget extends StatelessWidget {
       future: getLastKnownLocation(),
       builder: (context, snapshot) {
         List<Widget> children;
-        
-        if (snapshot.hasError) {
-          children = <Widget>[
-            Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: InfoWidget('Error', snapshot.error.toString()),
-            )
-          ];
-        } else if (!snapshot.hasData) {
-          children = <Widget>[
-              SizedBox(
-                child: CircularProgressIndicator(),
-                width: 60,
-                height: 60,
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            children = <Widget>[
+              Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 60,
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text('Awaiting result...'),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: InfoWidget('Error', snapshot.error.toString()),
               )
-          ];
+            ];
+          } else {
+            children = <Widget>[
+              Icon(
+                Icons.check_circle_outline,
+                color: Colors.green,
+                size: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: InfoWidget(
+                  'Last known position:',
+                  snapshot.data.toString(),
+                ),
+              )
+            ];
+          }
         } else {
           children = <Widget>[
-            Icon(
-              Icons.check_circle_outline,
-              color: Colors.green,
-              size: 60,
+            SizedBox(
+              child: CircularProgressIndicator(),
+              width: 60,
+              height: 60,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: InfoWidget(
-                'Last known position:',
-                snapshot.data.toString(),
-              ),
+            const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text('Awaiting result...'),
             )
           ];
         }

@@ -2,11 +2,11 @@ package com.baseflow.geolocator.location;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.PermissionChecker;
 
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
@@ -16,15 +16,13 @@ import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.util.function.Supplier;
+import io.flutter.plugin.common.PluginRegistry;
 
-public class GeolocationManager {
+public class GeolocationManager implements PluginRegistry.ActivityResultListener {
     @NonNull
     private final PermissionManager permissionManager;
-
-    private volatile LocationClient locationClient;
-    private PositionChangedCallback positionChangedCallback;
-    private ErrorCallback errorCallback;
+    @Nullable
+    private LocationClient locationClient;
 
     public GeolocationManager(@NonNull PermissionManager permissionManager) {
         this.permissionManager = permissionManager;
@@ -40,7 +38,7 @@ public class GeolocationManager {
                 context,
                 activity,
                 () -> {
-                    LocationClient locationClient = getLocationClient(context);
+                    LocationClient locationClient = createLocationClient(context);
                     locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
                 },
                 errorCallback);
@@ -57,7 +55,7 @@ public class GeolocationManager {
             return false;
         }
 
-        boolean gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);;
+        boolean gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
         return gps_enabled || network_enabled;
@@ -74,29 +72,24 @@ public class GeolocationManager {
                 context,
                 activity,
                 () -> {
-                    LocationClient locationClient = getLocationClient(context);
-                    locationClient.startPositionUpdates(options, positionChangedCallback, errorCallback);
+                    LocationClient locationClient = createLocationClient(context);
+                    locationClient.startPositionUpdates(activity, options, positionChangedCallback, errorCallback);
                 },
                 errorCallback);
     }
 
-    public void stopPositionUpdates(Context context) {
-        LocationClient locationClient = getLocationClient(context);
-        locationClient.stopPositionUpdates();
+    public void stopPositionUpdates() {
+        if (this.locationClient != null) {
+            this.locationClient.stopPositionUpdates();
+        }
     }
 
-    private LocationClient getLocationClient(Context context) {
-        if (locationClient == null) {
-            synchronized (GeolocationManager.class) {
-                if (locationClient == null) {
-                    locationClient = isGooglePlayServicesAvailable(context)
-                            ? new FusedLocationClient(context)
-                            : new LocationManagerClient(context);
-                }
-            }
-        }
+    private LocationClient createLocationClient(Context context) {
+        this.locationClient = isGooglePlayServicesAvailable(context)
+                ? new FusedLocationClient(context)
+                : new LocationManagerClient(context);
 
-        return locationClient;
+        return this.locationClient;
     }
 
     private boolean isGooglePlayServicesAvailable(Context context){
@@ -136,5 +129,14 @@ public class GeolocationManager {
         } catch (PermissionUndefinedException ex) {
             errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
         }
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (locationClient == null) {
+            return false;
+        }
+
+        return locationClient.onActivityResult(requestCode, resultCode);
     }
 }

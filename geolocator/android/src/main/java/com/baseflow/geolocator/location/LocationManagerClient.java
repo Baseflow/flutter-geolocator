@@ -1,5 +1,6 @@
 package com.baseflow.geolocator.location;
 
+import android.app.Activity;
 import android.content.Context;
 import com.baseflow.geolocator.errors.ErrorCallback;
 
@@ -18,7 +19,13 @@ class LocationManagerClient implements LocationClient {
     }
 
     @Override
+    public boolean onActivityResult(int requestCode, int resultCode) {
+        return false;
+    }
+
+    @Override
     public void startPositionUpdates(
+            Activity activity,
             LocationOptions options,
             PositionChangedCallback positionChangedCallback,
             ErrorCallback errorCallback) {
