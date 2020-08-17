@@ -3,6 +3,7 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.CopticCalendar;
 import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
@@ -38,7 +39,7 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
                 context,
                 activity,
                 () -> {
-                    LocationClient locationClient = createLocationClient(context);
+                    LocationClient locationClient = createLocationClient(context, false);
                     locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
                 },
                 errorCallback);
@@ -72,7 +73,7 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
                 context,
                 activity,
                 () -> {
-                    LocationClient locationClient = createLocationClient(context);
+                    LocationClient locationClient = createLocationClient(context, options.isForceAndroidLocationManager());
                     locationClient.startPositionUpdates(activity, options, positionChangedCallback, errorCallback);
                 },
                 errorCallback);
@@ -84,7 +85,12 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
         }
     }
 
-    private LocationClient createLocationClient(Context context) {
+    private LocationClient createLocationClient(Context context, boolean forceLocationManagerClient) {
+        if (forceLocationManagerClient) {
+            this.locationClient = new LocationManagerClient(context);
+            return this.locationClient;
+        }
+
         this.locationClient = isGooglePlayServicesAvailable(context)
                 ? new FusedLocationClient(context)
                 : new LocationManagerClient(context);

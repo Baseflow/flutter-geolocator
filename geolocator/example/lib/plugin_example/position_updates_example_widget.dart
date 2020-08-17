@@ -115,7 +115,12 @@ class _PositionUpdatesExampleWidgetState
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
       final Stream<Position> positionStream = getPositionStream();
-      _positionStreamSubscription = positionStream.listen(
+      _positionStreamSubscription = positionStream
+        .handleError((error) => {
+           _positionStreamSubscription.cancel();
+           _positionStreamSubscription = null;
+        })
+        .listen(
           (Position position) => setState(() => _positions.add(position)));
       _positionStreamSubscription.pause();
     }
