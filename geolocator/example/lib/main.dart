@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator_example/settings_menu.dart';
 import 'template/globals.dart';
+
+/// Defines the main theme color.
+final MaterialColor themeMaterialColor =
+    createMaterialColor(const Color.fromRGBO(48, 49, 60, 1));
+
+/// Utility method to create a material color from any given
+/// color.
+MaterialColor createMaterialColor(Color color) {
+  List strengths = <double>[.05];
+  Map swatch = <int, Color>{};
+  final int r = color.red, g = color.green, b = color.blue;
+
+  for (int i = 1; i < 10; i++) {
+    strengths.add(0.1 * i);
+  }
+  strengths.forEach((strength) {
+    final double ds = 0.5 - strength;
+    swatch[(strength * 1000).round()] = Color.fromRGBO(
+      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
+      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
+      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+      1,
+    );
+  });
+  return MaterialColor(color.value, swatch);
+}
 
 void main() {
   runApp(BaseflowPluginExample());
 }
 
+/// Example widget demostrating how to use the geolocator plugin
 class BaseflowPluginExample extends StatelessWidget {
-  final MaterialColor themeMaterialColor =
-      createMaterialColor(const Color.fromRGBO(48, 49, 60, 1));
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,31 +77,15 @@ class BaseflowPluginExample extends StatelessWidget {
       home: MyHomePage(title: 'Baseflow ${Globals.pluginName} example app'),
     );
   }
-
-  static MaterialColor createMaterialColor(Color color) {
-    List strengths = <double>[.05];
-    Map swatch = <int, Color>{};
-    final int r = color.red, g = color.green, b = color.blue;
-
-    for (int i = 1; i < 10; i++) {
-      strengths.add(0.1 * i);
-    }
-    strengths.forEach((strength) {
-      final double ds = 0.5 - strength;
-      swatch[(strength * 1000).round()] = Color.fromRGBO(
-        r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-        g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-        b + ((ds < 0 ? b : (255 - b)) * ds).round(),
-        1,
-      );
-    });
-    return MaterialColor(color.value, swatch);
-  }
 }
 
+/// The home page widget which defines the main canvas and 
+/// the bottom app bar.
 class MyHomePage extends StatefulWidget {
+  /// Constructs the [MyHomePage] widget.
   MyHomePage({Key key, this.title}) : super(key: key);
 
+  /// The title shown in the App bar.
   final String title;
 
   @override
@@ -98,6 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
             width: 140,
           ),
         ),
+        actions: [
+          SettingsMenu(),
+        ],
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: PageView(

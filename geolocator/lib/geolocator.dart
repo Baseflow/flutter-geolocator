@@ -106,4 +106,4 @@ Future<bool> openAppSettings() =>
 /// Returns [true] if the location settings page could be opened, otherwise 
 /// [false] is returned.
 Future<bool> openLocationSettings() =>
-  GeolocatorPlatform.instance.openAppSettings();
+  GeolocatorPlatform.instance.openLocationSettings();

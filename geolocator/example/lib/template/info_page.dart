@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'globals.dart';
 
+/// The widget which defines the info page.
 class InfoPage extends StatefulWidget {
+  /// Constructs the [InfoPage] widget
   InfoPage({Key key}) : super(key: key);
 
   @override

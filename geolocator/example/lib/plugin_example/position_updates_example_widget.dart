@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator_example/plugin_example/widgets/info_widget.dart';
 
+/// A widget that will request and display position updates
+/// using the device's location services.
 class PositionUpdatesExampleWidget extends StatefulWidget {
   @override
   _PositionUpdatesExampleWidgetState createState() =>

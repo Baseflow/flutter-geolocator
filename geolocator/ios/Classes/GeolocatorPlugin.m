@@ -42,9 +42,9 @@
     } else if ([@"getLastKnownPosition" isEqualToString:call.method]) {
         [self onGetLastKnownPosition:result];
     } else if ([@"openAppSettings" isEqualToString:call.method]) {
-        [self onOpenAppSettings:result];
+        [self openSettings:result];
     } else if ([@"openLocationSettings" isEqualToString:call.method]) {
-        [self onOpenLocationSettings:result];
+        [self openSettings:result];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -145,31 +145,20 @@
     }];
 }
 
-- (void)onOpenAppSettings:(FlutterResult)result {
-    [self openSettingsForUrl:UIApplicationOpenSettingsURLString
-               flutterResult:result];
-}
-
-- (void)onOpenLocationSettings:(FlutterResult)result {
-    [self openSettingsForUrl:@"prefs:root=Privacy&path=LOCATION"
-               flutterResult:result];
-}
-
-- (void) openSettingsForUrl:(NSString *)urlString
-              flutterResult:(FlutterResult)result {
+- (void) openSettings:(FlutterResult)result {
     if (@available(iOS 10, *)) {
       [[UIApplication sharedApplication]
-                    openURL:[NSURL URLWithString:urlString]
+                    openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
                     options:[[NSDictionary alloc] init]
           completionHandler:^(BOOL success) {
             result([[NSNumber alloc] initWithBool:success]);
           }];
     } else if (@available(iOS 8.0, *)) {
       BOOL success = [[UIApplication sharedApplication]
-          openURL:[NSURL URLWithString:urlString]];
+          openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
       result([[NSNumber alloc] initWithBool:success]);
     } else {
-      result(@false);
+      result([[NSNumber alloc] initWithBool:NO]);
     }
 }
 
