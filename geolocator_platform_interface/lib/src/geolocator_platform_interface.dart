@@ -46,18 +46,16 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   }
 
   /// Request permission to access the location of the device.
-  /// 
+  ///
   /// Returns a [Future] which when completes indicates if the user granted
   /// permission to access the device's location.
   /// Throws a [PermissionDefinitionsNotFoundException] when the required
-  /// platform specific configuration is missing (e.g. in the 
+  /// platform specific configuration is missing (e.g. in the
   /// AndroidManifest.xml on Android or the Info.plist on iOS).
-  /// A [PermissionRequestInProgressException] is thrown if permissions are 
+  /// A [PermissionRequestInProgressException] is thrown if permissions are
   /// requested while an earlier request has not yet been completed.
   Future<LocationPermission> requestPermission() {
-    throw UnimplementedError(
-      'requestPermission() has not been implemented.'
-    );
+    throw UnimplementedError('requestPermission() has not been implemented.');
   }
 
   /// Returns a [Future] containing a [bool] value indicating whether location
@@ -86,8 +84,8 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Returns the current position taking the supplied [desiredAccuracy] into
   /// account.
   ///
-  /// When the [desiredAccuracy] is not supplied, it defaults to best. 
-  /// Throws a [TimeoutException] when no location is received within the 
+  /// When the [desiredAccuracy] is not supplied, it defaults to best.
+  /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.
@@ -119,8 +117,8 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// You can customize the behaviour of the location updates by supplying an
   /// instance [LocationOptions] class. When you don't supply any specific
   /// options, default values will be used for each setting.
-  /// 
-  /// Throws a [TimeoutException] when no location is received within the 
+  ///
+  /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.
@@ -135,7 +133,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
 
   /// Opens the App settings page.
   ///
-  /// Returns [true] if the app settings page could be opened, otherwise 
+  /// Returns [true] if the app settings page could be opened, otherwise
   /// [false] is returned.
   Future<bool> openAppSettings() async {
     throw UnimplementedError('openAppSettings() has not been implemented.');
@@ -143,17 +141,17 @@ abstract class GeolocatorPlatform extends PlatformInterface {
 
   /// Opens the location settings page.
   ///
-  /// Returns [true] if the location settings page could be opened, otherwise 
+  /// Returns [true] if the location settings page could be opened, otherwise
   /// [false] is returned.
   Future<bool> openLocationSettings() async {
     throw UnimplementedError(
-      'openLocationSettings() has not been implemented.');
+        'openLocationSettings() has not been implemented.');
   }
 
   /// Calculates the distance between the supplied coordinates in meters.
-  /// 
+  ///
   /// The distance between the coordinates is calculated using the Haversine
-  /// formula (see https://en.wikipedia.org/wiki/Haversine_formula). The 
+  /// formula (see https://en.wikipedia.org/wiki/Haversine_formula). The
   /// supplied coordinates [startLatitude], [startLongitude], [endLatitude] and
   /// [endLongitude] should be supplied in degrees.
   static double distanceBetween(
@@ -162,16 +160,16 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     double endLatitude,
     double endLongitude,
   ) {
-    var earthRadius = 6378137.0; 
+    var earthRadius = 6378137.0;
     var dLat = _toRadians(endLatitude - startLatitude);
     var dLon = _toRadians(endLongitude - startLongitude);
 
-    var a = pow(sin(dLat / 2), 2) + 
-            pow(sin(dLon / 2), 2) * 
-            cos(_toRadians(startLatitude)) * 
+    var a = pow(sin(dLat / 2), 2) +
+        pow(sin(dLon / 2), 2) *
+            cos(_toRadians(startLatitude)) *
             cos(_toRadians(endLatitude));
     var c = 2 * asin(sqrt(a));
-    
+
     return earthRadius * c;
   }
 
@@ -180,10 +178,10 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   }
 
   /// Calculates the initial bearing between two points
-  /// 
-  /// The initial bearing will most of the time be different than the end 
+  ///
+  /// The initial bearing will most of the time be different than the end
   /// bearing, see https://www.movable-type.co.uk/scripts/latlong.html#bearing.
-  /// The supplied coordinates [startLatitude], [startLongitude], [endLatitude] 
+  /// The supplied coordinates [startLatitude], [startLongitude], [endLatitude]
   /// and [endLongitude] should be supplied in degrees.
   static double bearingBetween(
     double startLatitude,

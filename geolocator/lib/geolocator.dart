@@ -10,13 +10,13 @@ Future<LocationPermission> checkPermission() =>
     GeolocatorPlatform.instance.checkPermission();
 
 /// Request permission to access the location of the device.
-/// 
+///
 /// Returns a [Future] which when completes indicates if the user granted
 /// permission to access the device's location.
 /// Throws a [PermissionDefinitionsNotFoundException] when the required
-/// platform specific configuration is missing (e.g. in the 
+/// platform specific configuration is missing (e.g. in the
 /// AndroidManifest.xml on Android or the Info.plist on iOS).
-/// A [PermissionRequestInProgressException] is thrown if permissions are 
+/// A [PermissionRequestInProgressException] is thrown if permissions are
 /// requested while an earlier request has not yet been completed.
 Future<LocationPermission> requestPermission() =>
     GeolocatorPlatform.instance.requestPermission();
@@ -33,16 +33,15 @@ Future<bool> isLocationServiceEnabled() =>
 /// When no position is available, null is returned.
 /// Throws a [PermissionDeniedException] when trying to request the device's
 /// location when the user denied access.
-Future<Position> getLastKnownLocation({LocationAccuracy desiredAccuracy}) =>
-    GeolocatorPlatform
-      .instance
-      .getLastKnownPosition(desiredAccuracy: desiredAccuracy);
-      
+Future<Position> getLastKnownPosition({LocationAccuracy desiredAccuracy}) =>
+    GeolocatorPlatform.instance
+        .getLastKnownPosition(desiredAccuracy: desiredAccuracy);
+
 /// Returns the current position taking the supplied [desiredAccuracy] into
 /// account.
 ///
-/// When the [desiredAccuracy] is not supplied, it defaults to best. 
-/// Throws a [TimeoutException] when no location is received within the 
+/// When the [desiredAccuracy] is not supplied, it defaults to best.
+/// Throws a [TimeoutException] when no location is received within the
 /// supplied [timeLimit] duration.
 /// Throws a [PermissionDeniedException] when trying to request the device's
 /// location when the user denied access.
@@ -51,7 +50,7 @@ Future<Position> getCurrentPosition({
   Duration timeLimit,
 }) =>
     GeolocatorPlatform.instance.getCurrentPosition(
-      desiredAccuracy: desiredAccuracy, 
+      desiredAccuracy: desiredAccuracy,
       timeLimit: timeLimit,
     );
 
@@ -76,8 +75,8 @@ Future<Position> getCurrentPosition({
 /// You can customize the behaviour of the location updates by supplying an
 /// instance [LocationOptions] class. When you don't supply any specific
 /// options, default values will be used for each setting.
-/// 
-/// Throws a [TimeoutException] when no location is received within the 
+///
+/// Throws a [TimeoutException] when no location is received within the
 /// supplied [timeLimit] duration.
 /// Throws a [PermissionDeniedException] when trying to request the device's
 /// location when the user denied access.
@@ -96,14 +95,13 @@ Stream<Position> getPositionStream({
 
 /// Opens the App settings page.
 ///
-/// Returns [true] if the location settings page could be opened, otherwise 
+/// Returns [true] if the location settings page could be opened, otherwise
 /// [false] is returned.
-Future<bool> openAppSettings() =>
-  GeolocatorPlatform.instance.openAppSettings();
+Future<bool> openAppSettings() => GeolocatorPlatform.instance.openAppSettings();
 
 /// Opens the location settings page.
 ///
-/// Returns [true] if the location settings page could be opened, otherwise 
+/// Returns [true] if the location settings page could be opened, otherwise
 /// [false] is returned.
 Future<bool> openLocationSettings() =>
-  GeolocatorPlatform.instance.openLocationSettings();
+    GeolocatorPlatform.instance.openLocationSettings();

@@ -31,115 +31,115 @@ void main() {
     });
 
     test(
-      // ignore: lines_longer_than_80_chars
-      'Default implementation of checkPermission should throw unimplemented error',
-      (){
-        // Arrange
-        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+        // ignore: lines_longer_than_80_chars
+        'Default implementation of checkPermission should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-        // Act & Assert
-        expect(
-          geolocatorPlatform.checkPermission,
-          throwsUnimplementedError,
-        );
+      // Act & Assert
+      expect(
+        geolocatorPlatform.checkPermission,
+        throwsUnimplementedError,
+      );
     });
 
     test(
-      // ignore: lines_longer_than_80_chars
-      'Default implementation of requestPermission should throw unimplemented error',
-      (){
-        // Arrange
-        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+        // ignore: lines_longer_than_80_chars
+        'Default implementation of requestPermission should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-        // Act & Assert
-        expect(
-          geolocatorPlatform.requestPermission,
-          throwsUnimplementedError,
-        );
+      // Act & Assert
+      expect(
+        geolocatorPlatform.requestPermission,
+        throwsUnimplementedError,
+      );
     });
 
     test(
-      // ignore: lines_longer_than_80_chars
-      'Default implementation of isLocationServiceDisabled should throw unimplemented error',
-      (){
-        // Arrange
-        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+        // ignore: lines_longer_than_80_chars
+        'Default implementation of isLocationServiceDisabled should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-        // Act & Assert
-        expect(
-          geolocatorPlatform.isLocationServiceEnabled,
-          throwsUnimplementedError,
-        );
+      // Act & Assert
+      expect(
+        geolocatorPlatform.isLocationServiceEnabled,
+        throwsUnimplementedError,
+      );
     });
 
     test(
-      // ignore: lines_longer_than_80_chars
-      'Default implementation of getCurrentPosition should throw unimplemented error',
-      (){
-        // Arrange
-        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+        // ignore: lines_longer_than_80_chars
+        'Default implementation of getCurrentPosition should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-        // Act & Assert
-        expect(
-          geolocatorPlatform.getCurrentPosition,
-          throwsUnimplementedError,
-        );
+      // Act & Assert
+      expect(
+        geolocatorPlatform.getCurrentPosition,
+        throwsUnimplementedError,
+      );
     });
 
     test(
-      // ignore: lines_longer_than_80_chars
-      'Default implementation of getLastKnownPosition should throw unimplemented error',
-      (){
-        // Arrange
-        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+        // ignore: lines_longer_than_80_chars
+        'Default implementation of getLastKnownPosition should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-        // Act & Assert
-        expect(
-          geolocatorPlatform.getLastKnownPosition,
-          throwsUnimplementedError,
-        );
+      // Act & Assert
+      expect(
+        geolocatorPlatform.getLastKnownPosition,
+        throwsUnimplementedError,
+      );
     });
 
     test(
-      // ignore: lines_longer_than_80_chars
-      'Default implementation of getPositionStream should throw unimplemented error',
-      (){
-        // Arrange
-        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+        // ignore: lines_longer_than_80_chars
+        'Default implementation of getPositionStream should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-        // Act & Assert
-        expect(
-          geolocatorPlatform.getPositionStream,
-          throwsUnimplementedError,
-        );
+      // Act & Assert
+      expect(
+        geolocatorPlatform.getPositionStream,
+        throwsUnimplementedError,
+      );
     });
 
     test(
-      // ignore: lines_longer_than_80_chars
-      'Default implementation of openAppSettings should throw unimplemented error',
-      (){
-        // Arrange
-        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+        // ignore: lines_longer_than_80_chars
+        'Default implementation of openAppSettings should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-        // Act & Assert
-        expect(
-          geolocatorPlatform.openAppSettings(),
-          throwsUnimplementedError,
-        );
+      // Act & Assert
+      expect(
+        geolocatorPlatform.openAppSettings(),
+        throwsUnimplementedError,
+      );
     });
 
     test(
-      // ignore: lines_longer_than_80_chars
-      'Default implementation of openLocationSettings should throw unimplemented error',
-      (){
-        // Arrange
-        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+        // ignore: lines_longer_than_80_chars
+        'Default implementation of openLocationSettings should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-        // Act & Assert
-        expect(
-          geolocatorPlatform.openLocationSettings(),
-          throwsUnimplementedError,
-        );
+      // Act & Assert
+      expect(
+        geolocatorPlatform.openLocationSettings(),
+        throwsUnimplementedError,
+      );
     });
   });
 
@@ -149,10 +149,7 @@ void main() {
       final longitude = 5.639382;
 
       final distance = GeolocatorPlatform.distanceBetween(
-        latitude,
-        longitude,
-        latitude,
-        longitude);
+          latitude, longitude, latitude, longitude);
 
       expect(distance, 0.0);
     });
@@ -164,16 +161,10 @@ void main() {
       final endLongitude = 5.3851278;
 
       final firstDistance = GeolocatorPlatform.distanceBetween(
-        startLatitude,
-        startLongitude,
-        endLatitude,
-        endLongitude);
+          startLatitude, startLongitude, endLatitude, endLongitude);
 
       final reversedDistance = GeolocatorPlatform.distanceBetween(
-        endLatitude, 
-        endLongitude,
-        startLatitude, 
-        startLongitude);
+          endLatitude, endLongitude, startLatitude, startLongitude);
 
       expect(firstDistance, isNonNegative);
       expect(reversedDistance, isNonNegative);
@@ -187,18 +178,14 @@ void main() {
       final expectedDistance = 36164.15150480236;
 
       final distance = GeolocatorPlatform.distanceBetween(
-        startLatitude,
-        startLongitude,
-        endLatitude,
-        endLongitude);
+          startLatitude, startLongitude, endLatitude, endLongitude);
 
       expect(
-        distance, 
+        distance,
         expectedDistance,
       );
     });
   });
-
 
   group('bearingBetween: When requesting the bearing between points', () {
     test('the same points the bearing should be 0', () async {
@@ -287,8 +274,10 @@ class ImplementsGeolocatorPlatform implements GeolocatorPlatform {
 }
 
 class MockGeolocatorPlatform extends Mock
-    // ignore: prefer_mixin
-    with MockPlatformInterfaceMixin
-    implements GeolocatorPlatform {}
+    with
+        // ignore: prefer_mixin
+        MockPlatformInterfaceMixin
+    implements
+        GeolocatorPlatform {}
 
 class ExtendsGeolocatorPlatform extends GeolocatorPlatform {}

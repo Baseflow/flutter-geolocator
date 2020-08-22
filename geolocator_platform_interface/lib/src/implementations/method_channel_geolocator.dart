@@ -37,8 +37,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   Future<LocationPermission> checkPermission() async {
     try {
       // ignore: omit_local_variable_types
-      final int permission = await methodChannel
-        .invokeMethod('checkPermission');
+      final int permission =
+          await methodChannel.invokeMethod('checkPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -52,8 +52,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   Future<LocationPermission> requestPermission() async {
     try {
       // ignore: omit_local_variable_types
-      final int permission = await methodChannel
-        .invokeMethod('requestPermission');
+      final int permission =
+          await methodChannel.invokeMethod('requestPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -90,8 +90,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     Duration timeLimit,
-  }) => getPositionStream(
-              desiredAccuracy: desiredAccuracy, timeLimit: timeLimit)
+  }) =>
+      getPositionStream(desiredAccuracy: desiredAccuracy, timeLimit: timeLimit)
           .first;
 
   @override
@@ -129,30 +129,30 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     }
 
     _onPositionChanged = positionStream
-      .map<Position>(
-        (dynamic element) => Position.fromMap(element.cast<String, dynamic>()))
-      .handleError(
-        (error) {
-          if (error is PlatformException ) {
-            _handlePlatformException(error);
-          }
-          
-          throw error;
-        },
-      );
+        .map<Position>((dynamic element) =>
+            Position.fromMap(element.cast<String, dynamic>()))
+        .handleError(
+      (error) {
+        if (error is PlatformException) {
+          _handlePlatformException(error);
+        }
+
+        throw error;
+      },
+    );
     return _onPositionChanged;
   }
 
   @override
   Future<bool> openAppSettings() async =>
-    methodChannel.invokeMethod('openAppSettings');
+      methodChannel.invokeMethod('openAppSettings');
 
   @override
   Future<bool> openLocationSettings() async =>
-    methodChannel.invokeMethod('openLocationSettings');
+      methodChannel.invokeMethod('openLocationSettings');
 
   void _handlePlatformException(PlatformException exception) {
-    switch(exception.code) {
+    switch (exception.code) {
       case 'LOCATION_SERVICES_DISABLED':
         throw LocationServiceDisabledException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':

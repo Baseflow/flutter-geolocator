@@ -6,11 +6,12 @@ import 'package:geolocator_example/main.dart';
 enum MenuOptions {
   /// The menu option to open the App settings.
   appSettings,
+
   /// The menu option to open the location settings.
   locationSettings,
 }
 
-/// A widget that defines the popup menu shown as action in the 
+/// A widget that defines the popup menu shown as action in the
 /// App bar.
 class SettingsMenu extends StatelessWidget {
   @override

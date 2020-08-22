@@ -7,7 +7,7 @@ void main() {
     final expected = 'The location service on the device is disabled.';
     final exception = LocationServiceDisabledException();
 
-    // Act 
+    // Act
     final actual = exception.toString();
 
     // Assert

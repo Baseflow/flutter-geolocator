@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
@@ -25,50 +24,40 @@ void main() {
     });
 
     test('checkPermission', () async {
-      final permission = 
-        await geolocator.checkPermission();
+      final permission = await geolocator.checkPermission();
 
       expect(permission, geolocator.LocationPermission.whileInUse);
     });
 
     test('requestPermission', () async {
-      final permission = 
-        await geolocator.requestPermission();
+      final permission = await geolocator.requestPermission();
 
       expect(permission, geolocator.LocationPermission.whileInUse);
     });
 
     test('isLocationServiceEnabled', () async {
-      final isLocationServiceEnabled = 
-        await geolocator.isLocationServiceEnabled();
+      final isLocationServiceEnabled =
+          await geolocator.isLocationServiceEnabled();
 
       expect(isLocationServiceEnabled, true);
     });
 
     test('getLastKnownPosition', () async {
-      final position = 
-        await geolocator.getLastKnownLocation();
+      final position = await geolocator.getLastKnownPosition();
 
       expect(position, mockPosition);
     });
 
     test('getCurrentPosition', () async {
-      final position = 
-        await geolocator.getCurrentPosition();
+      final position = await geolocator.getCurrentPosition();
 
       expect(position, mockPosition);
     });
 
     test('getPositionStream', () async {
-      final position = 
-        await geolocator.getPositionStream();
+      final position = await geolocator.getPositionStream();
 
-      expect(
-        position, 
-        emitsInOrder([
-          emits(mockPosition),
-          emitsDone
-        ]));
+      expect(position, emitsInOrder([emits(mockPosition), emitsDone]));
     });
 
     test('openAppSettings', () async {
@@ -84,38 +73,41 @@ void main() {
 }
 
 class MockGeolocatorPlatform extends Mock
-    // ignore: prefer_mixin
-    with MockPlatformInterfaceMixin
-    implements GeolocatorPlatform {
+    with
+        // ignore: prefer_mixin
+        MockPlatformInterfaceMixin
+    implements
+        GeolocatorPlatform {
   @override
-  Future<geolocator.LocationPermission> checkPermission() 
-    => Future.value(geolocator.LocationPermission.whileInUse);
+  Future<geolocator.LocationPermission> checkPermission() =>
+      Future.value(geolocator.LocationPermission.whileInUse);
 
   @override
-  Future<geolocator.LocationPermission> requestPermission() 
-    => Future.value(geolocator.LocationPermission.whileInUse);
+  Future<geolocator.LocationPermission> requestPermission() =>
+      Future.value(geolocator.LocationPermission.whileInUse);
 
   @override
   Future<bool> isLocationServiceEnabled() => Future.value(true);
 
   @override
-  Future<geolocator.Position> getLastKnownPosition({
-    geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best})
-    => Future.value(mockPosition);
+  Future<geolocator.Position> getLastKnownPosition(
+          {geolocator.LocationAccuracy desiredAccuracy =
+              LocationAccuracy.best}) =>
+      Future.value(mockPosition);
 
   @override
-  Future<geolocator.Position> getCurrentPosition({
-    geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best, 
-    Duration timeLimit}) 
-    => Future.value(mockPosition);
-  
+  Future<geolocator.Position> getCurrentPosition(
+          {geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+          Duration timeLimit}) =>
+      Future.value(mockPosition);
+
   @override
-  Stream<geolocator.Position> getPositionStream({
-    geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best, 
-    int distanceFilter = 0, 
-    int timeInterval = 0, 
-    Duration timeLimit}) 
-    => Stream.value(mockPosition);
+  Stream<geolocator.Position> getPositionStream(
+          {geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+          int distanceFilter = 0,
+          int timeInterval = 0,
+          Duration timeLimit}) =>
+      Stream.value(mockPosition);
 
   @override
   Future<bool> openAppSettings() => Future.value(true);

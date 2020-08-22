@@ -79,7 +79,7 @@ class BaseflowPluginExample extends StatelessWidget {
   }
 }
 
-/// The home page widget which defines the main canvas and 
+/// The home page widget which defines the main canvas and
 /// the bottom app bar.
 class MyHomePage extends StatefulWidget {
   /// Constructs the [MyHomePage] widget.

@@ -1,6 +1,5 @@
 /// Represent the possible location accuracy values.
-enum LocationAccuracy 
-{
+enum LocationAccuracy {
   /// Location is accurate within a distance of 3000m on iOS and 500m on Android
   lowest,
 

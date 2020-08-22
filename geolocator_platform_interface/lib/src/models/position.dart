@@ -57,21 +57,21 @@ class Position {
   /// 0.0.
   final double heading;
 
-  /// The speed at which the devices is traveling in meters per second over 
+  /// The speed at which the devices is traveling in meters per second over
   /// ground.
   ///
-  /// The speed is not available on all devices. In these cases the value is 
+  /// The speed is not available on all devices. In these cases the value is
   /// 0.0.
   final double speed;
 
   /// The estimated speed accuracy of this position, in meters per second.
   ///
-  /// The speedAccuracy is not available on all devices. In these cases the 
+  /// The speedAccuracy is not available on all devices. In these cases the
   /// value is 0.0.
   final double speedAccuracy;
 
   @override
-  bool operator == (dynamic o) {
+  bool operator ==(dynamic o) {
     var areEqual = o is Position &&
         o.accuracy == accuracy &&
         o.altitude == altitude &&

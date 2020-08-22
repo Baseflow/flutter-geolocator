@@ -317,7 +317,7 @@ void main() {
       expect(
         readablePosition,
         'Latitude: ${position.latitude}, Longitude: ${position.longitude}',
-      ); 
+      );
     });
   });
 }

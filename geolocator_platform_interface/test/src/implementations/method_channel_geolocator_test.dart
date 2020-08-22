@@ -204,7 +204,7 @@ void main() {
         if (method == 'openLocationSettings') {
           return _mockCanOpenLocationSettings;
         }
-        
+
         return null;
       });
 
@@ -761,55 +761,53 @@ void main() {
       });
 
       test(
-        // ignore: lines_longer_than_80_chars
-          'Should receive a already subscribed exception',
-              () async {
-            // Arrange
-            _mockPermission = LocationPermission.whileInUse;
-            _mockIsAlreadyRequestingPermission = false;
-            _mockIsMissingPermissionDefinitions = false;
-            _mockIsLocationServiceEnabled = true;
-            _mockIsAlreadySubscribed = true;
+          // ignore: lines_longer_than_80_chars
+          'Should receive a already subscribed exception', () async {
+        // Arrange
+        _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
+        _mockIsLocationServiceEnabled = true;
+        _mockIsAlreadySubscribed = true;
 
-            // Act
-            var positionStream = methodChannelGeolocator.getPositionStream();
+        // Act
+        var positionStream = methodChannelGeolocator.getPositionStream();
 
-            // Assert
-            expect(
-              positionStream,
-              emitsInAnyOrder([
-                emitsError(
-                  isA<AlreadySubscribedException>(),
-                ),
-              ]),
-            );
-          });
+        // Assert
+        expect(
+          positionStream,
+          emitsInAnyOrder([
+            emitsError(
+              isA<AlreadySubscribedException>(),
+            ),
+          ]),
+        );
+      });
 
       test(
-        // ignore: lines_longer_than_80_chars
-          'Should receive a position update exception',
-              () async {
-            // Arrange
-            _mockPermission = LocationPermission.whileInUse;
-            _mockIsAlreadyRequestingPermission = false;
-            _mockIsMissingPermissionDefinitions = false;
-            _mockIsLocationServiceEnabled = true;
-            _mockIsAlreadySubscribed = false;
-            _mockHasPositionUpdateException = true;
+          // ignore: lines_longer_than_80_chars
+          'Should receive a position update exception', () async {
+        // Arrange
+        _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
+        _mockIsLocationServiceEnabled = true;
+        _mockIsAlreadySubscribed = false;
+        _mockHasPositionUpdateException = true;
 
-            // Act
-            var positionStream = methodChannelGeolocator.getPositionStream();
+        // Act
+        var positionStream = methodChannelGeolocator.getPositionStream();
 
-            // Assert
-            expect(
-              positionStream,
-              emitsInAnyOrder([
-                emitsError(
-                  isA<PositionUpdateException>(),
-                ),
-              ]),
-            );
-          });
+        // Assert
+        expect(
+          positionStream,
+          emitsInAnyOrder([
+            emitsError(
+              isA<PositionUpdateException>(),
+            ),
+          ]),
+        );
+      });
 
       test('Should throw a timeout exception when timeLimit is reached',
           () async {
@@ -851,9 +849,8 @@ void main() {
         ]);
       });
     });
-  
-    group('openAppSettings: When opening the App settings',
-        () {
+
+    group('openAppSettings: When opening the App settings', () {
       test('Should receive true if the page can be opened', () async {
         // Arrange
         _mockCanOpenAppSettings = true;
@@ -885,8 +882,7 @@ void main() {
       });
     });
 
-    group('openLocationSettings: When opening the Location settings',
-        () {
+    group('openLocationSettings: When opening the Location settings', () {
       test('Should receive true if the page can be opened', () async {
         // Arrange
         _mockCanOpenLocationSettings = true;

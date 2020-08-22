@@ -7,6 +7,7 @@ class InfoWidget extends StatelessWidget {
 
   /// The [title] that is displayed by this widget.
   final String title;
+
   /// The [message] that is displayed by this widget.
   final String message;
 
