@@ -10,9 +10,8 @@ A Flutter geolocation plugin which provides easy access to platform specific loc
 * Get the current location of the device;
 * Get continuous location updates;
 * Check if location services are enabled on the device;
-* Redirect the user to the Settings App;
 * Calculate the distance (in meters) between two geocoordinates;
-* Calculate the bearing between two geocoordinates.
+* Calculate the bearing between two geocoordinates;
 
 ## Usage
 
