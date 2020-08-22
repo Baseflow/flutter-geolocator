@@ -43,8 +43,6 @@ class _PositionUpdatesExampleWidgetState
                 ),
               ],
             );
-            return const InfoWidget('Access to location denied',
-                'Allow access to the location services for this App using the device settings.');
           }
 
           if (snapshot.data == LocationPermission.deniedForever) {
@@ -117,7 +115,12 @@ class _PositionUpdatesExampleWidgetState
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
       final Stream<Position> positionStream = getPositionStream();
-      _positionStreamSubscription = positionStream.listen(
+      _positionStreamSubscription = positionStream
+        .handleError((error) {
+           _positionStreamSubscription.cancel();
+           _positionStreamSubscription = null;
+        })
+        .listen(
           (Position position) => setState(() => _positions.add(position)));
       _positionStreamSubscription.pause();
     }

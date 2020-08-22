@@ -56,7 +56,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         .invokeMethod('requestPermission');
 
       return permission.toLocationPermission();
-    } on PlatformException catch (e, trace) {
+    } on PlatformException catch (e) {
       _handlePlatformException(e);
 
       rethrow;
@@ -143,6 +143,14 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     return _onPositionChanged;
   }
 
+  @override
+  Future<bool> openAppSettings() async =>
+    methodChannel.invokeMethod('openAppSettings');
+
+  @override
+  Future<bool> openLocationSettings() async =>
+    methodChannel.invokeMethod('openLocationSettings');
+
   void _handlePlatformException(PlatformException exception) {
     switch(exception.code) {
       case 'LOCATION_SERVICES_DISABLED':
@@ -157,6 +165,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         throw PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         throw PositionUpdateException(exception.message);
+      default:
+        throw exception;
     }
   }
 }

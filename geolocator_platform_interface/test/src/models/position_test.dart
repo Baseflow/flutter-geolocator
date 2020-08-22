@@ -3,7 +3,7 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 
 void main() {
   group('hashCode tests:', () {
-    test('hashCode hould be the same for two instances with the same values',
+    test('hashCode should be the same for two instances with the same values',
         () {
       // Arrange
       final firstPosition = Position();
@@ -267,8 +267,12 @@ void main() {
   });
 
   group('fromMap tests:', () {
-    test('fromMap should throw argument error when message is null', () {
-      expect(() => Position.fromMap(null), throwsArgumentError);
+    test('fromMap should return null when message is null', () {
+      // Act
+      final actual = Position.fromMap(null);
+
+      // Assert
+      expect(actual, null);
     });
 
     test(

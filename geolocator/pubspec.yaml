@@ -18,6 +18,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   effective_dart: ^1.2.2
+  mockito: ^4.1.1
+  plugin_platform_interface: ^1.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

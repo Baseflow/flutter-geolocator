@@ -38,25 +38,12 @@ void main() {
     expect(actual, expected);
   });
 
-  test(
-    'toLocationPermission: Should return whenInUseForever when 3 is supplied', 
-    () {
-    // Arrange
-    final expected = LocationPermission.whileInUseForever;
-
-    // Act
-    final actual = 3.toLocationPermission();
-
-    // Assert
-    expect(actual, expected);
-  });
-
   test('toLocationPermission: Should return always when 4 is supplied', () {
     // Arrange
     final expected = LocationPermission.always;
 
     // Act
-    final actual = 4.toLocationPermission();
+    final actual = 3.toLocationPermission();
 
     // Assert
     expect(actual, expected);
@@ -68,12 +55,12 @@ void main() {
       () {
     // Act & Assert
     expect(
-        () => 5.toLocationPermission(),
+        () => 4.toLocationPermission(),
         throwsA(
           isA<InvalidPermissionException>().having(
             (e) => e.valueToConvert,
             'Value should match the value trying to convert.',
-            5,
+            4,
           ),
         ));
   });

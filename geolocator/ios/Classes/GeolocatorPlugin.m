@@ -35,12 +35,16 @@
         CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
         result([AuthorizationStatusMapper toDartIndex:(status)]);
     } else if ([@"requestPermission" isEqualToString:call.method]) {
-        [self handleRequestPermission:result];
+        [self onRequestPermission:result];
     } else if ([@"isLocationServiceEnabled" isEqualToString:call.method]) {
         BOOL isEnabled = [CLLocationManager locationServicesEnabled];
         result([NSNumber numberWithBool:isEnabled]);
     } else if ([@"getLastKnownPosition" isEqualToString:call.method]) {
-        [self handleGetLastKnownPosition:result];
+        [self onGetLastKnownPosition:result];
+    } else if ([@"openAppSettings" isEqualToString:call.method]) {
+        [self onOpenAppSettings:result];
+    } else if ([@"openLocationSettings" isEqualToString:call.method]) {
+        [self onOpenLocationSettings:result];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -49,7 +53,7 @@
 - (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(FlutterEventSink)eventSink {
     if (_eventSink) {
         return [FlutterError errorWithCode:GeolocatorErrorLocationSubscriptionActive
-                                   message:@"Already listening for location updates. If you want to restart listening please cancel other subscriptions first"
+                                   message:@"Already listening for location updates. If you want to restart listening please cancel other subscriptions first."
                                    details:nil];
     }
     _eventSink = eventSink;
@@ -108,7 +112,7 @@
     _eventSink = nil;
 }
 
-- (void)handleRequestPermission:(FlutterResult)result {
+- (void)onRequestPermission:(FlutterResult)result {
     [self.permissionHandler
      requestPermission:^(CLAuthorizationStatus status) {
         result([AuthorizationStatusMapper toDartIndex:status]);
@@ -120,7 +124,7 @@
     }];
 }
 
-- (void)handleGetLastKnownPosition:(FlutterResult)result {
+- (void)onGetLastKnownPosition:(FlutterResult)result {
     __weak typeof(self) weakSelf = self;
     
     [self.permissionHandler
@@ -139,6 +143,34 @@
                                    message: errorDescription
                                    details: nil]);
     }];
+}
+
+- (void)onOpenAppSettings:(FlutterResult)result {
+    [self openSettingsForUrl:UIApplicationOpenSettingsURLString
+               flutterResult:result];
+}
+
+- (void)onOpenLocationSettings:(FlutterResult)result {
+    [self openSettingsForUrl:@"prefs:root=Privacy&path=LOCATION"
+               flutterResult:result];
+}
+
+- (void) openSettingsForUrl:(NSString *)urlString
+              flutterResult:(FlutterResult)result {
+    if (@available(iOS 10, *)) {
+      [[UIApplication sharedApplication]
+                    openURL:[NSURL URLWithString:urlString]
+                    options:[[NSDictionary alloc] init]
+          completionHandler:^(BOOL success) {
+            result([[NSNumber alloc] initWithBool:success]);
+          }];
+    } else if (@available(iOS 8.0, *)) {
+      BOOL success = [[UIApplication sharedApplication]
+          openURL:[NSURL URLWithString:urlString]];
+      result([[NSNumber alloc] initWithBool:success]);
+    } else {
+      result(@false);
+    }
 }
 
 - (GeolocationHandler *) geolocationHandler {

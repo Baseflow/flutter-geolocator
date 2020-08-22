@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:fake_async/fake_async.dart';
 import 'package:async/async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/services.dart';
@@ -118,6 +117,8 @@ void main() {
   var _mockIsMissingPermissionDefinitions = false;
   var _mockIsAlreadySubscribed = false;
   var _mockHasPositionUpdateException = false;
+  var _mockCanOpenAppSettings = false;
+  var _mockCanOpenLocationSettings = false;
 
   group('$MethodChannelGeolocator()', () {
     final log = <MethodCall>[];
@@ -194,9 +195,17 @@ void main() {
 
         if (method == 'isLocationServiceEnabled') {
           return _mockIsLocationServiceEnabled;
-        } else {
-          return null;
         }
+
+        if (method == 'openAppSettings') {
+          return _mockCanOpenAppSettings;
+        }
+
+        if (method == 'openLocationSettings') {
+          return _mockCanOpenLocationSettings;
+        }
+        
+        return null;
       });
 
       // Configure mock implementation for the EventChannel
@@ -820,28 +829,92 @@ void main() {
             timeLimit: Duration(milliseconds: 5));
 
         // Assert
-        fakeAsync((a) {
-          expect(
-            positionStream,
-            emitsInOrder([
-              emitsError(isA<TimeoutException>()),
-              emitsDone,
-            ]),
-          );
+        expect(
+          positionStream,
+          emitsInOrder([
+            emitsError(isA<TimeoutException>()),
+            emitsDone,
+          ]),
+        );
 
-          a.elapse(Duration(milliseconds: 10));
+        await Future.delayed(Duration(milliseconds: 10));
 
-          expect(log, <Matcher>[
-            isMethodCall(
-              'listen',
-              arguments: expectedArguments.toJson(),
-            ),
-            isMethodCall(
-              'cancel',
-              arguments: expectedArguments.toJson(),
-            ),
-          ]);
-        });
+        expect(log, <Matcher>[
+          isMethodCall(
+            'listen',
+            arguments: expectedArguments.toJson(),
+          ),
+          isMethodCall(
+            'cancel',
+            arguments: expectedArguments.toJson(),
+          ),
+        ]);
+      });
+    });
+  
+    group('openAppSettings: When opening the App settings',
+        () {
+      test('Should receive true if the page can be opened', () async {
+        // Arrange
+        _mockCanOpenAppSettings = true;
+
+        // Act
+        final hasOpenedAppSettings =
+            await methodChannelGeolocator.openAppSettings();
+
+        // Assert
+        expect(
+          hasOpenedAppSettings,
+          true,
+        );
+      });
+
+      test('Should receive false if an error occurred', () async {
+        // Arrange
+        _mockCanOpenAppSettings = false;
+
+        // Act
+        final hasOpenedAppSettings =
+            await methodChannelGeolocator.openAppSettings();
+
+        // Assert
+        expect(
+          hasOpenedAppSettings,
+          false,
+        );
+      });
+    });
+
+    group('openLocationSettings: When opening the Location settings',
+        () {
+      test('Should receive true if the page can be opened', () async {
+        // Arrange
+        _mockCanOpenLocationSettings = true;
+
+        // Act
+        final hasOpenedLocationSettings =
+            await methodChannelGeolocator.openLocationSettings();
+
+        // Assert
+        expect(
+          hasOpenedLocationSettings,
+          true,
+        );
+      });
+
+      test('Should receive false if an error occurred', () async {
+        // Arrange
+        _mockCanOpenLocationSettings = false;
+
+        // Act
+        final hasOpenedLocationSettings =
+            await methodChannelGeolocator.openLocationSettings();
+
+        // Assert
+        expect(
+          hasOpenedLocationSettings,
+          false,
+        );
       });
     });
   });
