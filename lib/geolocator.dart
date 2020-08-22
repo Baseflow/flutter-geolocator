@@ -72,7 +72,7 @@ class Geolocator {
   /// On Android devices you can set [forceAndroidLocationManager]
   /// to true to force the plugin to use the [LocationManager] to determine the
   /// position instead of the [FusedLocationProviderClient]. On iOS this is ignored.
-  bool forceAndroidLocationManager = false;
+  bool forceAndroidLocationManager = true;
 
   GooglePlayServicesAvailability _googlePlayServicesAvailability;
 
