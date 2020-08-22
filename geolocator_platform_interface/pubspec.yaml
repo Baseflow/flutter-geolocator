@@ -11,9 +11,10 @@ dependencies:
   
   meta: ^1.1.8
   plugin_platform_interface: ^1.0.2
-  vector_math: 2.0.8
+  vector_math: ^2.0.8
 
 dev_dependencies:
+  async: ^2.4.2
   fake_async: ^1.1.0
   flutter_test:
     sdk: flutter
