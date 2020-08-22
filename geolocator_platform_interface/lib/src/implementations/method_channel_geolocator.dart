@@ -143,6 +143,14 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     return _onPositionChanged;
   }
 
+  @override
+  Future<bool> openAppSettings() async =>
+    methodChannel.invokeMethod('openAppSettings');
+
+  @override
+  Future<bool> openLocationSettings() async =>
+    methodChannel.invokeMethod('openLocationSettings');
+
   void _handlePlatformException(PlatformException exception) {
     switch(exception.code) {
       case 'LOCATION_SERVICES_DISABLED':

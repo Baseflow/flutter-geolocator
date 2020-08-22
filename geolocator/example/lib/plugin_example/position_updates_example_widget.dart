@@ -116,7 +116,7 @@ class _PositionUpdatesExampleWidgetState
     if (_positionStreamSubscription == null) {
       final Stream<Position> positionStream = getPositionStream();
       _positionStreamSubscription = positionStream
-        .handleError((error) => {
+        .handleError((error) {
            _positionStreamSubscription.cancel();
            _positionStreamSubscription = null;
         })

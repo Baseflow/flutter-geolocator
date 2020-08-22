@@ -1,7 +1,6 @@
 // Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:geolocator_platform_interface/src/implementations/method_channel_geolocator.dart';
@@ -113,6 +112,171 @@ void main() {
           geolocatorPlatform.getPositionStream,
           throwsUnimplementedError,
         );
+    });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of openAppSettings should throw unimplemented error',
+      (){
+        // Arrange
+        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+        // Act & Assert
+        expect(
+          geolocatorPlatform.openAppSettings(),
+          throwsUnimplementedError,
+        );
+    });
+
+    test(
+      // ignore: lines_longer_than_80_chars
+      'Default implementation of openLocationSettings should throw unimplemented error',
+      (){
+        // Arrange
+        final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+        // Act & Assert
+        expect(
+          geolocatorPlatform.openLocationSettings(),
+          throwsUnimplementedError,
+        );
+    });
+  });
+
+  group('distanceBetween: When requesting the distance between points', () {
+    test('the distance should be zero between the same points', () {
+      final latitude = 52.561270;
+      final longitude = 5.639382;
+
+      final distance = GeolocatorPlatform.distanceBetween(
+        latitude,
+        longitude,
+        latitude,
+        longitude);
+
+      expect(distance, 0.0);
+    });
+
+    test('the distance should always be non negative', () {
+      final startLatitude = 52.561270;
+      final startLongitude = 5.639382;
+      final endLatitude = 52.157296;
+      final endLongitude = 5.3851278;
+
+      final firstDistance = GeolocatorPlatform.distanceBetween(
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude);
+
+      final reversedDistance = GeolocatorPlatform.distanceBetween(
+        endLatitude, 
+        endLongitude,
+        startLatitude, 
+        startLongitude);
+
+      expect(firstDistance, isNonNegative);
+      expect(reversedDistance, isNonNegative);
+    });
+
+    test('the distance should be in range', () {
+      final startLatitude = 52.1058731;
+      final startLongitude = 5.9076873;
+      final endLatitude = 52.157296;
+      final endLongitude = 5.3851278;
+      final expectedDistance = 36164.15150480236;
+
+      final distance = GeolocatorPlatform.distanceBetween(
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude);
+
+      expect(
+        distance, 
+        expectedDistance,
+      );
+    });
+  });
+
+
+  group('bearingBetween: When requesting the bearing between points', () {
+    test('the same points the bearing should be 0', () async {
+      final latitude = 56.0;
+      final longitude = 5.6;
+
+      final bearing = GeolocatorPlatform.bearingBetween(
+        latitude,
+        longitude,
+        latitude,
+        longitude,
+      );
+
+      expect(bearing, 0.0);
+    });
+
+    test('the North pole to the Sounth pole bearing should be 180', () async {
+      final startLatitude = 90.0;
+      final startLongitude = 0.0;
+      final endLatitude = -90.0;
+      final endLongitude = 0.0;
+
+      final bearing = GeolocatorPlatform.bearingBetween(
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude,
+      );
+
+      expect(bearing, 180.0);
+    });
+
+    test('the South pole to the North pole bearing should be 0', () async {
+      final startLatitude = -90.0;
+      final startLongitude = 0.0;
+      final endLatitude = 90.0;
+      final endLongitude = 0.0;
+
+      final bearing = GeolocatorPlatform.bearingBetween(
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude,
+      );
+
+      expect(bearing, 0.0);
+    });
+
+    test('the West to the East bearing should be 90', () async {
+      final startLatitude = 0.0;
+      final startLongitude = 180.0;
+      final endLatitude = 0.0;
+      final endLongitude = -180.0;
+
+      final bearing = GeolocatorPlatform.bearingBetween(
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude,
+      );
+
+      expect(bearing, 90.0);
+    });
+
+    test('the East to the West bearing should be -90', () async {
+      final startLatitude = 0.0;
+      final startLongitude = -180.0;
+      final endLatitude = 0.0;
+      final endLongitude = 180.0;
+
+      final bearing = GeolocatorPlatform.bearingBetween(
+        startLatitude,
+        startLongitude,
+        endLatitude,
+        endLongitude,
+      );
+
+      expect(bearing, -90.0);
     });
   });
 }

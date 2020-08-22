@@ -93,3 +93,17 @@ Stream<Position> getPositionStream({
       timeInterval: timeInterval,
       timeLimit: timeLimit,
     );
+
+/// Opens the App settings page.
+///
+/// Returns [true] if the location settings page could be opened, otherwise 
+/// [false] is returned.
+Future<bool> openAppSettings() =>
+  GeolocatorPlatform.instance.openAppSettings();
+
+/// Opens the location settings page.
+///
+/// Returns [true] if the location settings page could be opened, otherwise 
+/// [false] is returned.
+Future<bool> openLocationSettings() =>
+  GeolocatorPlatform.instance.openAppSettings();

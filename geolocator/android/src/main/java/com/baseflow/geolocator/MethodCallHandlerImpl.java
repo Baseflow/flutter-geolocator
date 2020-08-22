@@ -14,6 +14,7 @@ import com.baseflow.geolocator.location.GeolocationManager;
 import com.baseflow.geolocator.location.LocationMapper;
 import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
+import com.baseflow.geolocator.utils.Utils;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
@@ -58,6 +59,14 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
                 break;
             case "getLastKnownPosition":
                 onGetLastKnownPosition(result);
+                break;
+            case "openAppSettings":
+                boolean hasOpenedAppSettings = Utils.openAppSettings(this.context);
+                result.success(hasOpenedAppSettings);
+                break;
+            case "openLocationSettings":
+                boolean hasOpenedLocationSettings = Utils.openLocationSettings(this.context);
+                result.success(hasOpenedLocationSettings);
                 break;
             default:
                 result.notImplemented();
