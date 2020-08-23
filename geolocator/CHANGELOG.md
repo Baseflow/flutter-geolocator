@@ -1,3 +1,7 @@
+## [6.0.0-rc.2+1]
+
+* Fixed a typo causing a runtime exception when switching to the Android LocationManager.
+
 ## [6.0.0-rc.2]
 
 * Add support to force using the Android Location Manager instead of the Android FusedLocationProvider;
