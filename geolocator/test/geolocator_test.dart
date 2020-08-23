@@ -90,23 +90,27 @@ class MockGeolocatorPlatform extends Mock
   Future<bool> isLocationServiceEnabled() => Future.value(true);
 
   @override
-  Future<geolocator.Position> getLastKnownPosition(
-          {geolocator.LocationAccuracy desiredAccuracy =
-              LocationAccuracy.best}) =>
+  Future<geolocator.Position> getLastKnownPosition({
+    bool forceAndroidLocationManager = false,
+  }) =>
       Future.value(mockPosition);
 
   @override
-  Future<geolocator.Position> getCurrentPosition(
-          {geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-          Duration timeLimit}) =>
+  Future<geolocator.Position> getCurrentPosition({
+    geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool forceAndroidLocationManager = false,
+    Duration timeLimit,
+  }) =>
       Future.value(mockPosition);
 
   @override
-  Stream<geolocator.Position> getPositionStream(
-          {geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-          int distanceFilter = 0,
-          int timeInterval = 0,
-          Duration timeLimit}) =>
+  Stream<geolocator.Position> getPositionStream({
+    geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    int distanceFilter = 0,
+    bool forceAndroidLocationManager = false,
+    int timeInterval = 0,
+    Duration timeLimit,
+  }) =>
       Stream.value(mockPosition);
 
   @override

@@ -33,23 +33,21 @@ Future<bool> isLocationServiceEnabled() =>
 /// When no position is available, null is returned.
 /// Throws a [PermissionDeniedException] when trying to request the device's
 /// location when the user denied access.
-Future<Position> getLastKnownPosition({
-  bool forceAndroidLocationManager = false
-  }) =>
-    GeolocatorPlatform.instance
-        .getLastKnownPosition(
-          forceAndroidLocationManager: forceAndroidLocationManager);
+Future<Position> getLastKnownPosition(
+        {bool forceAndroidLocationManager = false}) =>
+    GeolocatorPlatform.instance.getLastKnownPosition(
+        forceAndroidLocationManager: forceAndroidLocationManager);
 
 /// Returns the current position taking the supplied [desiredAccuracy] into
 /// account.
 ///
 /// You can control the precision of the location updates by supplying the
-/// [desiredAccuracy] parameter (defaults to "best"). On Android you can 
-/// force the use of the Android LocationManager instead of the 
-/// FusedLocationProvider by setting the [forceAndroidLocationManager] 
-/// parameter to true. The [timeLimit] parameter allows you to specify a 
+/// [desiredAccuracy] parameter (defaults to "best"). On Android you can
+/// force the use of the Android LocationManager instead of the
+/// FusedLocationProvider by setting the [forceAndroidLocationManager]
+/// parameter to true. The [timeLimit] parameter allows you to specify a
 /// timeout interval (by default no time limit is configured).
-/// 
+///
 /// Throws a [TimeoutException] when no location is received within the
 /// supplied [timeLimit] duration.
 /// Throws a [PermissionDeniedException] when trying to request the device's
@@ -84,14 +82,14 @@ Future<Position> getCurrentPosition({
 /// ```
 ///
 /// You can control the precision of the location updates by supplying the
-/// [desiredAccuracy] parameter (defaults to "best"). The [distanceFilter] 
+/// [desiredAccuracy] parameter (defaults to "best"). The [distanceFilter]
 /// parameter controls the minimum distance the device needs to move before
-/// the update is emitted (default value is 0 indicator no filter is used). 
-/// On Android you can force the use of the Android LocationManager instead 
+/// the update is emitted (default value is 0 indicator no filter is used).
+/// On Android you can force the use of the Android LocationManager instead
 /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
 /// parameter to true. Using the [timeInterval] you can control the amount of
-/// time that needs to pass before the next position update is send. The 
-/// [timeLimit] parameter allows you to specify a timeout interval (by 
+/// time that needs to pass before the next position update is send. The
+/// [timeLimit] parameter allows you to specify a timeout interval (by
 /// default no time limit is configured).
 ///
 /// Throws a [TimeoutException] when no location is received within the
