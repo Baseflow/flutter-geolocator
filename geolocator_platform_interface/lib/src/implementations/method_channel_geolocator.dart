@@ -76,8 +76,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         'forceAndroidLocationManager': forceAndroidLocationManager,
       };
 
-      final positionMap = await methodChannel.invokeMethod(
-          'getLastKnownPosition', parameters);
+      final positionMap =
+          await methodChannel.invokeMethod('getLastKnownPosition', parameters);
 
       return Position.fromMap(positionMap);
     } on PlatformException catch (e) {
@@ -94,7 +94,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     Duration timeLimit,
   }) =>
       getPositionStream(
-        desiredAccuracy: desiredAccuracy, 
+        desiredAccuracy: desiredAccuracy,
         forceAndroidLocationManager: forceAndroidLocationManager,
         timeLimit: timeLimit,
       ).first;
