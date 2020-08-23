@@ -69,14 +69,15 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<Position> getLastKnownPosition({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool forceAndroidLocationManager = false,
   }) async {
-    final locationOptions =
-        LocationOptions(accuracy: desiredAccuracy, distanceFilter: 0);
-
     try {
+      final parameters = <String, dynamic>{
+        'forceAndroidLocationManager': forceAndroidLocationManager,
+      };
+
       final positionMap = await methodChannel.invokeMethod(
-          'getLastKnownPosition', locationOptions.toJson());
+          'getLastKnownPosition', parameters);
 
       return Position.fromMap(positionMap);
     } on PlatformException catch (e) {
@@ -89,21 +90,27 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   @override
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool forceAndroidLocationManager = false,
     Duration timeLimit,
   }) =>
-      getPositionStream(desiredAccuracy: desiredAccuracy, timeLimit: timeLimit)
-          .first;
+      getPositionStream(
+        desiredAccuracy: desiredAccuracy, 
+        forceAndroidLocationManager: forceAndroidLocationManager,
+        timeLimit: timeLimit,
+      ).first;
 
   @override
   Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
+    bool forceAndroidLocationManager = false,
     int timeInterval = 0,
     Duration timeLimit,
   }) {
     final locationOptions = LocationOptions(
       accuracy: desiredAccuracy,
       distanceFilter: distanceFilter,
+      forceAndroidLocationManager: forceAndroidLocationManager,
       timeInterval: timeInterval,
     );
 

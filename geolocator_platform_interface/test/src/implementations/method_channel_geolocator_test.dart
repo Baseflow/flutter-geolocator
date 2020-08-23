@@ -511,14 +511,13 @@ void main() {
         _mockIsAlreadyRequestingPermission = false;
         _mockIsMissingPermissionDefinitions = false;
 
-        final expectedArguments = LocationOptions(
-          accuracy: LocationAccuracy.low,
-          distanceFilter: 0,
-        );
+        final expectedArguments = <String, dynamic>{
+          "forceAndroidLocationManager": false,
+        };
 
         // Act
         final position = await methodChannelGeolocator.getLastKnownPosition(
-          desiredAccuracy: LocationAccuracy.low,
+          forceAndroidLocationManager: false,
         );
 
         // Arrange
@@ -526,7 +525,7 @@ void main() {
         expect(log, <Matcher>[
           isMethodCall(
             'getLastKnownPosition',
-            arguments: expectedArguments.toJson(),
+            arguments: expectedArguments,
           ),
         ]);
       });
@@ -539,7 +538,7 @@ void main() {
 
         // Act
         final future = methodChannelGeolocator.getLastKnownPosition(
-          desiredAccuracy: LocationAccuracy.best,
+          forceAndroidLocationManager: false,
         );
 
         // Assert

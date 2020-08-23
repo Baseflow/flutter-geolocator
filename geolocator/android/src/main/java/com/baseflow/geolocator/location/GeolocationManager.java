@@ -32,6 +32,7 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
     public void getLastKnownPosition(
             Context context,
             Activity activity,
+            boolean forceLocationManager,
             PositionChangedCallback positionChangedCallback,
             ErrorCallback errorCallback) {
 
@@ -39,7 +40,7 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
                 context,
                 activity,
                 () -> {
-                    LocationClient locationClient = createLocationClient(context, false);
+                    LocationClient locationClient = createLocationClient(context, forceLocationManager);
                     locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
                 },
                 errorCallback);

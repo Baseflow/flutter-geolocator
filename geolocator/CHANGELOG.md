@@ -1,3 +1,8 @@
+## [6.0.0-rc.2]
+
+* Add support to force using the Android Location Manager instead of the Android FusedLocationProvider;
+* Improved documentation.
+
 ## [6.0.0-rc.1]
 
 Complete rebuild of the geolocator plugin. Please note the this version contains breaking changes. The most important changes are:
@@ -7,6 +12,7 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 * Added support to configure a timeout to cancel the position request;
 * On Android the geolocator will now automatically prompt the user to enable the location services when they are disabled;
 * Improved error handling. The geolocator will throw detailed exceptions explaining what went wrong (for example a `InvalidPermissionException` when you don't have permissions to request the position or the `LocationServiceDisabledException` when the location services are disabled).
+* IMPORTANT: geocoding features have been moved to their own plugin: [geocoding](https://pub.dev/packages/geocoding).
 
 ## [5.3.1]
 

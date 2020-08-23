@@ -58,7 +58,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
                 onRequestPermission(result);
                 break;
             case "getLastKnownPosition":
-                onGetLastKnownPosition(result);
+                onGetLastKnownPosition(call, result);
                 break;
             case "openAppSettings":
                 boolean hasOpenedAppSettings = Utils.openAppSettings(this.context);
@@ -139,10 +139,13 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         }
     }
 
-    private void onGetLastKnownPosition(MethodChannel.Result result) {
+    private void onGetLastKnownPosition(MethodCall call, MethodChannel.Result result) {
+        boolean forceLocationManager = call.argument("forceLocationManager");
+
         this.geolocationManager.getLastKnownPosition(
                 this.context,
                 this.activity,
+                forceLocationManager,
                 (Location location) -> result.success(LocationMapper.toHashMap(location)),
                 (ErrorCodes errorCode) -> result.error(errorCode.toString(), errorCode.toDescription(), null)
         );

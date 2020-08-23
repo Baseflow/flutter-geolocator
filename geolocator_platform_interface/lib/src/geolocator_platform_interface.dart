@@ -68,13 +68,15 @@ abstract class GeolocatorPlatform extends PlatformInterface {
 
   /// Returns the last known position stored on the users device.
   ///
-  /// On Android we look for the location provider matching best with the
-  /// supplied [desiredAccuracy]. On iOS this parameter is ignored.
+  /// On Android you can force the plugin to use the old Android 
+  /// LocationManager implementation over the newer FusedLocationProvider by 
+  /// passing true to the [forceAndroidLocationManager] parameter. On iOS 
+  /// this parameter is ignored.
   /// When no position is available, null is returned.
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.
   Future<Position> getLastKnownPosition({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool forceAndroidLocationManager = false,
   }) {
     throw UnimplementedError(
       'getLastKnownPosition() has not been implemented.',
@@ -84,13 +86,20 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Returns the current position taking the supplied [desiredAccuracy] into
   /// account.
   ///
-  /// When the [desiredAccuracy] is not supplied, it defaults to best.
+  /// You can control the precision of the location updates by supplying the
+  /// [desiredAccuracy] parameter (defaults to "best"). On Android you can 
+  /// force the use of the Android LocationManager instead of the 
+  /// FusedLocationProvider by setting the [forceAndroidLocationManager] 
+  /// parameter to true. The [timeLimit] parameter allows you to specify a 
+  /// timeout interval (by default no time limit is configured).
+  /// 
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool forceAndroidLocationManager = false,
     Duration timeLimit,
   }) {
     throw UnimplementedError('getCurrentPosition() has not been implemented.');
@@ -114,9 +123,16 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// positionStream.cancel();
   /// ```
   ///
-  /// You can customize the behaviour of the location updates by supplying an
-  /// instance [LocationOptions] class. When you don't supply any specific
-  /// options, default values will be used for each setting.
+  /// You can control the precision of the location updates by supplying the
+  /// [desiredAccuracy] parameter (defaults to "best"). The [distanceFilter] 
+  /// parameter controls the minimum distance the device needs to move before
+  /// the update is emitted (default value is 0 indicator no filter is used). 
+  /// On Android you can force the use of the Android LocationManager instead 
+  /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
+  /// parameter to true. Using the [timeInterval] you can control the amount of
+  /// time that needs to pass before the next position update is send. The 
+  /// [timeLimit] parameter allows you to specify a timeout interval (by 
+  /// default no time limit is configured).
   ///
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
@@ -125,6 +141,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
+    bool forceAndroidLocationManager = false,
     int timeInterval = 0,
     Duration timeLimit,
   }) {
