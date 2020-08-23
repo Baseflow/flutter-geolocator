@@ -140,7 +140,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     }
 
     private void onGetLastKnownPosition(MethodCall call, MethodChannel.Result result) {
-        boolean forceLocationManager = call.argument("forceLocationManager");
+        boolean forceLocationManager = call.argument("forceAndroidLocationManager");
 
         this.geolocationManager.getLastKnownPosition(
                 this.context,
