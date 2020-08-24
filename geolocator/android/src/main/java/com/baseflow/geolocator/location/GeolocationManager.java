@@ -3,7 +3,6 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.util.CopticCalendar;
 import android.location.LocationManager;
 
 import androidx.annotation.NonNull;

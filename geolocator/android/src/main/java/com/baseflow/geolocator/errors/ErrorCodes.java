@@ -1,6 +1,7 @@
 package com.baseflow.geolocator.errors;
 
 public enum ErrorCodes {
+    errorWhileAcquiringPosition,
     locationServicesDisabled,
     permissionDefinitionsNotFound,
     permissionDenied,
@@ -8,6 +9,8 @@ public enum ErrorCodes {
 
     public String toString() {
         switch(this) {
+            case errorWhileAcquiringPosition:
+                return "ERROR_WHILE_ACQUIRING_POSITION";
             case locationServicesDisabled:
                 return "LOCATION_SERVICES_DISABLED";
             case permissionDefinitionsNotFound:
@@ -23,6 +26,8 @@ public enum ErrorCodes {
 
     public String toDescription() {
         switch(this) {
+            case errorWhileAcquiringPosition:
+                return "An unexpected error occurred while trying to acquire the device's position.";
             case locationServicesDisabled:
                 return "Location services are disabled. To receive location updates the location services should be enabled.";
             case permissionDefinitionsNotFound:

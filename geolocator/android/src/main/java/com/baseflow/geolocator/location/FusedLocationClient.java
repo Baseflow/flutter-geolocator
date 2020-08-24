@@ -44,6 +44,11 @@ class FusedLocationClient implements LocationClient {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null || positionChangedCallback == null) {
+                    Log.e("Geolocator", "LocationCallback was called with empty locationResult or no positionChangedCallback was registered.");
+                    fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+                    if (errorCallback != null) {
+                        errorCallback.onError(ErrorCodes.errorWhileAcquiringPosition);
+                    }
                     return;
                 }
 
@@ -75,7 +80,12 @@ class FusedLocationClient implements LocationClient {
 
         fusedLocationProviderClient.getLastLocation()
                 .addOnSuccessListener(positionChangedCallback::onPositionChanged)
-                .addOnFailureListener(e -> Log.e("Geolocator", "Error trying to get last the last known GPS location"));
+                .addOnFailureListener(e -> {
+                    Log.e("Geolocator", "Error trying to get last the last known GPS location");
+                    if (errorCallback != null) {
+                        errorCallback.onError(ErrorCodes.errorWhileAcquiringPosition);
+                    }
+                });
     }
 
     public boolean onActivityResult(int requestCode, int resultCode) {
@@ -119,10 +129,12 @@ class FusedLocationClient implements LocationClient {
 
         SettingsClient settingsClient = LocationServices.getSettingsClient(context);
         settingsClient.checkLocationSettings(settingsRequest)
-                .addOnSuccessListener(locationSettingsResponse -> fusedLocationProviderClient.requestLocationUpdates(
-                        locationRequest,
-                        locationCallback,
-                        Looper.getMainLooper()))
+                .addOnSuccessListener(locationSettingsResponse -> {
+                    fusedLocationProviderClient.requestLocationUpdates(
+                            locationRequest,
+                            locationCallback,
+                            Looper.getMainLooper());
+                })
                 .addOnFailureListener(e -> {
                     if (e instanceof ResolvableApiException) {
                         // When we don't have an activity return an error code explaining the
