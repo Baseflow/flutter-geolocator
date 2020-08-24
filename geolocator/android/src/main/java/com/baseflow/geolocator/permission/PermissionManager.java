@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -22,8 +24,11 @@ public class PermissionManager
 
     private static final int PERMISSION_REQUEST_CODE = 109;
 
+    @Nullable
     private Activity activity;
+    @Nullable
     private ErrorCallback errorCallback;
+    @Nullable
     private PermissionResultCallback resultCallback;
 
     public LocationPermission checkPermissionStatus(
@@ -94,7 +99,17 @@ public class PermissionManager
     @Override
     public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode != PERMISSION_REQUEST_CODE) {
-            this.resultCallback.onResult(LocationPermission.denied);
+            if (this.resultCallback != null) {
+                this.resultCallback.onResult(LocationPermission.denied);
+            }
+            return false;
+        }
+
+        if (this.activity == null) {
+            Log.e("Geolocator", "Trying to process permission result without an valid Activity instance");
+            if (this.errorCallback != null) {
+                this.errorCallback.onError(ErrorCodes.activityNotSupplied);
+            }
             return false;
         }
 
@@ -134,7 +149,10 @@ public class PermissionManager
             PermissionUtils.setRequestedPermission(activity, perm);
         }
 
-        this.resultCallback.onResult(permission);
+        if (this.resultCallback != null) {
+            this.resultCallback.onResult(permission);
+        }
+
         return true;
     }
 

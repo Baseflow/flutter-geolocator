@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -16,10 +15,6 @@ import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.*;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import static com.baseflow.geolocator.location.LocationAccuracy.*;
 
 class FusedLocationClient implements LocationClient {
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
@@ -129,12 +124,10 @@ class FusedLocationClient implements LocationClient {
 
         SettingsClient settingsClient = LocationServices.getSettingsClient(context);
         settingsClient.checkLocationSettings(settingsRequest)
-                .addOnSuccessListener(locationSettingsResponse -> {
-                    fusedLocationProviderClient.requestLocationUpdates(
-                            locationRequest,
-                            locationCallback,
-                            Looper.getMainLooper());
-                })
+                .addOnSuccessListener(locationSettingsResponse -> fusedLocationProviderClient.requestLocationUpdates(
+                        locationRequest,
+                        locationCallback,
+                        Looper.getMainLooper()))
                 .addOnFailureListener(e -> {
                     if (e instanceof ResolvableApiException) {
                         // When we don't have an activity return an error code explaining the
