@@ -1,3 +1,7 @@
+## [6.0.0-rc.3]
+
+* Fixed a bug where on Android the geolocator handles Activity messages that don't belong to the geolocator.
+
 ## [6.0.0-rc.2+1]
 
 * Fixed a typo causing a runtime exception when switching to the Android LocationManager.
