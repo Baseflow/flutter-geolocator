@@ -113,9 +113,8 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// is killed.
   ///
   /// ```
-  /// StreamSubscription<Position> positionStream = Geolocator()
-  ///     .GetPostionStream()
-  ///     .listen((Position position) => {
+  /// StreamSubscription<Position> positionStream = getPositionStream()
+  ///     .listen((Position position) {
   ///       // Handle position changes
   ///     });
   ///
