@@ -28,8 +28,10 @@ Future<bool> isLocationServiceEnabled() =>
 
 /// Returns the last known position stored on the users device.
 ///
-/// On Android we look for the location provider matching best with the
-/// supplied [desiredAccuracy]. On iOS this parameter is ignored.
+/// On Android you can force the plugin to use the old Android
+/// LocationManager implementation over the newer FusedLocationProvider by
+/// passing true to the [forceAndroidLocationManager] parameter. On iOS
+/// this parameter is ignored.
 /// When no position is available, null is returned.
 /// Throws a [PermissionDeniedException] when trying to request the device's
 /// location when the user denied access.
@@ -71,9 +73,8 @@ Future<Position> getCurrentPosition({
 /// is killed.
 ///
 /// ```
-/// StreamSubscription<Position> positionStream = Geolocator()
-///     .GetPostionStream()
-///     .listen((Position position) => {
+/// StreamSubscription<Position> positionStream = getPositionStream()
+///     .listen((Position position) {
 ///       // Handle position changes
 ///     });
 ///
