@@ -92,16 +92,16 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
     Duration timeLimit,
-  }) { 
+  }) {
     final position = getPositionStream(
-        desiredAccuracy: desiredAccuracy,
-        forceAndroidLocationManager: forceAndroidLocationManager,
-        timeLimit: timeLimit,
-      ).first;
+      desiredAccuracy: desiredAccuracy,
+      forceAndroidLocationManager: forceAndroidLocationManager,
+      timeLimit: timeLimit,
+    ).first;
 
     // Make sure we remove the reference to the closed position stream
     _positionStream = null;
-    
+
     return position;
   }
 

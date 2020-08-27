@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Fixed code formatting and homepage URL
+
 ## 1.0.2
 
 - Make sure close streams are dereferenced (solves a bug where closed stream is listened to generating an exception).
