@@ -587,6 +587,27 @@ void main() {
         ]);
       });
 
+      test('Should receive a position for each call', () async {
+        // Arrange
+        _mockPermission = LocationPermission.whileInUse;
+        _mockIsAlreadyRequestingPermission = false;
+        _mockIsMissingPermissionDefinitions = false;
+        _mockIsLocationServiceEnabled = true;
+
+        // Act
+        final position = await methodChannelGeolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.low,
+        );
+
+        final secondPosition = await methodChannelGeolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high,
+        );
+
+        // Assert
+        expect(position, mockPosition);
+        expect(secondPosition, mockPosition);
+      });
+
       test('Should throw a permission denied exception if permission is denied',
           () async {
         // Arrange

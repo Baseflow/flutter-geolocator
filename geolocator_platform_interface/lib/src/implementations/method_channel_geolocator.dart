@@ -31,7 +31,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   /// ignored.
   bool forceAndroidLocationManager = false;
 
-  Stream<Position> _onPositionChanged;
+  Stream<Position> _positionStream;
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -92,12 +92,18 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
     Duration timeLimit,
-  }) =>
-      getPositionStream(
+  }) { 
+    final position = getPositionStream(
         desiredAccuracy: desiredAccuracy,
         forceAndroidLocationManager: forceAndroidLocationManager,
         timeLimit: timeLimit,
       ).first;
+
+    // Make sure we remove the reference to the closed position stream
+    _positionStream = null;
+    
+    return position;
+  }
 
   @override
   Stream<Position> getPositionStream({
@@ -114,8 +120,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       timeInterval: timeInterval,
     );
 
-    if (_onPositionChanged != null) {
-      return _onPositionChanged;
+    if (_positionStream != null) {
+      return _positionStream;
     }
 
     var positionStream = eventChannel.receiveBroadcastStream(
@@ -131,15 +137,17 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
             timeLimit,
           ));
           s.close();
+          _positionStream = null;
         },
       );
     }
 
-    _onPositionChanged = positionStream
+    _positionStream = positionStream
         .map<Position>((dynamic element) =>
             Position.fromMap(element.cast<String, dynamic>()))
         .handleError(
       (error) {
+        _positionStream = null;
         if (error is PlatformException) {
           _handlePlatformException(error);
         }
@@ -147,7 +155,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         throw error;
       },
     );
-    return _onPositionChanged;
+
+    return _positionStream;
   }
 
   @override

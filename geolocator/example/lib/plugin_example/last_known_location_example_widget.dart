@@ -38,7 +38,7 @@ class LastKnownLocationExampleWidget extends StatelessWidget {
                   'Last known position:',
                   snapshot.data.toString(),
                 ),
-              )
+              ),
             ];
           }
         } else {

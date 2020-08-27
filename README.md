@@ -10,9 +10,12 @@ A Flutter geolocation plugin which provides easy access to platform specific loc
 * Get the current location of the device;
 * Get continuous location updates;
 * Check if location services are enabled on the device;
-* Redirect the user to the Settings App;
 * Calculate the distance (in meters) between two geocoordinates;
-* Calculate the bearing between two geocoordinates.
+* Calculate the bearing between two geocoordinates;
+
+> **IMPORTANT:**
+>
+> Starting from version 6.0.0 the geocoding features (`placemarkFromAddress` and `placemarkFromCoordinates`) are no longer part of the geolocator plugin. We have moved these features to their own plugin: [geocoding](https://pub.dev/packages/geocoding). This new plugin is an improved version of the old methods.
 
 ## Usage
 
@@ -20,7 +23,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: ^6.0.0
+  geolocator: ^6.0.0-rc.4
 ```
 
 <details>

@@ -1,3 +1,7 @@
+## [6.0.0-rc.4]
+
+* Upgrade to `geolocator_platform_interface: 1.0.2`
+
 ## [6.0.0-rc.3]
 
 * Fixed a bug where on Android the geolocator handles Activity messages that don't belong to the geolocator.

@@ -45,7 +45,7 @@
         [self openSettings:result];
     } else if ([@"openLocationSettings" isEqualToString:call.method]) {
         [self openSettings:result];
-    } else {
+    } else { 
         result(FlutterMethodNotImplemented);
     }
 }
