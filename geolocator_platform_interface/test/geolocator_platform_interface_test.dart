@@ -147,8 +147,9 @@ void main() {
     test('the distance should be zero between the same points', () {
       final latitude = 52.561270;
       final longitude = 5.639382;
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-      final distance = GeolocatorPlatform.distanceBetween(
+      final distance = geolocatorPlatform.distanceBetween(
           latitude, longitude, latitude, longitude);
 
       expect(distance, 0.0);
@@ -159,11 +160,12 @@ void main() {
       final startLongitude = 5.639382;
       final endLatitude = 52.157296;
       final endLongitude = 5.3851278;
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-      final firstDistance = GeolocatorPlatform.distanceBetween(
+      final firstDistance = geolocatorPlatform.distanceBetween(
           startLatitude, startLongitude, endLatitude, endLongitude);
 
-      final reversedDistance = GeolocatorPlatform.distanceBetween(
+      final reversedDistance = geolocatorPlatform.distanceBetween(
           endLatitude, endLongitude, startLatitude, startLongitude);
 
       expect(firstDistance, isNonNegative);
@@ -176,8 +178,9 @@ void main() {
       final endLatitude = 52.157296;
       final endLongitude = 5.3851278;
       final expectedDistance = 36164.15150480236;
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-      final distance = GeolocatorPlatform.distanceBetween(
+      final distance = geolocatorPlatform.distanceBetween(
           startLatitude, startLongitude, endLatitude, endLongitude);
 
       expect(
@@ -191,8 +194,9 @@ void main() {
     test('the same points the bearing should be 0', () async {
       final latitude = 56.0;
       final longitude = 5.6;
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-      final bearing = GeolocatorPlatform.bearingBetween(
+      final bearing = geolocatorPlatform.bearingBetween(
         latitude,
         longitude,
         latitude,
@@ -207,8 +211,9 @@ void main() {
       final startLongitude = 0.0;
       final endLatitude = -90.0;
       final endLongitude = 0.0;
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-      final bearing = GeolocatorPlatform.bearingBetween(
+      final bearing = geolocatorPlatform.bearingBetween(
         startLatitude,
         startLongitude,
         endLatitude,
@@ -223,8 +228,9 @@ void main() {
       final startLongitude = 0.0;
       final endLatitude = 90.0;
       final endLongitude = 0.0;
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-      final bearing = GeolocatorPlatform.bearingBetween(
+      final bearing = geolocatorPlatform.bearingBetween(
         startLatitude,
         startLongitude,
         endLatitude,
@@ -239,8 +245,9 @@ void main() {
       final startLongitude = 180.0;
       final endLatitude = 0.0;
       final endLongitude = -180.0;
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-      final bearing = GeolocatorPlatform.bearingBetween(
+      final bearing = geolocatorPlatform.bearingBetween(
         startLatitude,
         startLongitude,
         endLatitude,
@@ -255,8 +262,9 @@ void main() {
       final startLongitude = -180.0;
       final endLatitude = 0.0;
       final endLongitude = 180.0;
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
-      final bearing = GeolocatorPlatform.bearingBetween(
+      final bearing = geolocatorPlatform.bearingBetween(
         startLatitude,
         startLongitude,
         endLatitude,
