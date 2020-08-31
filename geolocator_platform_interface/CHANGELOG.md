@@ -1,3 +1,7 @@
+## 1.0.3+1
+
+- Improved LocationPermission documentation (see issue #494).
+
 ## 1.0.3
 
 - Fixed code formatting and homepage URL
