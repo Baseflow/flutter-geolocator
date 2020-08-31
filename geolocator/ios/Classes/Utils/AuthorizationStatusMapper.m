@@ -18,7 +18,7 @@
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             return @2;
         case kCLAuthorizationStatusAuthorizedAlways:
-            return @4;
+            return @3;
         default:
             return @0;
     }

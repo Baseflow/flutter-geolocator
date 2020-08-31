@@ -1,3 +1,7 @@
+## 6.0.0+1
+
+* iOS: fixed issue converting integer to LocationPermission enum;
+
 ## 6.0.0
 
 Complete rebuild of the geolocator plugin. Please note the this version contains breaking changes. The most important changes are:
