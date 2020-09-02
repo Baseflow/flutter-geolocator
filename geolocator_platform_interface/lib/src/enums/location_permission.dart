@@ -1,7 +1,7 @@
 /// Represent the possible location permissions.
 enum LocationPermission {
   /// This is the initial state on both Android and iOS, but on Android the
-  /// user can still choose to deny permissions, meaning the App can still 
+  /// user can still choose to deny permissions, meaning the App can still
   /// request for permission another time.
   denied,
 
