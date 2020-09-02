@@ -15,6 +15,7 @@ class Position {
     this.heading,
     this.speed,
     this.speedAccuracy,
+    this.isMocked,
   });
 
   Position._({
@@ -26,6 +27,7 @@ class Position {
     this.heading,
     this.speed,
     this.speedAccuracy,
+    this.isMocked,
   });
 
   /// The latitude of this position in degrees normalized to the interval -90.0
@@ -70,6 +72,12 @@ class Position {
   /// value is 0.0.
   final double speedAccuracy;
 
+  /// Will be true on Android (starting from API lvl 18) when the location came
+  /// from the mocked provider.
+  ///
+  /// On iOS this value will always be false.
+  final bool isMocked;
+
   @override
   bool operator ==(dynamic o) {
     var areEqual = o is Position &&
@@ -80,7 +88,8 @@ class Position {
         o.longitude == longitude &&
         o.speed == speed &&
         o.speedAccuracy == speedAccuracy &&
-        o.timestamp == timestamp;
+        o.timestamp == timestamp &&
+        o.isMocked == isMocked;
 
     return areEqual;
   }
@@ -94,7 +103,8 @@ class Position {
       longitude.hashCode ^
       speed.hashCode ^
       speedAccuracy.hashCode ^
-      timestamp.hashCode;
+      timestamp.hashCode ^
+      isMocked.hashCode;
 
   @override
   String toString() {
@@ -125,14 +135,16 @@ class Position {
         : null;
 
     return Position._(
-        latitude: positionMap['latitude'],
-        longitude: positionMap['longitude'],
-        timestamp: timestamp,
-        altitude: positionMap['altitude'] ?? 0.0,
-        accuracy: positionMap['accuracy'] ?? 0.0,
-        heading: positionMap['heading'] ?? 0.0,
-        speed: positionMap['speed'] ?? 0.0,
-        speedAccuracy: positionMap['speed_accuracy'] ?? 0.0);
+      latitude: positionMap['latitude'],
+      longitude: positionMap['longitude'],
+      timestamp: timestamp,
+      altitude: positionMap['altitude'] ?? 0.0,
+      accuracy: positionMap['accuracy'] ?? 0.0,
+      heading: positionMap['heading'] ?? 0.0,
+      speed: positionMap['speed'] ?? 0.0,
+      speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
+      isMocked: positionMap['is_mocked'] ?? false,
+    );
   }
 
   /// Converts the [Position] instance into a [Map] instance that can be
@@ -145,6 +157,7 @@ class Position {
         'altitude': altitude,
         'heading': heading,
         'speed': speed,
-        'speedAccuracy': speedAccuracy,
+        'speed_accuracy': speedAccuracy,
+        'is_mocked': isMocked,
       };
 }
