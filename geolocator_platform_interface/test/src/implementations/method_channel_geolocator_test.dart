@@ -17,7 +17,8 @@ Position get mockPosition => Position(
     accuracy: 0.0,
     heading: 0.0,
     speed: 0.0,
-    speedAccuracy: 0.0);
+    speedAccuracy: 0.0,
+    isMocked: false);
 
 Stream<Position> createPositionStream(
   Duration interval, {
