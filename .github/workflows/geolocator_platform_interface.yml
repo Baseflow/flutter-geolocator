@@ -21,11 +21,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Make sure Java is installed on the build machine
-      - uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'
       
       # Make sure the stable version of Flutter is available
       - uses: subosito/flutter-action@v1
