@@ -47,10 +47,9 @@ jobs:
       # Upload code coverage information
       - uses: codecov/codecov-action@v1
         with:
-          file: ./coverage/lcov.info # optional
+          file: ${{env.source-directory}}/coverage/lcov.info # optional
           name: Geolocator (Platform Interface Package) # optional
           fail_ci_if_error: true 
-          working-directory: ${{env.source-directory}}
 
   # Job configuration for the geolocator (App Facing Package)
   geolocator:
@@ -98,7 +97,6 @@ jobs:
       # Upload code coverage information
       - uses: codecov/codecov-action@v1
         with:
-          file: ./coverage/lcov.info # optional
+          file: ${{env.source-directory}}/coverage/lcov.info # optional
           name: Geolocator (App Facing Package) # optional
-          fail_ci_if_error: true 
-          working-directory: ${{env.source-directory}}
+          fail_ci_if_error: true
