@@ -80,7 +80,7 @@ jobs:
       # Build Android version of the example app
       - name: Run Android build
         run: flutter build apk --release
-        working-directory: ${{env.exampl-directory}}
+        working-directory: ${{env.example-directory}}
    
       # Build iOS version of the example app
       - name: Run iOS build
