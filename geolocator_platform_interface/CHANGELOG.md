@@ -1,3 +1,8 @@
+## 1.0.4
+
+- Add the `isMocked` field to the `Position` class to indicate if the position is retrieved using the Android MockLocationProvider (see issue #498);
+- Fixed typo in API documentation of LocationPermission (see issue #494)
+
 ## 1.0.3+1
 
 - Improved LocationPermission documentation (see issue #494).
