@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'globals.dart';
+import 'globals.dart' as globals;
 
 /// The widget which defines the info page.
 class InfoPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _InfoPageState extends State<InfoPage> {
     return SingleChildScrollView(
       child: Padding(
         padding:
-            Globals.defaultHorizontalPadding + Globals.defaultVerticalPadding,
+            globals.defaultHorizontalPadding + globals.defaultVerticalPadding,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -34,17 +34,19 @@ class _InfoPageState extends State<InfoPage> {
               padding: EdgeInsets.symmetric(vertical: 24),
             ),
             Text(
-              'This app showcases the possibilities of the ${Globals.pluginName} plugin, powered by Baseflow. '
+              'This app showcases the possibilities of the '
+              '${globals.pluginName} plugin, powered by Baseflow. '
               'This plugin is available as open source project on Github. \n\n'
-              'Need help with integrading functionalities within your own apps? Contact us at hello@baseflow.com',
+              'Need help with integrading functionalities within your own '
+              'apps? Contact us at hello@baseflow.com',
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
             ),
-            _launcherRaisedButton('Find us on Github', Globals.githubURL),
-            _launcherRaisedButton('Find us on pub.dev', Globals.pubDevURL),
-            _launcherRaisedButton('Visit baseflow.com', Globals.baseflowURL),
+            _launcherRaisedButton('Find us on Github', globals.githubURL),
+            _launcherRaisedButton('Find us on pub.dev', globals.pubDevURL),
+            _launcherRaisedButton('Visit baseflow.com', globals.baseflowURL),
             Padding(
               padding: EdgeInsets.only(bottom: 30),
             ),

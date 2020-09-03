@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator_example/plugin_example/widgets/info_widget.dart';
+import 'widgets/info_widget.dart';
 
 /// A widget that will request and display the last known
 /// location stored on the device.
