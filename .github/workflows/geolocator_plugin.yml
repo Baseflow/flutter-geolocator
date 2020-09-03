@@ -41,7 +41,7 @@ jobs:
       
       # Run all unit-tests with code coverage
       - name: Run unit tests
-        run: flutter test --converage
+        run: flutter test --coverage
         working-directory: ${{env.working-directory}}
 
   # Job configuration for the geolocator (App Facing Package)
@@ -73,7 +73,7 @@ jobs:
       
       # Run all unit-tests with code coverage
       - name: Run unit tests
-        run: flutter test --converage
+        run: flutter test --coverage
         working-directory: ${{env.working-directory}}
       
       # Build Android version of the example app
