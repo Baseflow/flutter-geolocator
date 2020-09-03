@@ -170,7 +170,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// formula (see https://en.wikipedia.org/wiki/Haversine_formula). The
   /// supplied coordinates [startLatitude], [startLongitude], [endLatitude] and
   /// [endLongitude] should be supplied in degrees.
-  static double distanceBetween(
+  double distanceBetween(
     double startLatitude,
     double startLongitude,
     double endLatitude,
@@ -199,7 +199,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// bearing, see https://www.movable-type.co.uk/scripts/latlong.html#bearing.
   /// The supplied coordinates [startLatitude], [startLongitude], [endLatitude]
   /// and [endLongitude] should be supplied in degrees.
-  static double bearingBetween(
+  double bearingBetween(
     double startLatitude,
     double startLongitude,
     double endLatitude,

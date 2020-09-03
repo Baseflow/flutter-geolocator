@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator_example/plugin_example/widgets/info_widget.dart';
+import 'widgets/info_widget.dart';
 
 /// A widget that will request and display position updates
 /// using the device's location services.
@@ -21,10 +21,7 @@ class _PositionUpdatesExampleWidgetState
   Widget build(BuildContext context) {
     return FutureBuilder<LocationPermission>(
         future: checkPermission(),
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<LocationPermission> snapshot,
-        ) {
+        builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -34,20 +31,24 @@ class _PositionUpdatesExampleWidgetState
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const InfoWidget('Request location permission',
-                    'Access to the device\'s location has been denied, please request permissions before continuing'),
+                const InfoWidget(
+                    'Request location permission',
+                    'Access to the device\'s location has been denied, please '
+                        'request permissions before continuing'),
                 RaisedButton(
                   child: const Text('Request permission'),
                   onPressed: () => requestPermission()
-                      .then((status) => setState(() => _positions.clear())),
+                      .then((status) => setState(_positions.clear)),
                 ),
               ],
             );
           }
 
           if (snapshot.data == LocationPermission.deniedForever) {
-            return const InfoWidget('Access to location permanently denied',
-                'Allow access to the location services for this App using the device settings.');
+            return const InfoWidget(
+                'Access to location permanently denied',
+                'Allow access to the location services for this App using the '
+                    'device settings.');
           }
 
           return _buildListView();
@@ -55,7 +56,7 @@ class _PositionUpdatesExampleWidgetState
   }
 
   Widget _buildListView() {
-    final List<Widget> listItems = <Widget>[
+    final listItems = <Widget>[
       ListTile(
         title: Row(
           mainAxisSize: MainAxisSize.max,
@@ -70,14 +71,14 @@ class _PositionUpdatesExampleWidgetState
             RaisedButton(
               child: Text('Clear'),
               padding: const EdgeInsets.all(8.0),
-              onPressed: () => setState(() => _positions.clear()),
+              onPressed: () => setState(_positions.clear),
             ),
           ],
         ),
       ),
     ];
 
-    listItems.addAll(_positions.map((Position position) {
+    listItems.addAll(_positions.map((position) {
       return ListTile(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,12 +116,11 @@ class _PositionUpdatesExampleWidgetState
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      final Stream<Position> positionStream = getPositionStream();
+      final positionStream = getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription.cancel();
         _positionStreamSubscription = null;
-      }).listen(
-          (Position position) => setState(() => _positions.add(position)));
+      }).listen((position) => setState(() => _positions.add(position)));
       _positionStreamSubscription.pause();
     }
 

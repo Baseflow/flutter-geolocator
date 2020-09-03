@@ -28,6 +28,7 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
       final secondPosition = Position(
         longitude: 1,
@@ -38,11 +39,12 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
 
       // Act & Assert
       expect(
-        firstPosition.hashCode != secondPosition,
+        firstPosition.hashCode != secondPosition.hashCode,
         true,
       );
     });
@@ -59,6 +61,7 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
       final secondPosition = Position(
         longitude: 0,
@@ -69,11 +72,12 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
 
       // Act & Assert
       expect(
-        firstPosition.hashCode != secondPosition,
+        firstPosition.hashCode != secondPosition.hashCode,
         true,
       );
     });
@@ -90,6 +94,7 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
       final secondPosition = Position(
         longitude: 0,
@@ -100,11 +105,12 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
 
       // Act & Assert
       expect(
-        firstPosition.hashCode != secondPosition,
+        firstPosition.hashCode != secondPosition.hashCode,
         true,
       );
     });
@@ -121,6 +127,7 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
       final secondPosition = Position(
         longitude: 0,
@@ -131,11 +138,12 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
 
       // Act & Assert
       expect(
-        firstPosition.hashCode != secondPosition,
+        firstPosition.hashCode != secondPosition.hashCode,
         true,
       );
     });
@@ -152,6 +160,7 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
       final secondPosition = Position(
         longitude: 0,
@@ -162,11 +171,12 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
 
       // Act & Assert
       expect(
-        firstPosition.hashCode != secondPosition,
+        firstPosition.hashCode != secondPosition.hashCode,
         true,
       );
     });
@@ -183,6 +193,7 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
       final secondPosition = Position(
         longitude: 0,
@@ -193,11 +204,12 @@ void main() {
         heading: 1,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
 
       // Act & Assert
       expect(
-        firstPosition.hashCode != secondPosition,
+        firstPosition.hashCode != secondPosition.hashCode,
         true,
       );
     });
@@ -213,6 +225,7 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
       final secondPosition = Position(
         longitude: 0,
@@ -223,11 +236,12 @@ void main() {
         heading: 0,
         speed: 1,
         speedAccuracy: 0,
+        isMocked: false,
       );
 
       // Act & Assert
       expect(
-        firstPosition.hashCode != secondPosition,
+        firstPosition.hashCode != secondPosition.hashCode,
         true,
       );
     });
@@ -246,6 +260,7 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 0,
+        isMocked: false,
       );
       final secondPosition = Position(
         longitude: 0,
@@ -256,11 +271,47 @@ void main() {
         heading: 0,
         speed: 0,
         speedAccuracy: 1,
+        isMocked: false,
       );
 
       // Act & Assert
       expect(
-        firstPosition.hashCode != secondPosition,
+        firstPosition.hashCode != secondPosition.hashCode,
+        true,
+      );
+    });
+
+    test(
+        // ignore: lines_longer_than_80_chars
+        'hashCode should not match when the speedAccuracy property is different',
+        () {
+      // Arrange
+      final firstPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        isMocked: false,
+      );
+      final secondPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        isMocked: true,
+      );
+
+      // Act & Assert
+      expect(
+        firstPosition.hashCode != secondPosition.hashCode,
         true,
       );
     });

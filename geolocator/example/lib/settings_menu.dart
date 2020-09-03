@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator_example/main.dart';
+import 'main.dart';
 
 /// Defines all possible menu options
 enum MenuOptions {
@@ -23,7 +23,7 @@ class SettingsMenu extends StatelessWidget {
       ),
       color: themeMaterialColor,
       onSelected: (option) => _handleMenuOption(context, option),
-      itemBuilder: (BuildContext context) => <PopupMenuEntry<MenuOptions>>[
+      itemBuilder: (context) => <PopupMenuEntry<MenuOptions>>[
         const PopupMenuItem(
           value: MenuOptions.appSettings,
           child: Text('Open App Settings'),

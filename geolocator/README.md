@@ -23,7 +23,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: ^6.0.0+1
+  geolocator: ^6.0.0
 ```
 
 <details>
@@ -81,10 +81,12 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 
 On iOS you'll need to add the following entries to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following:
 
+``` xml
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>This app needs access to location when open.</string>
 <key>NSLocationAlwaysUsageDescription</key>
 <string>This app needs access to location when in the background.</string>
+```
 
 If you would like to receive updates when your App is in the background, you'll also need to add the Background Modes capability to your XCode project (Project > Signing and Capabilties > "+ Capability" button) and select Location Updates. Be carefull with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
 
@@ -195,7 +197,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double distanceInMeters = distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double distanceInMeters = GeolocatorPlatform.distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 If you want to calculate the bearing between two geocoordinates you can use the `bearingBetween` method. The `bearingBetween` method also takes four parameters:
@@ -210,7 +212,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double bearing = bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double bearing = GeolocatorPlatform.bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 ### Location accuracy

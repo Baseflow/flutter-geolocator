@@ -1,3 +1,10 @@
+## 6.0.0+2
+
+- Add the `isMocked` field to the `Position` class to indicate if the position is retrieved using the Android MockLocationProvider (see issue #498);
+- Fix `IllegalArgumentException` on Android when using geolocator together with Firebase Analytics (see issue #503);
+- Fix a crash when denying permissions on iOS while receiving position updates (see issue #497);
+- Suppress warning when building App for Android (see issue #502).
+
 ## 6.0.0+1
 
 * iOS: fixed issue converting integer to LocationPermission enum;
