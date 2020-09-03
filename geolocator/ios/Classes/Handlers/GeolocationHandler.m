@@ -76,7 +76,10 @@
     }
     
     [self stopListening];
-    self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
+    
+    if (self.errorHandler) {
+        self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
+    }
 }
 
 + (BOOL) shouldEnableBackgroundLocationUpdates {
