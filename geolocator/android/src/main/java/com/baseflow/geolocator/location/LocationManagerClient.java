@@ -130,6 +130,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         if (status == LocationProvider.AVAILABLE) {
