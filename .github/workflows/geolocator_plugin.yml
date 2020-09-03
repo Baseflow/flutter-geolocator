@@ -17,7 +17,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: macos-latest
     env:
-      working-directory: ./geolocator_platform_interface 
+      source-directory: ./geolocator_platform_interface 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,24 +32,25 @@ jobs:
       # Download all Flutter packages the geolocator depends on
       - name: Download dependencies
         run: flutter pub get
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{env.source-directory}}
       
       # Run Flutter Analyzer
       - name: Run Flutter Analyzer
         run: flutter analyze
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{env.source-directory}}
       
       # Run all unit-tests with code coverage
       - name: Run unit tests
         run: flutter test --coverage
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{env.source-directory}}
 
   # Job configuration for the geolocator (App Facing Package)
   geolocator:
     # The type of runner that the job will run on
     runs-on: macos-latest
     env:
-      working-directory: ./geolocator 
+      source-directory: ./geolocator 
+      example-directory:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -64,24 +65,24 @@ jobs:
       # Download all Flutter packages the geolocator depends on
       - name: Download dependencies
         run: flutter pub get
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{env.source-directory}}
       
       # Run Flutter Analyzer
       - name: Run Flutter Analyzer
         run: flutter analyze
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{env.source-directory}}
       
       # Run all unit-tests with code coverage
       - name: Run unit tests
         run: flutter test --coverage
-        working-directory: ${{env.working-directory}}
+        working-directory: ${{env.source-directory}}
       
       # Build Android version of the example app
       - name: Run Android build
-        run: flutter build apk -t example/lib/main.dart --release
-        working-directory: ${{env.working-directory}}
+        run: flutter build apk --release
+        working-directory: ${{env.exampl-directory}}
    
       # Build iOS version of the example app
       - name: Run iOS build
-        run: flutter build ios -t example/lib/main.dart --release --no-codesign
-        working-directory: ${{env.working-directory}}
+        run: flutter build ios --release --no-codesign
+        working-directory: ${{env.example-directory}}
