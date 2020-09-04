@@ -45,7 +45,7 @@ The TL;DR version is:
 android.useAndroidX=true
 android.enableJetifier=true
 ```
-2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 29:
+2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 28:
 
 ```
 android {
@@ -72,6 +72,7 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 ```
 
 > **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalant to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
+
 
 </details>
 

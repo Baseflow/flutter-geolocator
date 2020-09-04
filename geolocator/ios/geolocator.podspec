@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'geolocator'
-  s.version          = '6.0.0+2'
+  s.version          = '6.0.0+3'
   s.summary          = 'Geolocation plugin for Flutter.'
   s.description      = <<-DESC
   Geolocation plugin for Flutter. This plugin provides a cross-platform (iOS, Android) API for generic location (GPS etc.) functions.
