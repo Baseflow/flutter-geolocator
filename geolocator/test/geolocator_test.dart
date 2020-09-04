@@ -136,7 +136,8 @@ class MockGeolocatorPlatform extends Mock
     double startLongitude,
     double endLatitude,
     double endLongitude,
-  ) => 42;
+  ) =>
+      42;
 
   @override
   double bearingBetween(
@@ -144,5 +145,6 @@ class MockGeolocatorPlatform extends Mock
     double startLongitude,
     double endLatitude,
     double endLongitude,
-  ) => 42;
+  ) =>
+      42;
 }
