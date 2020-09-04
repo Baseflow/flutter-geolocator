@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
@@ -136,7 +135,8 @@ class MockGeolocatorPlatform extends Mock
     double startLongitude,
     double endLatitude,
     double endLongitude,
-  ) => 42;
+  ) =>
+      42;
 
   @override
   double bearingBetween(
@@ -144,5 +144,6 @@ class MockGeolocatorPlatform extends Mock
     double startLongitude,
     double endLatitude,
     double endLongitude,
-  ) => 42;
+  ) =>
+      42;
 }
