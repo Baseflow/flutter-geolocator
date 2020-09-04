@@ -197,7 +197,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double distanceInMeters = GeolocatorPlatform.distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double distanceInMeters = distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 If you want to calculate the bearing between two geocoordinates you can use the `bearingBetween` method. The `bearingBetween` method also takes four parameters:
@@ -212,7 +212,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double bearing = GeolocatorPlatform.bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double bearing = bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 ### Location accuracy
