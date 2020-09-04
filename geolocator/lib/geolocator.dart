@@ -124,3 +124,41 @@ Future<bool> openAppSettings() => GeolocatorPlatform.instance.openAppSettings();
 /// [false] is returned.
 Future<bool> openLocationSettings() =>
     GeolocatorPlatform.instance.openLocationSettings();
+
+/// Calculates the distance between the supplied coordinates in meters.
+///
+/// The distance between the coordinates is calculated using the Haversine
+/// formula (see https://en.wikipedia.org/wiki/Haversine_formula). The
+/// supplied coordinates [startLatitude], [startLongitude], [endLatitude] and
+/// [endLongitude] should be supplied in degrees.
+double distanceBetween(
+  double startLatitude,
+  double startLongitude,
+  double endLatitude,
+  double endLongitude,
+) =>
+    GeolocatorPlatform.instance.distanceBetween(
+      startLatitude,
+      startLongitude,
+      endLatitude,
+      endLongitude,
+    );
+
+/// Calculates the initial bearing between two points
+///
+/// The initial bearing will most of the time be different than the end
+/// bearing, see https://www.movable-type.co.uk/scripts/latlong.html#bearing.
+/// The supplied coordinates [startLatitude], [startLongitude], [endLatitude]
+/// and [endLongitude] should be supplied in degrees.
+double bearingBetween(
+  double startLatitude,
+  double startLongitude,
+  double endLatitude,
+  double endLongitude,
+) =>
+    GeolocatorPlatform.instance.bearingBetween(
+      startLatitude,
+      startLongitude,
+      endLatitude,
+      endLongitude,
+    );

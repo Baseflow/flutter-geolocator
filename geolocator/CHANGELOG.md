@@ -1,9 +1,14 @@
+## 6.0.0+3
+
+* Make the `bearingBetween` and `distanceBetween` methods directly available from the geolocator package (see issue [#496](https://github.com/Baseflow/flutter-geolocator/issues/496));
+* Android: check if permissions and grantresults are available in `onRequestPermissionsResult` (see issue [#511](https://github.com/Baseflow/flutter-geolocator/issues/511))
+
 ## 6.0.0+2
 
-- Add the `isMocked` field to the `Position` class to indicate if the position is retrieved using the Android MockLocationProvider (see issue #498);
-- Fix `IllegalArgumentException` on Android when using geolocator together with Firebase Analytics (see issue #503);
-- Fix a crash when denying permissions on iOS while receiving position updates (see issue #497);
-- Suppress warning when building App for Android (see issue #502).
+* Add the `isMocked` field to the `Position` class to indicate if the position is retrieved using the Android MockLocationProvider (see issue [#498](https://github.com/Baseflow/flutter-geolocator/issues/498));
+* Fix `IllegalArgumentException` on Android when using geolocator together with Firebase Analytics (see issue [#503](https://github.com/Baseflow/flutter-geolocator/issues/503));
+* Fix a crash when denying permissions on iOS while receiving position updates (see issue [#497](https://github.com/Baseflow/flutter-geolocator/issues/497));
+* Suppress warning when building App for Android (see issue [#502](https://github.com/Baseflow/flutter-geolocator/issues/502)).
 
 ## 6.0.0+1
 

@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
@@ -69,6 +70,16 @@ void main() {
       final hasOpened = await geolocator.openLocationSettings();
       expect(hasOpened, true);
     });
+
+    test('distanceBetween', () async {
+      final distance = await geolocator.distanceBetween(0, 0, 0, 0);
+      expect(distance, 42);
+    });
+
+    test('bearingBetween', () async {
+      final bearing = await geolocator.bearingBetween(0, 0, 0, 0);
+      expect(bearing, 42);
+    });
   });
 }
 
@@ -118,4 +129,20 @@ class MockGeolocatorPlatform extends Mock
 
   @override
   Future<bool> openLocationSettings() => Future.value(true);
+
+  @override
+  double distanceBetween(
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) => 42;
+
+  @override
+  double bearingBetween(
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) => 42;
 }

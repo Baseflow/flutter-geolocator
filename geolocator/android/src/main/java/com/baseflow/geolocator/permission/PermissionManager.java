@@ -98,7 +98,7 @@ public class PermissionManager
 
     @Override
     public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode != PERMISSION_REQUEST_CODE) {
+        if (requestCode != PERMISSION_REQUEST_CODE || permissions.length == 0 || grantResults.length == 0) {
             if (this.resultCallback != null) {
                 this.resultCallback.onResult(LocationPermission.denied);
             }
@@ -128,6 +128,7 @@ public class PermissionManager
         LocationPermission permission = LocationPermission.denied;
 
         int requestedPermissionIndex = indexOf(permissions, requestedPermission);
+
         if (grantResults[requestedPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 int backgroundPermissionIndex = indexOf(permissions, Manifest.permission.ACCESS_BACKGROUND_LOCATION);

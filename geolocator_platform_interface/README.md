@@ -23,7 +23,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: ^6.0.0+1
+  geolocator: ^6.0.0
 ```
 
 <details>
@@ -72,6 +72,8 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 ```
 
 > **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalant to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
+
+
 </details>
 
 <details>
