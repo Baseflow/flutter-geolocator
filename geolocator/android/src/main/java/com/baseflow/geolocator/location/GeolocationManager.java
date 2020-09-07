@@ -106,7 +106,7 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
 
     private void handlePermissions(Context context, @Nullable Activity activity, Runnable hasPermissionCallback, ErrorCallback errorCallback) {
         try {
-            LocationPermission permissionStatus = permissionManager.checkPermissionStatus(context, null);
+            LocationPermission permissionStatus = permissionManager.checkPermissionStatus(context, activity);
 
             if (permissionStatus == LocationPermission.deniedForever) {
                 errorCallback.onError(ErrorCodes.permissionDenied);

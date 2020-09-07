@@ -98,10 +98,7 @@ public class PermissionManager
 
     @Override
     public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode != PERMISSION_REQUEST_CODE || permissions.length == 0 || grantResults.length == 0) {
-            if (this.resultCallback != null) {
-                this.resultCallback.onResult(LocationPermission.denied);
-            }
+        if (requestCode != PERMISSION_REQUEST_CODE) {
             return false;
         }
 
@@ -128,6 +125,16 @@ public class PermissionManager
         LocationPermission permission = LocationPermission.denied;
 
         int requestedPermissionIndex = indexOf(permissions, requestedPermission);
+
+        if (requestedPermissionIndex < 0) {
+            Log.w("Geolocator", "Location permissions not part of permissions send to onRequestPermissionsResult method.");
+            return false;
+        }
+
+        if (grantResults.length == 0) {
+            Log.i("Geolocator", "The grantResults array is empty. This can happen when the user cancels the permission request");
+            return false;
+        }
 
         if (grantResults[requestedPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {

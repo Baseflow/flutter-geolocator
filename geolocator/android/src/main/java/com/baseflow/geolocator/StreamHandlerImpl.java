@@ -47,7 +47,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
      */
     void startListening(Context context, BinaryMessenger messenger) {
         if (channel != null) {
-            Log.d(TAG, "Setting a event call handler before the last was disposed.");
+            Log.w(TAG, "Setting a event call handler before the last was disposed.");
             stopListening();
         }
 

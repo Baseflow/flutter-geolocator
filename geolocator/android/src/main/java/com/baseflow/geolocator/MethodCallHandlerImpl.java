@@ -83,7 +83,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
      */
     void startListening(Context context, BinaryMessenger messenger) {
         if (channel != null) {
-            Log.wtf(TAG, "Setting a method call handler before the last was disposed.");
+            Log.w(TAG, "Setting a method call handler before the last was disposed.");
             stopListening();
         }
 
