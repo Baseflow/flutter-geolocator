@@ -1,3 +1,7 @@
+## 6.0.0+4
+
+* Android: fix crash when multiple permissions requests are make simultanuous (see issue [#513](https://github.com/Baseflow/flutter-geolocator/issues/513)).
+
 ## 6.0.0+3
 
 * Make the `bearingBetween` and `distanceBetween` methods directly available from the geolocator package (see issue [#496](https://github.com/Baseflow/flutter-geolocator/issues/496));
