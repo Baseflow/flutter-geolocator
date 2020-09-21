@@ -54,6 +54,8 @@ Future<Position> getLastKnownPosition(
 /// supplied [timeLimit] duration.
 /// Throws a [PermissionDeniedException] when trying to request the device's
 /// location when the user denied access.
+/// Throws a [LocationServiceDisabledException] when the user allowed access,
+/// but the location services of the device are disabled.
 Future<Position> getCurrentPosition({
   LocationAccuracy desiredAccuracy = LocationAccuracy.best,
   bool forceAndroidLocationManager = false,
@@ -97,6 +99,8 @@ Future<Position> getCurrentPosition({
 /// supplied [timeLimit] duration.
 /// Throws a [PermissionDeniedException] when trying to request the device's
 /// location when the user denied access.
+/// Throws a [LocationServiceDisabledException] when the user allowed access,
+/// but the location services of the device are disabled.
 Stream<Position> getPositionStream({
   LocationAccuracy desiredAccuracy = LocationAccuracy.best,
   int distanceFilter = 0,
