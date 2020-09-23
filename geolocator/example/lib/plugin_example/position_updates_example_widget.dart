@@ -22,17 +22,9 @@ class _PositionUpdatesExampleWidgetState
     _test();
     super.initState();
   }
+
   _test() async {
     debugPrint((await isLocationServiceEnabled()).toString());
-  }
-
-  _false() {
-    debugPrint('we found false');
-    return false;
-  }
-  _true() {
-    debugPrint('we found true');
-    return true;
   }
 
   @override
@@ -40,10 +32,9 @@ class _PositionUpdatesExampleWidgetState
     return FutureBuilder<LocationPermission>(
         future: checkPermission(),
         builder: (context, snapshot) {
-          if(_false() && _true())
-          { if (!snapshot.hasData) {
+          if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
-          }
+
           }
 
           if (snapshot.data == LocationPermission.denied) {

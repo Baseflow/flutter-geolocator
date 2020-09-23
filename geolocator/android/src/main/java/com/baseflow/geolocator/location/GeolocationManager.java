@@ -15,20 +15,12 @@ import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -71,56 +63,44 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
 
         if (isGooglePlayServicesAvailable(context)) {
             ThreadPoolExecutor executor = new ThreadPoolExecutor(
-                    2,
-                    2,
-                    60L,
-                    TimeUnit.SECONDS,
-                    new LinkedBlockingQueue<Runnable>());
-            Task<LocationAvailability> la = LocationServices.getFusedLocationProviderClient(context)
-                    .getLocationAvailability();
+                    1,
+                    1,
+                    1000,
+                    TimeUnit.MILLISECONDS,
+                    new LinkedBlockingQueue<>());
+
+            final LocationSettingsStates[] ls = new LocationSettingsStates[1];
+
+            LocationServices.getSettingsClient(context).checkLocationSettings(new LocationSettingsRequest.Builder().build())
+                    .addOnSuccessListener(executor, (OnSuccessListener<LocationSettingsResponse>) o -> {
+                        System.out.println("Checking gps location usable in thread " + o.getLocationSettingsStates().isGpsUsable());
+                        ls[0] = o.getLocationSettingsStates();
+                    });
+
             try {
-                Tasks.await(la);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
+                // This await has to be replaced by something that stops waiting when the Task
+                // is done executing.
+                executor.awaitTermination(100, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            if (!la.isSuccessful()) return false;
-            if (la.getResult() == null) return false;
-            Task<LocationSettingsResponse> task = LocationServices.getSettingsClient(context).checkLocationSettings(new LocationSettingsRequest.Builder().build());
-            try {
-                Tasks.await(task);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (!task.isSuccessful()) return false;
-            if (task.getResult() == null) return false;
-            LocationSettingsStates ls = task.getResult().getLocationSettingsStates();
-            if (ls == null) return false;
-            boolean a = ls.isGpsUsable();
-            boolean b = ls.isBlePresent();
-            boolean c = ls.isBleUsable();
-            boolean d = ls.isLocationPresent();
-            boolean e = ls.isLocationUsable();
-            boolean f = ls.isNetworkLocationPresent();
-            boolean g = ls.isNetworkLocationUsable();
-            return la.getResult().isLocationAvailable();
+            if (ls[0] == null) return false;
+            return ls[0].isGpsUsable() || ls[0].isNetworkLocationUsable();
 
         } else {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-        if (locationManager == null) {
-            return false;
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+            if (locationManager == null) {
+                return false;
+            }
+
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            return gps_enabled || network_enabled;
         }
-
-        gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        }
-        return gps_enabled || network_enabled;
     }
 
     public void startPositionUpdates(
@@ -159,7 +139,7 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
         return this.locationClient;
     }
 
-    private boolean isGooglePlayServicesAvailable(Context context){
+    private boolean isGooglePlayServicesAvailable(Context context) {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
         return resultCode == ConnectionResult.SUCCESS;
