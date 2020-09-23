@@ -16,11 +16,11 @@ class _PositionUpdatesExampleWidgetState
     extends State<PositionUpdatesExampleWidget> {
   StreamSubscription<Position> _positionStreamSubscription;
   final _positions = <Position>[];
-
+ double test = Geolocator.bearingBetween(0, 0, 0, 0);
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LocationPermission>(
-        future: checkPermission(),
+        future: Geolocator.checkPermission (),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -37,7 +37,7 @@ class _PositionUpdatesExampleWidgetState
                         'request permissions before continuing'),
                 RaisedButton(
                   child: const Text('Request permission'),
-                  onPressed: () => requestPermission()
+                  onPressed: () => Geolocator.requestPermission()
                       .then((status) => setState(_positions.clear)),
                 ),
               ],
