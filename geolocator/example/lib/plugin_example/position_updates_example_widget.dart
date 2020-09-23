@@ -16,7 +16,7 @@ class _PositionUpdatesExampleWidgetState
     extends State<PositionUpdatesExampleWidget> {
   StreamSubscription<Position> _positionStreamSubscription;
   final _positions = <Position>[];
- double test = Geolocator.bearingBetween(0, 0, 0, 0);
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LocationPermission>(
