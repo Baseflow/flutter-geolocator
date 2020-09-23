@@ -18,12 +18,32 @@ class _PositionUpdatesExampleWidgetState
   final _positions = <Position>[];
 
   @override
+  void initState() {
+    _test();
+    super.initState();
+  }
+  _test() async {
+    debugPrint((await isLocationServiceEnabled()).toString());
+  }
+
+  _false() {
+    debugPrint('we found false');
+    return false;
+  }
+  _true() {
+    debugPrint('we found true');
+    return true;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<LocationPermission>(
         future: checkPermission(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if(_false() && _true())
+          { if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
+          }
           }
 
           if (snapshot.data == LocationPermission.denied) {
@@ -37,8 +57,9 @@ class _PositionUpdatesExampleWidgetState
                         'request permissions before continuing'),
                 RaisedButton(
                   child: const Text('Request permission'),
-                  onPressed: () => requestPermission()
-                      .then((status) => setState(_positions.clear)),
+                  onPressed: _test
+                      // requestPermission()
+                      // .then((status) => setState(_positions.clear)),
                 ),
               ],
             );
