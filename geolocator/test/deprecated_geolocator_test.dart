@@ -24,12 +24,14 @@ void main() {
     });
 
     test('checkPermission', () async {
+      //ignore: deprecated_member_use_from_same_package
       final permission = await geolocator.checkPermission();
 
       expect(permission, geolocator.LocationPermission.whileInUse);
     });
 
     test('requestPermission', () async {
+      //ignore: deprecated_member_use_from_same_package
       final permission = await geolocator.requestPermission();
 
       expect(permission, geolocator.LocationPermission.whileInUse);
@@ -37,45 +39,53 @@ void main() {
 
     test('isLocationServiceEnabled', () async {
       final isLocationServiceEnabled =
-      await geolocator.isLocationServiceEnabled();
+      //ignore: deprecated_member_use_from_same_package
+          await geolocator.isLocationServiceEnabled();
 
       expect(isLocationServiceEnabled, true);
     });
 
     test('getLastKnownPosition', () async {
+      //ignore: deprecated_member_use_from_same_package
       final position = await geolocator.getLastKnownPosition();
 
       expect(position, mockPosition);
     });
 
     test('getCurrentPosition', () async {
+      //ignore: deprecated_member_use_from_same_package
       final position = await geolocator.getCurrentPosition();
 
       expect(position, mockPosition);
     });
 
     test('getPositionStream', () async {
+      //ignore: deprecated_member_use_from_same_package
       final position = await geolocator.getPositionStream();
 
       expect(position, emitsInOrder([emits(mockPosition), emitsDone]));
     });
 
     test('openAppSettings', () async {
+      //ignore: deprecated_member_use_from_same_package
       final hasOpened = await geolocator.openAppSettings();
       expect(hasOpened, true);
     });
 
     test('openLocationSettings', () async {
+      //ignore: deprecated_member_use_from_same_package
       final hasOpened = await geolocator.openLocationSettings();
       expect(hasOpened, true);
     });
 
     test('distanceBetween', () async {
+      //ignore: deprecated_member_use_from_same_package
       final distance = await geolocator.distanceBetween(0, 0, 0, 0);
       expect(distance, 42);
     });
 
     test('bearingBetween', () async {
+      //ignore: deprecated_member_use_from_same_package
       final bearing = await geolocator.bearingBetween(0, 0, 0, 0);
       expect(bearing, 42);
     });
@@ -84,7 +94,7 @@ void main() {
 
 class MockGeolocatorPlatform extends Mock
     with
-    // ignore: prefer_mixin
+        // ignore: prefer_mixin
         MockPlatformInterfaceMixin
     implements
         GeolocatorPlatform {
@@ -131,19 +141,19 @@ class MockGeolocatorPlatform extends Mock
 
   @override
   double distanceBetween(
-      double startLatitude,
-      double startLongitude,
-      double endLatitude,
-      double endLongitude,
-      ) =>
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) =>
       42;
 
   @override
   double bearingBetween(
-      double startLatitude,
-      double startLongitude,
-      double endLatitude,
-      double endLongitude,
-      ) =>
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) =>
       42;
 }

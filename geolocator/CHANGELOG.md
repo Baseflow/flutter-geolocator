@@ -1,3 +1,7 @@
+## 6.0.1
+
+* Wrapped all global functions to a static class, thus changing the way geolocator methods should be called. (see issue [524] (https://github.com/Baseflow/flutter-geolocator/issues/524)).
+
 ## 6.0.0+4
 
 * Android: fix crash when multiple permissions requests are make simultanuous (see issue [#513](https://github.com/Baseflow/flutter-geolocator/issues/513)).

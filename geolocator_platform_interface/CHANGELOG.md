@@ -1,3 +1,7 @@
+## 1.0.5
+
+- Wrapped all global functions to a static class, thus changing the way geolocator methods should be called. (see issue [524] (https://github.com/Baseflow/flutter-geolocator/issues/524)).
+
 ## 1.0.4
 
 - Add the `isMocked` field to the `Position` class to indicate if the position is retrieved using the Android MockLocationProvider (see issue #498);

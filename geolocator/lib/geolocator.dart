@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+
 //#region   deprecated methods
 /// Returns a [Future] indicating if the user allows the App to access
 /// the device's location.
- @Deprecated(
-   'call Geolocator.checkPermission() instead'
-   'this  feature was deprecated after 6.0.0+4'
- )
+@Deprecated('call Geolocator.checkPermission() instead'
+    'this  feature was deprecated after 6.0.0+4')
 Future<LocationPermission> checkPermission() =>
     GeolocatorPlatform.instance.checkPermission();
 
@@ -22,19 +21,15 @@ Future<LocationPermission> checkPermission() =>
 /// AndroidManifest.xml on Android or the Info.plist on iOS).
 /// A [PermissionRequestInProgressException] is thrown if permissions are
 /// requested while an earlier request has not yet been completed.
-@Deprecated(
-    'call Geolocator.requestPermission instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call Geolocator.requestPermission instead'
+    'this  feature was deprecated after 6.0.0+4')
 Future<LocationPermission> requestPermission() =>
     GeolocatorPlatform.instance.requestPermission();
 
 /// Returns a [Future] containing a [bool] value indicating whether location
 /// services are enabled on the device.
-@Deprecated(
-    'call Geolocator.isLocationServiceEnabled instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call Geolocator.isLocationServiceEnabled instead'
+    'this  feature was deprecated after 6.0.0+4')
 Future<bool> isLocationServiceEnabled() =>
     GeolocatorPlatform.instance.isLocationServiceEnabled();
 
@@ -47,10 +42,8 @@ Future<bool> isLocationServiceEnabled() =>
 /// When no position is available, null is returned.
 /// Throws a [PermissionDeniedException] when trying to request the device's
 /// location when the user denied access.
-@Deprecated(
-    'call Geolocator.getLastKnownPosition instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call Geolocator.getLastKnownPosition instead'
+    'this  feature was deprecated after 6.0.0+4')
 Future<Position> getLastKnownPosition(
         {bool forceAndroidLocationManager = false}) =>
     GeolocatorPlatform.instance.getLastKnownPosition(
@@ -72,10 +65,8 @@ Future<Position> getLastKnownPosition(
 /// location when the user denied access.
 /// Throws a [LocationServiceDisabledException] when the user allowed access,
 /// but the location services of the device are disabled.
-@Deprecated(
-    'call Geolocator.getCurrentPosition instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call Geolocator.getCurrentPosition instead'
+    'this  feature was deprecated after 6.0.0+4')
 Future<Position> getCurrentPosition({
   LocationAccuracy desiredAccuracy = LocationAccuracy.best,
   bool forceAndroidLocationManager = false,
@@ -121,10 +112,8 @@ Future<Position> getCurrentPosition({
 /// location when the user denied access.
 /// Throws a [LocationServiceDisabledException] when the user allowed access,
 /// but the location services of the device are disabled.
-@Deprecated(
-    'call Geolocator.getPositionStream instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call Geolocator.getPositionStream instead'
+    'this  feature was deprecated after 6.0.0+4')
 Stream<Position> getPositionStream({
   LocationAccuracy desiredAccuracy = LocationAccuracy.best,
   int distanceFilter = 0,
@@ -144,20 +133,16 @@ Stream<Position> getPositionStream({
 ///
 /// Returns [true] if the location settings page could be opened, otherwise
 /// [false] is returned.
-@Deprecated(
-    'call Geolocator.openAppSettings instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call Geolocator.openAppSettings instead'
+    'this  feature was deprecated after 6.0.0+4')
 Future<bool> openAppSettings() => GeolocatorPlatform.instance.openAppSettings();
 
 /// Opens the location settings page.
 ///
 /// Returns [true] if the location settings page could be opened, otherwise
 /// [false] is returned.
-@Deprecated(
-    'call Geolocator.openLocationSettings instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call Geolocator.openLocationSettings instead'
+    'this  feature was deprecated after 6.0.0+4')
 Future<bool> openLocationSettings() =>
     GeolocatorPlatform.instance.openLocationSettings();
 
@@ -167,10 +152,8 @@ Future<bool> openLocationSettings() =>
 /// formula (see https://en.wikipedia.org/wiki/Haversine_formula). The
 /// supplied coordinates [startLatitude], [startLongitude], [endLatitude] and
 /// [endLongitude] should be supplied in degrees.
-@Deprecated(
-    'call Geolocator.distanceBetween instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call Geolocator.distanceBetween instead'
+    'this  feature was deprecated after 6.0.0+4')
 double distanceBetween(
   double startLatitude,
   double startLongitude,
@@ -190,10 +173,8 @@ double distanceBetween(
 /// bearing, see https://www.movable-type.co.uk/scripts/latlong.html#bearing.
 /// The supplied coordinates [startLatitude], [startLongitude], [endLatitude]
 /// and [endLongitude] should be supplied in degrees.
-@Deprecated(
-    'call geolocator.bearingBetween instead'
-    'this  feature was deprecated after 6.0.0+4'
-)
+@Deprecated('call geolocator.bearingBetween instead'
+    'this  feature was deprecated after 6.0.0+4')
 double bearingBetween(
   double startLatitude,
   double startLongitude,
@@ -208,8 +189,11 @@ double bearingBetween(
     );
 //#endregion
 
+
+///All of geolocators functions
 class Geolocator {
   Geolocator._();
+
   /// Returns a [Future] indicating if the user allows the App to access
   /// the device's location.
   static Future<LocationPermission> checkPermission() =>
@@ -242,7 +226,7 @@ class Geolocator {
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.
   static Future<Position> getLastKnownPosition(
-      {bool forceAndroidLocationManager = false}) =>
+          {bool forceAndroidLocationManager = false}) =>
       GeolocatorPlatform.instance.getLastKnownPosition(
           forceAndroidLocationManager: forceAndroidLocationManager);
 
@@ -307,7 +291,7 @@ class Geolocator {
   /// location when the user denied access.
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
-  static  Stream<Position> getPositionStream({
+  static Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
@@ -343,11 +327,11 @@ class Geolocator {
   /// supplied coordinates [startLatitude], [startLongitude], [endLatitude] and
   /// [endLongitude] should be supplied in degrees.
   static double distanceBetween(
-      double startLatitude,
-      double startLongitude,
-      double endLatitude,
-      double endLongitude,
-      ) =>
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) =>
       GeolocatorPlatform.instance.distanceBetween(
         startLatitude,
         startLongitude,
@@ -362,16 +346,15 @@ class Geolocator {
   /// The supplied coordinates [startLatitude], [startLongitude], [endLatitude]
   /// and [endLongitude] should be supplied in degrees.
   static double bearingBetween(
-      double startLatitude,
-      double startLongitude,
-      double endLatitude,
-      double endLongitude,
-      ) =>
+    double startLatitude,
+    double startLongitude,
+    double endLatitude,
+    double endLongitude,
+  ) =>
       GeolocatorPlatform.instance.bearingBetween(
         startLatitude,
         startLongitude,
         endLatitude,
         endLongitude,
       );
-
 }
