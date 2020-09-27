@@ -1,11 +1,11 @@
 ## 6.0.0+4
 
-* Android: fix crash when multiple permissions requests are make simultanuous (see issue [#513](https://github.com/Baseflow/flutter-geolocator/issues/513)).
+* Android: fix crash when multiple permissions requests are make simultaneous (see issue [#513](https://github.com/Baseflow/flutter-geolocator/issues/513)).
 
 ## 6.0.0+3
 
 * Make the `bearingBetween` and `distanceBetween` methods directly available from the geolocator package (see issue [#496](https://github.com/Baseflow/flutter-geolocator/issues/496));
-* Android: check if permissions and grantresults are available in `onRequestPermissionsResult` (see issue [#511](https://github.com/Baseflow/flutter-geolocator/issues/511))
+* Android: check if permissions and grant results are available in `onRequestPermissionsResult` (see issue [#511](https://github.com/Baseflow/flutter-geolocator/issues/511))
 
 ## 6.0.0+2
 
@@ -66,7 +66,7 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 
 * Added unit-tests to guard for breaking API changes;
 * Added support to supply a locale identifier when requesting a placemark using a [Position](https://pub.dev/documentation/geolocator/latest/geolocator/Position-class.html) instance;
-* **breaking** Stop hiding parsing exceptions when converting coordinates into an address. Instead of returning `null` the `placemarkFromCoordinates` method will now throw and `ArgumentError` if illigal values are returned (which should never happen).
+* **breaking** Stop hiding parsing exceptions when converting coordinates into an address. Instead of returning `null` the `placemarkFromCoordinates` method will now throw and `ArgumentError` if illegal values are returned (which should never happen).
 
 ## 5.2.1
 
@@ -75,7 +75,7 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 
 ## 5.2.0
 
-* iOS: keep trying to get the location when a `kCLErrorLocationUnknow` error is received (as per Apple's [documentation](https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate/1423786-locationmanager));
+* iOS: keep trying to get the location when a `kCLErrorLocationUnknown` error is received (as per Apple's [documentation](https://developer.apple.com/documentation/corelocation/cllocationmanagerdelegate/1423786-locationmanager));
 * Android: synchronize gradle versions with current stable version of Flutter (1.12.13+hotfix.5).
 
 ## 5.1.5
@@ -228,7 +228,7 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 * It is now possible to check the location permissions using the `checkGeolocationStatus` method [[ISSUE #51](https://github.com/BaseflowIT/flutter-geolocator/issues/51)].
 * Improved the example App [[ISSUE #54](https://github.com/BaseflowIT/flutter-geolocator/issues/54)]
 * Solved a bug on Android causing a memory leak when you stop listening to the position stream.
-* **breaking** Solved a bug on Android where permissions could be requested more then once simultaniously [[ISSUE #58](https://github.com/BaseflowIT/flutter-geolocator/issues/58)]
+* **breaking** Solved a bug on Android where permissions could be requested more then once simultaneously [[ISSUE #58](https://github.com/BaseflowIT/flutter-geolocator/issues/58)]
 * Solved a bug on Android where requesting permissions twice would cause the App to crash [[ISSUE #61](https://github.com/BaseflowIT/flutter-geolocator/issues/61)]
 
 > **Important:**
@@ -248,7 +248,7 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 * Added feature to query the last known location that is stored on the device using the `getLastKnownLocation` method;
 * **breaking** Renamed the `getPosition` to `getCurrentPosition`;
 * Fixed bug where calling `getCurrentPosition` on Android resulted in returning the last known location;
-* **breaking** Renamed methods `toPlacemark` and `fromPlacemark` respectively to the, more meaningfull names, `placemarkFromAddress` and `placemarkFromCoordinates`;
+* **breaking** Renamed methods `toPlacemark` and `fromPlacemark` respectively to the, more meaningful names, `placemarkFromAddress` and `placemarkFromCoordinates`;
 
 ## 1.3.1
 
