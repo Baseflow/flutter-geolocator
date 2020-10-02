@@ -200,8 +200,10 @@ double bearingBetween(
 //#endregion
 
 
-/// Wraps CLLocationManager (on iOS) and FusedLocationProviderClient or LocationManager
-/// (on Android), providing support to retrieve position information of the device.
+/// Wraps CLLocationManager (on iOS) and FusedLocationProviderClient or
+/// LocationManager
+/// (on Android), providing support to retrieve position information 
+/// of the device.
 ///
 /// Permissions are automatically handled when retrieving position information.
 /// However utility methods for manual permission management are also
