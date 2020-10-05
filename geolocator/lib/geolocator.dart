@@ -209,7 +209,6 @@ double bearingBetween(
 /// However utility methods for manual permission management are also
 /// provided.
 class Geolocator {
-  Geolocator._();
 
   /// Returns a [Future] indicating if the user allows the App to access
   /// the device's location.

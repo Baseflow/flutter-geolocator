@@ -1,4 +1,4 @@
-## 1.0.5
+## 1.1.0
 
 - Wrapped all global functions to a static class, thus changing the way geolocator methods should be called. (see issue [#524] (https://github.com/Baseflow/flutter-geolocator/issues/524)).
 
