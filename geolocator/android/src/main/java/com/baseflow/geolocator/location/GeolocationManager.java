@@ -19,11 +19,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import io.flutter.plugin.common.PluginRegistry;
 
@@ -54,54 +49,42 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
                 errorCallback);
     }
 
-    public boolean isLocationServiceEnabled(@Nullable Context context) {
+
+    public void isLocationServiceEnabled(@Nullable Context context, LocationServiceListener listener) {
         if (context == null) {
-            return false;
+            listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
         }
         boolean gps_enabled;
         boolean network_enabled;
-
         if (isGooglePlayServicesAvailable(context)) {
-            ThreadPoolExecutor executor = new ThreadPoolExecutor(
-                    1,
-                    1,
-                    1000,
-                    TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<>());
-
-            final LocationSettingsStates[] ls = new LocationSettingsStates[1];
-
-            LocationServices.getSettingsClient(context).checkLocationSettings(new LocationSettingsRequest.Builder().build())
-                    .addOnSuccessListener(executor, (OnSuccessListener<LocationSettingsResponse>) o -> {
-                        System.out.println("Checking gps location usable in thread " + o.getLocationSettingsStates().isGpsUsable());
-                        ls[0] = o.getLocationSettingsStates();
-                    });
-
-            try {
-                // This await has to be replaced by something that stops waiting when the Task
-                // is done executing.
-                executor.awaitTermination(100, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            if (ls[0] == null) return false;
-            return ls[0].isGpsUsable() || ls[0].isNetworkLocationUsable();
-
+            LocationServices
+                    .getSettingsClient(context)
+                    .checkLocationSettings(
+                            new LocationSettingsRequest.Builder()
+                                    .build()).addOnCompleteListener((response) -> {
+                if (response.isSuccessful()) {
+                    LocationSettingsResponse lsr = response.getResult();
+                    if (lsr != null) {
+                        LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
+                        listener.onLocationServiceResult(settingsStates.isGpsUsable() || settingsStates.isNetworkLocationUsable());
+                        System.out.println("We got em!");
+                    } else {
+                        listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+                    }
+                }
+            });
         } else {
-
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
             if (locationManager == null) {
-                return false;
+                listener.onLocationServiceResult(false);
             }
-
             gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-            return gps_enabled || network_enabled;
+            listener.onLocationServiceResult(gps_enabled || network_enabled);
         }
     }
+
+
 
     public void startPositionUpdates(
             Context context,

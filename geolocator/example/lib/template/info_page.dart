@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'globals.dart' as globals;
 
 /// The widget which defines the info page.

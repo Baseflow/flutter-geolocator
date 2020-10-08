@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
+import com.baseflow.geolocator.location.FlutterLocationServiceListener;
 import com.baseflow.geolocator.location.GeolocationManager;
 import com.baseflow.geolocator.location.LocationMapper;
 import com.baseflow.geolocator.permission.LocationPermission;
@@ -122,8 +123,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     }
 
     private void onIsLocationServiceEnabled(MethodChannel.Result result) {
-        boolean isEnabled = geolocationManager.isLocationServiceEnabled(context);
-        result.success(isEnabled);
+        geolocationManager.isLocationServiceEnabled(context, new FlutterLocationServiceListener(result));
     }
 
     private void onRequestPermission(MethodChannel.Result result) {

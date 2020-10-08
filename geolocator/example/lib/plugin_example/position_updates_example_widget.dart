@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'widgets/info_widget.dart';
 
 /// A widget that will request and display position updates
@@ -34,7 +35,6 @@ class _PositionUpdatesExampleWidgetState
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
-
           }
 
           if (snapshot.data == LocationPermission.denied) {
@@ -48,9 +48,8 @@ class _PositionUpdatesExampleWidgetState
                         'request permissions before continuing'),
                 RaisedButton(
                   child: const Text('Request permission'),
-                  onPressed: _test
-                      // requestPermission()
-                      // .then((status) => setState(_positions.clear)),
+                  onPressed: () => requestPermission()
+                      .then((status) => setState(_positions.clear)),
                 ),
               ],
             );

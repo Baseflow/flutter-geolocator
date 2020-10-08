@@ -1,9 +1,9 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+
 import '../plugin_example/last_known_location_example_widget.dart';
 import '../plugin_example/position_updates_example_widget.dart';
-
 import 'info_page.dart';
 
 /// Defines the name of the plugin

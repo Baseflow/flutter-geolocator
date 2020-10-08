@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'widgets/info_widget.dart';
 
 /// A widget that will request and display the last known
