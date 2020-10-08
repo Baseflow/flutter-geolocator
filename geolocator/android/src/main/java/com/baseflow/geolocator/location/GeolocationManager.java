@@ -67,7 +67,6 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
                     if (lsr != null) {
                         LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
                         listener.onLocationServiceResult(settingsStates.isGpsUsable() || settingsStates.isNetworkLocationUsable());
-                        System.out.println("We got em!");
                     } else {
                         listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
                     }

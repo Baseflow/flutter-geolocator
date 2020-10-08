@@ -19,16 +19,6 @@ class _PositionUpdatesExampleWidgetState
   final _positions = <Position>[];
 
   @override
-  void initState() {
-    _test();
-    super.initState();
-  }
-
-  _test() async {
-    debugPrint((await isLocationServiceEnabled()).toString());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder<LocationPermission>(
         future: checkPermission(),
