@@ -9,7 +9,7 @@ class LastKnownLocationExampleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getLastKnownPosition(),
+      future: Geolocator.getLastKnownPosition(),
       builder: (context, snapshot) {
         List<Widget> children;
 

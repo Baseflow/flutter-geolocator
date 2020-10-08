@@ -45,11 +45,11 @@ The TL;DR version is:
 android.useAndroidX=true
 android.enableJetifier=true
 ```
-2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 28:
+2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 30:
 
 ```
 android {
-  compileSdkVersion 29
+  compileSdkVersion 30
 
   ...
 }
@@ -71,7 +71,7 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 ```
 
-> **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalant to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
+> **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalent to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
 
 
 </details>
@@ -88,7 +88,7 @@ On iOS you'll need to add the following entries to your Info.plist file (located
 <string>This app needs access to location when in the background.</string>
 ```
 
-If you would like to receive updates when your App is in the background, you'll also need to add the Background Modes capability to your XCode project (Project > Signing and Capabilties > "+ Capability" button) and select Location Updates. Be carefull with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
+If you would like to receive updates when your App is in the background, you'll also need to add the Background Modes capability to your XCode project (Project > Signing and Capabilities > "+ Capability" button) and select Location Updates. Be careful with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
 
 </details>
 
@@ -104,7 +104,7 @@ To query the current location of the device simply make a call to the `getCurren
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 ```
 
 To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
@@ -112,7 +112,7 @@ To query the last known location retrieved stored on the device you can use the 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await getLastKnownPosition();
+Position position = await Geolocator.getLastKnownPosition();
 ```
 
 To listen for location changes you can call the `getPositionStream` to receive stream you can listen to and receive position updates. You can finetune the results by specifying the following parameters:
@@ -125,7 +125,7 @@ To listen for location changes you can call the `getPositionStream` to receive s
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-StreamSubscription<Position> positionStream = getPositionStream(locationOptions).listen(
+StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationOptions).listen(
     (Position position) {
         print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
     });
@@ -136,7 +136,7 @@ To check if location services are enabled you can call the `isLocationServiceEna
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-bool isLocationServiceEnabled  = await isLocationServiceEnabled();
+bool isLocationServiceEnabled  = await Geolocator.isLocationServiceEnabled();
 ```
 
 ### Permissions
@@ -148,7 +148,7 @@ If you want to check if the user already granted permissions to acquire the devi
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-LocationPermission permission = await checkPermission();
+LocationPermission permission = await Geolocator.checkPermission();
 ```
 
 If you want to request permission to access the device's location you can call the `requestPermission` method:
@@ -156,7 +156,7 @@ If you want to request permission to access the device's location you can call t
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-LocationPermission permission = await requestPermission();
+LocationPermission permission = await Geolocator.requestPermission();
 ```
 
 Possible results from the `checkPermission` and `requestPermission` methods are:
@@ -170,7 +170,7 @@ always | Permission to access the device's location is allowed even when the App
 
 ### Settings
 
-In some cases it is necessary to ask the user and update their device settings. For example when the user initially permantly denied permissions to access the device's location or if the location services are not enabled (and, on Android, automatic resolution didn't work). In these cases you can use the `openAppSettings` or `openLocationSettings` methods to immidiately redirect the user to the device's settings page. 
+In some cases it is necessary to ask the user and update their device settings. For example when the user initially permanently denied permissions to access the device's location or if the location services are not enabled (and, on Android, automatic resolution didn't work). In these cases you can use the `openAppSettings` or `openLocationSettings` methods to immediately redirect the user to the device's settings page. 
 
 On Android the `openAppSettings` method will redirect the user to the App specific settings where the user can update necessary permissions. The `openLocationSettings` method will redirect the user to the location settings where the user can enable/ disable the location services.
 
@@ -179,8 +179,8 @@ On iOS we are not allowed to open specific setting pages so both methods will re
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-await openAppSettings();
-await openLocationSettings();
+await Geolocator.openAppSettings();
+await Geolocator.openLocationSettings();
 ```
 
 ### Utility methods
@@ -197,7 +197,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double distanceInMeters = distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double Geolocator.distanceInMeters = distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 If you want to calculate the bearing between two geocoordinates you can use the `bearingBetween` method. The `bearingBetween` method also takes four parameters:
@@ -212,7 +212,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double bearing = bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double bearing = Geolocator.bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 ### Location accuracy
