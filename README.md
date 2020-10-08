@@ -71,7 +71,7 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 ```
 
-> **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalent to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
+> **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in only being allowed to request a location with the `getLastKnownPosition` method. The accuracy can be very precise or could be the equivalent to a city block. If the phone already knows where he is this results in a quick response, but it could also take a long time (minutes) before you will get your first locations fix.
 
 
 </details>
@@ -106,6 +106,8 @@ import 'package:geolocator/geolocator.dart';
 
 Position position = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 ```
+
+> **NOTE:** On Android, calling the `getCurrentPosition` method requires the `ACCESS_FINE_LOCATION` permission being set in the `android/app/src/main/AndroidManifest.xml` file.
 
 To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
 
