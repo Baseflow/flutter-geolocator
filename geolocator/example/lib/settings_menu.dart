@@ -39,10 +39,10 @@ class SettingsMenu extends StatelessWidget {
   void _handleMenuOption(BuildContext context, MenuOptions option) {
     switch (option) {
       case MenuOptions.appSettings:
-        openAppSettings();
+       Geolocator.openAppSettings();
         break;
       case MenuOptions.locationSettings:
-        openLocationSettings();
+       Geolocator.openLocationSettings();
         break;
     }
   }

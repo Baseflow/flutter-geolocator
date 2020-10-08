@@ -20,7 +20,7 @@ class _PositionUpdatesExampleWidgetState
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LocationPermission>(
-        future: checkPermission(),
+        future: Geolocator.checkPermission(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -37,7 +37,7 @@ class _PositionUpdatesExampleWidgetState
                         'request permissions before continuing'),
                 RaisedButton(
                   child: const Text('Request permission'),
-                  onPressed: () => requestPermission()
+                  onPressed: () => Geolocator.requestPermission()
                       .then((status) => setState(_positions.clear)),
                 ),
               ],
@@ -116,7 +116,7 @@ class _PositionUpdatesExampleWidgetState
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      final positionStream = getPositionStream();
+      final positionStream = Geolocator.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription.cancel();
         _positionStreamSubscription = null;
