@@ -50,21 +50,35 @@ class FusedLocationClient implements LocationClient {
                 Location location = locationResult.getLastLocation();
                 positionChangedCallback.onPositionChanged(location);
             }
+
+            @Override
+            public void onLocationAvailability(LocationAvailability locationAvailability) {
+                if (!locationAvailability.isLocationAvailable()) {
+                    if (errorCallback != null) {
+                        errorCallback.onError(ErrorCodes.locationServicesDisabled);
+                    }
+                }
+            }
         };
     }
 
     @Override
-    public boolean isLocationServiceEnabled() {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-        if (locationManager == null) {
-            return false;
-        }
-
-        boolean gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        boolean network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-        return gps_enabled || network_enabled;
+    public void isLocationServiceEnabled(LocationServiceListener listener) {
+        LocationServices
+                .getSettingsClient(context)
+                .checkLocationSettings(
+                        new LocationSettingsRequest.Builder()
+                                .build()).addOnCompleteListener((response) -> {
+            if (response.isSuccessful()) {
+                LocationSettingsResponse lsr = response.getResult();
+                if (lsr != null) {
+                    LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
+                    listener.onLocationServiceResult(settingsStates.isGpsUsable() || settingsStates.isNetworkLocationUsable());
+                } else {
+                    listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+                }
+            }
+        });
     }
 
     @SuppressLint("MissingPermission")
@@ -123,11 +137,14 @@ class FusedLocationClient implements LocationClient {
         LocationSettingsRequest settingsRequest = buildLocationSettingsRequest(locationRequest);
 
         SettingsClient settingsClient = LocationServices.getSettingsClient(context);
-        settingsClient.checkLocationSettings(settingsRequest)
-                .addOnSuccessListener(locationSettingsResponse -> fusedLocationProviderClient.requestLocationUpdates(
+        settingsClient
+                .checkLocationSettings(settingsRequest)
+                .addOnSuccessListener(locationSettingsResponse -> {
+                    fusedLocationProviderClient.requestLocationUpdates(
                         locationRequest,
                         locationCallback,
-                        Looper.getMainLooper()))
+                        Looper.getMainLooper());
+                })
                 .addOnFailureListener(e -> {
                     if (e instanceof ResolvableApiException) {
                         // When we don't have an activity return an error code explaining the

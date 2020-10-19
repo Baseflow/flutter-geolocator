@@ -82,7 +82,8 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
                 activity,
                 locationOptions,
                 (Location location) -> events.success(LocationMapper.toHashMap(location)),
-                (ErrorCodes errorCodes) -> events.error(errorCodes.toString(), errorCodes.toDescription(), null));
+                (ErrorCodes errorCodes) -> events.error(errorCodes.toString(), errorCodes.toDescription(), null)
+        );
     }
 
     @Override

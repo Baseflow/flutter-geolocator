@@ -44,11 +44,16 @@ class LocationManagerClient implements LocationClient, LocationListener {
     }
 
     @Override
-    public boolean isLocationServiceEnabled() {
+    public void isLocationServiceEnabled(LocationServiceListener listener) {
         if (locationManager == null) {
-            return false;
+            listener.onLocationServiceResult(false);
+            return;
         }
 
+        listener.onLocationServiceResult(checkLocationServices());
+    }
+
+    private boolean checkLocationServices() {
         boolean gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
@@ -85,7 +90,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
             PositionChangedCallback positionChangedCallback,
             ErrorCallback errorCallback) {
 
-        if (!isLocationServiceEnabled()) {
+        if (!checkLocationServices()) {
             errorCallback.onError(ErrorCodes.locationServicesDisabled);
             return;
         }

@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.baseflow.geolocator.errors.ErrorCallback;
 
 interface LocationClient {
-    boolean isLocationServiceEnabled();
+    void isLocationServiceEnabled(LocationServiceListener listener);
 
     void getLastKnownPosition(
             PositionChangedCallback positionChangedCallback,

@@ -54,33 +54,9 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
         if (context == null) {
             listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
         }
-        boolean gps_enabled;
-        boolean network_enabled;
-        if (isGooglePlayServicesAvailable(context)) {
-            LocationServices
-                    .getSettingsClient(context)
-                    .checkLocationSettings(
-                            new LocationSettingsRequest.Builder()
-                                    .build()).addOnCompleteListener((response) -> {
-                if (response.isSuccessful()) {
-                    LocationSettingsResponse lsr = response.getResult();
-                    if (lsr != null) {
-                        LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
-                        listener.onLocationServiceResult(settingsStates.isGpsUsable() || settingsStates.isNetworkLocationUsable());
-                    } else {
-                        listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
-                    }
-                }
-            });
-        } else {
-            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            if (locationManager == null) {
-                listener.onLocationServiceResult(false);
-            }
-            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            listener.onLocationServiceResult(gps_enabled || network_enabled);
-        }
+
+        LocationClient locationClient = createLocationClient(context, false);
+        locationClient.isLocationServiceEnabled(listener);
     }
 
 
