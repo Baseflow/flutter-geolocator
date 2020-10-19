@@ -1,6 +1,8 @@
 ## 6.1.0
 
-* Wrapped all global functions to a static class, thus changing the way geolocator methods should be called. (see issue [#524] (https://github.com/Baseflow/flutter-geolocator/issues/524)).
+* Wrapped all global functions to a static class, thus changing the way geolocator methods should be called. (see issue [#524] (https://github.com/Baseflow/flutter-geolocator/issues/524));
+* Fix permission issue on Android where permisisons are reported "Denied forever" after selecting "One time" permission (see issue [#532](https://github.com/Baseflow/flutter-geolocator/issues/532));
+* Added more detailed documentation on the `LocationServiceDisableException` (see issue [#519](https://github.com/Baseflow/flutter-geolocator/issues/519)).
 
 ## 6.0.0+4
 
