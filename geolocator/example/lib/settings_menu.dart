@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'main.dart';
 
 /// Defines all possible menu options
@@ -39,10 +40,10 @@ class SettingsMenu extends StatelessWidget {
   void _handleMenuOption(BuildContext context, MenuOptions option) {
     switch (option) {
       case MenuOptions.appSettings:
-        openAppSettings();
+       Geolocator.openAppSettings();
         break;
       case MenuOptions.locationSettings:
-        openLocationSettings();
+       Geolocator.openLocationSettings();
         break;
     }
   }

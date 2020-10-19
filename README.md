@@ -45,11 +45,11 @@ The TL;DR version is:
 android.useAndroidX=true
 android.enableJetifier=true
 ```
-2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 28:
+2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 30:
 
 ```
 android {
-  compileSdkVersion 29
+  compileSdkVersion 30
 
   ...
 }
@@ -71,7 +71,7 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 ```
 
-> **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalant to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
+> **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in only being allowed to request a location with the `getLastKnownPosition` method. The accuracy can be very precise or could be the equivalent to a city block. If the phone already knows where he is this results in a quick response, but it could also take a long time (minutes) before you will get your first locations fix.
 
 
 </details>
@@ -88,7 +88,7 @@ On iOS you'll need to add the following entries to your Info.plist file (located
 <string>This app needs access to location when in the background.</string>
 ```
 
-If you would like to receive updates when your App is in the background, you'll also need to add the Background Modes capability to your XCode project (Project > Signing and Capabilties > "+ Capability" button) and select Location Updates. Be carefull with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
+If you would like to receive updates when your App is in the background, you'll also need to add the Background Modes capability to your XCode project (Project > Signing and Capabilities > "+ Capability" button) and select Location Updates. Be careful with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
 
 </details>
 
@@ -106,6 +106,8 @@ import 'package:geolocator/geolocator.dart';
 
 Position position = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 ```
+
+> **NOTE:** On Android, calling the `getCurrentPosition` method requires the `ACCESS_FINE_LOCATION` permission being set in the `android/app/src/main/AndroidManifest.xml` file.
 
 To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
 
@@ -170,7 +172,7 @@ always | Permission to access the device's location is allowed even when the App
 
 ### Settings
 
-In some cases it is necessary to ask the user and update their device settings. For example when the user initially permantly denied permissions to access the device's location or if the location services are not enabled (and, on Android, automatic resolution didn't work). In these cases you can use the `openAppSettings` or `openLocationSettings` methods to immidiately redirect the user to the device's settings page. 
+In some cases it is necessary to ask the user and update their device settings. For example when the user initially permanently denied permissions to access the device's location or if the location services are not enabled (and, on Android, automatic resolution didn't work). In these cases you can use the `openAppSettings` or `openLocationSettings` methods to immediately redirect the user to the device's settings page. 
 
 On Android the `openAppSettings` method will redirect the user to the App specific settings where the user can update necessary permissions. The `openLocationSettings` method will redirect the user to the location settings where the user can enable/ disable the location services.
 

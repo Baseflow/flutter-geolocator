@@ -36,14 +36,6 @@ public class PermissionUtils {
         return false;
     }
 
-    static void updatePermissionShouldShowStatus(final Activity activity, String permission) {
-        if (activity == null) {
-            return;
-        }
-
-        PermissionUtils.setRequestedPermission(activity, permission);
-    }
-
     static boolean isNeverAskAgainSelected(final Activity activity, final String name) {
         if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M ) {
             return false;
@@ -54,15 +46,17 @@ public class PermissionUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     static boolean neverAskAgainSelected(final Activity activity, final String permission) {
-        final boolean hasRequestedPermissionBefore = getRequestedPermissionBefore(activity, permission);
+        final boolean shouldShowRequestPermissionRationaleBefore = getRequestedPermissionBefore(activity, permission);
         final boolean shouldShowRequestPermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
-        return hasRequestedPermissionBefore && !shouldShowRequestPermissionRationale;
+        return shouldShowRequestPermissionRationaleBefore && !shouldShowRequestPermissionRationale;
     }
 
-    static void setRequestedPermission(final Context context, final String permission) {
-        SharedPreferences prefs = context.getSharedPreferences("GEOLOCATOR_PERMISSIONS_REQUESTED", Context.MODE_PRIVATE);
+    static void setRequestedPermission(final Activity activity, final String permission) {
+        final boolean shouldShowRequestPermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+
+        SharedPreferences prefs = activity.getSharedPreferences("GEOLOCATOR_PERMISSIONS_REQUESTED", Context.MODE_PRIVATE);
         prefs.edit()
-                .putBoolean(permission, true)
+                .putBoolean(permission, shouldShowRequestPermissionRationale)
                 .apply();
     }
 

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:mockito/mockito.dart';
+import 'package:geolocator/geolocator.dart' as geolocator;
+import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 Position get mockPosition => Position(
@@ -23,59 +24,69 @@ void main() {
     });
 
     test('checkPermission', () async {
-      final permission = await Geolocator.checkPermission();
+      //ignore: deprecated_member_use_from_same_package
+      final permission = await geolocator.checkPermission();
 
-      expect(permission, LocationPermission.whileInUse);
+      expect(permission, geolocator.LocationPermission.whileInUse);
     });
 
     test('requestPermission', () async {
-      final permission = await Geolocator.requestPermission();
+      //ignore: deprecated_member_use_from_same_package
+      final permission = await geolocator.requestPermission();
 
-      expect(permission, LocationPermission.whileInUse);
+      expect(permission, geolocator.LocationPermission.whileInUse);
     });
 
     test('isLocationServiceEnabled', () async {
       final isLocationServiceEnabled =
-          await Geolocator.isLocationServiceEnabled();
+      //ignore: deprecated_member_use_from_same_package
+          await geolocator.isLocationServiceEnabled();
 
       expect(isLocationServiceEnabled, true);
     });
 
     test('getLastKnownPosition', () async {
-      final position = await Geolocator.getLastKnownPosition();
+      //ignore: deprecated_member_use_from_same_package
+      final position = await geolocator.getLastKnownPosition();
 
       expect(position, mockPosition);
     });
 
     test('getCurrentPosition', () async {
-      final position = await Geolocator.getCurrentPosition();
+      //ignore: deprecated_member_use_from_same_package
+      final position = await geolocator.getCurrentPosition();
 
       expect(position, mockPosition);
     });
 
     test('getPositionStream', () async {
-      final position = await Geolocator.getPositionStream();
+      //ignore: deprecated_member_use_from_same_package
+      final position = await geolocator.getPositionStream();
 
       expect(position, emitsInOrder([emits(mockPosition), emitsDone]));
     });
 
     test('openAppSettings', () async {
-      final hasOpened = await Geolocator.openAppSettings();
+      //ignore: deprecated_member_use_from_same_package
+      final hasOpened = await geolocator.openAppSettings();
       expect(hasOpened, true);
     });
 
     test('openLocationSettings', () async {
-      final hasOpened = await Geolocator.openLocationSettings();
+      //ignore: deprecated_member_use_from_same_package
+      final hasOpened = await geolocator.openLocationSettings();
       expect(hasOpened, true);
     });
 
     test('distanceBetween', () async {
-      final distance = await Geolocator.distanceBetween(0, 0, 0, 0);
+      //ignore: deprecated_member_use_from_same_package
+      final distance = await geolocator.distanceBetween(0, 0, 0, 0);
       expect(distance, 42);
     });
 
     test('bearingBetween', () async {
-      final bearing = await Geolocator.bearingBetween(0, 0, 0, 0);
+      //ignore: deprecated_member_use_from_same_package
+      final bearing = await geolocator.bearingBetween(0, 0, 0, 0);
       expect(bearing, 42);
     });
   });
@@ -88,33 +99,33 @@ class MockGeolocatorPlatform extends Mock
     implements
         GeolocatorPlatform {
   @override
-  Future<LocationPermission> checkPermission() =>
-      Future.value(LocationPermission.whileInUse);
+  Future<geolocator.LocationPermission> checkPermission() =>
+      Future.value(geolocator.LocationPermission.whileInUse);
 
   @override
-  Future<LocationPermission> requestPermission() =>
-      Future.value(LocationPermission.whileInUse);
+  Future<geolocator.LocationPermission> requestPermission() =>
+      Future.value(geolocator.LocationPermission.whileInUse);
 
   @override
   Future<bool> isLocationServiceEnabled() => Future.value(true);
 
   @override
-  Future<Position> getLastKnownPosition({
+  Future<geolocator.Position> getLastKnownPosition({
     bool forceAndroidLocationManager = false,
   }) =>
       Future.value(mockPosition);
 
   @override
-  Future<Position> getCurrentPosition({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+  Future<geolocator.Position> getCurrentPosition({
+    geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
     Duration timeLimit,
   }) =>
       Future.value(mockPosition);
 
   @override
-  Stream<Position> getPositionStream({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+  Stream<geolocator.Position> getPositionStream({
+    geolocator.LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
     int timeInterval = 0,

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:geolocator_platform_interface/src/implementations/method_channel_geolocator.dart';
 

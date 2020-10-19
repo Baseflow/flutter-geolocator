@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'widgets/info_widget.dart';
 
 /// A widget that will request and display the last known
@@ -8,7 +9,7 @@ class LastKnownLocationExampleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getLastKnownPosition(),
+      future: Geolocator.getLastKnownPosition(),
       builder: (context, snapshot) {
         List<Widget> children;
 

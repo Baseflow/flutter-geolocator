@@ -23,7 +23,7 @@ Setting up your development environment
 Running the example project
 ---------------------------
 
- * Change into the example directory: `cd example`
+ * Change into the example directory: `cd geolocator/example`
  * Run the App: `flutter run`
 
 Contribute
