@@ -3,7 +3,6 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,10 +14,6 @@ import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStates;
 
 import io.flutter.plugin.common.PluginRegistry;
 

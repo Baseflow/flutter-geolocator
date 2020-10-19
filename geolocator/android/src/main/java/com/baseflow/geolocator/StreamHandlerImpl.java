@@ -4,17 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.location.GeolocationManager;
-import com.baseflow.geolocator.location.LocationAccuracy;
 import com.baseflow.geolocator.location.LocationMapper;
 import com.baseflow.geolocator.location.LocationOptions;
-import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
-import io.flutter.plugin.common.MethodChannel;
 
 import java.util.Map;
 

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;

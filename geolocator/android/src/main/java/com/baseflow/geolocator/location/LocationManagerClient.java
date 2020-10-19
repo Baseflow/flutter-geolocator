@@ -20,8 +20,6 @@ import com.google.android.gms.common.util.Strings;
 
 import java.util.List;
 
-import static com.baseflow.geolocator.location.LocationAccuracy.*;
-
 class LocationManagerClient implements LocationClient, LocationListener {
     private static final long TWO_MINUTES = 120000;
 

@@ -23,7 +23,7 @@ import io.flutter.plugin.common.MethodChannel;
 
 /**
  * Translates incoming Geolocator MethodCalls into well formed Java function calls for {@link
- * Geolocator}.
+ * GeolocationManager}.
  */
 class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     private static final String TAG = "MethodCallHandlerImpl";

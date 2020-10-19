@@ -1,7 +1,6 @@
 package com.baseflow.geolocator.location;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import com.baseflow.geolocator.errors.ErrorCallback;
 
