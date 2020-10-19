@@ -1,3 +1,7 @@
+## 6.1.1
+
+* Android: throw `LocationServiceDisabledException` when location services are disabled while listening to the position update stream (see issue [#548](https://github.com/Baseflow/flutter-geolocator/issues/548)).
+
 ## 6.1.0
 
 * Wrapped all global functions to a static class, thus changing the way geolocator methods should be called. (see issue [#524] (https://github.com/Baseflow/flutter-geolocator/issues/524));
