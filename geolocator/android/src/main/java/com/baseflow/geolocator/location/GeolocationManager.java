@@ -3,7 +3,6 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,10 +14,6 @@ import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStates;
 
 import io.flutter.plugin.common.PluginRegistry;
 
@@ -54,33 +49,9 @@ public class GeolocationManager implements PluginRegistry.ActivityResultListener
         if (context == null) {
             listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
         }
-        boolean gps_enabled;
-        boolean network_enabled;
-        if (isGooglePlayServicesAvailable(context)) {
-            LocationServices
-                    .getSettingsClient(context)
-                    .checkLocationSettings(
-                            new LocationSettingsRequest.Builder()
-                                    .build()).addOnCompleteListener((response) -> {
-                if (response.isSuccessful()) {
-                    LocationSettingsResponse lsr = response.getResult();
-                    if (lsr != null) {
-                        LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
-                        listener.onLocationServiceResult(settingsStates.isGpsUsable() || settingsStates.isNetworkLocationUsable());
-                    } else {
-                        listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
-                    }
-                }
-            });
-        } else {
-            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            if (locationManager == null) {
-                listener.onLocationServiceResult(false);
-            }
-            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            listener.onLocationServiceResult(gps_enabled || network_enabled);
-        }
+
+        LocationClient locationClient = createLocationClient(context, false);
+        locationClient.isLocationServiceEnabled(listener);
     }
 
 
