@@ -19,164 +19,172 @@ import java.util.*;
 
 import io.flutter.plugin.common.PluginRegistry;
 
-public class PermissionManager
-        implements PluginRegistry.RequestPermissionsResultListener {
+public class PermissionManager implements PluginRegistry.RequestPermissionsResultListener {
 
-    private static final int PERMISSION_REQUEST_CODE = 109;
+  private static final int PERMISSION_REQUEST_CODE = 109;
 
-    @Nullable
-    private Activity activity;
-    @Nullable
-    private ErrorCallback errorCallback;
-    @Nullable
-    private PermissionResultCallback resultCallback;
+  @Nullable private Activity activity;
+  @Nullable private ErrorCallback errorCallback;
+  @Nullable private PermissionResultCallback resultCallback;
 
-    public LocationPermission checkPermissionStatus(
-            Context context,
-            Activity activity) throws PermissionUndefinedException {
-        String permission = determineFineOrCoarse(context);
+  public LocationPermission checkPermissionStatus(Context context, Activity activity)
+      throws PermissionUndefinedException {
+    String permission = determineFineOrCoarse(context);
 
-        // If target is before Android M, permission is always granted
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return LocationPermission.always;
-        }
-
-        final int permissionStatus = ContextCompat.checkSelfPermission(context, permission);
-        if (permissionStatus == PackageManager.PERMISSION_DENIED) {
-            if (PermissionUtils.isNeverAskAgainSelected(activity, permission)) {
-                return LocationPermission.deniedForever;
-            } else {
-                return LocationPermission.denied;
-            }
-        }
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            return LocationPermission.always;
-        }
-
-        boolean wantsBackgroundLocation = PermissionUtils.hasPermissionInManifest(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-        if (!wantsBackgroundLocation) {
-            return LocationPermission.whileInUse;
-        }
-
-        final int permissionStatusBackground = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-        if (permissionStatusBackground == PackageManager.PERMISSION_GRANTED) {
-            return LocationPermission.always;
-        }
-
-        return LocationPermission.whileInUse;
+    // If target is before Android M, permission is always granted
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+      return LocationPermission.always;
     }
 
-    public void requestPermission(
-            Activity activity,
-            PermissionResultCallback resultCallback,
-            ErrorCallback errorCallback)
-            throws PermissionUndefinedException {
-        final ArrayList<String> permissionsToRequest = new ArrayList<>();
-
-        // Before Android M, requesting permissions was not needed.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return;
-        }
-
-        String permission = determineFineOrCoarse(activity);
-        permissionsToRequest.add(permission);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && PermissionUtils.hasPermissionInManifest(activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-            permissionsToRequest.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-        }
-
-        this.errorCallback = errorCallback;
-        this.resultCallback = resultCallback;
-        this.activity = activity;
-
-        ActivityCompat.requestPermissions(
-                activity,
-                permissionsToRequest.toArray(new String[0]),
-                PERMISSION_REQUEST_CODE);
+    final int permissionStatus = ContextCompat.checkSelfPermission(context, permission);
+    if (permissionStatus == PackageManager.PERMISSION_DENIED) {
+      if (PermissionUtils.isNeverAskAgainSelected(activity, permission)) {
+        return LocationPermission.deniedForever;
+      } else {
+        return LocationPermission.denied;
+      }
     }
 
-    @Override
-    public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode != PERMISSION_REQUEST_CODE) {
-            return false;
-        }
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+      return LocationPermission.always;
+    }
 
-        if (this.activity == null) {
-            Log.e("Geolocator", "Trying to process permission result without an valid Activity instance");
-            if (this.errorCallback != null) {
-                this.errorCallback.onError(ErrorCodes.activityNotSupplied);
-            }
-            return false;
-        }
+    boolean wantsBackgroundLocation =
+        PermissionUtils.hasPermissionInManifest(
+            context, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+    if (!wantsBackgroundLocation) {
+      return LocationPermission.whileInUse;
+    }
 
-        String requestedPermission;
+    final int permissionStatusBackground =
+        ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+    if (permissionStatusBackground == PackageManager.PERMISSION_GRANTED) {
+      return LocationPermission.always;
+    }
 
-        try {
-            requestedPermission = determineFineOrCoarse(this.activity);
-        } catch (PermissionUndefinedException ex) {
-            if (this.errorCallback != null) {
-                this.errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
-            }
+    return LocationPermission.whileInUse;
+  }
 
-            return false;
-        }
+  public void requestPermission(
+      Activity activity, PermissionResultCallback resultCallback, ErrorCallback errorCallback)
+      throws PermissionUndefinedException {
+    final ArrayList<String> permissionsToRequest = new ArrayList<>();
 
-        LocationPermission permission = LocationPermission.denied;
+    // Before Android M, requesting permissions was not needed.
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+      return;
+    }
 
-        int requestedPermissionIndex = indexOf(permissions, requestedPermission);
+    String permission = determineFineOrCoarse(activity);
+    permissionsToRequest.add(permission);
 
-        if (requestedPermissionIndex < 0) {
-            Log.w("Geolocator", "Location permissions not part of permissions send to onRequestPermissionsResult method.");
-            return false;
-        }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+        && PermissionUtils.hasPermissionInManifest(
+            activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+      permissionsToRequest.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+    }
 
-        if (grantResults.length == 0) {
-            Log.i("Geolocator", "The grantResults array is empty. This can happen when the user cancels the permission request");
-            return false;
-        }
+    this.errorCallback = errorCallback;
+    this.resultCallback = resultCallback;
+    this.activity = activity;
 
-        if (grantResults[requestedPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-                int backgroundPermissionIndex = indexOf(permissions, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-                if (backgroundPermissionIndex >= 0 && grantResults[backgroundPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
-                    permission = LocationPermission.always;
-                } else {
-                    permission = LocationPermission.whileInUse;
-                }
-            } else {
-                permission = LocationPermission.always;
-            }
+    ActivityCompat.requestPermissions(
+        activity, permissionsToRequest.toArray(new String[0]), PERMISSION_REQUEST_CODE);
+  }
+
+  @Override
+  public boolean onRequestPermissionsResult(
+      int requestCode, String[] permissions, int[] grantResults) {
+    if (requestCode != PERMISSION_REQUEST_CODE) {
+      return false;
+    }
+
+    if (this.activity == null) {
+      Log.e("Geolocator", "Trying to process permission result without an valid Activity instance");
+      if (this.errorCallback != null) {
+        this.errorCallback.onError(ErrorCodes.activityNotSupplied);
+      }
+      return false;
+    }
+
+    String requestedPermission;
+
+    try {
+      requestedPermission = determineFineOrCoarse(this.activity);
+    } catch (PermissionUndefinedException ex) {
+      if (this.errorCallback != null) {
+        this.errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
+      }
+
+      return false;
+    }
+
+    LocationPermission permission = LocationPermission.denied;
+
+    int requestedPermissionIndex = indexOf(permissions, requestedPermission);
+
+    if (requestedPermissionIndex < 0) {
+      Log.w(
+          "Geolocator",
+          "Location permissions not part of permissions send to onRequestPermissionsResult method.");
+      return false;
+    }
+
+    if (grantResults.length == 0) {
+      Log.i(
+          "Geolocator",
+          "The grantResults array is empty. This can happen when the user cancels the permission request");
+      return false;
+    }
+
+    if (grantResults[requestedPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
+      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+        int backgroundPermissionIndex =
+            indexOf(permissions, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        if (backgroundPermissionIndex >= 0
+            && grantResults[backgroundPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
+          permission = LocationPermission.always;
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !activity.shouldShowRequestPermissionRationale(requestedPermission)) {
-                permission = LocationPermission.deniedForever;
-            }
+          permission = LocationPermission.whileInUse;
         }
-
-        for (String perm : permissions) {
-            PermissionUtils.setRequestedPermission(activity, perm);
-        }
-
-        if (this.resultCallback != null) {
-            this.resultCallback.onResult(permission);
-        }
-
-        return true;
+      } else {
+        permission = LocationPermission.always;
+      }
+    } else {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+          && !activity.shouldShowRequestPermissionRationale(requestedPermission)) {
+        permission = LocationPermission.deniedForever;
+      }
     }
 
-    private static <T> int indexOf(T[] arr, T val) {
-        return Arrays.asList(arr).indexOf(val);
+    for (String perm : permissions) {
+      PermissionUtils.setRequestedPermission(activity, perm);
     }
 
-    private static String determineFineOrCoarse(Context context) throws PermissionUndefinedException {
-        boolean wantsFineLocation = PermissionUtils.hasPermissionInManifest(context, Manifest.permission.ACCESS_FINE_LOCATION);
-        boolean wantsCoarseLocation = PermissionUtils.hasPermissionInManifest(context, Manifest.permission.ACCESS_COARSE_LOCATION);
-
-        if (!wantsCoarseLocation && !wantsFineLocation) {
-            throw new PermissionUndefinedException();
-        }
-
-        return wantsFineLocation ? Manifest.permission.ACCESS_FINE_LOCATION : Manifest.permission.ACCESS_COARSE_LOCATION;
+    if (this.resultCallback != null) {
+      this.resultCallback.onResult(permission);
     }
 
+    return true;
+  }
+
+  private static <T> int indexOf(T[] arr, T val) {
+    return Arrays.asList(arr).indexOf(val);
+  }
+
+  private static String determineFineOrCoarse(Context context) throws PermissionUndefinedException {
+    boolean wantsFineLocation =
+        PermissionUtils.hasPermissionInManifest(context, Manifest.permission.ACCESS_FINE_LOCATION);
+    boolean wantsCoarseLocation =
+        PermissionUtils.hasPermissionInManifest(
+            context, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+    if (!wantsCoarseLocation && !wantsFineLocation) {
+      throw new PermissionUndefinedException();
+    }
+
+    return wantsFineLocation
+        ? Manifest.permission.ACCESS_FINE_LOCATION
+        : Manifest.permission.ACCESS_COARSE_LOCATION;
+  }
 }

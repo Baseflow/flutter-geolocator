@@ -39,7 +39,7 @@ void main() {
 
     test('isLocationServiceEnabled', () async {
       final isLocationServiceEnabled =
-      //ignore: deprecated_member_use_from_same_package
+          //ignore: deprecated_member_use_from_same_package
           await geolocator.isLocationServiceEnabled();
 
       expect(isLocationServiceEnabled, true);
