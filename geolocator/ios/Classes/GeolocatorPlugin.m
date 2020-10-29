@@ -41,6 +41,9 @@
         result([NSNumber numberWithBool:isEnabled]);
     } else if ([@"getLastKnownPosition" isEqualToString:call.method]) {
         [self onGetLastKnownPosition:result];
+    } else if ([@"getCurrentPosition" isEqualToString:call.method]) {
+        [self onGetCurrentPositionWithArguments:call.arguments
+                                         result:result];
     } else if ([@"openAppSettings" isEqualToString:call.method]) {
         [self openSettings:result];
     } else if ([@"openLocationSettings" isEqualToString:call.method]) {
@@ -133,6 +136,7 @@
             result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
                                        message: @"User denied permissions to access the device's location."
                                        details:nil]);
+            return;
         }
         
         CLLocation *location = [weakSelf.geolocationHandler getLastKnownPosition];
@@ -145,7 +149,44 @@
     }];
 }
 
-- (void) openSettings:(FlutterResult)result {
+- (void)onGetCurrentPositionWithArguments:(id _Nullable)arguments
+                                   result:(FlutterResult)result {
+    [self.permissionHandler
+     requestPermission:^(CLAuthorizationStatus status) {
+        if (status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusAuthorizedAlways) {
+            result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
+                                       message: @"User denied permissions to access the device's location."
+                                       details:nil]);
+            return;
+        }
+        
+        CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
+        CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
+        GeolocationHandler *geolocationHandler = [[GeolocationHandler alloc] init];
+        
+        [geolocationHandler startListeningWithDesiredAccuracy:accuracy
+                                               distanceFilter:distanceFilter
+                                                resultHandler:^(CLLocation *location) {
+            [geolocationHandler stopListening];
+            
+            result([LocationMapper toDictionary:location]);
+        }
+                                                 errorHandler:^(NSString *errorCode, NSString *errorDescription){
+            [geolocationHandler stopListening];
+            
+            result([FlutterError errorWithCode: errorCode
+                                       message: errorDescription
+                                       details: nil]);
+        }];
+    }
+     errorHandler:^(NSString *errorCode, NSString *errorDescription) {
+        result([FlutterError errorWithCode: errorCode
+                                   message: errorDescription
+                                   details: nil]);
+    }];
+}
+
+- (void)openSettings:(FlutterResult)result {
     if (@available(iOS 10, *)) {
       [[UIApplication sharedApplication]
                     openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]

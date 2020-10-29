@@ -4,5 +4,5 @@ import android.location.Location;
 
 @FunctionalInterface
 public interface PositionChangedCallback {
-    public void onPositionChanged(Location location);
+  void onPositionChanged(Location location);
 }
