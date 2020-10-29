@@ -3,7 +3,6 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -14,129 +13,135 @@ import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+;
+import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
+import java.util.ArrayList;
+import java.util.List;
 
-import io.flutter.plugin.common.PluginRegistry;
+public class GeolocationManager implements ActivityResultListener {
+  @NonNull private final PermissionManager permissionManager;
+  private final List<LocationClient> locationClients;
 
-public class GeolocationManager implements PluginRegistry.ActivityResultListener {
-    @NonNull
-    private final PermissionManager permissionManager;
-    @Nullable
-    private LocationClient locationClient;
+  public GeolocationManager(@NonNull PermissionManager permissionManager) {
+    this.permissionManager = permissionManager;
+    this.locationClients = new ArrayList<>();
+  }
 
-    public GeolocationManager(@NonNull PermissionManager permissionManager) {
-        this.permissionManager = permissionManager;
+  public void getLastKnownPosition(
+      Context context,
+      Activity activity,
+      boolean forceLocationManager,
+      PositionChangedCallback positionChangedCallback,
+      ErrorCallback errorCallback) {
+
+    handlePermissions(
+        context,
+        activity,
+        () -> {
+          LocationClient locationClient = createLocationClient(context, forceLocationManager, null);
+          locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
+        },
+        errorCallback);
+  }
+
+  public void isLocationServiceEnabled(
+      @Nullable Context context, LocationServiceListener listener) {
+    if (context == null) {
+      listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
     }
 
-    public void getLastKnownPosition(
-            Context context,
-            Activity activity,
-            boolean forceLocationManager,
-            PositionChangedCallback positionChangedCallback,
-            ErrorCallback errorCallback) {
+    LocationClient locationClient = createLocationClient(context, false, null);
+    locationClient.isLocationServiceEnabled(listener);
+  }
 
-        handlePermissions(
-                context,
-                activity,
-                () -> {
-                    LocationClient locationClient = createLocationClient(context, forceLocationManager);
-                    locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
-                },
-                errorCallback);
+  public void startPositionUpdates(
+      Context context,
+      Activity activity,
+      LocationClient locationClient,
+      PositionChangedCallback positionChangedCallback,
+      ErrorCallback errorCallback) {
+
+    this.locationClients.add(locationClient);
+
+    handlePermissions(
+        context,
+        activity,
+        () -> locationClient.startPositionUpdates(activity, positionChangedCallback, errorCallback),
+        errorCallback);
+  }
+
+  public void stopPositionUpdates(@NonNull LocationClient locationClient) {
+    locationClients.remove(locationClient);
+    locationClient.stopPositionUpdates();
+  }
+
+  public LocationClient createLocationClient(
+      Context context,
+      boolean forceAndroidLocationManager,
+      @Nullable LocationOptions locationOptions) {
+    if (forceAndroidLocationManager) {
+      return new LocationManagerClient(context, locationOptions);
     }
 
+    return isGooglePlayServicesAvailable(context)
+        ? new FusedLocationClient(context, locationOptions)
+        : new LocationManagerClient(context, locationOptions);
+  }
 
-    public void isLocationServiceEnabled(@Nullable Context context, LocationServiceListener listener) {
-        if (context == null) {
-            listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
-        }
+  private boolean isGooglePlayServicesAvailable(Context context) {
+    GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+    int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
+    return resultCode == ConnectionResult.SUCCESS;
+  }
 
-        LocationClient locationClient = createLocationClient(context, false);
-        locationClient.isLocationServiceEnabled(listener);
-    }
+  private void handlePermissions(
+      Context context,
+      @Nullable Activity activity,
+      Runnable hasPermissionCallback,
+      ErrorCallback errorCallback) {
+    try {
+      LocationPermission permissionStatus =
+          permissionManager.checkPermissionStatus(context, activity);
 
+      if (permissionStatus == LocationPermission.deniedForever) {
+        errorCallback.onError(ErrorCodes.permissionDenied);
+        return;
+      }
 
+      if (permissionStatus == LocationPermission.whileInUse
+          || permissionStatus == LocationPermission.always) {
+        hasPermissionCallback.run();
+        return;
+      }
 
-    public void startPositionUpdates(
-            Context context,
-            Activity activity,
-            LocationOptions options,
-            PositionChangedCallback positionChangedCallback,
-            ErrorCallback errorCallback) {
-
-        handlePermissions(
-                context,
-                activity,
-                () -> {
-                    LocationClient locationClient = createLocationClient(context, options.isForceAndroidLocationManager());
-                    locationClient.startPositionUpdates(activity, options, positionChangedCallback, errorCallback);
-                },
-                errorCallback);
-    }
-
-    public void stopPositionUpdates() {
-        if (this.locationClient != null) {
-            this.locationClient.stopPositionUpdates();
-        }
-    }
-
-    private LocationClient createLocationClient(Context context, boolean forceLocationManagerClient) {
-        if (forceLocationManagerClient) {
-            this.locationClient = new LocationManagerClient(context);
-            return this.locationClient;
-        }
-
-        this.locationClient = isGooglePlayServicesAvailable(context)
-                ? new FusedLocationClient(context)
-                : new LocationManagerClient(context);
-
-        return this.locationClient;
-    }
-
-    private boolean isGooglePlayServicesAvailable(Context context) {
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
-        return resultCode == ConnectionResult.SUCCESS;
-    }
-
-    private void handlePermissions(Context context, @Nullable Activity activity, Runnable hasPermissionCallback, ErrorCallback errorCallback) {
-        try {
-            LocationPermission permissionStatus = permissionManager.checkPermissionStatus(context, activity);
-
-            if (permissionStatus == LocationPermission.deniedForever) {
-                errorCallback.onError(ErrorCodes.permissionDenied);
-                return;
-            }
-
-            if (permissionStatus == LocationPermission.whileInUse || permissionStatus == LocationPermission.always) {
+      if (permissionStatus == LocationPermission.denied && activity != null) {
+        permissionManager.requestPermission(
+            activity,
+            (permission) -> {
+              if (permission == LocationPermission.whileInUse
+                  || permission == LocationPermission.always) {
                 hasPermissionCallback.run();
-                return;
-            }
-
-            if (permissionStatus == LocationPermission.denied && activity != null) {
-                permissionManager.requestPermission(
-                        activity,
-                        (permission) -> {
-                            if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
-                                hasPermissionCallback.run();
-                            } else {
-                                errorCallback.onError(ErrorCodes.permissionDenied);
-                            }
-                        },
-                        errorCallback);
-            } else {
+              } else {
                 errorCallback.onError(ErrorCodes.permissionDenied);
-            }
-        } catch (PermissionUndefinedException ex) {
-            errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
-        }
+              }
+            },
+            errorCallback);
+      } else {
+        errorCallback.onError(ErrorCodes.permissionDenied);
+      }
+    } catch (PermissionUndefinedException ex) {
+      errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
+    }
+  }
+
+  @Override
+  public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+    for (LocationClient client : this.locationClients) {
+      if (client.onActivityResult(requestCode, resultCode)) {
+        return true;
+      }
     }
 
-    @Override
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (locationClient == null) {
-            return false;
-        }
-
-        return locationClient.onActivityResult(requestCode, resultCode);
-    }
+    return false;
+  }
 }

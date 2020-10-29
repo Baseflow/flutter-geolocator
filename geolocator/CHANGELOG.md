@@ -1,10 +1,16 @@
+## 6.1.2
+
+* Allow developers to call the `getCurrentPosition` method while already listening to a position stream (see issue [#546](https://github.com/Baseflow/flutter-geolocator/issues/546));
+* Make sure the position stream is stopped correctly (see issues [#485](https://github.com/Baseflow/flutter-geolocator/issues/485) and [#541](https://github.com/Baseflow/flutter-geolocator/issues/541));
+* Android: fix deprecation warning (see issue [#556](https://github.com/Baseflow/flutter-geolocator/issues/556)).
+
 ## 6.1.1
 
 * Android: throw `LocationServiceDisabledException` when location services are disabled while listening to the position update stream (see issue [#548](https://github.com/Baseflow/flutter-geolocator/issues/548)).
 
 ## 6.1.0
 
-* Wrapped all global functions to a static class, thus changing the way geolocator methods should be called. (see issue [#524] (https://github.com/Baseflow/flutter-geolocator/issues/524));
+* Wrapped all global functions to a static class, thus changing the way geolocator methods should be called. (see issue [#524](https://github.com/Baseflow/flutter-geolocator/issues/524));
 * Fix permission issue on Android where permisisons are reported "Denied forever" after selecting "One time" permission (see issue [#532](https://github.com/Baseflow/flutter-geolocator/issues/532));
 * Added more detailed documentation on the `LocationServiceDisableException` (see issue [#519](https://github.com/Baseflow/flutter-geolocator/issues/519)).
 

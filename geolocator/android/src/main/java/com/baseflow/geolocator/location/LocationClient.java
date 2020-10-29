@@ -4,20 +4,18 @@ import android.app.Activity;
 
 import com.baseflow.geolocator.errors.ErrorCallback;
 
-interface LocationClient {
-    void isLocationServiceEnabled(LocationServiceListener listener);
+public interface LocationClient {
+  void isLocationServiceEnabled(LocationServiceListener listener);
 
-    void getLastKnownPosition(
-            PositionChangedCallback positionChangedCallback,
-            ErrorCallback errorCallback);
+  void getLastKnownPosition(
+      PositionChangedCallback positionChangedCallback, ErrorCallback errorCallback);
 
-    boolean onActivityResult(int requestCode, int resultCode);
+  boolean onActivityResult(int requestCode, int resultCode);
 
-    void startPositionUpdates(
-            Activity activity,
-            LocationOptions options,
-            PositionChangedCallback positionChangedCallback,
-            ErrorCallback errorCallback);
+  void startPositionUpdates(
+      Activity activity,
+      PositionChangedCallback positionChangedCallback,
+      ErrorCallback errorCallback);
 
-    void stopPositionUpdates();
+  void stopPositionUpdates();
 }

@@ -92,17 +92,27 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
     Duration timeLimit,
-  }) {
-    final position = getPositionStream(
-      desiredAccuracy: desiredAccuracy,
+  }) async {
+    final locationOptions = LocationOptions(
+      accuracy: desiredAccuracy,
       forceAndroidLocationManager: forceAndroidLocationManager,
-      timeLimit: timeLimit,
-    ).first;
+    );
 
-    // Make sure we remove the reference to the closed position stream
-    _positionStream = null;
+    try {
+      final positionFuture = methodChannel
+          .invokeMethod(
+            'getCurrentPosition',
+            locationOptions.toJson(),
+          )
+          .timeout(timeLimit ?? Duration.zero);
 
-    return position;
+      final positionMap = await positionFuture;
+      return Position.fromMap(positionMap);
+    } on PlatformException catch (e) {
+      _handlePlatformException(e);
+
+      rethrow;
+    }
   }
 
   @override

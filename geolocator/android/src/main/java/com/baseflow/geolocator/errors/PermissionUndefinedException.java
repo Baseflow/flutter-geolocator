@@ -1,4 +1,3 @@
 package com.baseflow.geolocator.errors;
 
-public class PermissionUndefinedException extends Exception {
-}
+public class PermissionUndefinedException extends Exception {}
