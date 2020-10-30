@@ -99,12 +99,21 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     );
 
     try {
-      final positionFuture = methodChannel
-          .invokeMethod(
-            'getCurrentPosition',
-            locationOptions.toJson(),
-          )
-          .timeout(timeLimit ?? Duration.zero);
+      Future<dynamic> positionFuture;
+
+      if (timeLimit != null) {
+        positionFuture = methodChannel
+            .invokeMethod(
+              'getCurrentPosition',
+              locationOptions.toJson(),
+            )
+            .timeout(timeLimit);
+      } else {
+        positionFuture = methodChannel.invokeMethod(
+          'getCurrentPosition',
+          locationOptions.toJson(),
+        );
+      }
 
       final positionMap = await positionFuture;
       return Position.fromMap(positionMap);
