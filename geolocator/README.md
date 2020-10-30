@@ -23,7 +23,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: ^6.1.0
+  geolocator: ^6.1.2
 ```
 
 <details>
@@ -197,7 +197,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double Geolocator.distanceInMeters = distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double distanceInMeters = Geolocator.distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 If you want to calculate the bearing between two geocoordinates you can use the `bearingBetween` method. The `bearingBetween` method also takes four parameters:
