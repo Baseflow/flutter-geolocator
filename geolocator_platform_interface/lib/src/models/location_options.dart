@@ -1,5 +1,4 @@
 import '../enums/enums.dart';
-import '../extensions/extensions.dart';
 
 /// Represents different options to configure the quality and frequency
 /// of location updates.
@@ -49,7 +48,7 @@ class LocationOptions {
 
   /// Serializes the [LocationOptions] to a map message.
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'accuracy': accuracy.toShortString(),
+        'accuracy': accuracy.index,
         'distanceFilter': distanceFilter,
         'forceAndroidLocationManager': forceAndroidLocationManager,
         'timeInterval': timeInterval

@@ -1,3 +1,7 @@
+## 6.1.3
+
+- Solves a bug causing less accurate location fixes (see [#531]((https://github.com/Baseflow/flutter-geolocator/issues/531))).
+
 ## 6.1.2
 
 * Allow developers to call the `getCurrentPosition` method while already listening to a position stream (see issue [#546](https://github.com/Baseflow/flutter-geolocator/issues/546));
