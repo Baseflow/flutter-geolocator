@@ -23,7 +23,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: ^6.1.0
+  geolocator: ^6.1.2
 ```
 
 <details>
@@ -71,7 +71,7 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 ```
 
-> **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in only being allowed to request a location with the `getLastKnownPosition` method. The accuracy can be very precise or could be the equivalent to a city block. If the phone already knows where he is this results in a quick response, but it could also take a long time (minutes) before you will get your first locations fix.
+> **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalent to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
 
 
 </details>
@@ -104,17 +104,15 @@ To query the current location of the device simply make a call to the `getCurren
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 ```
-
-> **NOTE:** On Android, calling the `getCurrentPosition` method requires the `ACCESS_FINE_LOCATION` permission being set in the `android/app/src/main/AndroidManifest.xml` file.
 
 To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await getLastKnownPosition();
+Position position = await Geolocator.getLastKnownPosition();
 ```
 
 To listen for location changes you can call the `getPositionStream` to receive stream you can listen to and receive position updates. You can finetune the results by specifying the following parameters:
@@ -127,7 +125,7 @@ To listen for location changes you can call the `getPositionStream` to receive s
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-StreamSubscription<Position> positionStream = getPositionStream(locationOptions).listen(
+StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationOptions).listen(
     (Position position) {
         print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
     });
@@ -138,7 +136,7 @@ To check if location services are enabled you can call the `isLocationServiceEna
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-bool isLocationServiceEnabled  = await isLocationServiceEnabled();
+bool isLocationServiceEnabled  = await Geolocator.isLocationServiceEnabled();
 ```
 
 ### Permissions
@@ -150,7 +148,7 @@ If you want to check if the user already granted permissions to acquire the devi
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-LocationPermission permission = await checkPermission();
+LocationPermission permission = await Geolocator.checkPermission();
 ```
 
 If you want to request permission to access the device's location you can call the `requestPermission` method:
@@ -158,7 +156,7 @@ If you want to request permission to access the device's location you can call t
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-LocationPermission permission = await requestPermission();
+LocationPermission permission = await Geolocator.requestPermission();
 ```
 
 Possible results from the `checkPermission` and `requestPermission` methods are:
@@ -181,8 +179,8 @@ On iOS we are not allowed to open specific setting pages so both methods will re
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-await openAppSettings();
-await openLocationSettings();
+await Geolocator.openAppSettings();
+await Geolocator.openLocationSettings();
 ```
 
 ### Utility methods
@@ -199,7 +197,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double distanceInMeters = distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double distanceInMeters = Geolocator.distanceBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 If you want to calculate the bearing between two geocoordinates you can use the `bearingBetween` method. The `bearingBetween` method also takes four parameters:
@@ -214,7 +212,7 @@ endLongitude | double | Longitude of the destination position
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-double bearing = bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
+double bearing = Geolocator.bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.8285838);
 ```
 
 ### Location accuracy

@@ -1,3 +1,7 @@
+## 1.0.6+1
+
+- Solve a bug which adds a zero timeout when no timeout is supplied (see [#564]((https://github.com/Baseflow/flutter-geolocator/issues/564))).
+
 ## 1.0.6
 
 - Allow developers to call the `getCurrentPosition` method while already listening to a position stream (see issue [#546](https://github.com/Baseflow/flutter-geolocator/issues/546));
