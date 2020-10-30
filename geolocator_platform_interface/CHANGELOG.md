@@ -1,3 +1,7 @@
+## 1.0.7
+
+- Solves a bug causing less accurate location fixes (see [#531]((https://github.com/Baseflow/flutter-geolocator/issues/531))).
+
 ## 1.0.6+1
 
 - Solve a bug which adds a zero timeout when no timeout is supplied (see [#564]((https://github.com/Baseflow/flutter-geolocator/issues/564))).

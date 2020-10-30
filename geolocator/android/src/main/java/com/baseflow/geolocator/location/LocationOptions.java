@@ -8,35 +8,34 @@ public class LocationOptions {
   private long timeInterval;
 
   public static LocationOptions parseArguments(Map<String, Object> arguments) {
-    final String accuracy = (String) arguments.get("accuracy");
+    final int accuracy = (int) arguments.get("accuracy");
     final long distanceFilter = (int) arguments.get("distanceFilter");
     final long timeInterval = (int) arguments.get("timeInterval");
 
     LocationAccuracy locationAccuracy = LocationAccuracy.best;
 
-    if (accuracy != null) {
-      switch (accuracy) {
-        case "lowest":
-          locationAccuracy = LocationAccuracy.lowest;
-          break;
-        case "low":
-          locationAccuracy = LocationAccuracy.low;
-          break;
-        case "medium":
-          locationAccuracy = LocationAccuracy.medium;
-          break;
-        case "high":
-          locationAccuracy = LocationAccuracy.high;
-          break;
-        case "best":
-          locationAccuracy = LocationAccuracy.best;
-          break;
-        case "bestForNavigation":
-          locationAccuracy = LocationAccuracy.bestForNavigation;
-          break;
-      }
+    switch (accuracy) {
+      case 0:
+        locationAccuracy = LocationAccuracy.lowest;
+        break;
+      case 1:
+        locationAccuracy = LocationAccuracy.low;
+        break;
+      case 2:
+        locationAccuracy = LocationAccuracy.medium;
+        break;
+      case 3:
+        locationAccuracy = LocationAccuracy.high;
+        break;
+      case 5:
+        locationAccuracy = LocationAccuracy.bestForNavigation;
+        break;
+      case 4:
+      default:
+        locationAccuracy = LocationAccuracy.best;
+        break;
     }
-
+    
     return new LocationOptions(locationAccuracy, distanceFilter, timeInterval);
   }
 
