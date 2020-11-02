@@ -20,7 +20,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Constructs a GeolocatorPlatform.
   GeolocatorPlatform() : super(token: _token);
 
-  static final Object _token = Object();
+  static final Object _token = const Object();
 
   static GeolocatorPlatform _instance = MethodChannelGeolocator();
 
@@ -102,7 +102,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
-    Duration timeLimit,
+    Duration? timeLimit,
   }) {
     throw UnimplementedError('getCurrentPosition() has not been implemented.');
   }
@@ -146,7 +146,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
     int timeInterval = 0,
-    Duration timeLimit,
+    Duration? timeLimit,
   }) {
     throw UnimplementedError('getPositionStream() has not been implemented.');
   }

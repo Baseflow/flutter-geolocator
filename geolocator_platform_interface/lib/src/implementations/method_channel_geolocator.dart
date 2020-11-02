@@ -31,7 +31,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   /// ignored.
   bool forceAndroidLocationManager = false;
 
-  Stream<Position> _positionStream;
+  Stream<Position>? _positionStream;
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -64,8 +64,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
-  Future<bool> isLocationServiceEnabled() async =>
-      methodChannel.invokeMethod('isLocationServiceEnabled');
+  Future<bool> isLocationServiceEnabled() async => methodChannel
+      .invokeMethod<bool>('isLocationServiceEnabled')
+      .then((value) => value ?? false);
 
   @override
   Future<Position> getLastKnownPosition({
@@ -91,7 +92,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
-    Duration timeLimit,
+    Duration? timeLimit,
   }) async {
     final locationOptions = LocationOptions(
       accuracy: desiredAccuracy,
@@ -130,7 +131,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
     int timeInterval = 0,
-    Duration timeLimit,
+    Duration? timeLimit,
   }) {
     final locationOptions = LocationOptions(
       accuracy: desiredAccuracy,
@@ -140,7 +141,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     );
 
     if (_positionStream != null) {
-      return _positionStream;
+      return _positionStream!;
     }
 
     var positionStream = eventChannel.receiveBroadcastStream(
@@ -175,16 +176,18 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       },
     );
 
-    return _positionStream;
+    return _positionStream!;
   }
 
   @override
-  Future<bool> openAppSettings() async =>
-      methodChannel.invokeMethod('openAppSettings');
+  Future<bool> openAppSettings() async => methodChannel
+      .invokeMethod<bool>('openAppSettings')
+      .then((value) => value ?? false);
 
   @override
-  Future<bool> openLocationSettings() async =>
-      methodChannel.invokeMethod('openLocationSettings');
+  Future<bool> openLocationSettings() async => methodChannel
+      .invokeMethod<bool>('openLocationSettings')
+      .then((value) => value ?? false);
 
   void _handlePlatformException(PlatformException exception) {
     switch (exception.code) {

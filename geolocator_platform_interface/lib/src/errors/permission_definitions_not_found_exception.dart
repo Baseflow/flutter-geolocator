@@ -6,7 +6,7 @@ class PermissionDefinitionsNotFoundException implements Exception {
   const PermissionDefinitionsNotFoundException(this.message);
 
   /// A [message] describing more details on the denied permission.
-  final String message;
+  final String? message;
 
   @override
   String toString() {
@@ -15,6 +15,6 @@ class PermissionDefinitionsNotFoundException implements Exception {
           'added the necessary definitions to the configuration file (e.g. '
           'the AndroidManifest.xml on Android or the Info.plist on iOS).';
     }
-    return message;
+    return message!;
   }
 }

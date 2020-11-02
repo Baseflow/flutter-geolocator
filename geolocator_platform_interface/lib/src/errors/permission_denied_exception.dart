@@ -5,13 +5,13 @@ class PermissionDeniedException implements Exception {
   const PermissionDeniedException(this.message);
 
   /// A [message] describing more details on the denied permission.
-  final String message;
+  final String? message;
 
   @override
   String toString() {
     if (message == null || message == '') {
       return 'Access to the location of the device is denied by the user.';
     }
-    return message;
+    return message!;
   }
 }

@@ -70,7 +70,7 @@ Future<Position> getLastKnownPosition(
 Future<Position> getCurrentPosition({
   LocationAccuracy desiredAccuracy = LocationAccuracy.best,
   bool forceAndroidLocationManager = false,
-  Duration timeLimit,
+  Duration? timeLimit,
 }) =>
     GeolocatorPlatform.instance.getCurrentPosition(
       desiredAccuracy: desiredAccuracy,
@@ -119,7 +119,7 @@ Stream<Position> getPositionStream({
   int distanceFilter = 0,
   bool forceAndroidLocationManager = false,
   int timeInterval = 0,
-  Duration timeLimit,
+  Duration? timeLimit,
 }) =>
     GeolocatorPlatform.instance.getPositionStream(
       desiredAccuracy: desiredAccuracy,
@@ -253,7 +253,7 @@ class Geolocator {
   static Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
-    Duration timeLimit,
+    Duration? timeLimit,
   }) =>
       GeolocatorPlatform.instance.getCurrentPosition(
         desiredAccuracy: desiredAccuracy,
@@ -300,7 +300,7 @@ class Geolocator {
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
     int timeInterval = 0,
-    Duration timeLimit,
+    Duration? timeLimit,
   }) =>
       GeolocatorPlatform.instance.getPositionStream(
         desiredAccuracy: desiredAccuracy,

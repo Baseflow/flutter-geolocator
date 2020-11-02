@@ -1,3 +1,7 @@
+## 1.1.0-nullsafety
+
+- Migrated to support null safety.
+
 ## 1.0.7
 
 - Solves a bug causing less accurate location fixes (see [#531]((https://github.com/Baseflow/flutter-geolocator/issues/531))).

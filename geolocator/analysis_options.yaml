@@ -1,4 +1,6 @@
 analyzer:
+  enable-experiment:
+    - non-nullable
   exclude:
     # Ignore generated files
     - '**/*.g.dart'

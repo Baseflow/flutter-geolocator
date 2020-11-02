@@ -8,9 +8,9 @@ class MethodChannelMock {
   final log = <MethodCall>[];
 
   MethodChannelMock({
-    String channelName,
-    this.delay,
-    this.method,
+    required String channelName,
+    required this.method,
+    this.delay = Duration.zero,
     this.result,
   }) : methodChannel = MethodChannel(channelName) {
     methodChannel.setMockMethodCallHandler(_handler);
@@ -24,7 +24,7 @@ class MethodChannelMock {
           '$method on channel ${methodChannel.name}');
     }
 
-    return Future.delayed(delay ?? Duration.zero, () {
+    return Future.delayed(delay, () {
       if (result is Exception) {
         throw result;
       }
