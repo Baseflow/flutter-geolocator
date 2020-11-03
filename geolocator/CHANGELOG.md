@@ -1,6 +1,11 @@
+## 6.1.4
+
+- When available return the floor on which the devices is located (see [#562](https://github.com/Baseflow/flutter-geolocator/issues/562));
+- When on iOS 10+ return information regarding the speed accuracy.
+
 ## 6.1.3
 
-- Solves a bug causing less accurate location fixes (see [#531]((https://github.com/Baseflow/flutter-geolocator/issues/531))).
+- Solves a bug causing less accurate location fixes (see [#531](https://github.com/Baseflow/flutter-geolocator/issues/531)).
 
 ## 6.1.2
 
