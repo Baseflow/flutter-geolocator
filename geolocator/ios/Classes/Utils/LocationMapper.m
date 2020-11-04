@@ -16,9 +16,11 @@
     double timestamp = [LocationMapper currentTimeInMilliSeconds:location.timestamp];
     double speedAccuracy = 0.0;
     
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
     if (@available(iOS 10.0, *)) {
         speedAccuracy = location.speedAccuracy;
     }
+#endif
     
     NSMutableDictionary *locationMap = [[NSMutableDictionary alloc]initWithCapacity:9];
     [locationMap setObject:@(location.coordinate.latitude) forKey: @"latitude"];

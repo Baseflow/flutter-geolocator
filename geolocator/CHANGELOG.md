@@ -1,3 +1,7 @@
+## 6.1.4+1
+
+- Hotfix to make sure the `CLLocation.speedAccuracy` property is only compiled when using Xcode 12 or higher (see [#577](https://github.com/Baseflow/flutter-geolocator/issues/577)).
+
 ## 6.1.4
 
 - When available return the floor on which the devices is located (see [#562](https://github.com/Baseflow/flutter-geolocator/issues/562));
