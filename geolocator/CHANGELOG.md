@@ -1,3 +1,7 @@
+## 6.1.5
+
+- Android: fixed issue where `checkPermission` reports permissions are `denied` when it should report permissions are `deniedForever` (see [#571](https://github.com/Baseflow/flutter-geolocator/issues/571)) 
+
 ## 6.1.4+1
 
 - Hotfix to make sure the `CLLocation.speedAccuracy` property is only compiled when using Xcode 12 or higher (see [#577](https://github.com/Baseflow/flutter-geolocator/issues/577)).
