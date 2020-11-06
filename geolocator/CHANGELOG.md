@@ -1,6 +1,6 @@
 ## 6.1.6
 
-- Improved the example app to minimize code that is not relevant.
+- Improved the example app to minimize code that is not relevant, and prevent confusions.
 
 ## 6.1.5
 
