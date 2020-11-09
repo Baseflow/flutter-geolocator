@@ -9,6 +9,10 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  baseflow_plugin_template:
+    git:
+      url: git://github.com/Baseflow/baseflow_plugin_template.git
+      ref: v1.0.0
   flutter:
     sdk: flutter
 
@@ -17,7 +21,7 @@ dependencies:
     #   geolocator: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
     # The example app is bundled with the plugin so we use a path dependency on
-    # the parent directory to use the current plugin's version. 
+    # the parent directory to use the current plugin's version.
     path: ../
 
   # The following adds the Cupertino Icons font to your application.
@@ -43,3 +47,5 @@ flutter:
   assets:
     - res/images/baseflow_logo_def_light-02.png
     - res/images/poweredByBaseflowLogoLight@3x.png
+    - packages/baseflow_plugin_template/logo.png
+    - packages/baseflow_plugin_template/poweredByBaseflow.png

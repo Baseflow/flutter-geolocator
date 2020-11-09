@@ -1,6 +1,10 @@
+## 6.1.6
+
+- Improved the example app to minimize code that is not relevant, and prevent confusions.
+
 ## 6.1.5
 
-- Android: fixed issue where `checkPermission` reports permissions are `denied` when it should report permissions are `deniedForever` (see [#571](https://github.com/Baseflow/flutter-geolocator/issues/571)) 
+- Android: fixed issue where `checkPermission` reports permissions are `denied` when it should report permissions are `deniedForever` (see [#571](https://github.com/Baseflow/flutter-geolocator/issues/571))
 
 ## 6.1.4+1
 
