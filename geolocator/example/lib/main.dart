@@ -4,6 +4,11 @@ import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+enum _PositionItemType {
+  permission,
+  position,
+}
+
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
     BaseflowPluginExample.createMaterialColor(
@@ -29,35 +34,40 @@ class GeolocatorWidget extends StatefulWidget {
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
-  List<Position> posList = <Position>[];
+  final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position> _positionStreamSubscription;
-  LocationPermission permissionStatus;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: ListView.builder(
-          itemCount: posList.length == 0 ? 1 : posList.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return ListTile(
-                  title: Text(
-                "LocationPermission = $permissionStatus",
-                textAlign: TextAlign.center,
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ));
-            }
-            index -= 1;
+        itemCount: _positionItems.length,
+        itemBuilder: (context, index) {
+          final positionItem = _positionItems[index];
+
+          if (positionItem.type == _PositionItemType.permission) {
+            return ListTile(
+              title: Text(positionItem.displayValue,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  )),
+            );
+          } else {
             return Card(
               child: ListTile(
                 tileColor: themeMaterialColor,
-                title: Text(posList[index].toString(),
-                    style: TextStyle(color: Colors.white)),
+                title: Text(
+                  positionItem.displayValue,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             );
-          }),
+          }
+        },
+      ),
       floatingActionButton: Stack(
         children: <Widget>[
           Positioned(
@@ -65,7 +75,10 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             right: 10.0,
             child: FloatingActionButton.extended(
               onPressed: () async {
-                posList.add(await Geolocator.getLastKnownPosition());
+                await Geolocator.getLastKnownPosition().then((value) => {
+                      _positionItems.add(_PositionItem(
+                          _PositionItemType.position, value.toString()))
+                    });
 
                 setState(
                   () {},
@@ -79,7 +92,10 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             right: 10.0,
             child: FloatingActionButton.extended(
                 onPressed: () async {
-                  posList.add(await Geolocator.getCurrentPosition());
+                  await Geolocator.getCurrentPosition().then((value) => {
+                        _positionItems.add(_PositionItem(
+                            _PositionItemType.position, value.toString()))
+                      });
 
                   setState(
                     () {},
@@ -107,7 +123,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             bottom: 220.0,
             right: 10.0,
             child: FloatingActionButton.extended(
-              onPressed: () => setState(posList.clear),
+              onPressed: () => setState(_positionItems.clear),
               label: Text("clear positions"),
             ),
           ),
@@ -116,10 +132,23 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             right: 10.0,
             child: FloatingActionButton.extended(
               onPressed: () async {
-                permissionStatus = await Geolocator.checkPermission()
-                    .whenComplete(() => setState(() {}));
+                await Geolocator.checkPermission().then((value) => {
+                      _positionItems.add(_PositionItem(
+                          _PositionItemType.permission, value.toString()))
+                    });
+                setState(() {});
               },
               label: Text("getPermissionStatus"),
+            ),
+          ),
+          Positioned(
+            bottom: 360.0,
+            right: 10.0,
+            child: FloatingActionButton.extended(
+              onPressed: () async {
+                dispose();
+              },
+              label: Text("dispose"),
             ),
           ),
         ],
@@ -140,7 +169,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription.cancel();
         _positionStreamSubscription = null;
-      }).listen((position) => setState(() => posList.add(position)));
+      }).listen((position) => setState(() => _positionItems.add(
+          _PositionItem(_PositionItemType.permission, position.toString()))));
       _positionStreamSubscription.pause();
     }
 
@@ -152,4 +182,21 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       }
     });
   }
+
+  @override
+  void dispose() {
+    if (_positionStreamSubscription != null) {
+      _positionStreamSubscription.cancel();
+      _positionStreamSubscription = null;
+    }
+
+    super.dispose();
+  }
+}
+
+class _PositionItem {
+  _PositionItem(this.type, this.displayValue);
+
+  final _PositionItemType type;
+  final String displayValue;
 }
