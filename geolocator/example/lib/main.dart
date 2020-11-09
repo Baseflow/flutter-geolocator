@@ -110,7 +110,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
               onPressed: _toggleListening,
               label: Text(() {
                 if (_positionStreamSubscription == null) {
-                  return "getPositionStream = off";
+                  return "getPositionStream = null";
                 } else {
                   return "getPositionStream ="
                       " ${_positionStreamSubscription.isPaused ? "off" : "on"}";
@@ -141,16 +141,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
               label: Text("getPermissionStatus"),
             ),
           ),
-          Positioned(
-            bottom: 360.0,
-            right: 10.0,
-            child: FloatingActionButton.extended(
-              onPressed: () async {
-                dispose();
-              },
-              label: Text("dispose"),
-            ),
-          ),
         ],
       ),
     );
@@ -170,7 +160,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         _positionStreamSubscription.cancel();
         _positionStreamSubscription = null;
       }).listen((position) => setState(() => _positionItems.add(
-          _PositionItem(_PositionItemType.permission, position.toString()))));
+          _PositionItem(_PositionItemType.position, position.toString()))));
       _positionStreamSubscription.pause();
     }
 
