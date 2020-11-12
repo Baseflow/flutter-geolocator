@@ -30,7 +30,7 @@ class FusedLocationClient implements LocationClient {
     this.context = context;
     this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     this.locationOptions = locationOptions;
-    this.activityRequestCode = this.hashCode();
+    this.activityRequestCode = 1;
 
     locationCallback =
         new LocationCallback() {
