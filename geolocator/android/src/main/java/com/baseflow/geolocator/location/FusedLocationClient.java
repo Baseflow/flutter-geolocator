@@ -14,6 +14,7 @@ import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.*;
+import java.util.Random;
 
 class FusedLocationClient implements LocationClient {
   private final Context context;
@@ -30,7 +31,7 @@ class FusedLocationClient implements LocationClient {
     this.context = context;
     this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     this.locationOptions = locationOptions;
-    this.activityRequestCode = this.hashCode();
+    this.activityRequestCode = generateActivityRequestCode();
 
     locationCallback =
         new LocationCallback() {
@@ -61,6 +62,11 @@ class FusedLocationClient implements LocationClient {
             }
           }
         };
+  }
+
+  private synchronized int generateActivityRequestCode() {
+    Random random = new Random();
+    return random.nextInt(1 << 16);
   }
 
   @Override

@@ -1,3 +1,7 @@
+## 6.1.7
+
+- Resolved bug on Android where in some situations an IllegalArgumentException occures (see issue [#590](https://github.com/Baseflow/flutter-geolocator/issues/590)).
+
 ## 6.1.6
 
 - Improved the example app to minimize code that is not relevant, and prevent confusions.
