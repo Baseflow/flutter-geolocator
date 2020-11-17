@@ -23,6 +23,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Nullable private StreamHandlerImpl streamHandler;
 
+  @NonNull private  NmeaStreamImpl nmeaStream;
+
   @Nullable private Registrar pluginRegistrar;
 
   @Nullable private ActivityPluginBinding pluginBinding;
@@ -56,6 +58,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     StreamHandlerImpl streamHandler = new StreamHandlerImpl(geolocatorPlugin.geolocationManager);
     streamHandler.startListening(registrar.context(), registrar.messenger());
     streamHandler.setActivity(registrar.activity());
+
+    NmeaStreamImpl nmeaStream = new NmeaStreamImpl(geolocatorPlugin.geolocationManager);
+    nmeaStream.startListening(registrar.context(), registrar.messenger());
+    nmeaStream.setActivity(registrar.activity());
   }
 
   @Override
@@ -65,6 +71,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
     streamHandler = new StreamHandlerImpl(this.geolocationManager);
     streamHandler.startListening(
+        flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
+    nmeaStream = new NmeaStreamImpl(this.geolocationManager);
+    nmeaStream.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
   }
 
@@ -79,6 +88,11 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       streamHandler.stopListening();
       streamHandler = null;
     }
+
+    if (nmeaStream != null){
+      nmeaStream.stopListening();
+      nmeaStream = null;
+    }
   }
 
   @Override
@@ -88,6 +102,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     }
     if (streamHandler != null) {
       streamHandler.setActivity(binding.getActivity());
+    }
+
+    if (nmeaStream != null){
+      nmeaStream.setActivity(binding.getActivity());
     }
 
     this.pluginBinding = binding;
@@ -111,6 +129,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     }
     if (streamHandler != null) {
       streamHandler.setActivity(null);
+    }
+
+    if (nmeaStream != null){
+      nmeaStream.setActivity(null);
     }
 
     deregisterListeners();

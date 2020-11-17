@@ -3,6 +3,7 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.OnNmeaMessageListener;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -19,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GeolocationManager implements ActivityResultListener {
-  @NonNull private final PermissionManager permissionManager;
+
+  @NonNull
+  private final PermissionManager permissionManager;
   private final List<LocationClient> locationClients;
 
   public GeolocationManager(@NonNull PermissionManager permissionManager) {
@@ -70,10 +73,27 @@ public class GeolocationManager implements ActivityResultListener {
         errorCallback);
   }
 
+  public void startNmeaUpdates(Context context,
+      Activity activity,
+      LocationClient locationClient,
+      NmeaChangedCallback nmeaChangedCallback,
+      ErrorCallback errorCallback
+  ) {
+
+    this.locationClients.add(locationClient);
+
+    handlePermissions(
+        context,
+        activity,
+        () -> locationClient.startNmeaUpdates(nmeaChangedCallback, errorCallback),
+        errorCallback);
+  }
+
   public void stopPositionUpdates(@NonNull LocationClient locationClient) {
     locationClients.remove(locationClient);
     locationClient.stopPositionUpdates();
   }
+
 
   public LocationClient createLocationClient(
       Context context,
@@ -83,9 +103,7 @@ public class GeolocationManager implements ActivityResultListener {
       return new LocationManagerClient(context, locationOptions);
     }
 
-    return isGooglePlayServicesAvailable(context)
-        ? new FusedLocationClient(context, locationOptions)
-        : new LocationManagerClient(context, locationOptions);
+    return new LocationManagerClient(context, locationOptions);
   }
 
   private boolean isGooglePlayServicesAvailable(Context context) {

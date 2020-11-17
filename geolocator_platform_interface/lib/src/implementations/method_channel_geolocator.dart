@@ -25,6 +25,11 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   EventChannel eventChannel =
       EventChannel('flutter.baseflow.com/geolocator_updates');
 
+  /// The event channel used to receive [NmeaMessage] updates from the native
+  /// platform.
+  @visibleForTesting
+  EventChannel nmeaChannel = EventChannel('flutter.baseflow.com/nmea_updates');
+
   /// On Android devices you can set [forceAndroidLocationManager]
   /// to true to force the plugin to use the [LocationManager] to determine the
   /// position instead of the [FusedLocationProviderClient]. On iOS this is
@@ -32,6 +37,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   bool forceAndroidLocationManager = false;
 
   Stream<Position> _positionStream;
+  Stream<NmeaMessage> _nmeaMessageStream;
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -176,6 +182,36 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     );
 
     return _positionStream;
+  }
+
+  @override
+  Stream<NmeaMessage> getNmeaMessageStream() {
+    print("lala");
+
+    if (_nmeaMessageStream != null) {
+        return _nmeaMessageStream;
+    }
+
+    var nmeaStream = nmeaChannel.receiveBroadcastStream();
+
+    _nmeaMessageStream = nmeaStream
+        .map<NmeaMessage>((dynamic element) {
+          print("stream binnen");
+           return NmeaMessage.fromMap(element.cast<String, dynamic>());
+        })
+        .handleError(
+      (error) {
+        _nmeaMessageStream = null;
+        if (error is PlatformException) {
+          _handlePlatformException(error);
+        }
+
+        throw error;
+      },
+    );
+    print("Huts");
+
+    return _nmeaMessageStream;
   }
 
   @override

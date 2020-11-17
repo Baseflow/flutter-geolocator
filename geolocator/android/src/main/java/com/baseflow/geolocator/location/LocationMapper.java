@@ -14,6 +14,7 @@ public class LocationMapper {
 
     Map<String, Object> position = new HashMap<>();
 
+    position.put("satellites", location.getExtras().getInt("satellites"));
     position.put("latitude", location.getLatitude());
     position.put("longitude", location.getLongitude());
     position.put("timestamp", location.getTime());
@@ -30,7 +31,6 @@ public class LocationMapper {
     } else {
       position.put("is_mocked", false);
     }
-
     return position;
   }
 }

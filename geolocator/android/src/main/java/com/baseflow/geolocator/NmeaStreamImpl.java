@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
+import android.util.Pair;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.location.GeolocationManager;
@@ -13,10 +14,11 @@ import com.baseflow.geolocator.location.LocationOptions;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 
+import java.util.HashMap;
 import java.util.Map;
 
-class StreamHandlerImpl implements EventChannel.StreamHandler {
-  private static final String TAG = "StreamHandlerImpl";
+class NmeaStreamImpl implements EventChannel.StreamHandler {
+  private static final String TAG = "NmeaStreamImpl";
 
   private final GeolocationManager geolocationManager;
 
@@ -25,8 +27,9 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   @Nullable private Activity activity;
   @Nullable private LocationClient locationClient;
 
-  public StreamHandlerImpl(GeolocationManager geolocationManager) {
+  public NmeaStreamImpl(GeolocationManager geolocationManager) {
     this.geolocationManager = geolocationManager;
+    System.out.println("Called");
   }
 
   void setActivity(@Nullable Activity activity) {
@@ -45,9 +48,9 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       Log.w(TAG, "Setting a event call handler before the last was disposed.");
       stopListening();
     }
+    System.out.println("Start listening");
 
-
-    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_updates");
+    channel = new EventChannel(messenger, "flutter.baseflow.com/nmea_updates");
     channel.setStreamHandler(this);
     this.context = context;
   }
@@ -72,20 +75,30 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
     @SuppressWarnings("unchecked")
     Map<String, Object> map = (Map<String, Object>) arguments;
 
-    boolean forceLocationManager = (boolean) map.get("forceAndroidLocationManager");
-    LocationOptions locationOptions = LocationOptions.parseArguments(map);
+    System.out.println("onListen...");
+    boolean forceLocationManager = true;
+    LocationOptions locationOptions = null;
 
     this.locationClient =
         geolocationManager.createLocationClient(
             this.context, forceLocationManager, locationOptions);
 
-    geolocationManager.startPositionUpdates(
+    geolocationManager.startNmeaUpdates(
         context,
         activity,
         this.locationClient,
-        (Location location) -> events.success(LocationMapper.toHashMap(location)),
+        (String n, long l) -> events.success(toMap(n,l)),
         (ErrorCodes errorCodes) ->
             events.error(errorCodes.toString(), errorCodes.toDescription(), null));
+  }
+
+  public static Map<String, Object> toMap(String n, Long l) {
+    Map<String, Object> Nmea = new HashMap<>();
+
+    Nmea.put(n, l);
+    System.out.println(Nmea.values().toString() + "  NMEA VALUES");
+
+    return Nmea;
   }
 
   @Override

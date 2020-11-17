@@ -1,26 +1,35 @@
 package com.baseflow.geolocator.location;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.location.OnNmeaMessageListener;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.util.Strings;
 
 import java.util.List;
 
-class LocationManagerClient implements LocationClient, LocationListener {
+
+@SuppressLint("NewApi")
+class LocationManagerClient implements LocationClient, LocationListener, OnNmeaMessageListener{
   private static final long TWO_MINUTES = 120000;
 
   private final LocationManager locationManager;
@@ -32,12 +41,15 @@ class LocationManagerClient implements LocationClient, LocationListener {
   @Nullable private String currentLocationProvider;
   @Nullable private PositionChangedCallback positionChangedCallback;
   @Nullable private ErrorCallback errorCallback;
+  @Nullable private NmeaChangedCallback nmeaChangedCallback;
 
   public LocationManagerClient(
       @NonNull Context context, @Nullable LocationOptions locationOptions) {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     this.locationOptions = locationOptions;
+    this.locationManager.addNmeaListener(this);
   }
+
 
   @Override
   public void isLocationServiceEnabled(LocationServiceListener listener) {
@@ -123,6 +135,13 @@ class LocationManagerClient implements LocationClient, LocationListener {
   }
 
   @Override
+  public void startNmeaUpdates(NmeaChangedCallback nmeaChangedCallback,  ErrorCallback errorCallback) {
+    
+    this.nmeaChangedCallback = nmeaChangedCallback;
+    this.errorCallback = errorCallback;
+  }
+
+  @Override
   public synchronized void onLocationChanged(Location location) {
     float desiredAccuracy =
         locationOptions != null ? accuracyToFloat(locationOptions.getAccuracy()) : 50;
@@ -198,6 +217,8 @@ class LocationManagerClient implements LocationClient, LocationListener {
     return false;
   }
 
+
+
   private static String getBestProvider(
       LocationManager locationManager, LocationAccuracy accuracy) {
     Criteria criteria = new Criteria();
@@ -251,6 +272,14 @@ class LocationManagerClient implements LocationClient, LocationListener {
         return 50;
       default:
         return 100;
+    }
+  }
+
+  @Override
+  public void onNmeaMessage(String s, long l) {
+
+    if (this.nmeaChangedCallback != null){
+      this.nmeaChangedCallback.onNmeaMessage(s, l);
     }
   }
 }

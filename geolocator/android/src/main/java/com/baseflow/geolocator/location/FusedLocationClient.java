@@ -189,6 +189,13 @@ class FusedLocationClient implements LocationClient {
     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
   }
 
+  @Override
+  public void startNmeaUpdates(
+      NmeaChangedCallback nmeaChangedCallback,
+      ErrorCallback errorCallback) {
+
+  }
+
   private static LocationRequest buildLocationRequest(@Nullable LocationOptions options) {
     LocationRequest locationRequest = new LocationRequest();
 

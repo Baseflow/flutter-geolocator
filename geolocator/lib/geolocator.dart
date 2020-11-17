@@ -261,6 +261,10 @@ class Geolocator {
         timeLimit: timeLimit,
       );
 
+  static Stream <NmeaMessage> getNmeaMessageStream() =>
+    GeolocatorPlatform.instance.getNmeaMessageStream();
+
+
   /// Fires whenever the location changes inside the bounds of the
   /// [desiredAccuracy].
   ///
