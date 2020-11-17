@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:geolocator_platform_interface/src/models/nmea_message.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:vector_math/vector_math.dart';
 
@@ -149,6 +150,11 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     Duration timeLimit,
   }) {
     throw UnimplementedError('getPositionStream() has not been implemented.');
+  }
+
+
+  Stream<NmeaMessage> getNmeaMessageStream (){
+    throw UnimplementedError('requestPermission() has not been implemented.');
   }
 
   /// Opens the App settings page.

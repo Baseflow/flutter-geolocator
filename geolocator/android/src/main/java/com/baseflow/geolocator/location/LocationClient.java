@@ -18,4 +18,6 @@ public interface LocationClient {
       ErrorCallback errorCallback);
 
   void stopPositionUpdates();
+
+  void startNmeaUpdates(NmeaChangedCallback nmeaChangedCallback, ErrorCallback errorCallback);
 }
