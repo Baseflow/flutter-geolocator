@@ -29,7 +29,7 @@ import java.util.List;
 
 
 @SuppressLint("NewApi")
-class LocationManagerClient implements LocationClient, LocationListener, OnNmeaMessageListener{
+class LocationManagerClient implements LocationClient, LocationListener{
   private static final long TWO_MINUTES = 120000;
 
   private final LocationManager locationManager;
@@ -47,7 +47,6 @@ class LocationManagerClient implements LocationClient, LocationListener, OnNmeaM
       @NonNull Context context, @Nullable LocationOptions locationOptions) {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     this.locationOptions = locationOptions;
-    this.locationManager.addNmeaListener(this);
   }
 
 
@@ -134,12 +133,6 @@ class LocationManagerClient implements LocationClient, LocationListener, OnNmeaM
     this.locationManager.removeUpdates(this);
   }
 
-  @Override
-  public void startNmeaUpdates(NmeaChangedCallback nmeaChangedCallback,  ErrorCallback errorCallback) {
-    
-    this.nmeaChangedCallback = nmeaChangedCallback;
-    this.errorCallback = errorCallback;
-  }
 
   @Override
   public synchronized void onLocationChanged(Location location) {
@@ -272,14 +265,6 @@ class LocationManagerClient implements LocationClient, LocationListener, OnNmeaM
         return 50;
       default:
         return 100;
-    }
-  }
-
-  @Override
-  public void onNmeaMessage(String s, long l) {
-
-    if (this.nmeaChangedCallback != null){
-      this.nmeaChangedCallback.onNmeaMessage(s, l);
     }
   }
 }

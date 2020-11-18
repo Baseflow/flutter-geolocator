@@ -75,7 +75,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                       _positionItems.add(_PositionItem(
                           _PositionItemType.position, value.toString()))
                     });
-
                 setState(
                   () {},
                 );
@@ -178,11 +177,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
     super.dispose();
   }
-}
-
-enum _PositionItemType {
-  permission,
-  position,
 }
 
 class _PositionItem {

@@ -115,7 +115,6 @@ class Position {
     if (message == null) {
       return null;
     }
-    print("using from map...");
 
     final Map<dynamic, dynamic> positionMap = message;
 

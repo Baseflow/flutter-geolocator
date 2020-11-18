@@ -20,7 +20,7 @@ class NmeaMessage {
     if (message == null) {
       return null;
     }
-    print("using from map...");
+    print("using from nmea message map method...");
 
     final Map<dynamic, dynamic> nmeaMessageMap = message;
 

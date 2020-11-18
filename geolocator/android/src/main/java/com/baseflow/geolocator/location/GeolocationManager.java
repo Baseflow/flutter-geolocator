@@ -3,7 +3,7 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.OnNmeaMessageListener;
+import android.os.Build.VERSION_CODES;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -24,6 +24,7 @@ public class GeolocationManager implements ActivityResultListener {
   @NonNull
   private final PermissionManager permissionManager;
   private final List<LocationClient> locationClients;
+
 
   public GeolocationManager(@NonNull PermissionManager permissionManager) {
     this.permissionManager = permissionManager;
@@ -73,19 +74,26 @@ public class GeolocationManager implements ActivityResultListener {
         errorCallback);
   }
 
-  public void startNmeaUpdates(Context context,
-      Activity activity,
-      LocationClient locationClient,
-      NmeaChangedCallback nmeaChangedCallback,
-      ErrorCallback errorCallback
-  ) {
+  public NmeaMessageaClient createNmeaClient(Context context){
+    if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.N){
+      GnssNmeaMessageClient client = new GnssNmeaMessageClient(context);
+      System.out.println("created gnss");
+      return client;
+    } else{
+      GpsNmeaMessageClient client = new GpsNmeaMessageClient(context);
+      System.out.println("created gps");
+      return client;
+    }
+  }
 
-    this.locationClients.add(locationClient);
+
+  public void startNmeaUpdates(Context context, Activity activity, NmeaMessageaClient client,
+      NmeaChangedCallback nmeaChangedCallback, ErrorCallback errorCallback) {
 
     handlePermissions(
         context,
         activity,
-        () -> locationClient.startNmeaUpdates(nmeaChangedCallback, errorCallback),
+        () -> client.startNmeaUpdates(nmeaChangedCallback, errorCallback),
         errorCallback);
   }
 
