@@ -2,15 +2,11 @@ package com.baseflow.geolocator;
 
 import android.app.Activity;
 import android.content.Context;
-import android.location.Location;
 import android.util.Log;
-import android.util.Pair;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.location.GeolocationManager;
-import com.baseflow.geolocator.location.LocationClient;
-import com.baseflow.geolocator.location.LocationMapper;
-import com.baseflow.geolocator.location.LocationOptions;
+import com.baseflow.geolocator.location.NmeaMessageaClient;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 
@@ -25,7 +21,7 @@ class NmeaStreamImpl implements EventChannel.StreamHandler {
   @Nullable private EventChannel channel;
   @Nullable private Context context;
   @Nullable private Activity activity;
-  @Nullable private LocationClient locationClient;
+  @Nullable private NmeaMessageaClient nmeaMessageaClient;
 
   public NmeaStreamImpl(GeolocationManager geolocationManager) {
     this.geolocationManager = geolocationManager;
@@ -72,39 +68,36 @@ class NmeaStreamImpl implements EventChannel.StreamHandler {
 
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {
-    @SuppressWarnings("unchecked")
-    Map<String, Object> map = (Map<String, Object>) arguments;
 
-    System.out.println("onListen...");
-    boolean forceLocationManager = true;
-    LocationOptions locationOptions = null;
-
-    this.locationClient =
-        geolocationManager.createLocationClient(
-            this.context, forceLocationManager, locationOptions);
+    this.nmeaMessageaClient = geolocationManager.createNmeaClient(context);
 
     geolocationManager.startNmeaUpdates(
         context,
         activity,
-        this.locationClient,
-        (String n, long l) -> events.success(toMap(n,l)),
+        nmeaMessageaClient,
+        (String n, long l) -> {
+          events.success(toMap(n,l));
+        },
         (ErrorCodes errorCodes) ->
             events.error(errorCodes.toString(), errorCodes.toDescription(), null));
   }
 
   public static Map<String, Object> toMap(String n, Long l) {
+    if (n == null || l == null){
+      return null;
+    }
     Map<String, Object> Nmea = new HashMap<>();
 
-    Nmea.put(n, l);
-    System.out.println(Nmea.values().toString() + "  NMEA VALUES");
+    Nmea.put("timestamp", l);
+    Nmea.put("message", n);
 
     return Nmea;
   }
 
   @Override
   public void onCancel(Object arguments) {
-    if (this.locationClient != null) {
-      geolocationManager.stopPositionUpdates(this.locationClient);
-    }
+ //   if (this.nmeaMessageaClient != null) {
+   //   geolocationManager.stopPositionUpdates(this.nmeaMessageaClient);
+  //  }
   }
 }

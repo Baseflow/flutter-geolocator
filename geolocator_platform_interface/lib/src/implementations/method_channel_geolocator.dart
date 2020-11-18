@@ -181,12 +181,12 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       },
     );
 
+    print(_positionStream.last);
     return _positionStream;
   }
 
   @override
   Stream<NmeaMessage> getNmeaMessageStream() {
-    print("lala");
 
     if (_nmeaMessageStream != null) {
         return _nmeaMessageStream;
@@ -195,10 +195,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     var nmeaStream = nmeaChannel.receiveBroadcastStream();
 
     _nmeaMessageStream = nmeaStream
-        .map<NmeaMessage>((dynamic element) {
-          print("stream binnen");
-           return NmeaMessage.fromMap(element.cast<String, dynamic>());
-        })
+        .map<NmeaMessage>((dynamic element) =>
+            NmeaMessage.fromMap(element.cast<String, dynamic>()))
         .handleError(
       (error) {
         _nmeaMessageStream = null;
@@ -209,7 +207,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         throw error;
       },
     );
-    print("Huts");
+    print(_nmeaMessageStream.last);
 
     return _nmeaMessageStream;
   }
