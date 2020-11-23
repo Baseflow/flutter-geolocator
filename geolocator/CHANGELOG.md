@@ -1,4 +1,4 @@
-## 7.0.0-nullsafety
+## 7.0.0-nullsafety.0
 
 - Migrated to support null safety.
 
