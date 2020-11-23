@@ -3,11 +3,6 @@ description: Geolocation plugin for Flutter. This plugin provides a cross-platfo
 version: 7.0.0-nullsafety.0
 homepage: https://github.com/Baseflow/flutter-geolocator/tree/master/geolocator
 
-# TODO(mvanbeusekom): Remove this line and update the 
-# geolocator_platform_interface dependency once the nullsafety package is 
-# released.
-publish_to: none
-
 environment:
   sdk: ">=2.12.0-0 <3.0.0"
   flutter: ">=1.10.0 <2.0.0"
