@@ -1,13 +1,15 @@
 name: geolocator
 description: Geolocation plugin for Flutter. This plugin provides a cross-platform (iOS, Android) API for generic location (GPS etc.) functions.
-version: 6.2.0-nullsafety
-homepage: https://github.com/baseflow/flutter-geolocator
+version: 7.0.0-nullsafety.0
+homepage: https://github.com/Baseflow/flutter-geolocator/tree/master/geolocator
 
-# TODO(mvanbeusekom): Null safety should not be published yet
+# TODO(mvanbeusekom): Remove this line and update the 
+# geolocator_platform_interface dependency once the nullsafety package is 
+# released.
 publish_to: none
 
 environment:
-  sdk: ">=2.11.0-260.0.dev <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
   flutter: ">=1.10.0 <2.0.0"
 
 dependencies:
@@ -20,7 +22,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  effective_dart: ^1.2.2
+  effective_dart: ^1.3.0
   mockito: ^4.1.3
   plugin_platform_interface: ^1.1.0-nullsafety
 

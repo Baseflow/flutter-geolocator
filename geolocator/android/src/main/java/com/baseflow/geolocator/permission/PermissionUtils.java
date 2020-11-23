@@ -49,25 +49,42 @@ public class PermissionUtils {
 
   @RequiresApi(api = Build.VERSION_CODES.M)
   static boolean neverAskAgainSelected(final Activity activity, final String permission) {
-    final boolean shouldShowRequestPermissionRationaleBefore =
-        getRequestedPermissionBefore(activity, permission);
+    final boolean permissionDeniedForever = getPermissionDeniedForever(activity, permission);
     final boolean shouldShowRequestPermissionRationale =
         ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
-    return shouldShowRequestPermissionRationaleBefore && !shouldShowRequestPermissionRationale;
+    final boolean isDeniedForever = permissionDeniedForever && !shouldShowRequestPermissionRationale;
+
+    if (permissionDeniedForever != isDeniedForever) {
+      setPermissionDeniedForever(activity, permission, false);
+    }
+
+    return isDeniedForever;
   }
 
-  static void setRequestedPermission(final Activity activity, final String permission) {
+  static void setRequestedPermission(
+      final Activity activity, final String permission, final int grantResult) {
+    // Only save permissions when they are denied
+    if (grantResult != PackageManager.PERMISSION_DENIED) {
+      return;
+    }
+
     final boolean shouldShowRequestPermissionRationale =
         ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
+    final boolean isDeniedForever = !shouldShowRequestPermissionRationale;
 
-    SharedPreferences prefs =
-        activity.getSharedPreferences("GEOLOCATOR_PERMISSIONS_REQUESTED", Context.MODE_PRIVATE);
-    prefs.edit().putBoolean(permission, shouldShowRequestPermissionRationale).apply();
+    setPermissionDeniedForever(activity, permission, isDeniedForever);
   }
 
-  static boolean getRequestedPermissionBefore(final Context context, final String permission) {
+  static boolean getPermissionDeniedForever(final Context context, final String permission) {
     SharedPreferences prefs =
-        context.getSharedPreferences("GEOLOCATOR_PERMISSIONS_REQUESTED", Context.MODE_PRIVATE);
+        context.getSharedPreferences("GEOLOCATOR_PERMISSIONS_DENIED_FOREVER", Context.MODE_PRIVATE);
     return prefs.getBoolean(permission, false);
+  }
+
+  private static void setPermissionDeniedForever(
+      final Activity activity, final String permission, final boolean isDeniedForever) {
+    SharedPreferences prefs =
+        activity.getSharedPreferences("GEOLOCATOR_PERMISSIONS_DENIED_FOREVER", Context.MODE_PRIVATE);
+    prefs.edit().putBoolean(permission, isDeniedForever).apply();
   }
 }

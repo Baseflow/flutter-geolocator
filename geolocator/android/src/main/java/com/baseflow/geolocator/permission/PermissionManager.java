@@ -157,8 +157,11 @@ public class PermissionManager implements PluginRegistry.RequestPermissionsResul
       }
     }
 
-    for (String perm : permissions) {
-      PermissionUtils.setRequestedPermission(activity, perm);
+    for (int i = 0; i < permissions.length; i++) {
+      final String perm = permissions[i];
+      final int grantResult = grantResults[i];
+
+      PermissionUtils.setRequestedPermission(activity, perm, grantResult);
     }
 
     if (this.resultCallback != null) {

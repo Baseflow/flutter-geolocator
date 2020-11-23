@@ -15,6 +15,7 @@ class Position {
     required this.heading,
     required this.speed,
     required this.speedAccuracy,
+    this.floor,
     this.isMocked = false,
   });
 
@@ -47,6 +48,13 @@ class Position {
   /// 0.0.
   final double heading;
 
+  /// The floor specifies the floor of the building on which the device is
+  /// located.
+  ///
+  /// The floor property is only available on iOS and only when the information
+  /// is available. In all other cases this value will be null.
+  final int? floor;
+
   /// The speed at which the devices is traveling in meters per second over
   /// ground.
   ///
@@ -74,6 +82,7 @@ class Position {
         o.heading == heading &&
         o.latitude == latitude &&
         o.longitude == longitude &&
+        o.floor == o.floor &&
         o.speed == speed &&
         o.speedAccuracy == speedAccuracy &&
         o.timestamp == timestamp &&
@@ -89,6 +98,7 @@ class Position {
       heading.hashCode ^
       latitude.hashCode ^
       longitude.hashCode ^
+      floor.hashCode ^
       speed.hashCode ^
       speedAccuracy.hashCode ^
       timestamp.hashCode ^
@@ -125,6 +135,7 @@ class Position {
       altitude: positionMap['altitude'] ?? 0.0,
       accuracy: positionMap['accuracy'] ?? 0.0,
       heading: positionMap['heading'] ?? 0.0,
+      floor: positionMap['floor'],
       speed: positionMap['speed'] ?? 0.0,
       speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
       isMocked: positionMap['is_mocked'] ?? false,
@@ -139,6 +150,7 @@ class Position {
         'timestamp': timestamp?.millisecondsSinceEpoch,
         'accuracy': accuracy,
         'altitude': altitude,
+        'floor': floor,
         'heading': heading,
         'speed': speed,
         'speed_accuracy': speedAccuracy,

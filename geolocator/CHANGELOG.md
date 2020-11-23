@@ -1,10 +1,31 @@
-## 6.2.0-nullsafety
+## 7.0.0-nullsafety
 
 - Migrated to support null safety.
 
+## 6.1.7
+
+- Resolved bug on Android where in some situations an IllegalArgumentException occures (see issue [#590](https://github.com/Baseflow/flutter-geolocator/issues/590)).
+
+## 6.1.6
+
+- Improved the example app to minimize code that is not relevant, and prevent confusions.
+
+## 6.1.5
+
+- Android: fixed issue where `checkPermission` reports permissions are `denied` when it should report permissions are `deniedForever` (see [#571](https://github.com/Baseflow/flutter-geolocator/issues/571))
+
+## 6.1.4+1
+
+- Hotfix to make sure the `CLLocation.speedAccuracy` property is only compiled when using Xcode 12 or higher (see [#577](https://github.com/Baseflow/flutter-geolocator/issues/577)).
+
+## 6.1.4
+
+- When available return the floor on which the devices is located (see [#562](https://github.com/Baseflow/flutter-geolocator/issues/562));
+- When on iOS 10+ return information regarding the speed accuracy.
+
 ## 6.1.3
 
-- Solves a bug causing less accurate location fixes (see [#531]((https://github.com/Baseflow/flutter-geolocator/issues/531))).
+- Solves a bug causing less accurate location fixes (see [#531](https://github.com/Baseflow/flutter-geolocator/issues/531)).
 
 ## 6.1.2
 

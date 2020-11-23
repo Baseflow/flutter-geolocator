@@ -69,7 +69,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       .then((value) => value ?? false);
 
   @override
-  Future<Position> getLastKnownPosition({
+  Future<Position?> getLastKnownPosition({
     bool forceAndroidLocationManager = false,
   }) async {
     try {
@@ -80,7 +80,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       final positionMap =
           await methodChannel.invokeMethod('getLastKnownPosition', parameters);
 
-      return Position.fromMap(positionMap);
+      return positionMap != null 
+        ? Position.fromMap(positionMap) 
+        : null;
     } on PlatformException catch (e) {
       _handlePlatformException(e);
 

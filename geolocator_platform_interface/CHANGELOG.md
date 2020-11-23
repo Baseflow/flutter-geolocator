@@ -1,10 +1,14 @@
-## 1.1.0-nullsafety
+## 2.0.0-nullsafety
 
 - Migrated to support null safety.
 
+## 1.0.8
+
+- Added the optional floor property to the position model and can be used by implementations to specify the floor on which the device is located (see [#562](https://github.com/Baseflow/flutter-geolocator/issues/562)).
+
 ## 1.0.7
 
-- Solves a bug causing less accurate location fixes (see [#531]((https://github.com/Baseflow/flutter-geolocator/issues/531))).
+- Solves a bug causing less accurate location fixes (see [#531](https://github.com/Baseflow/flutter-geolocator/issues/531)).
 
 ## 1.0.6+1
 
