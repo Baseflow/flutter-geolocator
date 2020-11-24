@@ -4,6 +4,12 @@ import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+enum _PositionItemType {
+  permission,
+  position,
+  nmea,
+}
+
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
     BaseflowPluginExample.createMaterialColor(
@@ -20,7 +26,6 @@ void main() {
 
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
-  /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
     return ExamplePage(Icons.location_on, (context) => GeolocatorWidget());
   }
@@ -32,6 +37,7 @@ class GeolocatorWidget extends StatefulWidget {
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position> _positionStreamSubscription;
+  StreamSubscription<NmeaMessage> _nmeaStreamSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +108,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             bottom: 150.0,
             right: 10.0,
             child: FloatingActionButton.extended(
-              onPressed: _toggleListening,
+              onPressed: _toggleListeningToPositionStream,
               label: Text(() {
                 if (_positionStreamSubscription == null) {
                   return "getPositionStream = null";
@@ -111,7 +117,23 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                       " ${_positionStreamSubscription.isPaused ? "off" : "on"}";
                 }
               }()),
-              backgroundColor: _determineButtonColor(),
+              backgroundColor: _determineButtonColorForPositionStreamButton(),
+            ),
+          ),
+          Positioned(
+            bottom: 360.0,
+            right: 10.0,
+            child: FloatingActionButton.extended(
+              onPressed: _toggleListeningToNmeaStream,
+              label: Text(() {
+                if (_nmeaStreamSubscription == null) {
+                  return "getNmeaMessageStream= null";
+                } else {
+                  return "getNmeaMessageStream ="
+                      " ${_nmeaStreamSubscription.isPaused ? "off" : "on"}";
+                }
+              }()),
+              backgroundColor: _determineButtonColorForNmeaButton(),
             ),
           ),
           Positioned(
@@ -141,14 +163,15 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     );
   }
 
-  bool _isListening() => !(_positionStreamSubscription == null ||
-      _positionStreamSubscription.isPaused);
+  bool _isListeningToPositionStream() =>
+      !(_positionStreamSubscription == null ||
+          _positionStreamSubscription.isPaused);
 
-  Color _determineButtonColor() {
-    return _isListening() ? Colors.green : Colors.red;
+  Color _determineButtonColorForPositionStreamButton() {
+    return _isListeningToPositionStream() ? Colors.green : Colors.red;
   }
 
-  void _toggleListening() {
+  void _toggleListeningToPositionStream() {
     if (_positionStreamSubscription == null) {
       final positionStream = Geolocator.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {
@@ -168,11 +191,44 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     });
   }
 
+  bool _isListeningToNmeaStream() =>
+      !(_nmeaStreamSubscription == null || _nmeaStreamSubscription.isPaused);
+
+  Color _determineButtonColorForNmeaButton() {
+    return _isListeningToNmeaStream() ? Colors.green : Colors.red;
+  }
+
+  void _toggleListeningToNmeaStream() {
+    if (_nmeaStreamSubscription == null) {
+      final nmeaStream = Geolocator.getNmeaMessageStream();
+      _nmeaStreamSubscription = nmeaStream.handleError((error) {
+        _nmeaStreamSubscription.cancel();
+        _nmeaStreamSubscription = null;
+      }).listen((nmeaMessage) => setState(() => _positionItems.add(
+          _PositionItem(_PositionItemType.nmea,
+              nmeaMessage.message + nmeaMessage.timestamp.toString()))));
+
+      _nmeaStreamSubscription.pause();
+    }
+
+    setState(() {
+      if (_nmeaStreamSubscription.isPaused) {
+        _nmeaStreamSubscription.resume();
+      } else {
+        _nmeaStreamSubscription.pause();
+      }
+    });
+  }
+
   @override
   void dispose() {
     if (_positionStreamSubscription != null) {
       _positionStreamSubscription.cancel();
       _positionStreamSubscription = null;
+    }
+    if (_nmeaStreamSubscription != null) {
+      _nmeaStreamSubscription.cancel();
+      _nmeaStreamSubscription = null;
     }
 
     super.dispose();

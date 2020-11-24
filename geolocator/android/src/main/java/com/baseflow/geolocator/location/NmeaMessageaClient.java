@@ -6,4 +6,6 @@ public interface NmeaMessageaClient {
 
   void startNmeaUpdates(NmeaChangedCallback nmeaChangedCallback,
       ErrorCallback errorCallback);
+
+  void stopNmeaUpdates();
 }

@@ -15,8 +15,9 @@ import io.flutter.plugin.common.EventChannel;
 
 import java.util.Map;
 
-class StreamHandlerImpl implements EventChannel.StreamHandler {
-  private static final String TAG = "StreamHandlerImpl";
+class PositionStreamImpl implements EventChannel.StreamHandler {
+
+  private static final String TAG = "PositionStreamImpl";
 
   private final GeolocationManager geolocationManager;
 
@@ -25,7 +26,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   @Nullable private Activity activity;
   @Nullable private LocationClient locationClient;
 
-  public StreamHandlerImpl(GeolocationManager geolocationManager) {
+  public PositionStreamImpl(GeolocationManager geolocationManager) {
     this.geolocationManager = geolocationManager;
   }
 

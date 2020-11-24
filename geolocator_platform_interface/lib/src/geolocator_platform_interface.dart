@@ -152,8 +152,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError('getPositionStream() has not been implemented.');
   }
 
-
-  Stream<NmeaMessage> getNmeaMessageStream (){
+  Stream<NmeaMessage> getNmeaMessageStream() {
     throw UnimplementedError('requestPermission() has not been implemented.');
   }
 
