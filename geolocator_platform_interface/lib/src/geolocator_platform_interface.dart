@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:geolocator_platform_interface/src/models/nmea_message.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:vector_math/vector_math.dart';
 
 import 'enums/enums.dart';
 import 'implementations/method_channel_geolocator.dart';
 import 'models/models.dart';
+import 'models/nmea_message.dart';
 
 /// The interface that implementations of geolocator  must implement.
 ///
