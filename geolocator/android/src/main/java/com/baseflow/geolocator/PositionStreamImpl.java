@@ -47,7 +47,6 @@ class PositionStreamImpl implements EventChannel.StreamHandler {
       stopListening();
     }
 
-
     channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_updates");
     channel.setStreamHandler(this);
     this.context = context;

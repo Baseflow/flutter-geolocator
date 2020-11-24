@@ -6,7 +6,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.OnNmeaMessageListener;
-import android.os.Bundle;
 import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,7 +52,6 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
 
   @Override
   public void onNmeaMessage(String s, long l) {
-
     if (this.nmeaChangedCallback != null) {
       this.nmeaChangedCallback.onNmeaMessage(s, l);
     }
@@ -64,15 +62,9 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
   public void onLocationChanged(@NonNull Location location) {
   }
 
-  @Override
-  public void onStatusChanged(String s, int i, Bundle bundle) {
-
-  }
-
 
   @Override
   public void onProviderEnabled(String s) {
-
   }
 
   @Override
@@ -85,7 +77,6 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
       if (this.errorCallback != null) {
         errorCallback.onError(ErrorCodes.locationServicesDisabled);
       }
-
     }
   }
 }

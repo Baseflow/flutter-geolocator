@@ -51,7 +51,6 @@ public class GpsNmeaMessageClient implements LocationListener, GpsStatus.NmeaLis
 
   @Override
   public void onProviderEnabled(String s) {
-
   }
 
   @Override
@@ -64,7 +63,6 @@ public class GpsNmeaMessageClient implements LocationListener, GpsStatus.NmeaLis
       if (this.errorCallback != null) {
         errorCallback.onError(ErrorCodes.locationServicesDisabled);
       }
-
     }
   }
 

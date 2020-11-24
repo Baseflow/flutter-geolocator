@@ -11,8 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  geolocator_platform_interface:
-    path: ../geolocator_platform_interface
+  geolocator_platform_interface: ^1.0.9
 
 dev_dependencies:
   flutter_test:
