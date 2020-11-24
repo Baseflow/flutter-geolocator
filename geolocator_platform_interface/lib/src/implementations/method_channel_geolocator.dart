@@ -187,9 +187,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Stream<NmeaMessage> getNmeaMessageStream() {
-
     if (_nmeaMessageStream != null) {
-        return _nmeaMessageStream;
+      return _nmeaMessageStream;
     }
 
     var nmeaStream = nmeaChannel.receiveBroadcastStream();
@@ -207,7 +206,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         throw error;
       },
     );
-    print(_nmeaMessageStream.last);
 
     return _nmeaMessageStream;
   }

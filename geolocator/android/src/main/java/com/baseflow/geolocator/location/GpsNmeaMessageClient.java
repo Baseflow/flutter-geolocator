@@ -1,71 +1,77 @@
 package com.baseflow.geolocator.location;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.GpsStatus;
-import android.location.GpsStatus.Listener;
-import android.location.GpsStatus.NmeaListener;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.OnNmeaMessageListener;
-import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCallback;
+import com.baseflow.geolocator.errors.ErrorCodes;
 
-@SuppressLint("NewApi")
+
 public class GpsNmeaMessageClient implements LocationListener, GpsStatus.NmeaListener,
-    GpsStatus.Listener, NmeaMessageaClient {
+    NmeaMessageaClient {
 
   LocationManager locationManager;
   @Nullable
   private NmeaChangedCallback nmeaChangedCallback;
+
   @Nullable
   private ErrorCallback errorCallback;
+
+  private boolean isListening = false;
 
 
   public GpsNmeaMessageClient(
       @NonNull Context context) {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000f, this);
-    locationManager.addNmeaListener(this);
-    locationManager.addGpsStatusListener(this);
-    System.out.println("gps nmea client initialized");
   }
 
   public void startNmeaUpdates(NmeaChangedCallback nmeaChangedCallback,
       ErrorCallback errorCallback) {
 
+    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000f, this);
+    locationManager.addNmeaListener(this);
     this.nmeaChangedCallback = nmeaChangedCallback;
     this.errorCallback = errorCallback;
+    this.isListening = true;
+  }
+
+  @Override
+  public void stopNmeaUpdates() {
+    this.isListening = false;
+    this.locationManager.removeUpdates(this);
   }
 
   @Override
   public void onLocationChanged(@NonNull Location location) {
-    System.out.println("Location changed");
   }
 
   @Override
   public void onProviderEnabled(String s) {
-    System.out.println("on provider enabled");
+
   }
 
   @Override
   public void onProviderDisabled(String s) {
-    System.out.println("provider disabled");
-  }
+    if (s.equals(locationManager.GPS_PROVIDER)) {
+      if (isListening) {
+        this.locationManager.removeUpdates(this);
+      }
 
-  @Override
-  public void onNmeaReceived(long l, String s) {
-    System.out.println("nmaerecieved");
-    if (this.nmeaChangedCallback != null) {
-      this.nmeaChangedCallback.onNmeaMessage(s, l);
+      if (this.errorCallback != null) {
+        errorCallback.onError(ErrorCodes.locationServicesDisabled);
+      }
+
     }
   }
 
   @Override
-  public void onGpsStatusChanged(int i) {
-    System.out.println("gps status changed");
+  public void onNmeaReceived(long l, String s) {
+    if (this.nmeaChangedCallback != null) {
+      this.nmeaChangedCallback.onNmeaMessage(s, l);
+    }
   }
 }

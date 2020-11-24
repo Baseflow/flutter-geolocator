@@ -1,11 +1,9 @@
-
 import 'package:meta/meta.dart';
 
-
 @immutable
+
 ///nmea message
 class NmeaMessage {
-
   ///nmea message
   NmeaMessage(this.message, this.timestamp);
 
@@ -20,7 +18,6 @@ class NmeaMessage {
     if (message == null) {
       return null;
     }
-    print("using from nmea message map method...");
 
     final Map<dynamic, dynamic> nmeaMessageMap = message;
 
@@ -49,23 +46,18 @@ class NmeaMessage {
   /// Converts the [NmeaMessage] instance into a [Map] instance that can be
   /// serialized to JSON.
   Map<String, dynamic> toJson() => {
-    'message': message,
-    'timestamp': timestamp?.millisecondsSinceEpoch,
-  };
+        'message': message,
+        'timestamp': timestamp?.millisecondsSinceEpoch,
+      };
 
   @override
   bool operator ==(dynamic o) {
-    var areEqual = o is NmeaMessage &&
-        o.message == message &&
-        o.timestamp == timestamp;
-
+    var areEqual =
+        o is NmeaMessage && o.message == message && o.timestamp == timestamp;
 
     return areEqual;
   }
 
   @override
-  int get hashCode =>
-      message.hashCode ^
-      timestamp.hashCode;
-
+  int get hashCode => message.hashCode ^ timestamp.hashCode;
 }

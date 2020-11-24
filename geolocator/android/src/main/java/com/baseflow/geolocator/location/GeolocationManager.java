@@ -14,7 +14,6 @@ import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-;
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,16 +73,9 @@ public class GeolocationManager implements ActivityResultListener {
         errorCallback);
   }
 
-  public NmeaMessageaClient createNmeaClient(Context context){
-    if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.N){
-      GnssNmeaMessageClient client = new GnssNmeaMessageClient(context);
-      System.out.println("created gnss");
-      return client;
-    } else{
-      GpsNmeaMessageClient client = new GpsNmeaMessageClient(context);
-      System.out.println("created gps");
-      return client;
-    }
+  public void stopPositionUpdates(@NonNull LocationClient locationClient) {
+    locationClients.remove(locationClient);
+    locationClient.stopPositionUpdates();
   }
 
 
@@ -97,11 +89,14 @@ public class GeolocationManager implements ActivityResultListener {
         errorCallback);
   }
 
-  public void stopPositionUpdates(@NonNull LocationClient locationClient) {
-    locationClients.remove(locationClient);
-    locationClient.stopPositionUpdates();
+  public void stopNmeaUpdates(NmeaMessageaClient client) {
+    client.stopNmeaUpdates();
   }
 
+  public NmeaMessageaClient createNmeaClient(Context context) {
+    return android.os.Build.VERSION.SDK_INT >= VERSION_CODES.N ? new GnssNmeaMessageClient(context)
+        : new GpsNmeaMessageClient(context);
+  }
 
   public LocationClient createLocationClient(
       Context context,
@@ -111,7 +106,9 @@ public class GeolocationManager implements ActivityResultListener {
       return new LocationManagerClient(context, locationOptions);
     }
 
-    return new LocationManagerClient(context, locationOptions);
+    return isGooglePlayServicesAvailable(context)
+        ? new FusedLocationClient(context, locationOptions)
+        : new LocationManagerClient(context, locationOptions);
   }
 
   private boolean isGooglePlayServicesAvailable(Context context) {

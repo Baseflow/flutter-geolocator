@@ -6,45 +6,55 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.OnNmeaMessageListener;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import com.baseflow.geolocator.errors.ErrorCallback;
+import com.baseflow.geolocator.errors.ErrorCodes;
 
 
-@RequiresApi(api = VERSION_CODES.N)
-public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationListener, NmeaMessageaClient {
+@SuppressLint("NewApi")
+public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationListener,
+    NmeaMessageaClient {
 
- private final LocationManager locationManager;
+  private final LocationManager locationManager;
   @Nullable
   private NmeaChangedCallback nmeaChangedCallback;
+
   @Nullable
   private ErrorCallback errorCallback;
+
+  private boolean isListening = false;
 
 
   public GnssNmeaMessageClient(
       @NonNull Context context) {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-    this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10000f, this);
-    this.locationManager.addNmeaListener(this, null);
-    System.out.println("gnss nmea client initialized");
   }
 
   public void startNmeaUpdates(NmeaChangedCallback nmeaChangedCallback,
       ErrorCallback errorCallback) {
 
+    this.locationManager.addNmeaListener(this, null);
+    this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this,
+        Looper.getMainLooper());
     this.nmeaChangedCallback = nmeaChangedCallback;
     this.errorCallback = errorCallback;
+    this.isListening = true;
+  }
+
+  @Override
+  public void stopNmeaUpdates() {
+    this.isListening = false;
+    this.locationManager.removeUpdates(this);
   }
 
 
   @Override
   public void onNmeaMessage(String s, long l) {
-    System.out.println("got nmea message");
 
-    if (this.nmeaChangedCallback != null){
+    if (this.nmeaChangedCallback != null) {
       this.nmeaChangedCallback.onNmeaMessage(s, l);
     }
   }
@@ -52,13 +62,13 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
 
   @Override
   public void onLocationChanged(@NonNull Location location) {
-
   }
 
   @Override
   public void onStatusChanged(String s, int i, Bundle bundle) {
 
   }
+
 
   @Override
   public void onProviderEnabled(String s) {
@@ -67,6 +77,15 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
 
   @Override
   public void onProviderDisabled(String s) {
+    if (s.equals(locationManager.GPS_PROVIDER)) {
+      if (isListening) {
+        this.locationManager.removeUpdates(this);
+      }
 
+      if (this.errorCallback != null) {
+        errorCallback.onError(ErrorCodes.locationServicesDisabled);
+      }
+
+    }
   }
 }

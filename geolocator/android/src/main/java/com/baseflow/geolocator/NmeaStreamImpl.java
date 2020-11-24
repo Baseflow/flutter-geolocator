@@ -9,23 +9,39 @@ import com.baseflow.geolocator.location.GeolocationManager;
 import com.baseflow.geolocator.location.NmeaMessageaClient;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
-
 import java.util.HashMap;
 import java.util.Map;
 
 class NmeaStreamImpl implements EventChannel.StreamHandler {
+
   private static final String TAG = "NmeaStreamImpl";
 
   private final GeolocationManager geolocationManager;
 
-  @Nullable private EventChannel channel;
-  @Nullable private Context context;
-  @Nullable private Activity activity;
-  @Nullable private NmeaMessageaClient nmeaMessageaClient;
+  @Nullable
+  private EventChannel channel;
+  @Nullable
+  private Context context;
+  @Nullable
+  private Activity activity;
+  @Nullable
+  private NmeaMessageaClient nmeaMessageaClient;
 
   public NmeaStreamImpl(GeolocationManager geolocationManager) {
     this.geolocationManager = geolocationManager;
-    System.out.println("Called");
+  }
+
+  public static Map<String, Object> toMap(String n, Long l) {
+    if (n == null || l == null) {
+      return null;
+    }
+
+    Map<String, Object> Nmea = new HashMap<>();
+
+    Nmea.put("timestamp", l);
+    Nmea.put("message", n);
+
+    return Nmea;
   }
 
   void setActivity(@Nullable Activity activity) {
@@ -44,7 +60,6 @@ class NmeaStreamImpl implements EventChannel.StreamHandler {
       Log.w(TAG, "Setting a event call handler before the last was disposed.");
       stopListening();
     }
-    System.out.println("Start listening");
 
     channel = new EventChannel(messenger, "flutter.baseflow.com/nmea_updates");
     channel.setStreamHandler(this);
@@ -75,29 +90,16 @@ class NmeaStreamImpl implements EventChannel.StreamHandler {
         context,
         activity,
         nmeaMessageaClient,
-        (String n, long l) -> {
-          events.success(toMap(n,l));
-        },
+        (String n, long l) -> events.success(toMap(n, l)),
         (ErrorCodes errorCodes) ->
             events.error(errorCodes.toString(), errorCodes.toDescription(), null));
   }
 
-  public static Map<String, Object> toMap(String n, Long l) {
-    if (n == null || l == null){
-      return null;
-    }
-    Map<String, Object> Nmea = new HashMap<>();
-
-    Nmea.put("timestamp", l);
-    Nmea.put("message", n);
-
-    return Nmea;
-  }
-
   @Override
   public void onCancel(Object arguments) {
- //   if (this.nmeaMessageaClient != null) {
-   //   geolocationManager.stopPositionUpdates(this.nmeaMessageaClient);
-  //  }
+    if (this.nmeaMessageaClient != null) {
+      geolocationManager.stopNmeaUpdates(this.nmeaMessageaClient);
+    }
   }
+
 }
