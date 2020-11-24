@@ -1,3 +1,7 @@
+## 6.1.9
+
+- Added a functionality to receive NMEA messages.
+
 ## 6.1.8+1
 
 - Fixed Dart formatting issue.

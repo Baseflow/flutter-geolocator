@@ -89,7 +89,7 @@ class NmeaStreamImpl implements EventChannel.StreamHandler {
     geolocationManager.startNmeaUpdates(
         context,
         activity,
-        nmeaMessageaClient,
+        this.nmeaMessageaClient,
         (String n, long l) -> events.success(toMap(n, l)),
         (ErrorCodes errorCodes) ->
             events.error(errorCodes.toString(), errorCodes.toDescription(), null));

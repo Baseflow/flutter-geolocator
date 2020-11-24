@@ -18,5 +18,4 @@ public interface LocationClient {
       ErrorCallback errorCallback);
 
   void stopPositionUpdates();
-
 }

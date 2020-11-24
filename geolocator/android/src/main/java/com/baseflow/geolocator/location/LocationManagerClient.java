@@ -1,26 +1,19 @@
 package com.baseflow.geolocator.location;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
-import android.location.OnNmeaMessageListener;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.util.Strings;
@@ -28,7 +21,6 @@ import com.google.android.gms.common.util.Strings;
 import java.util.List;
 
 
-@SuppressLint("NewApi")
 class LocationManagerClient implements LocationClient, LocationListener{
   private static final long TWO_MINUTES = 120000;
 
@@ -41,14 +33,12 @@ class LocationManagerClient implements LocationClient, LocationListener{
   @Nullable private String currentLocationProvider;
   @Nullable private PositionChangedCallback positionChangedCallback;
   @Nullable private ErrorCallback errorCallback;
-  @Nullable private NmeaChangedCallback nmeaChangedCallback;
 
   public LocationManagerClient(
       @NonNull Context context, @Nullable LocationOptions locationOptions) {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     this.locationOptions = locationOptions;
   }
-
 
   @Override
   public void isLocationServiceEnabled(LocationServiceListener listener) {
@@ -133,7 +123,6 @@ class LocationManagerClient implements LocationClient, LocationListener{
     this.locationManager.removeUpdates(this);
   }
 
-
   @Override
   public synchronized void onLocationChanged(Location location) {
     float desiredAccuracy =
@@ -209,8 +198,6 @@ class LocationManagerClient implements LocationClient, LocationListener{
 
     return false;
   }
-
-
 
   private static String getBestProvider(
       LocationManager locationManager, LocationAccuracy accuracy) {

@@ -4,12 +4,6 @@ import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-enum _PositionItemType {
-  permission,
-  position,
-  nmea,
-}
-
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
     BaseflowPluginExample.createMaterialColor(
@@ -233,6 +227,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
     super.dispose();
   }
+}
+
+enum _PositionItemType {
+  permission,
+  position,
+  nmea,
 }
 
 class _PositionItem {
