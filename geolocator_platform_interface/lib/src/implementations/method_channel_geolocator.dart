@@ -181,7 +181,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       },
     );
 
-    print(_positionStream.last);
     return _positionStream;
   }
 
