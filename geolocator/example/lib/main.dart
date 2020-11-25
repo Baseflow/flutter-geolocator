@@ -20,6 +20,7 @@ void main() {
 
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
+  /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
     return ExamplePage(Icons.location_on, (context) => GeolocatorWidget());
   }

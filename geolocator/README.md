@@ -23,7 +23,7 @@ To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file]
 
 ```yaml
 dependencies:
-  geolocator: ^6.1.7
+  geolocator: ^7.0.0-nullsafety.1
 ```
 
 <details>
