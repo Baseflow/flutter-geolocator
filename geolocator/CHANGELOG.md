@@ -1,3 +1,7 @@
+## 6.1.8
+
+- Deprecate the `timeInterval` parameter of the `getPositionStream` method in favor of the more semantic `intervalDuration` parameter.
+
 ## 6.1.7
 
 - Resolved bug on Android where in some situations an IllegalArgumentException occures (see issue [#590](https://github.com/Baseflow/flutter-geolocator/issues/590)).

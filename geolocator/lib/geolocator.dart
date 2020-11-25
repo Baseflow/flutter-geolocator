@@ -284,8 +284,8 @@ class Geolocator {
   /// the update is emitted (default value is 0 indicator no filter is used).
   /// On Android you can force the use of the Android LocationManager instead
   /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
-  /// parameter to true. Using the [timeInterval] you can control the amount of
-  /// time that needs to pass before the next position update is send. The
+  /// parameter to true. Using the [intervalDuration] you can control the amount
+  /// of time that needs to pass before the next position update is send. The
   /// [timeLimit] parameter allows you to specify a timeout interval (by
   /// default no time limit is configured).
   ///
@@ -299,14 +299,18 @@ class Geolocator {
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
+    @Deprecated(
+        'The timeInterval parameter has been deprecated, use the ' 
+        'intervalDuration parameter instead')
     int timeInterval = 0,
+    Duration intervalDuration,
     Duration timeLimit,
   }) =>
       GeolocatorPlatform.instance.getPositionStream(
         desiredAccuracy: desiredAccuracy,
         distanceFilter: distanceFilter,
         forceAndroidLocationManager: forceAndroidLocationManager,
-        timeInterval: timeInterval,
+        timeInterval: intervalDuration?.inMilliseconds ?? timeInterval,
         timeLimit: timeLimit,
       );
 
