@@ -1,5 +1,5 @@
 
-## 7.0.0-mullsafety.1
+## 7.0.0-nullsafety.1
 
 - Added null safe version of the `intervalDuration` parameter.
 - Removed deprecated `timeInterval` parameter from the `getPositionStream` method.
