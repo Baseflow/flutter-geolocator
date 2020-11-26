@@ -6,17 +6,18 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.location.GeolocationManager;
-import com.baseflow.geolocator.location.NmeaMessageaClient;
+import com.baseflow.geolocator.nmea.NmeaMessageManager;
+import com.baseflow.geolocator.nmea.NmeaMessageaClient;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 import java.util.HashMap;
 import java.util.Map;
 
-class NmeaStreamImpl implements EventChannel.StreamHandler {
+class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
 
   private static final String TAG = "NmeaStreamImpl";
 
-  private final GeolocationManager geolocationManager;
+  private final NmeaMessageManager nmeaMessageManager;
 
   @Nullable
   private EventChannel channel;
@@ -27,11 +28,11 @@ class NmeaStreamImpl implements EventChannel.StreamHandler {
   @Nullable
   private NmeaMessageaClient nmeaMessageaClient;
 
-  public NmeaStreamImpl(GeolocationManager geolocationManager) {
-    this.geolocationManager = geolocationManager;
+  public NmeaStreamHandlerImpl(NmeaMessageManager nmeaMessageManager) {
+    this.nmeaMessageManager = nmeaMessageManager;
   }
 
-  public static Map<String, Object> toMap(String n, Long l) {
+  private static Map<String, Object> toMap(String n, Long l) {
     if (n == null || l == null) {
       return null;
     }
@@ -84,9 +85,9 @@ class NmeaStreamImpl implements EventChannel.StreamHandler {
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {
 
-    this.nmeaMessageaClient = geolocationManager.createNmeaClient(context);
+    this.nmeaMessageaClient = nmeaMessageManager.createNmeaClient(context);
 
-    geolocationManager.startNmeaUpdates(
+    nmeaMessageManager.startNmeaUpdates(
         context,
         activity,
         this.nmeaMessageaClient,
@@ -98,7 +99,7 @@ class NmeaStreamImpl implements EventChannel.StreamHandler {
   @Override
   public void onCancel(Object arguments) {
     if (this.nmeaMessageaClient != null) {
-      geolocationManager.stopNmeaUpdates(this.nmeaMessageaClient);
+      nmeaMessageManager.stopNmeaUpdates(this.nmeaMessageaClient);
     }
   }
 

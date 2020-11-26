@@ -27,6 +27,47 @@ public class PermissionManager implements PluginRegistry.RequestPermissionsResul
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PermissionResultCallback resultCallback;
 
+
+  public void handlePermissions(
+      Context context,
+      @Nullable Activity activity,
+      Runnable hasPermissionCallback,
+      ErrorCallback errorCallback) {
+    try {
+      LocationPermission permissionStatus =
+          checkPermissionStatus(context, activity);
+
+      if (permissionStatus == LocationPermission.deniedForever) {
+        errorCallback.onError(ErrorCodes.permissionDenied);
+        return;
+      }
+
+      if (permissionStatus == LocationPermission.whileInUse
+          || permissionStatus == LocationPermission.always) {
+        hasPermissionCallback.run();
+        return;
+      }
+
+      if (permissionStatus == LocationPermission.denied && activity != null) {
+        requestPermission(
+            activity,
+            (permission) -> {
+              if (permission == LocationPermission.whileInUse
+                  || permission == LocationPermission.always) {
+                hasPermissionCallback.run();
+              } else {
+                errorCallback.onError(ErrorCodes.permissionDenied);
+              }
+            },
+            errorCallback);
+      } else {
+        errorCallback.onError(ErrorCodes.permissionDenied);
+      }
+    } catch (PermissionUndefinedException ex) {
+      errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
+    }
+  }
+
   public LocationPermission checkPermissionStatus(Context context, Activity activity)
       throws PermissionUndefinedException {
     String permission = determineFineOrCoarse(context);

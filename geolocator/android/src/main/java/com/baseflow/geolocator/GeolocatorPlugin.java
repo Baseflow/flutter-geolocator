@@ -1,11 +1,10 @@
 package com.baseflow.geolocator;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.location.GeolocationManager;
+import com.baseflow.geolocator.nmea.NmeaMessageManager;
 import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -18,14 +17,15 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private static final String TAG = "GeocodingPlugin";
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
+  private final NmeaMessageManager nmeaMessageManager;
 
   @Nullable private MethodCallHandlerImpl methodCallHandler;
 
   @Nullable
-  private PositionStreamImpl streamHandler;
+  private PositionStreamHandlerImpl positionStreamHandler;
 
   @Nullable
-  private NmeaStreamImpl nmeaStream;
+  private NmeaStreamHandlerImpl nmeaStreamHandler;
 
   @Nullable
   private Registrar pluginRegistrar;
@@ -34,8 +34,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private ActivityPluginBinding pluginBinding;
 
   public GeolocatorPlugin() {
-
     this.permissionManager = new PermissionManager();
+    this.nmeaMessageManager = new NmeaMessageManager(permissionManager);
     this.geolocationManager = new GeolocationManager(permissionManager);
   }
 
@@ -59,11 +59,11 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     methodCallHandler.startListening(registrar.context(), registrar.messenger());
     methodCallHandler.setActivity(registrar.activity());
 
-    PositionStreamImpl streamHandler = new PositionStreamImpl(geolocatorPlugin.geolocationManager);
+    PositionStreamHandlerImpl streamHandler = new PositionStreamHandlerImpl(geolocatorPlugin.geolocationManager);
     streamHandler.startListening(registrar.context(), registrar.messenger());
     streamHandler.setActivity(registrar.activity());
 
-    NmeaStreamImpl nmeaStream = new NmeaStreamImpl(geolocatorPlugin.geolocationManager);
+    NmeaStreamHandlerImpl nmeaStream = new NmeaStreamHandlerImpl(geolocatorPlugin.nmeaMessageManager);
     nmeaStream.startListening(registrar.context(), registrar.messenger());
     nmeaStream.setActivity(registrar.activity());
   }
@@ -73,11 +73,11 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     methodCallHandler = new MethodCallHandlerImpl(this.permissionManager, this.geolocationManager);
     methodCallHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
-    streamHandler = new PositionStreamImpl(this.geolocationManager);
-    streamHandler.startListening(
+    positionStreamHandler = new PositionStreamHandlerImpl(this.geolocationManager);
+    positionStreamHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
-    nmeaStream = new NmeaStreamImpl(this.geolocationManager);
-    nmeaStream.startListening(
+    nmeaStreamHandler = new NmeaStreamHandlerImpl(this.nmeaMessageManager);
+    nmeaStreamHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
   }
 
@@ -88,14 +88,14 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       methodCallHandler = null;
     }
 
-    if (streamHandler != null) {
-      streamHandler.stopListening();
-      streamHandler = null;
+    if (positionStreamHandler != null) {
+      positionStreamHandler.stopListening();
+      positionStreamHandler = null;
     }
 
-    if (nmeaStream != null) {
-      nmeaStream.stopListening();
-      nmeaStream = null;
+    if (nmeaStreamHandler != null) {
+      nmeaStreamHandler.stopListening();
+      nmeaStreamHandler = null;
     }
   }
 
@@ -104,12 +104,12 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     if (methodCallHandler != null) {
       methodCallHandler.setActivity(binding.getActivity());
     }
-    if (streamHandler != null) {
-      streamHandler.setActivity(binding.getActivity());
+    if (positionStreamHandler != null) {
+      positionStreamHandler.setActivity(binding.getActivity());
     }
 
-    if (nmeaStream != null) {
-      nmeaStream.setActivity(binding.getActivity());
+    if (nmeaStreamHandler != null) {
+      nmeaStreamHandler.setActivity(binding.getActivity());
     }
 
     this.pluginBinding = binding;
@@ -131,12 +131,12 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     if (methodCallHandler != null) {
       methodCallHandler.setActivity(null);
     }
-    if (streamHandler != null) {
-      streamHandler.setActivity(null);
+    if (positionStreamHandler != null) {
+      positionStreamHandler.setActivity(null);
     }
 
-    if (nmeaStream != null) {
-      nmeaStream.setActivity(null);
+    if (nmeaStreamHandler != null) {
+      nmeaStreamHandler.setActivity(null);
     }
 
     deregisterListeners();

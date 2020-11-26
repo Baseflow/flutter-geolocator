@@ -1,4 +1,4 @@
-package com.baseflow.geolocator.location;
+package com.baseflow.geolocator.nmea;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -32,17 +32,19 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
   }
 
+  @SuppressLint("MissingPermission")
   public void startNmeaUpdates(NmeaChangedCallback nmeaChangedCallback,
       ErrorCallback errorCallback) {
 
     this.locationManager.addNmeaListener(this, null);
-    this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this,
+    this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this,
         Looper.getMainLooper());
     this.nmeaChangedCallback = nmeaChangedCallback;
     this.errorCallback = errorCallback;
     this.isListening = true;
   }
 
+  @SuppressLint("MissingPermission")
   @Override
   public void stopNmeaUpdates() {
     this.isListening = false;
@@ -60,6 +62,7 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
 
   @Override
   public void onLocationChanged(@NonNull Location location) {
+    System.out.println("location changed");
   }
 
 
@@ -67,9 +70,10 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
   public void onProviderEnabled(String s) {
   }
 
+  @SuppressLint("MissingPermission")
   @Override
   public void onProviderDisabled(String s) {
-    if (s.equals(locationManager.GPS_PROVIDER)) {
+    if (s.equals(LocationManager.GPS_PROVIDER)) {
       if (isListening) {
         this.locationManager.removeUpdates(this);
       }

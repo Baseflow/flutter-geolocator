@@ -190,7 +190,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       return _nmeaMessageStream;
     }
 
-    var nmeaStream = nmeaChannel.receiveBroadcastStream();
+    final nmeaStream = nmeaChannel.receiveBroadcastStream();
 
     _nmeaMessageStream = nmeaStream
         .map<NmeaMessage>((dynamic element) =>

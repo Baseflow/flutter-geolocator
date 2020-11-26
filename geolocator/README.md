@@ -20,7 +20,7 @@ A Flutter geolocation plugin which provides easy access to platform specific loc
 ## Usage
 
 To add the geolocator to your Flutter application read the [install](https://pub.dev/packages/geolocator/install) instructions. Below are some Android and iOS specifics that are required for the geolocator to work correctly.
-  
+
 <details>
 <summary>Android</summary>
   

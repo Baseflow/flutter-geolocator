@@ -3,14 +3,10 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build.VERSION_CODES;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
-import com.baseflow.geolocator.errors.PermissionUndefinedException;
-import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -37,7 +33,7 @@ public class GeolocationManager implements ActivityResultListener {
       PositionChangedCallback positionChangedCallback,
       ErrorCallback errorCallback) {
 
-    handlePermissions(
+    permissionManager.handlePermissions(
         context,
         activity,
         () -> {
@@ -66,7 +62,7 @@ public class GeolocationManager implements ActivityResultListener {
 
     this.locationClients.add(locationClient);
 
-    handlePermissions(
+    permissionManager.handlePermissions(
         context,
         activity,
         () -> locationClient.startPositionUpdates(activity, positionChangedCallback, errorCallback),
@@ -76,26 +72,6 @@ public class GeolocationManager implements ActivityResultListener {
   public void stopPositionUpdates(@NonNull LocationClient locationClient) {
     locationClients.remove(locationClient);
     locationClient.stopPositionUpdates();
-  }
-
-
-  public void startNmeaUpdates(Context context, Activity activity, NmeaMessageaClient client,
-      NmeaChangedCallback nmeaChangedCallback, ErrorCallback errorCallback) {
-
-    handlePermissions(
-        context,
-        activity,
-        () -> client.startNmeaUpdates(nmeaChangedCallback, errorCallback),
-        errorCallback);
-  }
-
-  public void stopNmeaUpdates(NmeaMessageaClient client) {
-    client.stopNmeaUpdates();
-  }
-
-  public NmeaMessageaClient createNmeaClient(Context context) {
-    return android.os.Build.VERSION.SDK_INT >= VERSION_CODES.N ? new GnssNmeaMessageClient(context)
-        : new GpsNmeaMessageClient(context);
   }
 
   public LocationClient createLocationClient(
@@ -115,46 +91,6 @@ public class GeolocationManager implements ActivityResultListener {
     GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
     int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
     return resultCode == ConnectionResult.SUCCESS;
-  }
-
-  private void handlePermissions(
-      Context context,
-      @Nullable Activity activity,
-      Runnable hasPermissionCallback,
-      ErrorCallback errorCallback) {
-    try {
-      LocationPermission permissionStatus =
-          permissionManager.checkPermissionStatus(context, activity);
-
-      if (permissionStatus == LocationPermission.deniedForever) {
-        errorCallback.onError(ErrorCodes.permissionDenied);
-        return;
-      }
-
-      if (permissionStatus == LocationPermission.whileInUse
-          || permissionStatus == LocationPermission.always) {
-        hasPermissionCallback.run();
-        return;
-      }
-
-      if (permissionStatus == LocationPermission.denied && activity != null) {
-        permissionManager.requestPermission(
-            activity,
-            (permission) -> {
-              if (permission == LocationPermission.whileInUse
-                  || permission == LocationPermission.always) {
-                hasPermissionCallback.run();
-              } else {
-                errorCallback.onError(ErrorCodes.permissionDenied);
-              }
-            },
-            errorCallback);
-      } else {
-        errorCallback.onError(ErrorCodes.permissionDenied);
-      }
-    } catch (PermissionUndefinedException ex) {
-      errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
-    }
   }
 
   @Override
