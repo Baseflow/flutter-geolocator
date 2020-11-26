@@ -1,4 +1,4 @@
-package com.baseflow.geolocator.location;
+package com.baseflow.geolocator.nmea;
 
 import com.baseflow.geolocator.errors.ErrorCallback;
 

@@ -261,14 +261,16 @@ class Geolocator {
         timeLimit: timeLimit,
       );
 
-  /// Fires every time NMEA-0183 sentences are received.
+  /// Returns a stream emitting NMEA-0183 sentences when they are received from
+  /// the GNSS engine. With devices running a Android API level lower than 24
+  /// NMEA-0183 sentences are received from the GPS engine.
   ///
   /// This event starts all location sensors on the device and will keep them
   /// active until you cancel listening to the stream or when the application
   /// is killed.
   ///
   /// ```
-  /// StreamSubscription<NmeaMessage> nmeaStream = getNmeaStream()
+  /// StreamSubscription<NmeaMessage> nmeaStream = Geolocator.getNmeaStream()
   ///     .listen((NmeaMessage nmea) {
   ///       // Handle NMEA changes
   ///     });
@@ -286,7 +288,7 @@ class Geolocator {
   static Stream<NmeaMessage> getNmeaMessageStream() =>
       GeolocatorPlatform.instance.getNmeaMessageStream();
 
-  /// Fires whenever the location changes inside the bounds of the
+  /// Returns a stream emitting the location changes inside the bounds of the
   /// [desiredAccuracy].
   ///
   /// This event starts all location sensors on the device and will keep them
@@ -294,7 +296,8 @@ class Geolocator {
   /// is killed.
   ///
   /// ```
-  /// StreamSubscription<Position> positionStream = getPositionStream()
+  /// StreamSubscription<Position> positionStream =
+  ///     Geolocator.getPositionStream()
   ///     .listen((Position position) {
   ///       // Handle position changes
   ///     });
