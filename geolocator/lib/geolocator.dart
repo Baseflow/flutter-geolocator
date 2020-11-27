@@ -299,10 +299,9 @@ class Geolocator {
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
-    @Deprecated(
-        'The timeInterval parameter has been deprecated, use the ' 
+    @Deprecated('The timeInterval parameter has been deprecated, use the '
         'intervalDuration parameter instead')
-    int timeInterval = 0,
+        int timeInterval = 0,
     Duration intervalDuration,
     Duration timeLimit,
   }) =>
