@@ -72,6 +72,7 @@ public class PermissionManager implements PluginRegistry.RequestPermissionsResul
 
     // Before Android M, requesting permissions was not needed.
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+      this.resultCallback.onResult(LocationPermission.always);
       return;
     }
 
