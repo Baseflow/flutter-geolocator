@@ -263,9 +263,9 @@ class Geolocator {
 
   /// Returns a stream emitting NMEA-0183 sentences Android only, no-op on iOS.
   ///
-  /// With devices running an Android API level lower than 24 NMEA-0183 sentences
-  /// are received from the GPS engine. From API level 24 and up the GNSS engine
-  /// is used.
+  /// With devices running an Android API level lower than 24 NMEA-0183
+  /// sentences are received from the GPS engine. From API level 24 and up the
+  /// GNSS engine is used.
   ///
   /// This event starts all location sensors on the device and will keep them
   /// active until you cancel listening to the stream or when the application
