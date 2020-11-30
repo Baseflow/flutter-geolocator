@@ -88,7 +88,6 @@ class Position {
         o.timestamp == timestamp &&
         o.isMocked == isMocked;
 
-
     return areEqual;
   }
 
@@ -130,35 +129,35 @@ class Position {
 
     final timestamp = positionMap['timestamp'] != null
         ? DateTime.fromMillisecondsSinceEpoch(positionMap['timestamp'].toInt(),
-          isUtc: true)
+            isUtc: true)
         : null;
 
     return Position(
-        latitude: positionMap['latitude'],
-        longitude: positionMap['longitude'],
-        timestamp: timestamp,
-        altitude: positionMap['altitude'] ?? 0.0,
-        accuracy: positionMap['accuracy'] ?? 0.0,
-        heading: positionMap['heading'] ?? 0.0,
-        floor: positionMap['floor'],
-        speed: positionMap['speed'] ?? 0.0,
-        speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
-        isMocked: positionMap['is_mocked'] ?? false,
+      latitude: positionMap['latitude'],
+      longitude: positionMap['longitude'],
+      timestamp: timestamp,
+      altitude: positionMap['altitude'] ?? 0.0,
+      accuracy: positionMap['accuracy'] ?? 0.0,
+      heading: positionMap['heading'] ?? 0.0,
+      floor: positionMap['floor'],
+      speed: positionMap['speed'] ?? 0.0,
+      speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
+      isMocked: positionMap['is_mocked'] ?? false,
     );
   }
 
   /// Converts the [Position] instance into a [Map] instance that can be
   /// serialized to JSON.
   Map<String, dynamic> toJson() => {
-    'longitude': longitude,
-    'latitude': latitude,
-    'timestamp': timestamp?.millisecondsSinceEpoch,
-    'accuracy': accuracy,
-    'altitude': altitude,
-    'floor': floor,
-    'heading': heading,
-    'speed': speed,
-    'speed_accuracy': speedAccuracy,
-    'is_mocked': isMocked,
-  };
+        'longitude': longitude,
+        'latitude': latitude,
+        'timestamp': timestamp?.millisecondsSinceEpoch,
+        'accuracy': accuracy,
+        'altitude': altitude,
+        'floor': floor,
+        'heading': heading,
+        'speed': speed,
+        'speed_accuracy': speedAccuracy,
+        'is_mocked': isMocked,
+      };
 }

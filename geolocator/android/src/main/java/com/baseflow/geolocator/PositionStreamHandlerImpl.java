@@ -17,7 +17,7 @@ import java.util.Map;
 
 class PositionStreamHandlerImpl implements EventChannel.StreamHandler {
 
-  private static final String TAG = "PositionStreamImpl";
+  private static final String TAG = "PositionStreamHandler";
 
   private final GeolocationManager geolocationManager;
 

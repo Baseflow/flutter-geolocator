@@ -22,13 +22,14 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   /// The event channel used to receive [Position] updates from the native
   /// platform.
   @visibleForTesting
-  EventChannel eventChannel =
+  EventChannel positionEventChannel =
       EventChannel('flutter.baseflow.com/geolocator_updates');
 
   /// The event channel used to receive [NmeaMessage] updates from the native
   /// platform.
   @visibleForTesting
-  EventChannel nmeaChannel = EventChannel('flutter.baseflow.com/nmea_updates');
+  EventChannel nmeaEventChannel =
+      EventChannel('flutter.baseflow.com/nmea_updates');
 
   /// On Android devices you can set [forceAndroidLocationManager]
   /// to true to force the plugin to use the [LocationManager] to determine the
@@ -149,7 +150,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       return _positionStream;
     }
 
-    var positionStream = eventChannel.receiveBroadcastStream(
+    var positionStream = positionEventChannel.receiveBroadcastStream(
       locationOptions.toJson(),
     );
 
@@ -190,7 +191,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       return _nmeaMessageStream;
     }
 
-    final nmeaStream = nmeaChannel.receiveBroadcastStream();
+    final nmeaStream = nmeaEventChannel.receiveBroadcastStream();
 
     _nmeaMessageStream = nmeaStream
         .map<NmeaMessage>((dynamic element) =>

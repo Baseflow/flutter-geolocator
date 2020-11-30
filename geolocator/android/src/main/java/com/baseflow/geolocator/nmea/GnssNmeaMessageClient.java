@@ -53,16 +53,15 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
 
 
   @Override
-  public void onNmeaMessage(String s, long l) {
+  public void onNmeaMessage(String message, long timestamp) {
     if (this.nmeaChangedCallback != null) {
-      this.nmeaChangedCallback.onNmeaMessage(s, l);
+      this.nmeaChangedCallback.onNmeaMessage(message, timestamp);
     }
   }
 
 
   @Override
   public void onLocationChanged(@NonNull Location location) {
-    System.out.println("location changed");
   }
 
 
@@ -72,8 +71,8 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
 
   @SuppressLint("MissingPermission")
   @Override
-  public void onProviderDisabled(String s) {
-    if (s.equals(LocationManager.GPS_PROVIDER)) {
+  public void onProviderDisabled(String provider) {
+    if (provider.equals(LocationManager.GPS_PROVIDER)) {
       if (isListening) {
         this.locationManager.removeUpdates(this);
       }

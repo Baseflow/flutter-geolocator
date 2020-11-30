@@ -1,5 +1,7 @@
 package com.baseflow.geolocator;
 
+import android.app.Activity;
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -9,6 +11,7 @@ import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /** GeolocatorPlugin */
@@ -51,34 +54,13 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   public static void registerWith(Registrar registrar) {
     GeolocatorPlugin geolocatorPlugin = new GeolocatorPlugin();
     geolocatorPlugin.pluginRegistrar = registrar;
-    geolocatorPlugin.registerListeners();
-
-    MethodCallHandlerImpl methodCallHandler =
-        new MethodCallHandlerImpl(
-            geolocatorPlugin.permissionManager, geolocatorPlugin.geolocationManager);
-    methodCallHandler.startListening(registrar.context(), registrar.messenger());
-    methodCallHandler.setActivity(registrar.activity());
-
-    PositionStreamHandlerImpl streamHandler = new PositionStreamHandlerImpl(geolocatorPlugin.geolocationManager);
-    streamHandler.startListening(registrar.context(), registrar.messenger());
-    streamHandler.setActivity(registrar.activity());
-
-    NmeaStreamHandlerImpl nmeaStream = new NmeaStreamHandlerImpl(geolocatorPlugin.nmeaMessageManager);
-    nmeaStream.startListening(registrar.context(), registrar.messenger());
-    nmeaStream.setActivity(registrar.activity());
+    geolocatorPlugin.configureListeners(registrar.context(), registrar.messenger());
+    geolocatorPlugin.setActivity(registrar.activity());
   }
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    methodCallHandler = new MethodCallHandlerImpl(this.permissionManager, this.geolocationManager);
-    methodCallHandler.startListening(
-        flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
-    positionStreamHandler = new PositionStreamHandlerImpl(this.geolocationManager);
-    positionStreamHandler.startListening(
-        flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
-    nmeaStreamHandler = new NmeaStreamHandlerImpl(this.nmeaMessageManager);
-    nmeaStreamHandler.startListening(
-        flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
+    configureListeners(flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
   }
 
   @Override
@@ -101,19 +83,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-    if (methodCallHandler != null) {
-      methodCallHandler.setActivity(binding.getActivity());
-    }
-    if (positionStreamHandler != null) {
-      positionStreamHandler.setActivity(binding.getActivity());
-    }
-
-    if (nmeaStreamHandler != null) {
-      nmeaStreamHandler.setActivity(binding.getActivity());
-    }
-
     this.pluginBinding = binding;
-    registerListeners();
+    setActivity(binding.getActivity());
   }
 
   @Override
@@ -128,18 +99,38 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onDetachedFromActivity() {
+    setActivity(null);
+  }
+
+
+  void configureListeners(Context applicationContext, BinaryMessenger messenger) {
+    methodCallHandler =
+        new MethodCallHandlerImpl(permissionManager, geolocationManager);
+    methodCallHandler.startListening(applicationContext, messenger);
+
+    positionStreamHandler = new PositionStreamHandlerImpl(geolocationManager);
+    positionStreamHandler.startListening(applicationContext, messenger);
+
+    nmeaStreamHandler = new NmeaStreamHandlerImpl(nmeaMessageManager);
+    nmeaStreamHandler.startListening(applicationContext, messenger);
+  }
+
+  void setActivity(@Nullable Activity activity) {
     if (methodCallHandler != null) {
-      methodCallHandler.setActivity(null);
+      methodCallHandler.setActivity(activity);
     }
     if (positionStreamHandler != null) {
-      positionStreamHandler.setActivity(null);
+      positionStreamHandler.setActivity(activity);
     }
-
     if (nmeaStreamHandler != null) {
-      nmeaStreamHandler.setActivity(null);
+      nmeaStreamHandler.setActivity(activity);
     }
 
-    deregisterListeners();
+    if (activity != null) {
+      registerListeners();
+    } else {
+      deregisterListeners();
+    }
   }
 
   private void registerListeners() {

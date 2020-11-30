@@ -15,7 +15,7 @@ import java.util.Map;
 
 class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
 
-  private static final String TAG = "NmeaStreamImpl";
+  private static final String TAG = "NmeaStreamHandlerImpl";
 
   private final NmeaMessageManager nmeaMessageManager;
 
@@ -32,17 +32,17 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
     this.nmeaMessageManager = nmeaMessageManager;
   }
 
-  private static Map<String, Object> toMap(String n, Long l) {
-    if (n == null || l == null) {
+  private static Map<String, Object> toMap(String message, Long timestamp) {
+    if (message == null || timestamp == null) {
       return null;
     }
 
-    Map<String, Object> Nmea = new HashMap<>();
+    Map<String, Object> nmeaMap = new HashMap<>();
 
-    Nmea.put("timestamp", l);
-    Nmea.put("message", n);
+    nmeaMap.put("timestamp", timestamp);
+    nmeaMap.put("message", message);
 
-    return Nmea;
+    return nmeaMap;
   }
 
   void setActivity(@Nullable Activity activity) {
@@ -91,7 +91,7 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
         context,
         activity,
         this.nmeaMessageaClient,
-        (String n, long l) -> events.success(toMap(n, l)),
+        (String message, long timestamp) -> events.success(toMap(message, timestamp)),
         (ErrorCodes errorCodes) ->
             events.error(errorCodes.toString(), errorCodes.toDescription(), null));
   }
