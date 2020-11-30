@@ -261,17 +261,19 @@ class Geolocator {
         timeLimit: timeLimit,
       );
 
-  /// Returns a stream emitting NMEA-0183 sentences when they are received from
-  /// the GNSS engine. With devices running a Android API level lower than 24
-  /// NMEA-0183 sentences are received from the GPS engine.
+  /// Returns a stream emitting NMEA-0183 sentences Android only, no-op on iOS.
+  ///
+  /// With devices running an Android API level lower than 24 NMEA-0183 sentences
+  /// are received from the GPS engine. From API level 24 and up the GNSS engine
+  /// is used.
   ///
   /// This event starts all location sensors on the device and will keep them
   /// active until you cancel listening to the stream or when the application
   /// is killed.
   ///
   /// ```
-  /// StreamSubscription<NmeaMessage> nmeaStream = Geolocator.getNmeaStream()
-  ///     .listen((NmeaMessage nmea) {
+  /// StreamSubscription<NmeaMessage> nmeaStream =
+  ///     Geolocator.getNmeaMessageStream().listen((NmeaMessage nmea) {
   ///       // Handle NMEA changes
   ///     });
   /// ```

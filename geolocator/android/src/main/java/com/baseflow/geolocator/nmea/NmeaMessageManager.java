@@ -34,7 +34,8 @@ public class NmeaMessageManager {
   }
 
   public NmeaMessageaClient createNmeaClient(Context context) {
-    return android.os.Build.VERSION.SDK_INT >= VERSION_CODES.N ? new GnssNmeaMessageClient(context)
+    return android.os.Build.VERSION.SDK_INT >= VERSION_CODES.N
+        ? new GnssNmeaMessageClient(context)
         : new GpsNmeaMessageClient(context);
   }
 
