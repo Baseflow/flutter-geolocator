@@ -1,3 +1,7 @@
+## 6.2.0
+
+- Added a functionality to receive NMEA messages.
+
 ## 6.1.9
 
 - Return `LocationPermission.always` when requesting permission on Android 5.1 and below (see issue [#610](https://github.com/Baseflow/flutter-geolocator/issues/610)).

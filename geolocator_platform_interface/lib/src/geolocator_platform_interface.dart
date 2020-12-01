@@ -7,6 +7,7 @@ import 'package:vector_math/vector_math.dart';
 import 'enums/enums.dart';
 import 'implementations/method_channel_geolocator.dart';
 import 'models/models.dart';
+import 'models/nmea_message.dart';
 
 /// The interface that implementations of geolocator  must implement.
 ///
@@ -107,7 +108,36 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError('getCurrentPosition() has not been implemented.');
   }
 
-  /// Fires whenever the location changes inside the bounds of the
+  /// Returns a stream emitting NMEA-0183 sentences when they are received from
+  /// the GNSS engine. With devices running a Android API level lower than 24
+  /// NMEA-0183 sentences are received from the GPS engine.
+  ///
+  /// This event starts all location sensors on the device and will keep them
+  /// active until you cancel listening to the stream or when the application
+  /// is killed.
+  ///
+  /// ```
+  /// StreamSubscription<NmeaMessage> nmeaStream = Geolocator.getNmeaStream()
+  ///     .listen((NmeaMessage nmea) {
+  ///       // Handle NMEA changes
+  ///     });
+  /// ```
+  ///
+  /// When no longer needed cancel the subscription
+  /// nmeaStream.cancel();
+  ///
+  /// Throws a [PermissionDeniedException] when trying to request the device's
+  /// location when the user denied access.
+  /// Throws a [LocationServiceDisabledException] when the user allowed access,
+  /// but the location services of the device are disabled.
+  ///
+  /// for more info about NMEA 0183 see https://en.wikipedia.org/wiki/NMEA_0183
+  Stream<NmeaMessage> getNmeaMessageStream() {
+    throw UnimplementedError(
+        'getNmeaMessageStream() has not been implemented.');
+  }
+
+  /// Returns a stream emitting the location changes inside the bounds of the
   /// [desiredAccuracy].
   ///
   /// This event starts all location sensors on the device and will keep them
@@ -115,7 +145,8 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// is killed.
   ///
   /// ```
-  /// StreamSubscription<Position> positionStream = getPositionStream()
+  /// StreamSubscription<Position> positionStream =
+  ///     Geolocator.getPositionStream()
   ///     .listen((Position position) {
   ///       // Handle position changes
   ///     });

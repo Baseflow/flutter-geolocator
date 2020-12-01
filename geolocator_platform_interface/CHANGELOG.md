@@ -1,3 +1,7 @@
+## 1.1.0
+
+- Added a functionality to receive NMEA messages. This can be done using the new nmea_message model.
+
 ## 1.0.8
 
 - Added the optional floor property to the position model and can be used by implementations to specify the floor on which the device is located (see [#562](https://github.com/Baseflow/flutter-geolocator/issues/562)).

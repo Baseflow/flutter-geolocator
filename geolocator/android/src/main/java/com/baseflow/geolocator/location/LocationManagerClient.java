@@ -20,7 +20,8 @@ import com.google.android.gms.common.util.Strings;
 
 import java.util.List;
 
-class LocationManagerClient implements LocationClient, LocationListener {
+
+class LocationManagerClient implements LocationClient, LocationListener{
   private static final long TWO_MINUTES = 120000;
 
   private final LocationManager locationManager;

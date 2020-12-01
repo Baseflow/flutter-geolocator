@@ -20,7 +20,6 @@ void main() {
 
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
-  /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
     return ExamplePage(Icons.location_on, (context) => GeolocatorWidget());
   }
@@ -30,19 +29,20 @@ class GeolocatorWidget extends StatefulWidget {
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
-  final List<_PositionItem> _positionItems = <_PositionItem>[];
+  final List<_GeolocatorItem> _geolocatorItems = <_GeolocatorItem>[];
   StreamSubscription<Position> _positionStreamSubscription;
+  StreamSubscription<NmeaMessage> _nmeaStreamSubscription;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: ListView.builder(
-        itemCount: _positionItems.length,
+        itemCount: _geolocatorItems.length,
         itemBuilder: (context, index) {
-          final positionItem = _positionItems[index];
+          final positionItem = _geolocatorItems[index];
 
-          if (positionItem.type == _PositionItemType.permission) {
+          if (positionItem.type == _GeolocatorItemType.permission) {
             return ListTile(
               title: Text(positionItem.displayValue,
                   textAlign: TextAlign.center,
@@ -72,10 +72,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
               onPressed: () async {
                 await Geolocator.getLastKnownPosition().then((value) => {
-                      _positionItems.add(_PositionItem(
-                          _PositionItemType.position, value.toString()))
+                      _geolocatorItems.add(_GeolocatorItem(
+                          _GeolocatorItemType.position, value.toString()))
                     });
-
                 setState(
                   () {},
                 );
@@ -89,10 +88,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
                 onPressed: () async {
                   await Geolocator.getCurrentPosition().then((value) => {
-                        _positionItems.add(_PositionItem(
-                            _PositionItemType.position, value.toString()))
+                        _geolocatorItems.add(_GeolocatorItem(
+                            _GeolocatorItemType.position, value.toString()))
                       });
-
                   setState(
                     () {},
                   );
@@ -103,7 +101,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             bottom: 150.0,
             right: 10.0,
             child: FloatingActionButton.extended(
-              onPressed: _toggleListening,
+              onPressed: _toggleListeningToPositionStream,
               label: Text(() {
                 if (_positionStreamSubscription == null) {
                   return "getPositionStream = null";
@@ -112,15 +110,31 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                       " ${_positionStreamSubscription.isPaused ? "off" : "on"}";
                 }
               }()),
-              backgroundColor: _determineButtonColor(),
+              backgroundColor: _determineButtonColorForPositionStreamButton(),
+            ),
+          ),
+          Positioned(
+            bottom: 360.0,
+            right: 10.0,
+            child: FloatingActionButton.extended(
+              onPressed: _toggleListeningToNmeaStream,
+              label: Text(() {
+                if (_nmeaStreamSubscription == null) {
+                  return "getNmeaMessageStream= null";
+                } else {
+                  return "getNmeaMessageStream ="
+                      " ${_nmeaStreamSubscription.isPaused ? "off" : "on"}";
+                }
+              }()),
+              backgroundColor: _determineButtonColorForNmeaButton(),
             ),
           ),
           Positioned(
             bottom: 220.0,
             right: 10.0,
             child: FloatingActionButton.extended(
-              onPressed: () => setState(_positionItems.clear),
-              label: Text("clear positions"),
+              onPressed: () => setState(_geolocatorItems.clear),
+              label: Text("clear "),
             ),
           ),
           Positioned(
@@ -129,8 +143,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
               onPressed: () async {
                 await Geolocator.checkPermission().then((value) => {
-                      _positionItems.add(_PositionItem(
-                          _PositionItemType.permission, value.toString()))
+                      _geolocatorItems.add(_GeolocatorItem(
+                          _GeolocatorItemType.permission, value.toString()))
                     });
                 setState(() {});
               },
@@ -142,21 +156,22 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     );
   }
 
-  bool _isListening() => !(_positionStreamSubscription == null ||
-      _positionStreamSubscription.isPaused);
+  bool _isListeningToPositionStream() =>
+      !(_positionStreamSubscription == null ||
+          _positionStreamSubscription.isPaused);
 
-  Color _determineButtonColor() {
-    return _isListening() ? Colors.green : Colors.red;
+  Color _determineButtonColorForPositionStreamButton() {
+    return _isListeningToPositionStream() ? Colors.green : Colors.red;
   }
 
-  void _toggleListening() {
+  void _toggleListeningToPositionStream() {
     if (_positionStreamSubscription == null) {
       final positionStream = Geolocator.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription.cancel();
         _positionStreamSubscription = null;
-      }).listen((position) => setState(() => _positionItems.add(
-          _PositionItem(_PositionItemType.position, position.toString()))));
+      }).listen((position) => setState(() => _geolocatorItems.add(
+          _GeolocatorItem(_GeolocatorItemType.position, position.toString()))));
       _positionStreamSubscription.pause();
     }
 
@@ -169,25 +184,58 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     });
   }
 
+  bool _isListeningToNmeaStream() =>
+      !(_nmeaStreamSubscription == null || _nmeaStreamSubscription.isPaused);
+
+  Color _determineButtonColorForNmeaButton() {
+    return _isListeningToNmeaStream() ? Colors.green : Colors.red;
+  }
+
+  void _toggleListeningToNmeaStream() {
+    if (_nmeaStreamSubscription == null) {
+      final nmeaStream = Geolocator.getNmeaMessageStream();
+      _nmeaStreamSubscription = nmeaStream.handleError((error) {
+        _nmeaStreamSubscription.cancel();
+        _nmeaStreamSubscription = null;
+      }).listen((nmeaMessage) => setState(() => _geolocatorItems.add(
+          _GeolocatorItem(_GeolocatorItemType.nmea,
+              nmeaMessage.message + nmeaMessage.timestamp.toString()))));
+      _nmeaStreamSubscription.pause();
+    }
+
+    setState(() {
+      if (_nmeaStreamSubscription.isPaused) {
+        _nmeaStreamSubscription.resume();
+      } else {
+        _nmeaStreamSubscription.pause();
+      }
+    });
+  }
+
   @override
   void dispose() {
     if (_positionStreamSubscription != null) {
       _positionStreamSubscription.cancel();
       _positionStreamSubscription = null;
     }
+    if (_nmeaStreamSubscription != null) {
+      _nmeaStreamSubscription.cancel();
+      _nmeaStreamSubscription = null;
+    }
 
     super.dispose();
   }
 }
 
-enum _PositionItemType {
+enum _GeolocatorItemType {
   permission,
   position,
+  nmea,
 }
 
-class _PositionItem {
-  _PositionItem(this.type, this.displayValue);
+class _GeolocatorItem {
+  _GeolocatorItem(this.type, this.displayValue);
 
-  final _PositionItemType type;
+  final _GeolocatorItemType type;
   final String displayValue;
 }

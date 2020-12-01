@@ -5,22 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
-import com.baseflow.geolocator.errors.PermissionUndefinedException;
-import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-;
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GeolocationManager implements ActivityResultListener {
-  @NonNull private final PermissionManager permissionManager;
+
+  @NonNull
+  private final PermissionManager permissionManager;
   private final List<LocationClient> locationClients;
+
 
   public GeolocationManager(@NonNull PermissionManager permissionManager) {
     this.permissionManager = permissionManager;
@@ -34,7 +33,7 @@ public class GeolocationManager implements ActivityResultListener {
       PositionChangedCallback positionChangedCallback,
       ErrorCallback errorCallback) {
 
-    handlePermissions(
+    permissionManager.handlePermissions(
         context,
         activity,
         () -> {
@@ -63,7 +62,7 @@ public class GeolocationManager implements ActivityResultListener {
 
     this.locationClients.add(locationClient);
 
-    handlePermissions(
+    permissionManager.handlePermissions(
         context,
         activity,
         () -> locationClient.startPositionUpdates(activity, positionChangedCallback, errorCallback),
@@ -92,46 +91,6 @@ public class GeolocationManager implements ActivityResultListener {
     GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
     int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
     return resultCode == ConnectionResult.SUCCESS;
-  }
-
-  private void handlePermissions(
-      Context context,
-      @Nullable Activity activity,
-      Runnable hasPermissionCallback,
-      ErrorCallback errorCallback) {
-    try {
-      LocationPermission permissionStatus =
-          permissionManager.checkPermissionStatus(context, activity);
-
-      if (permissionStatus == LocationPermission.deniedForever) {
-        errorCallback.onError(ErrorCodes.permissionDenied);
-        return;
-      }
-
-      if (permissionStatus == LocationPermission.whileInUse
-          || permissionStatus == LocationPermission.always) {
-        hasPermissionCallback.run();
-        return;
-      }
-
-      if (permissionStatus == LocationPermission.denied && activity != null) {
-        permissionManager.requestPermission(
-            activity,
-            (permission) -> {
-              if (permission == LocationPermission.whileInUse
-                  || permission == LocationPermission.always) {
-                hasPermissionCallback.run();
-              } else {
-                errorCallback.onError(ErrorCodes.permissionDenied);
-              }
-            },
-            errorCallback);
-      } else {
-        errorCallback.onError(ErrorCodes.permissionDenied);
-      }
-    } catch (PermissionUndefinedException ex) {
-      errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
-    }
   }
 
   @Override
