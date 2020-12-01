@@ -1,4 +1,4 @@
-## 1.0.9
+## 1.1.0
 
 - Added a functionality to receive NMEA messages. This can be done using the new nmea_message model.
 

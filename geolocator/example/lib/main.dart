@@ -29,7 +29,7 @@ class GeolocatorWidget extends StatefulWidget {
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
-  final List<_PositionItem> _positionItems = <_PositionItem>[];
+  final List<_GeolocatorItem> _geolocatorItems = <_GeolocatorItem>[];
   StreamSubscription<Position> _positionStreamSubscription;
   StreamSubscription<NmeaMessage> _nmeaStreamSubscription;
 
@@ -38,11 +38,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: ListView.builder(
-        itemCount: _positionItems.length,
+        itemCount: _geolocatorItems.length,
         itemBuilder: (context, index) {
-          final positionItem = _positionItems[index];
+          final positionItem = _geolocatorItems[index];
 
-          if (positionItem.type == _PositionItemType.permission) {
+          if (positionItem.type == _GeolocatorItemType.permission) {
             return ListTile(
               title: Text(positionItem.displayValue,
                   textAlign: TextAlign.center,
@@ -72,8 +72,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
               onPressed: () async {
                 await Geolocator.getLastKnownPosition().then((value) => {
-                      _positionItems.add(_PositionItem(
-                          _PositionItemType.position, value.toString()))
+                      _geolocatorItems.add(_GeolocatorItem(
+                          _GeolocatorItemType.position, value.toString()))
                     });
                 setState(
                   () {},
@@ -88,10 +88,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
                 onPressed: () async {
                   await Geolocator.getCurrentPosition().then((value) => {
-                        _positionItems.add(_PositionItem(
-                            _PositionItemType.position, value.toString()))
+                        _geolocatorItems.add(_GeolocatorItem(
+                            _GeolocatorItemType.position, value.toString()))
                       });
-
                   setState(
                     () {},
                   );
@@ -134,8 +133,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             bottom: 220.0,
             right: 10.0,
             child: FloatingActionButton.extended(
-              onPressed: () => setState(_positionItems.clear),
-              label: Text("clear positions"),
+              onPressed: () => setState(_geolocatorItems.clear),
+              label: Text("clear "),
             ),
           ),
           Positioned(
@@ -144,8 +143,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
               onPressed: () async {
                 await Geolocator.checkPermission().then((value) => {
-                      _positionItems.add(_PositionItem(
-                          _PositionItemType.permission, value.toString()))
+                      _geolocatorItems.add(_GeolocatorItem(
+                          _GeolocatorItemType.permission, value.toString()))
                     });
                 setState(() {});
               },
@@ -171,8 +170,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription.cancel();
         _positionStreamSubscription = null;
-      }).listen((position) => setState(() => _positionItems.add(
-          _PositionItem(_PositionItemType.position, position.toString()))));
+      }).listen((position) => setState(() => _geolocatorItems.add(
+          _GeolocatorItem(_GeolocatorItemType.position, position.toString()))));
       _positionStreamSubscription.pause();
     }
 
@@ -198,10 +197,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       _nmeaStreamSubscription = nmeaStream.handleError((error) {
         _nmeaStreamSubscription.cancel();
         _nmeaStreamSubscription = null;
-      }).listen((nmeaMessage) => setState(() => _positionItems.add(
-          _PositionItem(_PositionItemType.nmea,
+      }).listen((nmeaMessage) => setState(() => _geolocatorItems.add(
+          _GeolocatorItem(_GeolocatorItemType.nmea,
               nmeaMessage.message + nmeaMessage.timestamp.toString()))));
-
       _nmeaStreamSubscription.pause();
     }
 
@@ -229,15 +227,15 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 }
 
-enum _PositionItemType {
+enum _GeolocatorItemType {
   permission,
   position,
   nmea,
 }
 
-class _PositionItem {
-  _PositionItem(this.type, this.displayValue);
+class _GeolocatorItem {
+  _GeolocatorItem(this.type, this.displayValue);
 
-  final _PositionItemType type;
+  final _GeolocatorItemType type;
   final String displayValue;
 }
