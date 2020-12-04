@@ -57,7 +57,10 @@ class FusedLocationClient implements LocationClient {
               LocationAvailability locationAvailability) {
             if (!locationAvailability.isLocationAvailable()) {
               if (errorCallback != null) {
-                errorCallback.onError(ErrorCodes.locationServicesDisabled);
+                ErrorCodes errorCode = checkLocationService(context)
+                    ? ErrorCodes.locationNotAvailable
+                    : ErrorCodes.locationServicesDisabled;
+                errorCallback.onError(errorCode);
               }
             }
           }

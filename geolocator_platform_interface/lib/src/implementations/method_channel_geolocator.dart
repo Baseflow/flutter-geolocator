@@ -200,6 +200,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         throw PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         throw PositionUpdateException(exception.message);
+      case 'LOCATION_NOT_AVAILABLE':
+        throw LocationNotAvailableException();
       default:
         throw exception;
     }

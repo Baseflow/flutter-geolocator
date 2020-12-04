@@ -6,7 +6,8 @@ public enum ErrorCodes {
   locationServicesDisabled,
   permissionDefinitionsNotFound,
   permissionDenied,
-  permissionRequestInProgress;
+  permissionRequestInProgress,
+  locationNotAvailable;
 
   public String toString() {
     switch (this) {
@@ -22,6 +23,9 @@ public enum ErrorCodes {
         return "PERMISSION_DENIED";
       case permissionRequestInProgress:
         return "PERMISSION_REQUEST_IN_PROGRESS";
+      case locationNotAvailable:
+        return "LOCATION_NOT_AVAILABLE";
+
       default:
         throw new IndexOutOfBoundsException();
     }
@@ -41,6 +45,8 @@ public enum ErrorCodes {
         return "User denied permissions to access the device's location.";
       case permissionRequestInProgress:
         return "Already listening for location updates. If you want to restart listening please cancel other subscriptions first";
+      case locationNotAvailable:
+        return "A location fix was not available. There was something wrong in the device's settings or environment.";
       default:
         throw new IndexOutOfBoundsException();
     }

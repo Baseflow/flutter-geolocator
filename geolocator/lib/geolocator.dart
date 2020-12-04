@@ -217,6 +217,10 @@ class Geolocator {
 
   /// Returns a [Future] containing a [bool] value indicating whether location
   /// services are enabled on the device.
+  ///
+  /// On android, this does not retrieve information about the Device's
+  /// settings. Geolocator may ask in a pop-up window for additional location
+  /// settings if needed.
   static Future<bool> isLocationServiceEnabled() =>
       GeolocatorPlatform.instance.isLocationServiceEnabled();
 
@@ -238,11 +242,13 @@ class Geolocator {
   /// account.
   ///
   /// You can control the precision of the location updates by supplying the
-  /// [desiredAccuracy] parameter (defaults to "best"). On Android you can
-  /// force the use of the Android LocationManager instead of the
-  /// FusedLocationProvider by setting the [forceAndroidLocationManager]
-  /// parameter to true. The [timeLimit] parameter allows you to specify a
-  /// timeout interval (by default no time limit is configured).
+  /// [desiredAccuracy] parameter (defaults to "best"). The "medium" accuracy
+  /// may not work on an AVD using FusedLocationProvider.
+  /// On Android you can force the use of the Android LocationManager instead of
+  /// the FusedLocationProvider by setting the
+  /// [forceAndroidLocationManager] parameter to true. The [timeLimit]
+  /// parameter allows you to specify a timeout interval (by default no time
+  /// limit is configured).
   ///
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
@@ -279,9 +285,11 @@ class Geolocator {
   /// ```
   ///
   /// You can control the precision of the location updates by supplying the
-  /// [desiredAccuracy] parameter (defaults to "best"). The [distanceFilter]
-  /// parameter controls the minimum distance the device needs to move before
-  /// the update is emitted (default value is 0 indicator no filter is used).
+  /// [desiredAccuracy] parameter (defaults to "best").The "medium" accuracy
+  /// may not work on an AVD using FusedLocationProvider.
+  /// The [distanceFilter] parameter controls the minimum distance
+  /// the device needs to move before the update is emitted
+  /// (default value is 0 indicator no filter is used).
   /// On Android you can force the use of the Android LocationManager instead
   /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
   /// parameter to true. Using the [intervalDuration] you can control the amount
