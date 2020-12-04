@@ -1,3 +1,6 @@
+## 7.0.0-nullsafety.2
+
+- Merged fix for issue [#610](https://github.com/Baseflow/flutter-geolocator/issues/610) into nnbd.
 
 ## 7.0.0-nullsafety.1
 
@@ -7,6 +10,14 @@
 ## 7.0.0-nullsafety.0
 
 - Migrated to support null safety.
+
+## 6.1.9
+
+- Return `LocationPermission.always` when requesting permission on Android 5.1 and below (see issue [#610](https://github.com/Baseflow/flutter-geolocator/issues/610)).
+
+## 6.1.8+1
+
+- Fixed Dart formatting issue.
 
 ## 6.1.8
 

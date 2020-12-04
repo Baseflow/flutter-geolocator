@@ -19,13 +19,8 @@ A Flutter geolocation plugin which provides easy access to platform specific loc
 
 ## Usage
 
-To use this plugin, add `geolocator` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/). For example:
-
-```yaml
-dependencies:
-  geolocator: ^7.0.0-nullsafety.1
-```
-
+To add the geolocator to your Flutter application read the [install](https://pub.dev/packages/geolocator/install) instructions. Below are some Android and iOS specifics that are required for the geolocator to work correctly.
+  
 <details>
 <summary>Android</summary>
   
