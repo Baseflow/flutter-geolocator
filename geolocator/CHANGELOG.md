@@ -1,3 +1,7 @@
+## 6.1.10
+
+- Filter false positive notifications on Android indicating location services are not available (see issue [#585](https://github.com/Baseflow/flutter-geolocator/issues/585)).
+
 ## 6.1.9
 
 - Return `LocationPermission.always` when requesting permission on Android 5.1 and below (see issue [#610](https://github.com/Baseflow/flutter-geolocator/issues/610)).

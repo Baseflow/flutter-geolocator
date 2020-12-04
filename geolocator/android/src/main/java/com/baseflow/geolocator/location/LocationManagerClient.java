@@ -21,8 +21,9 @@ import com.google.android.gms.common.util.Strings;
 import java.util.List;
 
 class LocationManagerClient implements LocationClient, LocationListener {
-  private static final long TWO_MINUTES = 120000;
 
+  private static final long TWO_MINUTES = 120000;
+  public Context context;
   private final LocationManager locationManager;
   @Nullable private final LocationOptions locationOptions;
 
@@ -37,6 +38,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
       @NonNull Context context, @Nullable LocationOptions locationOptions) {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     this.locationOptions = locationOptions;
+    this.context = context;
   }
 
   @Override
@@ -46,14 +48,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
       return;
     }
 
-    listener.onLocationServiceResult(checkLocationServices());
-  }
-
-  private boolean checkLocationServices() {
-    boolean gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    boolean network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-    return gps_enabled || network_enabled;
+    listener.onLocationServiceResult(checkLocationService(context));
   }
 
   @Override
@@ -85,7 +80,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
       PositionChangedCallback positionChangedCallback,
       ErrorCallback errorCallback) {
 
-    if (!checkLocationServices()) {
+    if (!checkLocationService(context)) {
       errorCallback.onError(ErrorCodes.locationServicesDisabled);
       return;
     }
