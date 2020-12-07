@@ -1,3 +1,7 @@
+## 7.0.0-nullsafety.3
+
+- Merged versions 6.1.11 and 6.1.12 into nndb.
+
 ## 7.0.0-nullsafety.2
 
 - Merged fix for issue [#610](https://github.com/Baseflow/flutter-geolocator/issues/610) into nnbd.
@@ -10,6 +14,18 @@
 ## 7.0.0-nullsafety.0
 
 - Migrated to support null safety.
+
+## 6.1.12
+
+- Added an example on how to access the current position of the device to the README.md (see issue [#615](https://github.com/Baseflow/flutter-geolocator/issues/615)).
+
+## 6.1.11
+
+- Solve issue on Android which can throw a `ConcurrentModificationException` when accessing locations simultaneously (see issue [#620](https://github.com/Baseflow/flutter-geolocator/issues/620)).
+
+## 6.1.10
+
+- Filter false positive notifications on Android indicating location services are not available (see issue [#585](https://github.com/Baseflow/flutter-geolocator/issues/585)).
 
 ## 6.1.9
 
