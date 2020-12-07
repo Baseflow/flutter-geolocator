@@ -1,3 +1,7 @@
+## 6.1.11
+
+- Solve issue on Android which can throw a `ConcurrentModificationException` when accessing locations simultaneously (see issue [#620](https://github.com/Baseflow/flutter-geolocator/issues/620)).
+
 ## 6.1.10
 
 - Filter false positive notifications on Android indicating location services are not available (see issue [#585](https://github.com/Baseflow/flutter-geolocator/issues/585)).
