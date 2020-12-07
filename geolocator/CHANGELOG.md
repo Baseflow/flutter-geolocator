@@ -1,3 +1,7 @@
+## 6.1.12
+
+- Added an example on how to access the current position of the device to the README.md (see issue [#615](https://github.com/Baseflow/flutter-geolocator/issues/615)).
+
 ## 6.1.11
 
 - Solve issue on Android which can throw a `ConcurrentModificationException` when accessing locations simultaneously (see issue [#620](https://github.com/Baseflow/flutter-geolocator/issues/620)).
