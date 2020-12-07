@@ -15,8 +15,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GeolocationManager implements ActivityResultListener {
   @NonNull private final PermissionManager permissionManager;
