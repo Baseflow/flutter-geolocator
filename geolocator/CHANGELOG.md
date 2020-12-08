@@ -1,3 +1,7 @@
+## 6.1.13
+
+- Resolve deprecation warnings when building for Android.
+
 ## 6.1.12
 
 - Added an example on how to access the current position of the device to the README.md (see issue [#615](https://github.com/Baseflow/flutter-geolocator/issues/615)).
