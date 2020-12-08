@@ -17,9 +17,9 @@ import com.baseflow.geolocator.errors.PermissionUndefinedException;
 
 import java.util.*;
 
-import io.flutter.plugin.common.PluginRegistry;
-
-public class PermissionManager implements PluginRegistry.RequestPermissionsResultListener {
+@SuppressWarnings("deprecation")
+public class PermissionManager
+    implements io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener {
 
   private static final int PERMISSION_REQUEST_CODE = 109;
 
