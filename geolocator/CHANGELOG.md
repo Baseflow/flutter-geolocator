@@ -1,3 +1,7 @@
+## 7.0.0-nullsafety.4
+
+- Merged versions 6.1.13 into nndb.
+
 ## 7.0.0-nullsafety.3
 
 - Merged versions 6.1.11 and 6.1.12 into nndb.
@@ -14,6 +18,10 @@
 ## 7.0.0-nullsafety.0
 
 - Migrated to support null safety.
+
+## 6.1.13
+
+- Resolve deprecation warnings when building for Android.
 
 ## 6.1.12
 
