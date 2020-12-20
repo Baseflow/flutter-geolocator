@@ -43,7 +43,7 @@ class FusedLocationClient implements LocationClient {
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PositionChangedCallback positionChangedCallback;
 
-  private final CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+  @Nullable private CancellationTokenSource cancellationTokenSource;
 
   public FusedLocationClient(@NonNull Context context, @Nullable LocationOptions locationOptions) {
     this.context = context;
@@ -205,45 +205,51 @@ class FusedLocationClient implements LocationClient {
 
   @SuppressLint("MissingPermission")
   private void getCurrentLocation(
-          PositionChangedCallback positionChangedCallback,
-          ErrorCallback errorCallback) {
+         PositionChangedCallback positionChangedCallback,
+         ErrorCallback errorCallback) {
+    if (cancellationTokenSource == null) {
+        cancellationTokenSource = new CancellationTokenSource();
+    }
 
-      final LocationAccuracy accuracy = locationOptions != null ?
-                                        locationOptions.getAccuracy() :
-                                        LocationAccuracy.high;
+    final LocationAccuracy accuracy = locationOptions != null ?
+                                      locationOptions.getAccuracy() :
+                                      LocationAccuracy.high;
 
-      final Task<Location> currentLocationTask = fusedLocationProviderClient.getCurrentLocation(
-              toPriority(accuracy),
-              cancellationTokenSource.getToken());
+    final Task<Location> currentLocationTask = fusedLocationProviderClient.getCurrentLocation(
+            toPriority(accuracy),
+            cancellationTokenSource.getToken());
 
-      currentLocationTask.addOnCompleteListener(task -> {
-          if (task.isSuccessful() && task.getResult() != null) {
-              positionChangedCallback.onPositionChanged(task.getResult());
-          } else {
-              Log.e("Geolocator", "Error trying to get current GPS location.");
-              if (errorCallback != null) {
-                  errorCallback.onError(ErrorCodes.errorWhileAcquiringPosition);
-              }
-          }
-      });
+    currentLocationTask.addOnCompleteListener(task -> {
+        if (task.isSuccessful() && task.getResult() != null) {
+            positionChangedCallback.onPositionChanged(task.getResult());
+        } else {
+            Log.e("Geolocator", "Error trying to get current GPS location.");
+            if (errorCallback != null) {
+                errorCallback.onError(ErrorCodes.errorWhileAcquiringPosition);
+            }
+        }
+    });
   }
 
   @SuppressLint("MissingPermission")
   private void getCurrentLocationUpdates(
-          @NonNull PositionChangedCallback positionChangedCallback,
-          @NonNull ErrorCallback errorCallback,
-          @NonNull LocationRequest locationRequest) {
-      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
-          getCurrentLocation(positionChangedCallback, errorCallback);
-      } else {
-          fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-                                                             locationCallback,
-                                                             Looper.getMainLooper());
-      }
+        @NonNull PositionChangedCallback positionChangedCallback,
+        @NonNull ErrorCallback errorCallback,
+        @NonNull LocationRequest locationRequest) {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
+        getCurrentLocation(positionChangedCallback, errorCallback);
+    } else {
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                                                           locationCallback,
+                                                           Looper.getMainLooper());
+    }
   }
 
   public void stopPositionUpdates() {
-    cancellationTokenSource.cancel();
+    if (cancellationTokenSource != null) {
+        cancellationTokenSource.cancel();
+        cancellationTokenSource = null;
+    }
     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
   }
 
