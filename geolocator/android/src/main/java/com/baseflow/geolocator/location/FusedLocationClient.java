@@ -5,16 +5,32 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
+import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.*;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.CancellationTokenSource;
+import com.google.android.gms.tasks.Task;
+
 import java.util.Random;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 class FusedLocationClient implements LocationClient {
   private final Context context;
@@ -26,6 +42,8 @@ class FusedLocationClient implements LocationClient {
   @Nullable private Activity activity;
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PositionChangedCallback positionChangedCallback;
+
+  private final CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
   public FusedLocationClient(@NonNull Context context, @Nullable LocationOptions locationOptions) {
     this.context = context;
@@ -127,7 +145,6 @@ class FusedLocationClient implements LocationClient {
     return false;
   }
 
-  @SuppressLint("MissingPermission")
   public void startPositionUpdates(
       @Nullable Activity activity,
       @NonNull PositionChangedCallback positionChangedCallback,
@@ -143,10 +160,10 @@ class FusedLocationClient implements LocationClient {
     SettingsClient settingsClient = LocationServices.getSettingsClient(context);
     settingsClient
         .checkLocationSettings(settingsRequest)
-        .addOnSuccessListener(
-            locationSettingsResponse ->
-                fusedLocationProviderClient.requestLocationUpdates(
-                    locationRequest, locationCallback, Looper.getMainLooper()))
+        .addOnSuccessListener(locationSettingsResponse -> getCurrentLocationUpdates(
+                positionChangedCallback,
+                errorCallback,
+                locationRequest))
         .addOnFailureListener(
             e -> {
               if (e instanceof ResolvableApiException) {
@@ -174,8 +191,9 @@ class FusedLocationClient implements LocationClient {
                 ApiException ae = (ApiException) e;
                 int statusCode = ae.getStatusCode();
                 if (statusCode == LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE) {
-                  fusedLocationProviderClient.requestLocationUpdates(
-                      locationRequest, locationCallback, Looper.getMainLooper());
+                    getCurrentLocationUpdates(positionChangedCallback,
+                                              errorCallback,
+                                              locationRequest);
                 } else {
                   // This should not happen according to Android documentation but it has been
                   // observed on some phones.
@@ -185,7 +203,47 @@ class FusedLocationClient implements LocationClient {
             });
   }
 
+  @SuppressLint("MissingPermission")
+  private void getCurrentLocation(
+          PositionChangedCallback positionChangedCallback,
+          ErrorCallback errorCallback) {
+
+      final LocationAccuracy accuracy = locationOptions != null ?
+                                        locationOptions.getAccuracy() :
+                                        LocationAccuracy.high;
+
+      final Task<Location> currentLocationTask = fusedLocationProviderClient.getCurrentLocation(
+              toPriority(accuracy),
+              cancellationTokenSource.getToken());
+
+      currentLocationTask.addOnCompleteListener(task -> {
+          if (task.isSuccessful() && task.getResult() != null) {
+              positionChangedCallback.onPositionChanged(task.getResult());
+          } else {
+              Log.e("Geolocator", "Error trying to get current GPS location.");
+              if (errorCallback != null) {
+                  errorCallback.onError(ErrorCodes.errorWhileAcquiringPosition);
+              }
+          }
+      });
+  }
+
+  @SuppressLint("MissingPermission")
+  private void getCurrentLocationUpdates(
+          @NonNull PositionChangedCallback positionChangedCallback,
+          @NonNull ErrorCallback errorCallback,
+          @NonNull LocationRequest locationRequest) {
+      if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
+          getCurrentLocation(positionChangedCallback, errorCallback);
+      } else {
+          fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                                                             locationCallback,
+                                                             Looper.getMainLooper());
+      }
+  }
+
   public void stopPositionUpdates() {
+    cancellationTokenSource.cancel();
     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
   }
 
