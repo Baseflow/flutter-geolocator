@@ -1,3 +1,7 @@
+## 6.1.14
+
+- Update the url_launcher dependency in the example app.
+
 ## 6.1.13
 
 - Resolve deprecation warnings when building for Android.
