@@ -30,7 +30,7 @@ dependencies:
 
   # The following adds the URL Launcher plugin which is used by
   # the demo application to open the links in the web browser.
-  url_launcher: ^5.4.11
+  url_launcher: ^5.7.10
 
 dev_dependencies:
   flutter_test:
