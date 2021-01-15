@@ -83,7 +83,13 @@ On iOS you'll need to add the following entries to your Info.plist file (located
 <string>This app needs access to location when in the background.</string>
 ```
 
-If you would like to receive updates when your App is in the background, you'll also need to add the Background Modes capability to your XCode project (Project > Signing and Capabilities > "+ Capability" button) and select Location Updates. Be careful with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
+If you would like to receive updates when your App is in the background, you'll also need to
+- Add the Background Modes capability to your XCode project (Project > Signing and Capabilities > "+ Capability" button) and select Location Updates. Be careful with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
+- Add the following to the Info.plist file:
+``` xml
+<key>EnableBackgroundLocationUpdates</key>
+<true/>
+```
 
 </details>
 
