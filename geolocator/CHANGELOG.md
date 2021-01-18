@@ -1,3 +1,7 @@
+## 6.1.14
+
+- iOS: Look for UIBackgroundModes location instead of having to register a separate `EnableBackgroundLocationUpdates` key in the Info.plist (see PR [#645](https://github.com/Baseflow/flutter-geolocator/pull/645)).
+
 ## 6.1.13
 
 - Resolve deprecation warnings when building for Android.
