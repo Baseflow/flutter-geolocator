@@ -84,11 +84,7 @@
 
 + (BOOL) shouldEnableBackgroundLocationUpdates {
     if (@available(iOS 9.0, *)) {
-        id config = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"EnableBackgroundLocationUpdates"];
-
-        if (!config) return NO;
-
-        return [config boolValue];
+        return [[NSBundle.mainBundle objectForInfoDictionaryKey:@"UIBackgroundModes"] containsObject: @"location"];
     } else {
         return NO;
     }
