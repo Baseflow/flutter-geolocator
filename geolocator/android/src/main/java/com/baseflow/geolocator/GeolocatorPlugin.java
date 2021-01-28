@@ -1,7 +1,5 @@
 package com.baseflow.geolocator;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -10,7 +8,6 @@ import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /** GeolocatorPlugin */
 public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
@@ -23,7 +20,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Nullable private StreamHandlerImpl streamHandler;
 
-  @Nullable private Registrar pluginRegistrar;
+  @SuppressWarnings("deprecation")
+  @Nullable private io.flutter.plugin.common.PluginRegistry.Registrar pluginRegistrar;
 
   @Nullable private ActivityPluginBinding pluginBinding;
 
@@ -42,7 +40,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
   // depending on the user's project. onAttachedToEngine or registerWith must both be defined
   // in the same class.
-  public static void registerWith(Registrar registrar) {
+  @SuppressWarnings("deprecation")
+  public static void registerWith(io.flutter.plugin.common.PluginRegistry.Registrar registrar) {
     GeolocatorPlugin geolocatorPlugin = new GeolocatorPlugin();
     geolocatorPlugin.pluginRegistrar = registrar;
     geolocatorPlugin.registerListeners();

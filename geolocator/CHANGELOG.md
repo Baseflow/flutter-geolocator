@@ -1,3 +1,7 @@
+## 7.0.0-nullsafety.4
+
+- Merged version 6.1.14 into nndb.
+
 ## 7.0.0-nullsafety.3
 
 - Merged versions 6.1.11 and 6.1.12 into nndb.
@@ -14,6 +18,14 @@
 ## 7.0.0-nullsafety.0
 
 - Migrated to support null safety.
+
+## 6.1.14
+
+- iOS: Look for UIBackgroundModes location instead of having to register a separate `EnableBackgroundLocationUpdates` key in the Info.plist (see PR [#645](https://github.com/Baseflow/flutter-geolocator/pull/645)).
+
+## 6.1.13
+
+- Resolve deprecation warnings when building for Android.
 
 ## 6.1.12
 

@@ -14,11 +14,13 @@ import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GeolocationManager implements ActivityResultListener {
+@SuppressWarnings("deprecation")
+public class GeolocationManager
+    implements io.flutter.plugin.common.PluginRegistry.ActivityResultListener {
+
   @NonNull private final PermissionManager permissionManager;
   private final List<LocationClient> locationClients;
 
