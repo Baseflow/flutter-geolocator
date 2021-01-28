@@ -1,6 +1,10 @@
-## 7.0.0-nullsafety.4
+## 7.0.0-nullsafety.5
 
 - Merged version 6.1.14 into nndb.
+
+## 7.0.0-nullsafety.4
+
+- Merged version 6.1.13 into nndb.
 
 ## 7.0.0-nullsafety.3
 
