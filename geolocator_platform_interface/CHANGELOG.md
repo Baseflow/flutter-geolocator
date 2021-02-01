@@ -1,3 +1,7 @@
+## 1.0.9
+
+- Updated the README.md to more clearly explain the purpose of the geolocator_platform_interface package.
+
 ## 1.0.8
 
 - Added the optional floor property to the position model and can be used by implementations to specify the floor on which the device is located (see [#562](https://github.com/Baseflow/flutter-geolocator/issues/562)).
