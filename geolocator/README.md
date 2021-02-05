@@ -87,6 +87,19 @@ If you would like to receive updates when your App is in the background, you'll 
 
 </details>
 
+<details>
+<summary>Web</summary>
+
+To use the Geolocator plugin on the web you need to be using Flutter 1.20 or higher. Flutter will automatically add the endorsed [geolocator_web]() package to your application when you add the `geolocator: ^6.2.0` dependency to your `pubspec.yaml`.
+
+Note that the following methods of the geolocator API are not supported on the web and will result in a `PlatformException` with the code `UNSUPPORTED_OPERATION`:
+
+- `getLastKnownPosition({ bool forceAndroidLocationManager = true })`
+- `openAppSettings()`
+- `openLocationSettings()`
+
+</details>
+
 ### Example
 
 The code below shows an example on how to acquire the current position of the device, including checking if the location services are enabled and checking / requesting permission to access the position of the device:
@@ -268,7 +281,7 @@ Please file any issues, bugs or feature requests as an issue on our [GitHub](htt
 
 ## Want to contribute
 
-If you would like to contribute to the plugin (e.g. by improving the documentation, solving a bug or adding a cool new feature), please carefully review our [contribution guide](CONTRIBUTING.md) and send us your [pull request](https://github.com/Baseflow/flutter-geolocator/pulls).
+If you would like to contribute to the plugin (e.g. by improving the documentation, solving a bug or adding a cool new feature), please carefully review our [contribution guide](../CONTRIBUTING.md) and send us your [pull request](https://github.com/Baseflow/flutter-geolocator/pulls).
 
 ## Author
 
