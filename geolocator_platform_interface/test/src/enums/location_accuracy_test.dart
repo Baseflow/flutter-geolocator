@@ -5,7 +5,7 @@ void main() {
   test('LocationAccuracy should contain 6 options', () {
     final values = LocationAccuracy.values;
 
-    expect(values.length, 4);
+    expect(values.length, 6);
   });
 
   test("LocationAccuracy enum should have items in correct index", () {
