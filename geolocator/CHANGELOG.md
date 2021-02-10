@@ -1,3 +1,7 @@
+## 7.0.0-nullsafety.6
+
+- Merged version 6.2.0 into nnbd.
+
 ## 7.0.0-nullsafety.5
 
 - Merged version 6.1.14 into nndb.
@@ -22,6 +26,10 @@
 ## 7.0.0-nullsafety.0
 
 - Migrated to support null safety.
+
+## 6.2.0
+
+- Added web support.
 
 ## 6.1.14
 
