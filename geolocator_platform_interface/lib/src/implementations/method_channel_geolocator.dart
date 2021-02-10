@@ -80,9 +80,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       final positionMap =
           await methodChannel.invokeMethod('getLastKnownPosition', parameters);
 
-      return positionMap != null 
-        ? Position.fromMap(positionMap) 
-        : null;
+      return positionMap != null ? Position.fromMap(positionMap) : null;
     } on PlatformException catch (e) {
       _handlePlatformException(e);
 
