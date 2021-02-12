@@ -7,8 +7,12 @@ name: app_facing_package
 on:
   push:
     branches: [ master ]
+    paths:
+    - 'geolocator/**'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'geolocator/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

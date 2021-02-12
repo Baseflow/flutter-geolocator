@@ -7,8 +7,12 @@ name: web_implementation_package
 on:
   push:
     branches: [ master ]
+    paths:
+    - 'geolocator_web/**'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'geolocator_web/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
