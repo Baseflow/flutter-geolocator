@@ -27,7 +27,7 @@ jobs:
       # Make sure the stable version of Flutter is available
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: 'beta'
 
       # Download all Flutter packages the geolocator depends on
       - name: Download dependencies
@@ -71,7 +71,7 @@ jobs:
       # Make sure the stable version of Flutter is available
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: 'beta'
 
       # Download all Flutter packages the geolocator depends on
       - name: Download dependencies
@@ -111,7 +111,7 @@ jobs:
       # Make sure the stable version of Flutter is available
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'stable'
+          channel: 'beta'
 
       # Download all Flutter packages the geolocator depends on
       - name: Download dependencies
