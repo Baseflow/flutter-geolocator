@@ -5,7 +5,7 @@ class PositionUpdateException implements Exception {
   const PositionUpdateException(this.message);
 
   /// A [message] describing more details on the update exception
-  final String message;
+  final String? message;
 
   @override
   String toString() {
@@ -13,6 +13,6 @@ class PositionUpdateException implements Exception {
       return 'Something went wrong while listening for position updates.';
     }
 
-    return message;
+    return message!;
   }
 }

@@ -7,16 +7,16 @@ class Position {
   /// instances constructed this way won't actually reflect any real information
   /// from the platform, just whatever was passed in at construction time.
   Position({
-    this.longitude,
-    this.latitude,
-    this.timestamp,
-    this.accuracy,
-    this.altitude,
-    this.heading,
+    required this.longitude,
+    required this.latitude,
+    required this.timestamp,
+    required this.accuracy,
+    required this.altitude,
+    required this.heading,
+    required this.speed,
+    required this.speedAccuracy,
     this.floor,
-    this.speed,
-    this.speedAccuracy,
-    this.isMocked,
+    this.isMocked = false,
   });
 
   /// The latitude of this position in degrees normalized to the interval -90.0
@@ -28,7 +28,7 @@ class Position {
   final double longitude;
 
   /// The time at which this position was determined.
-  final DateTime timestamp;
+  final DateTime? timestamp;
 
   /// The altitude of the device in meters.
   ///
@@ -53,7 +53,7 @@ class Position {
   ///
   /// The floor property is only available on iOS and only when the information
   /// is available. In all other cases this value will be null.
-  final int floor;
+  final int? floor;
 
   /// The speed at which the devices is traveling in meters per second over
   /// ground.
@@ -111,10 +111,6 @@ class Position {
 
   /// Converts the supplied [Map] to an instance of the [Position] class.
   static Position fromMap(dynamic message) {
-    if (message == null) {
-      return null;
-    }
-
     final Map<dynamic, dynamic> positionMap = message;
 
     if (!positionMap.containsKey('latitude')) {

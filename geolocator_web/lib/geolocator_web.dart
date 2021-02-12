@@ -11,8 +11,8 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 class GeolocatorPlugin extends GeolocatorPlatform {
   static const _permissionQuery = {'name': 'geolocation'};
 
-  final html.Geolocation _geolocation;
-  final html.Permissions _permissions;
+  final html.Geolocation? _geolocation;
+  final html.Permissions? _permissions;
 
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith(Registrar registrar) {
@@ -27,7 +27,14 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   @override
   Future<LocationPermission> checkPermission() async {
-    final html.PermissionStatus result = await _permissions.query(
+    if (_permissions == null) {
+      throw PlatformException(
+        code: 'LOCATION_SERVICES_NOT_SUPPORTED',
+        message: 'Location services are not supported on this browser.',
+      );
+    }
+
+    final html.PermissionStatus result = await _permissions!.query(
       _permissionQuery,
     );
 
@@ -36,8 +43,15 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   @override
   Future<LocationPermission> requestPermission() async {
+    if (_permissions == null) {
+      throw PlatformException(
+        code: 'LOCATION_SERVICES_NOT_SUPPORTED',
+        message: 'Location services are not supported on this browser.',
+      );
+    }
+
     final html.PermissionStatus result =
-        await _permissions.request(_permissionQuery);
+        await _permissions!.request(_permissionQuery);
 
     return _toLocationPermission(result.state);
   }
@@ -56,14 +70,14 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
-    Duration timeLimit,
+    Duration? timeLimit,
   }) async {
     if (!_locationServicesEnabled) {
       throw LocationServiceDisabledException();
     }
 
     try {
-      final result = await _geolocation.getCurrentPosition(
+      final result = await _geolocation!.getCurrentPosition(
         enableHighAccuracy: _enableHighAccuracy(desiredAccuracy),
         timeout: timeLimit,
       );
@@ -80,13 +94,13 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
     int timeInterval = 0,
-    Duration timeLimit,
+    Duration? timeLimit,
   }) {
     if (!_locationServicesEnabled) {
       throw LocationServiceDisabledException();
     }
 
-    return _geolocation
+    return _geolocation!
         .watchPosition(
           enableHighAccuracy: _enableHighAccuracy(desiredAccuracy),
           timeout: timeLimit,
@@ -121,7 +135,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   bool _enableHighAccuracy(LocationAccuracy accuracy) =>
       accuracy.index >= LocationAccuracy.high.index;
 
-  LocationPermission _toLocationPermission(String webPermission) {
+  LocationPermission _toLocationPermission(String? webPermission) {
     switch (webPermission) {
       case 'granted':
         return LocationPermission.whileInUse;
@@ -138,15 +152,21 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   Position _toPosition(html.Geoposition webPosition) {
     final coords = webPosition.coords;
 
+    if (coords == null) {
+      throw new PositionUpdateException('Received invalid position result.');
+    }
+
     return Position(
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-      timestamp: DateTime.fromMillisecondsSinceEpoch(webPosition.timestamp),
-      altitude: coords.altitude ?? 0.0,
-      accuracy: coords.accuracy ?? 0.0,
-      heading: coords.heading ?? 0.0,
+      latitude: coords.latitude as double,
+      longitude: coords.longitude as double,
+      timestamp: webPosition.timestamp != null
+          ? DateTime.fromMillisecondsSinceEpoch(webPosition.timestamp! /*!*/)
+          : DateTime.now(),
+      altitude: coords.altitude as double? ?? 0.0,
+      accuracy: coords.accuracy as double? ?? 0.0,
+      heading: coords.heading as double? ?? 0.0,
       floor: null,
-      speed: coords.speed ?? 0.0,
+      speed: coords.speed as double? ?? 0.0,
       speedAccuracy: 0.0,
       isMocked: false,
     );

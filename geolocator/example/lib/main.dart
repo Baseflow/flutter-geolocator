@@ -31,7 +31,7 @@ class GeolocatorWidget extends StatefulWidget {
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   final List<_PositionItem> _positionItems = <_PositionItem>[];
-  StreamSubscription<Position> _positionStreamSubscription;
+  StreamSubscription<Position>? _positionStreamSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +108,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                 if (_positionStreamSubscription == null) {
                   return "getPositionStream = null";
                 } else {
+                  final isPaused = _positionStreamSubscription!.isPaused;
                   return "getPositionStream ="
-                      " ${_positionStreamSubscription.isPaused ? "off" : "on"}";
+                      " ${isPaused ? "off" : "on"}";
                 }
               }()),
               backgroundColor: _determineButtonColor(),
@@ -143,7 +144,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   bool _isListening() => !(_positionStreamSubscription == null ||
-      _positionStreamSubscription.isPaused);
+      _positionStreamSubscription!.isPaused);
 
   Color _determineButtonColor() {
     return _isListening() ? Colors.green : Colors.red;
@@ -153,18 +154,22 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     if (_positionStreamSubscription == null) {
       final positionStream = Geolocator.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {
-        _positionStreamSubscription.cancel();
+        _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
       }).listen((position) => setState(() => _positionItems.add(
           _PositionItem(_PositionItemType.position, position.toString()))));
-      _positionStreamSubscription.pause();
+      _positionStreamSubscription?.pause();
     }
 
     setState(() {
-      if (_positionStreamSubscription.isPaused) {
-        _positionStreamSubscription.resume();
+      if (_positionStreamSubscription == null) {
+        return;
+      }
+
+      if (_positionStreamSubscription!.isPaused) {
+        _positionStreamSubscription!.resume();
       } else {
-        _positionStreamSubscription.pause();
+        _positionStreamSubscription!.pause();
       }
     });
   }
@@ -172,7 +177,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   @override
   void dispose() {
     if (_positionStreamSubscription != null) {
-      _positionStreamSubscription.cancel();
+      _positionStreamSubscription!.cancel();
       _positionStreamSubscription = null;
     }
 

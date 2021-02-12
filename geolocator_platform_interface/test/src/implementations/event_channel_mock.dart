@@ -1,19 +1,17 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
 class EventChannelMock {
   final MethodChannel _methodChannel;
   final Stream stream;
   final log = <MethodCall>[];
 
-  StreamSubscription _streamSubscription;
+  StreamSubscription? _streamSubscription;
 
   EventChannelMock({
-    @required String channelName,
-    @required this.stream,
+    required String channelName,
+    required this.stream,
   }) : _methodChannel = MethodChannel(channelName) {
     _methodChannel.setMockMethodCallHandler(_handler);
   }
@@ -29,7 +27,7 @@ class EventChannelMock {
         _onCancel();
         break;
       default:
-        return null;
+        return Future.value(null);
     }
 
     return Future.value();
@@ -37,13 +35,21 @@ class EventChannelMock {
 
   void _onListen() {
     _streamSubscription = stream.handleError((error) {
-      ServicesBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+      if (ServicesBinding.instance == null) {
+        return;
+      }
+
+      ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
         _methodChannel.name,
         _createErrorEnvelope(error),
         (_) {},
       );
     }).listen((event) {
-      ServicesBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+      if (ServicesBinding.instance == null) {
+        return;
+      }
+
+      ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
         _methodChannel.name,
         _createSuccessEnvelope(event),
         (_) {},
@@ -53,13 +59,13 @@ class EventChannelMock {
 
   void _onCancel() {
     if (_streamSubscription != null) {
-      _streamSubscription.cancel();
+      _streamSubscription!.cancel();
     }
   }
 
   ByteData _createErrorEnvelope(Exception error) {
     var code = "UNKNOWN_EXCEPTION";
-    String message;
+    String? message;
     dynamic details;
 
     if (error is PlatformException) {
