@@ -26,7 +26,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   @Nullable private ActivityPluginBinding pluginBinding;
 
   public GeolocatorPlugin() {
-
     this.permissionManager = new PermissionManager();
     this.geolocationManager = new GeolocationManager(permissionManager);
   }
