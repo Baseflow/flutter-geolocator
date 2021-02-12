@@ -116,7 +116,10 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                 if (_positionStreamSubscription == null) {
                   return "Start stream";
                 } else {
-                  return "${_positionStreamSubscription.isPaused ? "Resume" : "Pause"} stream";
+                  final buttonText =
+                      _positionStreamSubscription.isPaused ? "Resume" : "Pause";
+
+                  return "$buttonText stream";
                 }
               }()),
               backgroundColor: _determineButtonColor(),
