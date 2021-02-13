@@ -12,6 +12,7 @@
 .svn/
 bin/
 coverage/
+.fvm/
 
 # IntelliJ related
 *.iml

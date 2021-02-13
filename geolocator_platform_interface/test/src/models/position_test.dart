@@ -6,8 +6,28 @@ void main() {
     test('hashCode should be the same for two instances with the same values',
         () {
       // Arrange
-      final firstPosition = Position();
-      final secondPosition = Position();
+      final firstPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        isMocked: false,
+      );
+      final secondPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        isMocked: false,
+      );
 
       // Act & Assert
       expect(
@@ -352,14 +372,6 @@ void main() {
   });
 
   group('fromMap tests:', () {
-    test('fromMap should return null when message is null', () {
-      // Act
-      final actual = Position.fromMap(null);
-
-      // Assert
-      expect(actual, null);
-    });
-
     test(
         // ignore: lines_longer_than_80_chars
         'fromMap should throw argument error when map does not contain latitude',
@@ -391,8 +403,15 @@ void main() {
     test('toString should return human readable latitude and longitude', () {
       // Arrange
       final position = Position(
-        latitude: 52.2165157,
-        longitude: 6.9437819,
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        heading: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        isMocked: false,
       );
 
       // Act

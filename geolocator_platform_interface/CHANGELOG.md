@@ -1,3 +1,11 @@
+## 2.0.0-nullsafety.1
+
+- Merged version 1.0.9 into null safety.
+
+## 2.0.0-nullsafety.0
+
+- Migrated to support null safety.
+
 ## 1.0.9
 
 - Updated the README.md to more clearly explain the purpose of the geolocator_platform_interface package.

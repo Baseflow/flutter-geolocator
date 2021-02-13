@@ -1,6 +1,9 @@
 // Copyright 2019 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
+// TODO(mvanbeusekom): Remove once Mockito is migrated to null safety.
+// @dart = 2.9
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:geolocator_platform_interface/src/implementations/method_channel_geolocator.dart';

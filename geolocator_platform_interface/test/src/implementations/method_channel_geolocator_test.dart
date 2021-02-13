@@ -473,7 +473,7 @@ void main() {
           method: 'getCurrentPosition',
           result: PlatformException(
             code: 'LOCATION_SERVICES_DISABLED',
-            message: null,
+            message: '',
             details: null,
           ),
         );

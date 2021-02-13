@@ -5,7 +5,7 @@ class PermissionRequestInProgressException implements Exception {
   const PermissionRequestInProgressException(this.message);
 
   /// A [message] describing more details on the denied permission.
-  final String message;
+  final String? message;
 
   @override
   String toString() {
@@ -13,6 +13,6 @@ class PermissionRequestInProgressException implements Exception {
       return 'A request for location permissions is already running, please '
           'wait for it to complete before doing another request.';
     }
-    return message;
+    return message!;
   }
 }

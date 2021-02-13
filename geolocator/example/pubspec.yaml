@@ -6,13 +6,13 @@ description: Demonstrates how to use the geolocator plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   baseflow_plugin_template:
     git:
       url: git://github.com/Baseflow/baseflow_plugin_template.git
-      ref: v1.0.0
+      ref: v2.0.0-nullsafety
   flutter:
     sdk: flutter
 
@@ -26,11 +26,11 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
+  cupertino_icons: ^1.0.1+1
 
   # The following adds the URL Launcher plugin which is used by
   # the demo application to open the links in the web browser.
-  url_launcher: ^5.4.11
+  url_launcher: ^6.0.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:
