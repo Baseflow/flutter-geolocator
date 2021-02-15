@@ -1,6 +1,7 @@
 ## 7.0.0
 
-- **breaking change** Checking permissions on Android can no longer result in `LocationPermissions.deniedForever`. In the past the method `shouldShowRequestPermissionRationale` was misused to determine if the user opted not to be requested permission again. Due to changes in Android API 30 this was causing bugs in combination with the "Ask every time" permission. Therefore this code was removed. More details can be found in issue [#653](https://github.com/Baseflow/flutter-geolocator/issues/653)
+- Stable release for null safety.
+- **breaking change** Checking permissions on Android can no longer result in `LocationPermissions.deniedForever`. In the past the method `shouldShowRequestPermissionRationale` was misused to determine if the user opted to not be requested permission again. Due to changes in Android API 30 this was causing bugs in combination with the "Ask every time" permission. Therefore this code was removed. More details can be found in issue [#653](https://github.com/Baseflow/flutter-geolocator/issues/653).
 
 ## 7.0.0-nullsafety.6
 

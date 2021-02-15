@@ -151,7 +151,7 @@ public class PermissionManager
 
       permissionsDeniedBefore = false;
     } else {
-      if (shouldNotAskAgain(requestedPermission)) {
+      if (activity != null && !ActivityCompat.shouldShowRequestPermissionRationale(activity, requestedPermission)) {
         permission = LocationPermission.deniedForever;
       }
 
@@ -163,14 +163,6 @@ public class PermissionManager
     }
 
     return true;
-  }
-
-  private boolean shouldNotAskAgain(String permission) {
-    if (activity == null) {
-      return false;
-    }
-
-    return permissionsDeniedBefore && !ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
   }
 
   private static <T> int indexOf(T[] arr, T val) {
