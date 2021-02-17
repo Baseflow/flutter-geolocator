@@ -1,3 +1,7 @@
+## 7.0.0-nullsafety.8
+
+- Fixed typo in README.md
+
 ## 7.0.0-nullsafety.7
 
 This release contains the following **breaking changes**: 
