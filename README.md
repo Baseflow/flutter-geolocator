@@ -132,7 +132,7 @@ Future<Position> _determinePosition() async {
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately. 
       return Future.error(
-        'Location permissions are permantly denied, we cannot request permissions.');
+        'Location permissions are  permanently denied, we cannot request permissions.');
     } 
 
     if (permission == LocationPermission.denied) {
