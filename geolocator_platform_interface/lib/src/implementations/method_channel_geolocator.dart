@@ -15,14 +15,12 @@ import '../models/position.dart';
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class MethodChannelGeolocator extends GeolocatorPlatform {
   /// The method channel used to interact with the native platform.
-  @visibleForTesting
-  MethodChannel methodChannel =
+  static const _methodChannel =
       MethodChannel('flutter.baseflow.com/geolocator');
 
   /// The event channel used to receive [Position] updates from the native
   /// platform.
-  @visibleForTesting
-  EventChannel eventChannel =
+  static const _eventChannel =
       EventChannel('flutter.baseflow.com/geolocator_updates');
 
   /// On Android devices you can set [forceAndroidLocationManager]
@@ -38,7 +36,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     try {
       // ignore: omit_local_variable_types
       final int permission =
-          await methodChannel.invokeMethod('checkPermission');
+          await _methodChannel.invokeMethod('checkPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -53,7 +51,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     try {
       // ignore: omit_local_variable_types
       final int permission =
-          await methodChannel.invokeMethod('requestPermission');
+          await _methodChannel.invokeMethod('requestPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -64,7 +62,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
-  Future<bool> isLocationServiceEnabled() async => methodChannel
+  Future<bool> isLocationServiceEnabled() async => _methodChannel
       .invokeMethod<bool>('isLocationServiceEnabled')
       .then((value) => value ?? false);
 
@@ -78,7 +76,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       };
 
       final positionMap =
-          await methodChannel.invokeMethod('getLastKnownPosition', parameters);
+          await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
 
       return positionMap != null ? Position.fromMap(positionMap) : null;
     } on PlatformException catch (e) {
@@ -103,14 +101,14 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       Future<dynamic> positionFuture;
 
       if (timeLimit != null) {
-        positionFuture = methodChannel
+        positionFuture = _methodChannel
             .invokeMethod(
               'getCurrentPosition',
               locationOptions.toJson(),
             )
             .timeout(timeLimit);
       } else {
-        positionFuture = methodChannel.invokeMethod(
+        positionFuture = _methodChannel.invokeMethod(
           'getCurrentPosition',
           locationOptions.toJson(),
         );
@@ -144,7 +142,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       return _positionStream!;
     }
 
-    var positionStream = eventChannel.receiveBroadcastStream(
+    var positionStream = _eventChannel.receiveBroadcastStream(
       locationOptions.toJson(),
     );
 
@@ -180,12 +178,12 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
-  Future<bool> openAppSettings() async => methodChannel
+  Future<bool> openAppSettings() async => _methodChannel
       .invokeMethod<bool>('openAppSettings')
       .then((value) => value ?? false);
 
   @override
-  Future<bool> openLocationSettings() async => methodChannel
+  Future<bool> openLocationSettings() async => _methodChannel
       .invokeMethod<bool>('openLocationSettings')
       .then((value) => value ?? false);
 
