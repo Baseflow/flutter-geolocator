@@ -1,15 +1,21 @@
+## 7.0.0
+
+This release contains the following **breaking changes**: 
+- Stable release of null safety migration;
+- Checking permissions on Android can no longer result in `LocationPermissions.deniedForever`. More details can be found in issue [#653](https://github.com/Baseflow/flutter-geolocator/issues/653) and the [wiki](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0#android-permission-update);
+- Removed deprecated `timeInterval` parameter from the `getPositionStream` method;
+- Removed deprecated global methods.
+
+For detailed explanation of all breaking changes checkout the wiki page [Breacking changes in 7.0.0](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0).
+
 ## 7.0.0-nullsafety.8
 
 - Fixed typo in README.md
 
 ## 7.0.0-nullsafety.7
 
-This release contains the following **breaking changes**: 
-- Checking permissions on Android can no longer result in `LocationPermissions.deniedForever`. More details can be found in issue [#653](https://github.com/Baseflow/flutter-geolocator/issues/653) and the [wiki](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0#android-permission-update);
-- Removed deprecated `timeInterval` parameter from the `getPositionStream` method;
-- Removed deprecated global methods.
+- **breaking change** Checking permissions on Android can no longer result in `LocationPermissions.deniedForever`. More details can be found in issue [#653](https://github.com/Baseflow/flutter-geolocator/issues/653) and the [wiki](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0#android-permission-update);
 
-For detailed explanation of all breaking changes checkout the wiki page [Breacking changes in 7.0.0](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0).
 
 ## 7.0.0-nullsafety.6
 
