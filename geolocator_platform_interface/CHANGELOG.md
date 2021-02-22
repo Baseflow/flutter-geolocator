@@ -1,3 +1,7 @@
+## 2.0.0
+
+- Stable release for null safety.
+
 ## 2.0.0-nullsafety.1
 
 - Merged version 1.0.9 into null safety.
