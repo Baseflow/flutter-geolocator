@@ -36,10 +36,19 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   @override
   Future<LocationPermission> requestPermission() async {
-    final html.PermissionStatus result =
-        await _permissions.request(_permissionQuery);
+    if (_geolocation == null) {
+      throw PlatformException(
+        code: 'LOCATION_SERVICES_NOT_SUPPORTED',
+        message: 'Location services are not supported on this browser.',
+      );
+    }
 
-    return _toLocationPermission(result.state);
+    try {
+      _geolocation.getCurrentPosition();
+      return LocationPermission.whileInUse;
+    } catch (e) {
+      return LocationPermission.denied;
+    }
   }
 
   @override
