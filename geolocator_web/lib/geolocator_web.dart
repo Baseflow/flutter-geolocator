@@ -50,23 +50,12 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       );
     }
 
-<<<<<<< HEAD
     try {
       _geolocation!.getCurrentPosition();
       return LocationPermission.whileInUse;
     } catch (e) {
       return LocationPermission.denied;
     }
-||||||| f29c642
-    return _toLocationPermission(result.state);
-=======
-    try {
-      _geolocation.getCurrentPosition();
-      return LocationPermission.whileInUse;
-    } catch (e) {
-      return LocationPermission.denied;
-    }
->>>>>>> v6.2.0
   }
 
   @override
