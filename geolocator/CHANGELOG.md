@@ -1,3 +1,7 @@
+## 6.2.1
+
+- Solve bug causing error when requesting permissions (see issue [#673](https://github.com/Baseflow/flutter-geolocator/issues/673)).
+
 ## 6.2.0
 
 - Added web support.
