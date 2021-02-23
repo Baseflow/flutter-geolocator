@@ -12,6 +12,10 @@ This release contains the following **breaking changes**:
 
 For detailed explanation of all breaking changes checkout the wiki page [Breacking changes in 7.0.0](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0).
 
+## 6.2.1
+
+- Solve bug causing error when requesting permissions (see issue [#673](https://github.com/Baseflow/flutter-geolocator/issues/673)).
+
 ## 6.2.0
 
 - Added web support.
