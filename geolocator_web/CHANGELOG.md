@@ -1,3 +1,7 @@
+## 2.0.2
+
+- Solve bug receiving same location from stream when using ```distantFilter``` (see issue [#674](https://github.com/Baseflow/flutter-geolocator/issues/674))
+
 ## 2.0.1
 
 - Solve bug causing error when requesting permissions (see issue [#673](https://github.com/Baseflow/flutter-geolocator/issues/673)). 

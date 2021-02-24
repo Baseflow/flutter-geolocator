@@ -102,13 +102,31 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       throw LocationServiceDisabledException();
     }
 
+    html.Geoposition? previousPosition = null;
+
     return _geolocation!
         .watchPosition(
           enableHighAccuracy: _enableHighAccuracy(desiredAccuracy),
           timeout: timeLimit,
         )
         .handleError((error) => throw _convertPositionError(error))
-        .map(_toPosition);
+        .skipWhile((geoposition) {
+      if (distanceFilter == 0) {
+        return false;
+      }
+
+      double distance = 0;
+
+      if (previousPosition != null) {
+        distance = distanceBetween(
+            previousPosition!.coords!.latitude as double,
+            previousPosition!.coords!.longitude as double,
+            geoposition.coords!.latitude as double,
+            geoposition.coords!.longitude as double);
+      }
+      previousPosition = geoposition;
+      return distance < distanceFilter;
+    }).map(_toPosition);
   }
 
   @override
