@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:html' as html;
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+import 'package:geolocator_web/src/Geolocation.dart';
+import 'package:geolocator_web/src/HtmlGeolocation.dart';
 
 /// The web implementation of [GeolocatorPlatform].
 ///
@@ -11,17 +14,27 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 class GeolocatorPlugin extends GeolocatorPlatform {
   static const _permissionQuery = {'name': 'geolocation'};
 
-  final html.Geolocation? _geolocation;
+  final Geolocation? _geolocation;
   final html.Permissions? _permissions;
 
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith(Registrar registrar) {
-    GeolocatorPlatform.instance = GeolocatorPlugin._(html.window.navigator);
+    final geolocation = html.window.navigator.geolocation;
+    HtmlGeolocation htmlGeolocation;
+    if (geolocation != null) {
+      htmlGeolocation = HtmlGeolocation(geolocation);
+    }
+
+    GeolocatorPlatform.instance = GeolocatorPlugin.private(
+      htmlGeolocation,
+      permissions,
+    );
   }
 
-  GeolocatorPlugin._(html.Navigator navigator)
-      : _geolocation = navigator.geolocation,
-        _permissions = navigator.permissions;
+  @visibleForTesting
+  GeolocatorPlugin.private(Geolocation? geolocation, Permission? permissions)
+      : _geolocation = geolocation,
+        _permissions = permissions;
 
   bool get _locationServicesEnabled => _geolocation != null;
 
@@ -84,7 +97,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
         timeout: timeLimit,
       );
 
-      return _toPosition(result);
+      return result;
     } on html.PositionError catch (e) {
       throw _convertPositionError(e);
     }
@@ -126,7 +139,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       }
       previousPosition = geoposition;
       return distance < distanceFilter;
-    }).map(_toPosition);
+    });
   }
 
   @override
@@ -167,29 +180,6 @@ class GeolocatorPlugin extends GeolocatorPlatform {
         throw ArgumentError(
             '$webPermission cannot be converted to a LocationPermission.');
     }
-  }
-
-  Position _toPosition(html.Geoposition webPosition) {
-    final coords = webPosition.coords;
-
-    if (coords == null) {
-      throw new PositionUpdateException('Received invalid position result.');
-    }
-
-    return Position(
-      latitude: coords.latitude as double,
-      longitude: coords.longitude as double,
-      timestamp: webPosition.timestamp != null
-          ? DateTime.fromMillisecondsSinceEpoch(webPosition.timestamp! /*!*/)
-          : DateTime.now(),
-      altitude: coords.altitude as double? ?? 0.0,
-      accuracy: coords.accuracy as double? ?? 0.0,
-      heading: coords.heading as double? ?? 0.0,
-      floor: null,
-      speed: coords.speed as double? ?? 0.0,
-      speedAccuracy: 0.0,
-      isMocked: false,
-    );
   }
 
   PlatformException _unsupported(String method) {
