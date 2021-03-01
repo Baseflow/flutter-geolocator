@@ -1,14 +1,14 @@
 import 'dart:html' as html;
 
 import 'package:geolocator_platform_interface/src/models/position.dart';
-import 'package:geolocator_web/src/Geolocation.dart';
 
-import 'GeolocationUtils.dart';
+import 'geolocation_manager.dart';
+import 'utils.dart';
 
-class HtmlGeolocation implements Geolocation {
+class HtmlGeolocationManager implements GeolocationManager {
   final html.Geolocation _geolocation;
 
-  HtmlGeolocation(this._geolocation) : assert(_geolocation != null);
+  HtmlGeolocationManager(this._geolocation) : assert(_geolocation != null);
 
   @override
   Future<Position> getCurrentPosition({

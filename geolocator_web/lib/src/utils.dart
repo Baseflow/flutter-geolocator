@@ -23,3 +23,17 @@ Position toPosition(html.Geoposition webPosition) {
     isMocked: false,
   );
 }
+
+LocationPermission toLocationPermission(String? webPermission) {
+  switch (webPermission) {
+    case 'granted':
+      return LocationPermission.whileInUse;
+    case 'prompt':
+      return LocationPermission.denied;
+    case 'denied':
+      return LocationPermission.deniedForever;
+    default:
+      throw ArgumentError(
+          '$webPermission cannot be converted to a LocationPermission.');
+  }
+}

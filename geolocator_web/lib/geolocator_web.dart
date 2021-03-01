@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
-import 'package:geolocator_web/src/Geolocation.dart';
-import 'package:geolocator_web/src/HtmlGeolocation.dart';
+import 'src/geolocation_manager.dart';
+import 'src/permissions_manager.dart';
+import 'src/html_geolocation_manager.dart';
+import 'src/html_permissions_manager.dart';
+
 
 /// The web implementation of [GeolocatorPlatform].
 ///
@@ -14,25 +17,33 @@ import 'package:geolocator_web/src/HtmlGeolocation.dart';
 class GeolocatorPlugin extends GeolocatorPlatform {
   static const _permissionQuery = {'name': 'geolocation'};
 
-  final Geolocation? _geolocation;
-  final html.Permissions? _permissions;
+  final GeolocationManager? _geolocation;
+  final PermissionsManager? _permissions;
 
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith(Registrar registrar) {
     final geolocation = html.window.navigator.geolocation;
-    HtmlGeolocation htmlGeolocation;
+    final permissions = html.window.navigator.permissions;
+
+    HtmlGeolocationManager? htmlGeolocation;
+    HtmlPermissionsManager? htmlPermissions;
+
     if (geolocation != null) {
-      htmlGeolocation = HtmlGeolocation(geolocation);
+      htmlGeolocation = HtmlGeolocationManager(geolocation);
+    }
+
+    if (permissions != null) {
+      htmlPermissions = HtmlPermissionsManager(permissions);
     }
 
     GeolocatorPlatform.instance = GeolocatorPlugin.private(
       htmlGeolocation,
-      permissions,
+      htmlPermissions,
     );
   }
 
   @visibleForTesting
-  GeolocatorPlugin.private(Geolocation? geolocation, Permission? permissions)
+  GeolocatorPlugin.private(GeolocationManager? geolocation, PermissionsManager? permissions)
       : _geolocation = geolocation,
         _permissions = permissions;
 
@@ -47,11 +58,9 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       );
     }
 
-    final html.PermissionStatus result = await _permissions!.query(
+    return await _permissions!.query(
       _permissionQuery,
     );
-
-    return _toLocationPermission(result.state);
   }
 
   @override
@@ -115,7 +124,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       throw LocationServiceDisabledException();
     }
 
-    html.Geoposition? previousPosition = null;
+    Position? previousPosition = null;
 
     return _geolocation!
         .watchPosition(
@@ -132,10 +141,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
       if (previousPosition != null) {
         distance = distanceBetween(
-            previousPosition!.coords!.latitude as double,
-            previousPosition!.coords!.longitude as double,
-            geoposition.coords!.latitude as double,
-            geoposition.coords!.longitude as double);
+            previousPosition!.latitude as double,
+            previousPosition!.longitude as double,
+            geoposition.latitude as double,
+            geoposition.longitude as double);
       }
       previousPosition = geoposition;
       return distance < distanceFilter;
@@ -167,20 +176,6 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   bool _enableHighAccuracy(LocationAccuracy accuracy) =>
       accuracy.index >= LocationAccuracy.high.index;
-
-  LocationPermission _toLocationPermission(String? webPermission) {
-    switch (webPermission) {
-      case 'granted':
-        return LocationPermission.whileInUse;
-      case 'prompt':
-        return LocationPermission.denied;
-      case 'denied':
-        return LocationPermission.deniedForever;
-      default:
-        throw ArgumentError(
-            '$webPermission cannot be converted to a LocationPermission.');
-    }
-  }
 
   PlatformException _unsupported(String method) {
     return PlatformException(
