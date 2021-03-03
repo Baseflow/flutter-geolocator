@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:html' as html;
+import 'package:flutter/services.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 Position toPosition(html.Geoposition webPosition) {
@@ -35,5 +37,21 @@ LocationPermission toLocationPermission(String? webPermission) {
     default:
       throw ArgumentError(
           '$webPermission cannot be converted to a LocationPermission.');
+  }
+}
+
+Exception convertPositionError(html.PositionError error) {
+  switch (error.code) {
+    case 1:
+      return PermissionDeniedException(error.message);
+    case 2:
+      return PositionUpdateException(error.message);
+    case 3:
+      return TimeoutException(error.message);
+    default:
+      return PlatformException(
+        code: error.code.toString(),
+        message: error.message,
+      );
   }
 }

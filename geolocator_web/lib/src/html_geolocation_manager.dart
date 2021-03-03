@@ -8,19 +8,26 @@ import 'utils.dart';
 class HtmlGeolocationManager implements GeolocationManager {
   final html.Geolocation _geolocation;
 
-  HtmlGeolocationManager(this._geolocation) : assert(_geolocation != null);
+  HtmlGeolocationManager() : _geolocation = html.window.navigator.geolocation;
+
+  @override
+  bool get locationServicesEnabled => _geolocation != null;
 
   @override
   Future<Position> getCurrentPosition({
     bool? enableHighAccuracy,
     Duration? timeout,
   }) async {
-    final geoPosition = await _geolocation.getCurrentPosition(
-      enableHighAccuracy: enableHighAccuracy,
-      timeout: timeout,
-    );
+    try {
+      final geoPosition = await _geolocation.getCurrentPosition(
+        enableHighAccuracy: enableHighAccuracy,
+        timeout: timeout,
+      );
 
-    return toPosition(geoPosition);
+      return toPosition(geoPosition);
+    } on html.PositionError catch (e) {
+      throw convertPositionError(e);
+    }
   }
 
   @override
@@ -32,7 +39,7 @@ class HtmlGeolocationManager implements GeolocationManager {
         .watchPosition(
           enableHighAccuracy: enableHighAccuracy,
           timeout: timeout,
-        )
+        ).handleError((error) => throw convertPositionError(error))
         .map((geoPosition) => toPosition(geoPosition));
   }
 }
