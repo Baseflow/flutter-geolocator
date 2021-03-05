@@ -39,7 +39,8 @@ class HtmlGeolocationManager implements GeolocationManager {
         .watchPosition(
           enableHighAccuracy: enableHighAccuracy,
           timeout: timeout,
-        ).handleError((error) => throw convertPositionError(error))
+        )
+        .handleError((error) => throw convertPositionError(error))
         .map((geoPosition) => toPosition(geoPosition));
   }
 }
