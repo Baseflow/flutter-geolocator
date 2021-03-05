@@ -32,8 +32,6 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       : _geolocation = geolocation,
         _permissions = permissions;
 
-  bool get _locationServicesEnabled => _geolocation.locationServicesEnabled;
-
   @override
   Future<LocationPermission> checkPermission() async {
     if (!_permissions.permissionsSupported) {
@@ -50,13 +48,6 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   @override
   Future<LocationPermission> requestPermission() async {
-    if (!_locationServicesEnabled) {
-      throw PlatformException(
-        code: 'LOCATION_SERVICES_NOT_SUPPORTED',
-        message: 'Location services are not supported on this browser.',
-      );
-    }
-
     try {
       _geolocation.getCurrentPosition();
       return LocationPermission.whileInUse;
@@ -64,10 +55,6 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       return LocationPermission.denied;
     }
   }
-
-  @override
-  Future<bool> isLocationServiceEnabled() =>
-      Future.value(_locationServicesEnabled);
 
   @override
   Future<Position> getLastKnownPosition({
@@ -81,10 +68,6 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     bool forceAndroidLocationManager = false,
     Duration? timeLimit,
   }) async {
-    if (!_locationServicesEnabled) {
-      throw LocationServiceDisabledException();
-    }
-
     final result = await _geolocation.getCurrentPosition(
       enableHighAccuracy: _enableHighAccuracy(desiredAccuracy),
       timeout: timeLimit,
@@ -101,11 +84,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     int timeInterval = 0,
     Duration? timeLimit,
   }) {
-    if (!_locationServicesEnabled) {
-      throw LocationServiceDisabledException();
-    }
-
-    Position? previousPosition = null;
+    Position? previousPosition;
 
     return _geolocation
         .watchPosition(
@@ -121,10 +100,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
       if (previousPosition != null) {
         distance = distanceBetween(
-            previousPosition!.latitude as double,
-            previousPosition!.longitude as double,
-            geoposition.latitude as double,
-            geoposition.longitude as double);
+            previousPosition!.latitude,
+            previousPosition!.longitude,
+            geoposition.latitude,
+            geoposition.longitude);
       } else {
         return false;
       }

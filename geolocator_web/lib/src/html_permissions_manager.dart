@@ -1,6 +1,6 @@
 import 'dart:html' as html;
 
-import 'package:geolocator_platform_interface/src/enums/location_permission.dart';
+import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 import 'permissions_manager.dart';
 import 'utils.dart';

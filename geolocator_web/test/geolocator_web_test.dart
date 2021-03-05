@@ -24,18 +24,6 @@ List<Position> get mockPositions => List.of(() sync* {
     }());
 
 void main() {
-  test('isLocationServiceEnabled returns true', () async {
-    final mockGeolocationManager = MockGeolocationManager();
-    final mockPermissionManager = MockPermissionManager();
-    final geolocatorPlugin =
-        GeolocatorPlugin.private(mockGeolocationManager, mockPermissionManager);
-
-    final isLocationServiceEnabled =
-        await geolocatorPlugin.isLocationServiceEnabled();
-
-    expect(isLocationServiceEnabled, true);
-  });
-
   test(
       'enableHighAccuracy returns the correct value depending on given accuracy in getPositionStream method',
       () async {
@@ -95,19 +83,6 @@ void main() {
       verify(mockPermissionManager.query({'name': 'geolocation'})).called(1);
     });
 
-    test('requestPermission throws exception when LocationServices is disabled',
-        () {
-      final mockGeolocationManager = MockGeolocationManager();
-      final mockPermissionManager = MockPermissionManager();
-      final geolocatorPlugin = GeolocatorPlugin.private(
-          mockGeolocationManager, mockPermissionManager);
-
-      mockGeolocationManager.setLocationServiceStatus(false);
-
-      expect(geolocatorPlugin.requestPermission,
-          throwsA(isA<PlatformException>()));
-    });
-
     test('requestPermission returns LocationPermission.whileInUse', () async {
       final mockGeolocationManager = MockGeolocationManager();
       final mockPermissionManager = MockPermissionManager();
@@ -127,24 +102,8 @@ void main() {
       final geolocatorPlugin = GeolocatorPlugin.private(
           mockGeolocationManager, mockPermissionManager);
 
-      mockGeolocationManager.setLocationServiceStatus(true);
-
       final position = await geolocatorPlugin.getCurrentPosition();
       expect(position, mockPositions.first);
-    });
-
-    test(
-        'getCurrentPosition throws exception when LocationServices is disabled',
-        () {
-      final mockGeolocationManager = MockGeolocationManager();
-      final mockPermissionManager = MockPermissionManager();
-      final geolocatorPlugin = GeolocatorPlugin.private(
-          mockGeolocationManager, mockPermissionManager);
-
-      mockGeolocationManager.setLocationServiceStatus(false);
-
-      expect(geolocatorPlugin.getCurrentPosition,
-          throwsA(isA<LocationServiceDisabledException>()));
     });
   });
 
@@ -188,19 +147,6 @@ void main() {
 
       expect(positionsStream, emitsInOrder(mockPositionsForFilter));
     });
-
-    test('getPositionStream throws error when LocationServices is disabled',
-        () {
-      final mockGeolocationManager = MockGeolocationManager();
-      final mockPermissionManager = MockPermissionManager();
-      final geolocatorPlugin = GeolocatorPlugin.private(
-          mockGeolocationManager, mockPermissionManager);
-
-      mockGeolocationManager.setLocationServiceStatus(false);
-
-      expect(geolocatorPlugin.getPositionStream,
-          throwsA(isA<LocationServiceDisabledException>()));
-    });
   });
 
   group('Unsupported exceptions', () {
@@ -237,17 +183,12 @@ void main() {
 }
 
 class MockGeolocationManager implements GeolocationManager {
-  bool _locationServicesEnabled = true;
   bool? enableHighAccuracy;
 
   @override
   Future<Position> getCurrentPosition(
       {bool? enableHighAccuracy, Duration? timeout}) {
     this.enableHighAccuracy = enableHighAccuracy;
-    if (!_locationServicesEnabled) {
-      throw LocationServiceDisabledException();
-    }
-
     return Future.value(mockPositions.first);
   }
 
@@ -256,13 +197,6 @@ class MockGeolocationManager implements GeolocationManager {
       {bool? enableHighAccuracy, Duration? timeout}) {
     this.enableHighAccuracy = enableHighAccuracy;
     return Stream.fromIterable(mockPositions);
-  }
-
-  @override
-  bool get locationServicesEnabled => _locationServicesEnabled;
-
-  void setLocationServiceStatus(bool enabled) {
-    _locationServicesEnabled = enabled;
   }
 }
 
