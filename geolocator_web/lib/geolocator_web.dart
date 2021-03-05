@@ -109,9 +109,9 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
     return _geolocation
         .watchPosition(
-          enableHighAccuracy: _enableHighAccuracy(desiredAccuracy),
-          timeout: timeLimit,
-        )
+      enableHighAccuracy: _enableHighAccuracy(desiredAccuracy),
+      timeout: timeLimit,
+    )
         .skipWhile((geoposition) {
       if (distanceFilter == 0) {
         return false;
@@ -125,6 +125,8 @@ class GeolocatorPlugin extends GeolocatorPlatform {
             previousPosition!.longitude as double,
             geoposition.latitude as double,
             geoposition.longitude as double);
+      } else {
+        return false;
       }
 
       previousPosition = geoposition;
