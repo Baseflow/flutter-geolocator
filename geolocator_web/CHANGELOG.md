@@ -1,6 +1,10 @@
+## 2.0.3
+
+- Implement missing `isLocationServiceEnabled` for web implementation (see issue[#694](https://github.com/Baseflow/flutter-geolocator/issues/694)).
+
 ## 2.0.2
 
-- Solve bug receiving same location from stream when using ```distantFilter``` (see issue [#674](https://github.com/Baseflow/flutter-geolocator/issues/674))
+- Solve bug receiving same location from stream when using ```distantFilter``` (see issue [#674](https://github.com/Baseflow/flutter-geolocator/issues/674)).
 
 ## 2.0.1
 
