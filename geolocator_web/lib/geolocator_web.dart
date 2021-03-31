@@ -32,6 +32,14 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       : _geolocation = geolocation,
         _permissions = permissions;
 
+  /// Returns a [Future] containing a [bool] value indicating whether location
+  /// services are enabled on the device.
+  ///
+  /// This will always return `true` on the web as the web platform doesn't know
+  /// the concept of a separate location service which has to be enabled.
+  @override
+  Future<bool> isLocationServiceEnabled() => Future.value(true);
+
   @override
   Future<LocationPermission> checkPermission() async {
     if (!_permissions.permissionsSupported) {
