@@ -1,7 +1,3 @@
-## 7.0.2
-
-- Resolved analyzer error when using mockito (see issue [#709](https://github.com/Baseflow/flutter-geolocator/issues/709)).
-
 ## 7.0.1
 
 - Resolved bug when requesting permissions for the web (see issue [#673](https://github.com/Baseflow/flutter-geolocator/issues/673)).
