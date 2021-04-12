@@ -75,7 +75,7 @@ class Position {
   final bool isMocked;
 
   @override
-  bool operator ==(dynamic o) {
+  bool operator ==(Object o) {
     var areEqual = o is Position &&
         o.accuracy == accuracy &&
         o.altitude == altitude &&
