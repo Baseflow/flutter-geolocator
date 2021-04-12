@@ -1,6 +1,6 @@
 ## 7.0.2
 
-- Resolved analyzer error when using mockito (see issue [#709](https://github.com/Baseflow/flutter-geolocator/issues/709)).
+- Upgrade to `geolocator_platform_interface: 2.0.1`
 
 ## 7.0.1
 

@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Resolved analyzer error when using mockito (see issue [#709](https://github.com/Baseflow/flutter-geolocator/issues/709)).
+
 ## 2.0.0
 
 - Stable release for null safety.
