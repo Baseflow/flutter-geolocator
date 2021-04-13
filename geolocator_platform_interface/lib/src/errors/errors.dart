@@ -1,3 +1,4 @@
+export 'activity_missing_exception.dart';
 export 'already_subscribed_exception.dart';
 export 'invalid_permission_exception.dart';
 export 'location_service_disabled_exception.dart';

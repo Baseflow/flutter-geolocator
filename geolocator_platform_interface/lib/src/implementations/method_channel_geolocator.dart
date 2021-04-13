@@ -187,6 +187,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   void _handlePlatformException(PlatformException exception) {
     switch (exception.code) {
+      case 'ACTIVITY_NOT_SUPPLIED':
+        throw ActivityMissingException(exception.message);
       case 'LOCATION_SERVICES_DISABLED':
         throw LocationServiceDisabledException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':
