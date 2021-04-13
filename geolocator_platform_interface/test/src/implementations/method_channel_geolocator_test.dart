@@ -189,7 +189,7 @@ void main() {
         );
       });
 
-      test('Should receive deniedForEver if permission is denied for ever',
+      test('Should receive deniedForever if permission is denied for ever',
           () async {
         // Arrange
         MethodChannelMock(
@@ -260,6 +260,35 @@ void main() {
               (e) => e.message,
               'description',
               'Permission definitions are not found.',
+            ),
+          ),
+        );
+      });
+
+      test('Should receive an exception when android activity is missing',
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'requestPermission',
+          result: PlatformException(
+            code: 'ACTIVITY_MISSING',
+            message: 'Activity is missing.',
+            details: null,
+          ),
+        );
+
+        // Act
+        final permissionFuture = MethodChannelGeolocator().requestPermission();
+
+        // Assert
+        expect(
+          permissionFuture,
+          throwsA(
+            isA<ActivityMissingException>().having(
+              (e) => e.message,
+              'description',
+              'Activity is missing.',
             ),
           ),
         );
