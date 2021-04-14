@@ -49,7 +49,7 @@
     if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil) {
         [self.locationManager requestWhenInUseAuthorization];
     }
-    else if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"] != nil) {
+    else if ([self containsLocationAlwaysDescription]) {
         [self.locationManager requestAlwaysAuthorization];
     }
     else {
@@ -63,6 +63,17 @@
         [self cleanUp];
         return;
     }
+}
+
+- (BOOL) containsLocationAlwaysDescription {
+    BOOL containsAlwaysDescription = NO;
+    if (@available(iOS 11.0, *)) {
+        containsAlwaysDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysAndWhenInUseUsageDescription"] != nil;
+    }
+    
+    return containsAlwaysDescription
+        ? containsAlwaysDescription
+        : [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"] != nil;
 }
 
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
