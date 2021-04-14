@@ -26,7 +26,6 @@ public class PermissionManager
   @Nullable private Activity activity;
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PermissionResultCallback resultCallback;
-  private boolean permissionsDeniedBefore;
 
   public LocationPermission checkPermissionStatus(Context context, Activity activity)
       throws PermissionUndefinedException {
@@ -67,6 +66,11 @@ public class PermissionManager
       throws PermissionUndefinedException {
     final ArrayList<String> permissionsToRequest = new ArrayList<>();
 
+    if (activity == null) {
+      errorCallback.onError(ErrorCodes.activityMissing);
+      return;
+    }
+
     // Before Android M, requesting permissions was not needed.
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
       resultCallback.onResult(LocationPermission.always);
@@ -100,7 +104,7 @@ public class PermissionManager
     if (this.activity == null) {
       Log.e("Geolocator", "Trying to process permission result without an valid Activity instance");
       if (this.errorCallback != null) {
-        this.errorCallback.onError(ErrorCodes.activityNotSupplied);
+        this.errorCallback.onError(ErrorCodes.activityMissing);
       }
       return false;
     }
@@ -148,14 +152,10 @@ public class PermissionManager
       } else {
         permission = LocationPermission.always;
       }
-
-      permissionsDeniedBefore = false;
     } else {
       if (activity != null && !ActivityCompat.shouldShowRequestPermissionRationale(activity, requestedPermission)) {
         permission = LocationPermission.deniedForever;
       }
-
-      permissionsDeniedBefore = true;
     }
 
     if (this.resultCallback != null) {

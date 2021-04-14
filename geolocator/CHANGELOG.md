@@ -1,3 +1,7 @@
+## 7.0.3
+
+- Android: Throw the `ActivityMissingException` when requesting permissions while the activity is not available (e.g. when the App is in the background).
+
 ## 7.0.2
 
 - Upgrade to `geolocator_platform_interface: 2.0.1`
