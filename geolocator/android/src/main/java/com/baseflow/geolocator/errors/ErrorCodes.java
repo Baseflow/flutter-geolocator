@@ -1,7 +1,7 @@
 package com.baseflow.geolocator.errors;
 
 public enum ErrorCodes {
-  activityNotSupplied,
+  activityMissing,
   errorWhileAcquiringPosition,
   locationServicesDisabled,
   permissionDefinitionsNotFound,
@@ -10,8 +10,8 @@ public enum ErrorCodes {
 
   public String toString() {
     switch (this) {
-      case activityNotSupplied:
-        return "ACTIVITY_NOT_SUPPLIED";
+      case activityMissing:
+        return "ACTIVITY_MISSING";
       case errorWhileAcquiringPosition:
         return "ERROR_WHILE_ACQUIRING_POSITION";
       case locationServicesDisabled:
@@ -29,7 +29,7 @@ public enum ErrorCodes {
 
   public String toDescription() {
     switch (this) {
-      case activityNotSupplied:
+      case activityMissing:
         return "Activity is missing. This might happen when running a certain function from the background that requires a UI element (e.g. requesting permissions or enabling the location services).";
       case errorWhileAcquiringPosition:
         return "An unexpected error occurred while trying to acquire the device's position.";
