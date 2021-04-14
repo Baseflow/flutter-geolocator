@@ -26,7 +26,6 @@ public class PermissionManager
   @Nullable private Activity activity;
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PermissionResultCallback resultCallback;
-  private boolean permissionsDeniedBefore;
 
   public LocationPermission checkPermissionStatus(Context context, Activity activity)
       throws PermissionUndefinedException {
@@ -153,14 +152,10 @@ public class PermissionManager
       } else {
         permission = LocationPermission.always;
       }
-
-      permissionsDeniedBefore = false;
     } else {
       if (activity != null && !ActivityCompat.shouldShowRequestPermissionRationale(activity, requestedPermission)) {
         permission = LocationPermission.deniedForever;
       }
-
-      permissionsDeniedBefore = true;
     }
 
     if (this.resultCallback != null) {
