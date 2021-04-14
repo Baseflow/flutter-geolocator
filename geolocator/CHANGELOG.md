@@ -1,6 +1,7 @@
 ## 7.0.3
 
-- Android: Throw the `ActivityMissingException` when requesting permissions while the activity is not available (e.g. when the App is in the background).
+- Android: Throw the `ActivityMissingException` when requesting permissions while the activity is not available (e.g. when the App is in the background);
+- iOS: Support the `NSLocationAlwaysAndWhenInUseUsageDescription` key on iOS 11+ (this key replaces the `NSLocationAlwaysDescription` key which has been marked [deprecated](https://developer.apple.com/documentation/bundleresources/information_property_list/nslocationalwaysusagedescription?language=objc)). 
 
 ## 7.0.2
 
