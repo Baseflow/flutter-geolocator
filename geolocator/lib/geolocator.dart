@@ -35,6 +35,11 @@ class Geolocator {
   static Future<bool> isLocationServiceEnabled() =>
       GeolocatorPlatform.instance.isLocationServiceEnabled();
 
+  /// Returns a [Future] containing a [bool] value indicating whether the device
+  /// has a GPS service available
+  static Future<bool> canReportLocation() =>
+      GeolocatorPlatform.instance.supportsGps();
+
   /// Returns the last known position stored on the users device.
   ///
   /// On Android you can force the plugin to use the old Android

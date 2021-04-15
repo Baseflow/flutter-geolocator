@@ -168,6 +168,14 @@ abstract class GeolocatorPlatform extends PlatformInterface {
         'openLocationSettings() has not been implemented.');
   }
 
+  /// Returns if a GPS service is available
+  ///
+  /// Returns [true] if a Localization service is available, otherwise [false]
+  /// is returned
+  Future<bool> canReportPosition() async {
+    throw UnimplementedError('supportsGps() has not been implemented');
+  }
+
   /// Calculates the distance between the supplied coordinates in meters.
   ///
   /// The distance between the coordinates is calculated using the Haversine

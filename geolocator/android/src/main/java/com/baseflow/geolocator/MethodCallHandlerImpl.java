@@ -64,6 +64,9 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       case "getCurrentPosition":
         onGetCurrentPosition(call, result);
         break;
+        case "canReportPoisition":
+            onGetCurrentPosition(result);
+            break;
       case "openAppSettings":
         boolean hasOpenedAppSettings = Utils.openAppSettings(this.context);
         result.success(hasOpenedAppSettings);
@@ -154,6 +157,12 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         (Location location) -> result.success(LocationMapper.toHashMap(location)),
         (ErrorCodes errorCode) ->
             result.error(errorCode.toString(), errorCode.toDescription(), null));
+  }
+
+  private void canReportPosition(MethodChannel.Result result){
+      PackageManager packageManager = this.context.getPackageManager();
+      boolean hasGPS = packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION);
+      result.success(hasGPS);
   }
 
   private void onGetCurrentPosition(MethodCall call, MethodChannel.Result result) {

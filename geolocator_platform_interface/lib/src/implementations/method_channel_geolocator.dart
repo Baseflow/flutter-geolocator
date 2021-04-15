@@ -181,6 +181,11 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       .then((value) => value ?? false);
 
   @override
+  Future<bool> canReportPosition() async => _methodChannel
+      .invokeMethod<bool>('canReportPosition')
+      .then((value) => value ?? false);
+
+  @override
   Future<bool> openLocationSettings() async => _methodChannel
       .invokeMethod<bool>('openLocationSettings')
       .then((value) => value ?? false);
