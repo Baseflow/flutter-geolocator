@@ -1,3 +1,7 @@
+## 2.0.3
+
+- Solved a bug which caused the distanceFilter/timeInterval not to update after initializing a new PositionStream (see issue [#703](https://github.com/Baseflow/flutter-geolocator/issues/703)).
+
 ## 2.0.2
 
 - Added definition of the `ActivityMissingException`.

@@ -558,8 +558,6 @@ void main() {
           final methodChannelGeolocator = MethodChannelGeolocator();
           final firstStream = methodChannelGeolocator.getPositionStream(
               distanceFilter: 10);
-          final secondStream = methodChannelGeolocator.getPositionStream(
-              distanceFilter: 100);
 
           // Start listening so u can cancel the stream subscription
           StreamSubscription<Position>? firstSubscription =
@@ -569,13 +567,8 @@ void main() {
           firstSubscription.cancel();
           firstSubscription = null;
 
-          // Start listening to second stream so u can cancel the subscription
-          StreamSubscription<Position>? secondSubscription =
-          secondStream.listen((event) { });
-
-          // Cancel subscription
-          secondSubscription.cancel();
-          secondSubscription = null;
+          final secondStream = methodChannelGeolocator.getPositionStream(
+              distanceFilter: 100);
 
           // Pro stream different options are used, thus the stream shouldn't
           // be the same
