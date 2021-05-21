@@ -32,6 +32,7 @@ class GeolocatorWidget extends StatefulWidget {
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
+  StreamSubscription<bool>? _locationServiceStatusSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +115,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
               onPressed: _toggleListening,
               label: Text(() {
                 if (_positionStreamSubscription == null) {
-                  return "Start stream";
+                  return "Start Position Updates stream";
                 } else {
                   final buttonText = _positionStreamSubscription!.isPaused
                       ? "Resume"
@@ -125,6 +126,23 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
               }()),
               backgroundColor: _determineButtonColor(),
             ),
+          ),
+          Positioned(
+            bottom: 430.0,
+            right: 10.0,
+            child: FloatingActionButton.extended(
+              onPressed: _toggleLocationServiceListener,
+              label: Text(() {
+                if(_locationServiceStatusSubscription == null) {
+                  return "Start Location Service stream";
+                } else {
+                  final buttonText = _locationServiceStatusSubscription!.isPaused
+                      ? "Resume"
+                      : "Pause";
+                  return "$buttonText stream";
+                }
+              }())
+            )
           ),
           Positioned(
             bottom: 290.0,
@@ -166,6 +184,29 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     return _isListening() ? Colors.green : Colors.red;
   }
 
+  void _toggleLocationServiceListener() {
+    if(_locationServiceStatusSubscription == null){
+      final serviceStatusStream = Geolocator.getServiceStatusStream();
+      _locationServiceStatusSubscription = serviceStatusStream.handleError((error){
+        _locationServiceStatusSubscription?.cancel();
+        _locationServiceStatusSubscription = null;
+      }).listen((status) => setState(() => _positionItems.add(_PositionItem(
+          _PositionItemType.locationservicestatus, status.toString()))));
+      _locationServiceStatusSubscription?.pause();
+    }
+
+    setState((){
+      if(_locationServiceStatusSubscription == null){
+        return;
+      }
+      if(_locationServiceStatusSubscription!.isPaused) {
+        _locationServiceStatusSubscription!.resume();
+      }else{
+        _locationServiceStatusSubscription!.pause();
+      }
+    });
+  }
+
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
       final positionStream = Geolocator.getPositionStream();
@@ -204,6 +245,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 enum _PositionItemType {
   permission,
   position,
+  locationservicestatus
 }
 
 class _PositionItem {
