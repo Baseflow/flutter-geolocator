@@ -1,3 +1,7 @@
+## 2.1.0
+
+- Added the possibility to start a stream which will return an event when Location Services are manually enabled/disabled
+
 ## 2.0.2
 
 - Added definition of the `ActivityMissingException`.
