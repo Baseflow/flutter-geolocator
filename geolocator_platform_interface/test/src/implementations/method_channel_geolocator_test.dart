@@ -558,6 +558,34 @@ void main() {
 
       test(
           // ignore: lines_longer_than_80_chars
+          'Should receive a stream with location service updates if permissions are granted',
+          () async {
+        // Arrange
+        final streamController = StreamController<bool>.broadcast();
+        EventChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator_service_updates',
+            stream: streamController.stream);
+
+        // Act
+        final locationServiceStream =
+            MethodChannelGeolocator().getServiceStatusStream();
+        final streamQueue = StreamQueue(locationServiceStream);
+
+        // Emit test events
+        streamController.add(true);
+        streamController.add(false);
+
+        //Assert
+        expect(await streamQueue.next, true);
+        expect(await streamQueue.next, false);
+
+        // Clean up
+        await streamQueue.cancel();
+        await streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
           'Should receive a stream with position updates if permissions are granted',
           () async {
         // Arrange
