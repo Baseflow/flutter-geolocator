@@ -556,6 +556,28 @@ void main() {
         });
       });
 
+      group(
+        // ignore: lines_longer_than_80_chars
+          'getServiceStream: When requesting a stream of location service status updates',
+          () {
+        group(
+            'And requesting for location service status updates multiple times',
+            () {
+          test('Should return the same stream', () {
+            final methodChannelGeolocator = MethodChannelGeolocator();
+            final firstStream =
+                methodChannelGeolocator.getServiceStatusStream();
+            final secondstream =
+                methodChannelGeolocator.getServiceStatusStream();
+
+            expect(
+              identical(firstStream, secondstream),
+              true,
+            );
+          });
+        });
+      });
+
       test(
           // ignore: lines_longer_than_80_chars
           'Should receive a stream with location service updates if permissions are granted',
