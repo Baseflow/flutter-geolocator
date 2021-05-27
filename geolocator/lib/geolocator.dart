@@ -112,7 +112,7 @@ class Geolocator {
   /// but the location services of the device are disabled.
 
   static Stream<bool> getServiceStatusStream() =>
-  GeolocatorPlatform.instance.getServiceStatusStream();
+      GeolocatorPlatform.instance.getServiceStatusStream();
 
   static Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
