@@ -607,6 +607,46 @@ void main() {
       });
 
       test(
+        // ignore: lines_longer_than_80_chars
+          'Should receive an exception if android activity is missing',
+              () async {
+            // Arrange
+            final streamController =
+            StreamController<PlatformException>.broadcast();
+            EventChannelMock(
+              channelName: 'flutter.baseflow.com/geolocator_service_updates',
+              stream: streamController.stream,
+            );
+
+            // Act
+            final positionStream = MethodChannelGeolocator().getServiceStatusStream();
+            final streamQueue = StreamQueue(positionStream);
+
+            // Emit test error
+            streamController.addError(PlatformException(
+                code: 'ACTIVITY_MISSING',
+                message: 'Activity missing',
+                details: null));
+
+            // Assert
+            expect(
+                streamQueue.next,
+                throwsA(
+                  isA<ActivityMissingException>().having(
+                        (e) => e.message,
+                    'message',
+                    'Activity missing',
+                  ),
+                ));
+
+            // Clean up
+            streamQueue.cancel();
+            streamController.close();
+          });
+
+
+
+      test(
           // ignore: lines_longer_than_80_chars
           'Should receive a stream with position updates if permissions are granted',
           () async {
