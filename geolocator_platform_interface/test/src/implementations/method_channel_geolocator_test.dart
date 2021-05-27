@@ -557,7 +557,7 @@ void main() {
       });
 
       group(
-        // ignore: lines_longer_than_80_chars
+          // ignore: lines_longer_than_80_chars
           'getServiceStream: When requesting a stream of location service status updates',
           () {
         group(
@@ -607,44 +607,43 @@ void main() {
       });
 
       test(
-        // ignore: lines_longer_than_80_chars
+          // ignore: lines_longer_than_80_chars
           'Should receive an exception if android activity is missing',
-              () async {
-            // Arrange
-            final streamController =
+          () async {
+        // Arrange
+        final streamController =
             StreamController<PlatformException>.broadcast();
-            EventChannelMock(
-              channelName: 'flutter.baseflow.com/geolocator_service_updates',
-              stream: streamController.stream,
-            );
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_service_updates',
+          stream: streamController.stream,
+        );
 
-            // Act
-            final positionStream = MethodChannelGeolocator().getServiceStatusStream();
-            final streamQueue = StreamQueue(positionStream);
+        // Act
+        final positionStream =
+            MethodChannelGeolocator().getServiceStatusStream();
+        final streamQueue = StreamQueue(positionStream);
 
-            // Emit test error
-            streamController.addError(PlatformException(
-                code: 'ACTIVITY_MISSING',
-                message: 'Activity missing',
-                details: null));
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'ACTIVITY_MISSING',
+            message: 'Activity missing',
+            details: null));
 
-            // Assert
-            expect(
-                streamQueue.next,
-                throwsA(
-                  isA<ActivityMissingException>().having(
-                        (e) => e.message,
-                    'message',
-                    'Activity missing',
-                  ),
-                ));
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<ActivityMissingException>().having(
+                (e) => e.message,
+                'message',
+                'Activity missing',
+              ),
+            ));
 
-            // Clean up
-            streamQueue.cancel();
-            streamController.close();
-          });
-
-
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
+      });
 
       test(
           // ignore: lines_longer_than_80_chars
