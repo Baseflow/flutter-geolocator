@@ -110,6 +110,10 @@ class Geolocator {
   /// location when the user denied access.
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
+
+  static Stream<bool> getServiceStatusStream() =>
+  GeolocatorPlatform.instance.getServiceStatusStream();
+
   static Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
