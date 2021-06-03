@@ -583,7 +583,7 @@ void main() {
           'Should receive a stream with location service updates if permissions are granted',
           () async {
         // Arrange
-        final streamController = StreamController<bool>.broadcast();
+        final streamController = StreamController<int>.broadcast();
         EventChannelMock(
             channelName: 'flutter.baseflow.com/geolocator_service_updates',
             stream: streamController.stream);
@@ -594,12 +594,12 @@ void main() {
         final streamQueue = StreamQueue(locationServiceStream);
 
         // Emit test events
-        streamController.add(true);
-        streamController.add(false);
+        streamController.add(0); // disabled value in native enum
+        streamController.add(1); // enabled value in native enum
 
         //Assert
-        expect(await streamQueue.next, ServiceStatus.enabled);
         expect(await streamQueue.next, ServiceStatus.disabled);
+        expect(await streamQueue.next, ServiceStatus.enabled);
 
         // Clean up
         await streamQueue.cancel();
