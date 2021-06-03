@@ -29,7 +29,7 @@ public class LocationServiceStatusReceiver extends BroadcastReceiver {
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
 
-            if (isGpsEnabled) {
+            if (isGpsEnabled || isNetworkEnabled) {
                 /*
                 It may occur that the broadcastreceiver receives several events of the same type,
                 that's why u should check whether or not the event is fired more then one time.
@@ -38,14 +38,14 @@ public class LocationServiceStatusReceiver extends BroadcastReceiver {
                 if(!isEnabled){
                     isEnabled = true;
                     if (events != null) {
-                        events.success(ServiceStatus.enabled);
+                        events.success(ServiceStatus.enabled.ordinal());
                     }
                 }
             } else {
                 if(isEnabled){
                     isEnabled = false;
                     if (events != null) {
-                        events.success(ServiceStatus.disabled);
+                        events.success(ServiceStatus.disabled.ordinal());
                     }
                 }
 

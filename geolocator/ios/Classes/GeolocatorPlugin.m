@@ -7,6 +7,7 @@
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
 #import "Utils/LocationMapper.h"
+#import "Utils/ServiceStatus.h"
 
 @interface GeolocatorPlugin() <FlutterStreamHandler, CLLocationManagerDelegate>
 @property (strong, nonatomic) GeolocationHandler *geolocationHandler;
@@ -203,9 +204,9 @@
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
     if([CLLocationManager locationServicesEnabled]){
-        _locationServiceEventSink([NSNumber numberWithBool:YES]);
+        _locationServiceEventSink([NSNumber numberWithInt:(ServiceStatus)enabled]);
     }else{
-        _locationServiceEventSink([NSNumber numberWithBool:NO]);
+        _locationServiceEventSink([NSNumber numberWithInt:(ServiceStatus)disabled]);
     }
 }
 
