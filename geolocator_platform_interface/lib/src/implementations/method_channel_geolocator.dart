@@ -33,7 +33,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   bool forceAndroidLocationManager = false;
 
   Stream<Position>? _positionStream;
-  Stream<bool>? _serviceStatusStream;
+  Stream<ServiceStatus>? _serviceStatusStream;
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -128,7 +128,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
-  Stream<bool> getServiceStatusStream() {
+  Stream<ServiceStatus> getServiceStatusStream() {
     if (_serviceStatusStream != null) {
       return _serviceStatusStream!;
     }
@@ -136,7 +136,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         _serviceStatusEventChannel.receiveBroadcastStream();
 
     _serviceStatusStream = serviceStatusStream
-        .map((dynamic element) => element as bool)
+        .map((dynamic element) =>
+            element as bool ? ServiceStatus.enabled : ServiceStatus.disabled)
         .handleError((error) {
       _serviceStatusStream = null;
       if (error is PlatformException) {

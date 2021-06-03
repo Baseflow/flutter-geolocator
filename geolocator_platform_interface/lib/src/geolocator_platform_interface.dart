@@ -110,7 +110,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Fires when the Location Service is manually disabled or enabled f.e.
   /// when Location Service in Settings is disabled, a event will be fired which
   /// returns a [LocationServiceStatus].
-  Stream<bool> getServiceStatusStream() {
+  Stream<ServiceStatus> getServiceStatusStream() {
     throw UnimplementedError(
         'getServiceStatusStream() has not been implemented.');
   }

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:geolocator_platform_interface/src/implementations/method_channel_geolocator.dart';
-
+import 'package:geolocator_platform_interface/src/enums/location_service.dart';
 import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
 
@@ -554,6 +554,95 @@ void main() {
             true,
           );
         });
+      });
+
+      group(
+          // ignore: lines_longer_than_80_chars
+          'getServiceStream: When requesting a stream of location service status updates',
+          () {
+        group(
+            'And requesting for location service status updates multiple times',
+            () {
+          test('Should return the same stream', () {
+            final methodChannelGeolocator = MethodChannelGeolocator();
+            final firstStream =
+                methodChannelGeolocator.getServiceStatusStream();
+            final secondstream =
+                methodChannelGeolocator.getServiceStatusStream();
+
+            expect(
+              identical(firstStream, secondstream),
+              true,
+            );
+          });
+        });
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a stream with location service updates if permissions are granted',
+          () async {
+        // Arrange
+        final streamController = StreamController<bool>.broadcast();
+        EventChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator_service_updates',
+            stream: streamController.stream);
+
+        // Act
+        final locationServiceStream =
+            MethodChannelGeolocator().getServiceStatusStream();
+        final streamQueue = StreamQueue(locationServiceStream);
+
+        // Emit test events
+        streamController.add(true);
+        streamController.add(false);
+
+        //Assert
+        expect(await streamQueue.next, ServiceStatus.enabled);
+        expect(await streamQueue.next, ServiceStatus.disabled);
+
+        // Clean up
+        await streamQueue.cancel();
+        await streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive an exception if android activity is missing',
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_service_updates',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final positionStream =
+            MethodChannelGeolocator().getServiceStatusStream();
+        final streamQueue = StreamQueue(positionStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'ACTIVITY_MISSING',
+            message: 'Activity missing',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<ActivityMissingException>().having(
+                (e) => e.message,
+                'message',
+                'Activity missing',
+              ),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
       });
 
       test(
