@@ -2,6 +2,7 @@
 enum ServiceStatus {
   /// Indicates that the location service on the native platform is enabled.
   disabled,
+
   /// Indicates that the location service on the native platform is enabled.
   enabled,
 }
