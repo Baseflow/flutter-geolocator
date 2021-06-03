@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:geolocator_platform_interface/src/implementations/method_channel_geolocator.dart';
-
+import 'package:geolocator_platform_interface/src/enums/location_service.dart';
 import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
 
@@ -598,8 +598,8 @@ void main() {
         streamController.add(false);
 
         //Assert
-        expect(await streamQueue.next, true);
-        expect(await streamQueue.next, false);
+        expect(await streamQueue.next, ServiceStatus.enabled);
+        expect(await streamQueue.next, ServiceStatus.disabled);
 
         // Clean up
         await streamQueue.cancel();

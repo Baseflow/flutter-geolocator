@@ -136,7 +136,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         _serviceStatusEventChannel.receiveBroadcastStream();
 
     _serviceStatusStream = serviceStatusStream
-        .map((dynamic element) => element as ServiceStatus)
+        .map((dynamic element) =>
+            element as bool ? ServiceStatus.enabled : ServiceStatus.disabled)
         .handleError((error) {
       _serviceStatusStream = null;
       if (error is PlatformException) {
