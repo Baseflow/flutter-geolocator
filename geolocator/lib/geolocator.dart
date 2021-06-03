@@ -111,9 +111,6 @@ class Geolocator {
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
 
-  static Stream<bool> getServiceStatusStream() =>
-      GeolocatorPlatform.instance.getServiceStatusStream();
-
   static Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
@@ -128,6 +125,13 @@ class Geolocator {
         timeInterval: intervalDuration?.inMilliseconds ?? 0,
         timeLimit: timeLimit,
       );
+
+  /// Fires whenever the location services are disabled/enabled in the notification
+  /// bar or in the device settings. Returns ServiceStatus.enabled when location
+  /// services are enabled and returns ServiceStatus.disabled when location
+  /// services are disabled
+  static Stream<ServiceStatus> getServiceStatusStream() =>
+      GeolocatorPlatform.instance.getServiceStatusStream();
 
   /// Opens the App settings page.
   ///

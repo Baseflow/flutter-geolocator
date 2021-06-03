@@ -53,6 +53,16 @@ void main() {
       expect(position, mockPosition);
     });
 
+    test('getServiceStatusStream', () async {
+      when(GeolocatorPlatform.instance.getServiceStatusStream())
+          .thenAnswer((_) => Stream.value(ServiceStatus.enabled));
+
+      final locationService = await Geolocator.getServiceStatusStream();
+
+      expect(locationService,
+          emitsInOrder([emits(ServiceStatus.enabled), emitsDone]));
+    });
+
     test('getPositionStream', () async {
       when(GeolocatorPlatform.instance.getPositionStream(
         desiredAccuracy: LocationAccuracy.best,
@@ -162,6 +172,17 @@ class MockGeolocatorPlatform extends Mock
     Duration? timeLimit,
   }) =>
       Future.value(mockPosition);
+
+  @override
+  Stream<ServiceStatus> getServiceStatusStream() {
+    return super.noSuchMethod(
+      Invocation.method(
+        #getServiceStatusStream,
+        null,
+      ),
+      returnValue: Stream.value(ServiceStatus.enabled),
+    );
+  }
 
   @override
   Stream<Position> getPositionStream({

@@ -32,7 +32,7 @@ class GeolocatorWidget extends StatefulWidget {
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
-  StreamSubscription<bool>? _locationServiceStatusSubscription;
+  StreamSubscription<ServiceStatus>? _locationServiceStatusSubscription;
 
   @override
   Widget build(BuildContext context) {
