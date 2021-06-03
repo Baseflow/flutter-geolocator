@@ -38,14 +38,14 @@ public class LocationServiceStatusReceiver extends BroadcastReceiver {
                 if(!isEnabled){
                     isEnabled = true;
                     if (events != null) {
-                        events.success(true);
+                        events.success(ServiceStatus.enabled);
                     }
                 }
             } else {
                 if(isEnabled){
                     isEnabled = false;
                     if (events != null) {
-                        events.success(false);
+                        events.success(ServiceStatus.disabled);
                     }
                 }
 
