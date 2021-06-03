@@ -190,6 +190,18 @@ StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locat
     });
 ```
 
+To listen for service status changes you can call the `getServiceStatusStream` to receive stream you can listen to and receive location service status updates.
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceStatusStream().listen(
+    (ServiceStatus status) {
+        print(status);
+    });
+```
+
+
 To check if location services are enabled you can call the `isLocationServiceEnabled` method:
 
 ``` dart

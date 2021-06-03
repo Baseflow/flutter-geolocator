@@ -1,3 +1,7 @@
+## 7.1.0
+- Added the locationServiceStream which fires an event if the location service of the device are disabled/enabled in the Android/iOS notification bar or in the Settings of the device.
+- Updated the `geolocator_platform_interface: 2.1.0`
+
 ## 7.0.3
 
 - Android: Throw the `ActivityMissingException` when requesting permissions while the activity is not available (e.g. when the App is in the background);
