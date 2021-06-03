@@ -103,6 +103,20 @@ void main() {
 
     test(
         // ignore: lines_longer_than_80_chars
+        'Default implementation of getServiceStatusStream should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+      // Act & Assert
+      expect(
+        geolocatorPlatform.getServiceStatusStream,
+        throwsUnimplementedError,
+      );
+    });
+
+    test(
+        // ignore: lines_longer_than_80_chars
         'Default implementation of getPositionStream should throw unimplemented error',
         () {
       // Arrange
