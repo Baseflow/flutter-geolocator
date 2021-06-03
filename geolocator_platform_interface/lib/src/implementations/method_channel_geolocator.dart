@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import '../../geolocator_platform_interface.dart';
@@ -136,8 +137,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         _serviceStatusEventChannel.receiveBroadcastStream();
 
     _serviceStatusStream = serviceStatusStream
-        .map((dynamic element) =>
-            element as bool ? ServiceStatus.enabled : ServiceStatus.disabled)
+        .map((dynamic element) => ServiceStatus.values[element as int])
         .handleError((error) {
       _serviceStatusStream = null;
       if (error is PlatformException) {
