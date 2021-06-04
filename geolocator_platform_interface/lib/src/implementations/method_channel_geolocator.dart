@@ -183,6 +183,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         },
       );
     }
+
     _positionStream = positionStream
         .map<Position>((dynamic element) =>
             Position.fromMap(element.cast<String, dynamic>()))
@@ -202,8 +203,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     late StreamSubscription subscription;
     late StreamController<dynamic> controller;
     controller = StreamController<dynamic>(
-      onListen: () =>
-          subscription = incoming.listen((item) => controller.add(item)),
+      onListen: () => subscription = incoming.listen((item)
+                => controller.add(item)),
       onPause: () => subscription.pause(),
       onResume: () => subscription.resume(),
       onCancel: () {
@@ -211,7 +212,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         _positionStream = null;
       },
     );
-    return controller.stream;
+    return controller.stream.asBroadcastStream();
   }
 
   @override

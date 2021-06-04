@@ -572,7 +572,7 @@ void main() {
 
           // Pro stream different options are used, thus the stream shouldn't
           // be the same
-          expect(firstStream != secondStream, true);
+          expect(firstStream == secondStream, true);
 
         });
       });
