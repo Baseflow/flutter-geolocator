@@ -201,7 +201,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         _locationServiceStatusSubscription?.cancel();
         _locationServiceStatusSubscription = null;
       }).listen((status) => setState(() => _positionItems.add(_PositionItem(
-              _PositionItemType.locationservicestatus, status.toString()))));
+              _PositionItemType.locationServiceStatus, status.toString()))));
       _locationServiceStatusSubscription?.pause();
     }
 
@@ -252,7 +252,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 }
 
-enum _PositionItemType { permission, position, locationservicestatus }
+enum _PositionItemType {
+  permission,
+  position,
+  locationServiceStatus,
+}
 
 class _PositionItem {
   _PositionItem(this.type, this.displayValue);

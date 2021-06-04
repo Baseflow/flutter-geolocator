@@ -5,18 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import io.flutter.plugin.common.EventChannel;
 
-
 public class LocationServiceStatusReceiver extends BroadcastReceiver {
-    @Nullable
+    @NonNull
     private final EventChannel.EventSink events;
 
     private boolean isEnabled = false;
 
-    public LocationServiceStatusReceiver(@Nullable Object arguments, @Nullable EventChannel.EventSink events) {
+    public LocationServiceStatusReceiver(@NonNull EventChannel.EventSink events) {
         this.events = events;
     }
 
@@ -35,18 +34,14 @@ public class LocationServiceStatusReceiver extends BroadcastReceiver {
                 that's why u should check whether or not the event is fired more then one time.
                 This is realised by using the [isEnabled] boolean
                  */
-                if(!isEnabled){
+                if (!isEnabled) {
                     isEnabled = true;
-                    if (events != null) {
-                        events.success(ServiceStatus.enabled.ordinal());
-                    }
+                    events.success(ServiceStatus.enabled.ordinal());
                 }
             } else {
-                if(isEnabled){
+                if (isEnabled) {
                     isEnabled = false;
-                    if (events != null) {
-                        events.success(ServiceStatus.disabled.ordinal());
-                    }
+                    events.success(ServiceStatus.disabled.ordinal());
                 }
 
             }

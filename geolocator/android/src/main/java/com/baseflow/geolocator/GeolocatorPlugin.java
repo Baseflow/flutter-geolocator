@@ -1,10 +1,7 @@
 package com.baseflow.geolocator;
 
-import android.location.Location;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.baseflow.geolocator.location.GeolocationManager;
 import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
