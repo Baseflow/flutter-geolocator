@@ -1,6 +1,6 @@
-## 2.0.3
+## 2.1.0
 
-- Solved a bug which caused the distanceFilter/timeInterval not to update after initializing a new PositionStream (see issue [#703](https://github.com/Baseflow/flutter-geolocator/issues/703)).
+- Added the possibility to start a stream which will return an event when Location Services are manually enabled/disabled
 
 ## 2.0.2
 

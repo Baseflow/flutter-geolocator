@@ -21,6 +21,11 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   static const _eventChannel =
       EventChannel('flutter.baseflow.com/geolocator_updates');
 
+  /// The event channel used to receive [LocationServiceStatus] updates from the
+  /// native platform.
+  static const _serviceStatusEventChannel =
+      EventChannel('flutter.baseflow.com/geolocator_service_updates');
+
   /// On Android devices you can set [forceAndroidLocationManager]
   /// to true to force the plugin to use the [LocationManager] to determine the
   /// position instead of the [FusedLocationProviderClient]. On iOS this is
@@ -28,6 +33,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   bool forceAndroidLocationManager = false;
 
   Stream<Position>? _positionStream;
+  Stream<ServiceStatus>? _serviceStatusStream;
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -119,6 +125,27 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
       rethrow;
     }
+  }
+
+  @override
+  Stream<ServiceStatus> getServiceStatusStream() {
+    if (_serviceStatusStream != null) {
+      return _serviceStatusStream!;
+    }
+    var serviceStatusStream =
+        _serviceStatusEventChannel.receiveBroadcastStream();
+
+    _serviceStatusStream = serviceStatusStream
+        .map((dynamic element) => ServiceStatus.values[element as int])
+        .handleError((error) {
+      _serviceStatusStream = null;
+      if (error is PlatformException) {
+        _handlePlatformException(error);
+      }
+      throw error;
+    });
+
+    return _serviceStatusStream!;
   }
 
   @override
