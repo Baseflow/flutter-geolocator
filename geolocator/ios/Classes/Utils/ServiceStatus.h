@@ -8,15 +8,9 @@
 #ifndef ServiceStatus_h
 #define ServiceStatus_h
 
-@interface ServiceStatusEnum : NSObject {
-    
-}
-
 typedef enum {
     disabled,
     enabled
 } ServiceStatus;
-
-@end
 
 #endif /* ServiceStatus_h */

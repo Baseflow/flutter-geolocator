@@ -27,7 +27,6 @@ public class LocationServiceStatusReceiver extends BroadcastReceiver {
             boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
-
             if (isGpsEnabled || isNetworkEnabled) {
                 /*
                 It may occur that the broadcastreceiver receives several events of the same type,
