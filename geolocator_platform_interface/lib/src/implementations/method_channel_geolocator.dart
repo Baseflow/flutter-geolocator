@@ -203,8 +203,13 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     late StreamSubscription subscription;
     late StreamController<dynamic> controller;
     controller = StreamController<dynamic>(
-      onListen: () => subscription = incoming.listen((item)
-                => controller.add(item)),
+      onListen: () {
+        subscription = incoming.listen(
+          (item) => controller.add(item),
+          onError: (error) => controller.addError(error),
+          onDone: () => controller.done,
+        );
+      },
       onPause: () => subscription.pause(),
       onResume: () => subscription.resume(),
       onCancel: () {
