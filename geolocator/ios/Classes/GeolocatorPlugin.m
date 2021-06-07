@@ -20,7 +20,7 @@
     FlutterMethodChannel *methodChannel = [FlutterMethodChannel
                                            methodChannelWithName:@"flutter.baseflow.com/geolocator"
                                            binaryMessenger:registrar.messenger];
-    FlutterEventChannel *eventChannel = [FlutterEventChannel
+    FlutterEventChannel *positionUpdatesEventChannel = [FlutterEventChannel
                                          eventChannelWithName:@"flutter.baseflow.com/geolocator_updates"
                                          binaryMessenger:registrar.messenger];
     
@@ -29,7 +29,7 @@
   
     PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.geolocationHandler
                                                                                            PermissionHandler:instance.permissionHandler];
-    [eventChannel setStreamHandler:positionStreamHandler];
+    [positionUpdatesEventChannel setStreamHandler:positionStreamHandler];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
