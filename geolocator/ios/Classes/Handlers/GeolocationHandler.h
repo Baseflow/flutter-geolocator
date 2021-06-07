@@ -5,6 +5,9 @@
 //  Created by Maurits van Beusekom on 23/06/2020.
 //
 
+#ifndef GeolocatorHandler_h
+#define GeolocatorHandler_h
+
 #import <CoreLocation/CoreLocation.h>
 #import <Foundation/Foundation.h>
 
@@ -22,3 +25,5 @@ typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
 
 - (void)stopListening;
 @end
+
+#endif /* GeolocatorHandler_h */
