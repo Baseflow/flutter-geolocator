@@ -2,9 +2,24 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Runner.xcodeproj">
+      location = "group:build">
    </FileRef>
    <FileRef
-      location = "group:Pods/Pods.xcodeproj">
+      location = "group:Flutter">
+   </FileRef>
+   <FileRef
+      location = "group:Podfile">
+   </FileRef>
+   <FileRef
+      location = "group:Podfile.lock">
+   </FileRef>
+   <FileRef
+      location = "group:Pods">
+   </FileRef>
+   <FileRef
+      location = "group:Runner">
+   </FileRef>
+   <FileRef
+      location = "group:Runner.xcodeproj">
    </FileRef>
 </Workspace>
