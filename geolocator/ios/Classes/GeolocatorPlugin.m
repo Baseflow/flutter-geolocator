@@ -3,38 +3,33 @@
 #import "Constants/ErrorCodes.h"
 #import "Handlers/GeolocationHandler.h"
 #import "Handlers/PermissionHandler.h"
+#import "Handlers/PositionStreamHandler.h"
 #import "Utils/AuthorizationStatusMapper.h"
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
 #import "Utils/LocationMapper.h"
-#import "Utils/ServiceStatus.h"
 
-@interface GeolocatorPlugin() <FlutterStreamHandler, CLLocationManagerDelegate>
+@interface GeolocatorPlugin()
 @property (strong, nonatomic) GeolocationHandler *geolocationHandler;
 @property (strong, nonatomic) PermissionHandler *permissionHandler;
-@property (strong, nonatomic) CLLocationManager *locationManager;
 @end
 
-@implementation GeolocatorPlugin {
-    FlutterEventSink _eventSink;
-    FlutterEventSink _locationServiceEventSink;
-}
+@implementation GeolocatorPlugin
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel *methodChannel = [FlutterMethodChannel
                                            methodChannelWithName:@"flutter.baseflow.com/geolocator"
                                            binaryMessenger:registrar.messenger];
-    FlutterEventChannel *eventChannel = [FlutterEventChannel
+    FlutterEventChannel *positionUpdatesEventChannel = [FlutterEventChannel
                                          eventChannelWithName:@"flutter.baseflow.com/geolocator_updates"
                                          binaryMessenger:registrar.messenger];
-    FlutterEventChannel *locationServiceEventChannel = [FlutterEventChannel
-                                                        eventChannelWithName:@"flutter.baseflow.com/geolocator_service_updates"
-                                                        binaryMessenger:registrar.messenger];
     
     GeolocatorPlugin *instance = [[GeolocatorPlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:methodChannel];
-    [eventChannel setStreamHandler:instance];
-    [locationServiceEventChannel setStreamHandler:instance];
+  
+    PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.geolocationHandler
+                                                                                           PermissionHandler:instance.permissionHandler];
+    [positionUpdatesEventChannel setStreamHandler:positionStreamHandler];
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
@@ -58,77 +53,6 @@
     } else { 
         result(FlutterMethodNotImplemented);
     }
-}
-
-- (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(FlutterEventSink)eventSink {
-    if(arguments != nil){
-        if (_eventSink) {
-            return [FlutterError errorWithCode: GeolocatorErrorLocationSubscriptionActive
-                                       message: @"Already listening for location updates. If you want to restart listening please cancel other subscriptions first."
-                                       details: nil];
-        }
-        _eventSink = eventSink;
-        
-        __weak typeof(self) weakSelf = self;
-        
-        [self.permissionHandler
-         requestPermission:^(CLAuthorizationStatus status) {
-            if (status != kCLAuthorizationStatusAuthorizedWhenInUse && status != kCLAuthorizationStatusAuthorizedAlways) {
-                [weakSelf onLocationFailureWithErrorCode: GeolocatorErrorPermissionDenied
-                                        errorDescription: @"User denied permissions to access the device's location."];
-                return;
-            }
-            
-            CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
-            CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
-            
-            [[weakSelf geolocationHandler] startListeningWithDesiredAccuracy:accuracy
-                                                          distanceFilter:distanceFilter
-                                                           resultHandler:^(CLLocation *location) {
-                [weakSelf onLocationDidChange: location];
-            }
-                                                            errorHandler:^(NSString *errorCode, NSString *errorDescription){
-                [weakSelf onLocationFailureWithErrorCode:errorCode
-                                    errorDescription:errorDescription];
-            }];
-        }
-         errorHandler:^(NSString *errorCode, NSString *errorDescription) {
-            [weakSelf onLocationFailureWithErrorCode:errorCode
-                                    errorDescription:errorDescription];
-        }];
-    }else{
-        _locationServiceEventSink = eventSink;
-        if(self.locationManager == nil){
-            self.locationManager = [[CLLocationManager alloc] init];
-            self.locationManager.delegate = self;
-        }
-    }
-    
-    return nil;
-}
-
-- (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
-    [[self geolocationHandler] stopListening];
-    _eventSink = nil;
-    _locationServiceEventSink = nil;
-    self.locationManager = nil;
-    return nil;
-}
-
-- (void)onLocationDidChange:(CLLocation *_Nullable)location {
-    if (!_eventSink) return;
-    
-    _eventSink([LocationMapper toDictionary:location]);
-}
-
-- (void)onLocationFailureWithErrorCode:(NSString *_Nonnull)errorCode
-                      errorDescription:(NSString *_Nonnull)errorDescription {
-    if (!_eventSink) return;
-    
-    _eventSink([FlutterError errorWithCode:errorCode
-                                   message:errorDescription
-                                   details:nil]);
-    _eventSink = nil;
 }
 
 - (void)onRequestPermission:(FlutterResult)result {
@@ -200,14 +124,6 @@
                                    message: errorDescription
                                    details: nil]);
     }];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
-    if([CLLocationManager locationServicesEnabled]){
-        _locationServiceEventSink([NSNumber numberWithInt:(ServiceStatus)enabled]);
-    }else{
-        _locationServiceEventSink([NSNumber numberWithInt:(ServiceStatus)disabled]);
-    }
 }
 
 - (void)openSettings:(FlutterResult)result {
