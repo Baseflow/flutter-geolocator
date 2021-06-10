@@ -575,6 +575,19 @@ void main() {
           expect(firstStream == secondStream, true);
 
         });
+        test('PositionStream can be listened to and can be canceled', () {
+          // Arrange
+          final methodChannelGeolocator = MethodChannelGeolocator();
+          final firstStream = methodChannelGeolocator.getPositionStream();
+          final secondStream = methodChannelGeolocator.getPositionStream();
+
+          // Act
+          firstStream.listen((event) {}).cancel();
+          secondStream.listen((event) {}).cancel();
+
+          // Assert
+          identical(firstStream, secondStream);
+        });
       });
 
       group(
