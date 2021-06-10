@@ -581,13 +581,13 @@ void main() {
               channelName: 'flutter.baseflow.com/geolocator_updates',
               stream: streamController.stream);
 
-          Stream<Position> stream = MethodChannelGeolocator().getPositionStream();
+          var stream =
+              MethodChannelGeolocator().getPositionStream();
 
-          StreamSubscription<Position> streamSubscription = stream.listen((event) { });
+          var streamSubscription =
+              stream.listen((event) {});
 
-          streamController.onListen = () {
-
-          };
+          streamController.onListen = () {};
           streamController.onResume = () {};
           streamController.onCancel = () {};
           streamController.onPause = () {};
@@ -598,8 +598,6 @@ void main() {
           expect(streamSubscription.isPaused, false);
           streamSubscription.cancel();
           expect(streamSubscription, null);
-
-
         });
       });
 
