@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
@@ -556,37 +557,54 @@ void main() {
         });
         test('Should return a new stream when original stream is closed', () {
           final methodChannelGeolocator = MethodChannelGeolocator();
-          final firstStream = methodChannelGeolocator.getPositionStream(
-              distanceFilter: 10);
+          final firstStream =
+              methodChannelGeolocator.getPositionStream(distanceFilter: 10);
 
           // Start listening so u can cancel the stream subscription
           StreamSubscription<Position>? firstSubscription =
-              firstStream.listen((event) { });
+              firstStream.listen((event) {});
 
           // Cancel subscription
           firstSubscription.cancel();
           firstSubscription = null;
 
-          final secondStream = methodChannelGeolocator.getPositionStream(
-              distanceFilter: 100);
+          final secondStream =
+              methodChannelGeolocator.getPositionStream(distanceFilter: 100);
 
           // Pro stream different options are used, thus the stream shouldn't
           // be the same
           expect(firstStream == secondStream, true);
-
         });
         test('PositionStream can be listened to and can be canceled', () {
           // Arrange
+          StreamController<Position>? streamController =
+              StreamController<Position>.broadcast();
+          EventChannelMock(
+              channelName: 'flutter.baseflow.com/geolocator_service_updates',
+              stream: streamController.stream);
+
           final methodChannelGeolocator = MethodChannelGeolocator();
           final firstStream = methodChannelGeolocator.getPositionStream();
-          final secondStream = methodChannelGeolocator.getPositionStream();
+
+          late StreamSubscription<Position>? streamSubscription;
+          streamSubscription = firstStream.listen((event) {});
 
           // Act
-          firstStream.listen((event) {}).cancel();
-          secondStream.listen((event) {}).cancel();
+          streamSubscription.pause();
+          streamSubscription.resume();
+          streamSubscription.cancel();
+
+          streamSubscription = null;
+
+          streamController.done;
+          streamController.close();
 
           // Assert
-          identical(firstStream, secondStream);
+          expect(streamSubscription, null);
+          expect(streamController.isClosed, true);
+
+          // Clean up stream controller
+          streamController = null;
         });
       });
 
