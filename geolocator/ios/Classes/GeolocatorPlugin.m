@@ -8,6 +8,7 @@
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
 #import "Utils/LocationMapper.h"
+#import "LocationServiceStreamHandler.h"
 
 @interface GeolocatorPlugin()
 @property (strong, nonatomic) GeolocationHandler *geolocationHandler;
@@ -33,7 +34,9 @@
     PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.geolocationHandler
                                                                                            PermissionHandler:instance.permissionHandler];
     
-    LocationServiceStreamHandler *locationServiceStreamHandler = [[LocationServiceStreamHandler alloc]];
+    LocationServiceStreamHandler *locationServiceStreamHandler = [[LocationServiceStreamHandler alloc] init];
+    
+    [locationServiceUpdatesEventChannel setStreamHandler:locationServiceStreamHandler];
     [positionUpdatesEventChannel setStreamHandler:positionStreamHandler];
 }
 
