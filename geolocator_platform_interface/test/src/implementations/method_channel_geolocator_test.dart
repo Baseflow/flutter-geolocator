@@ -584,19 +584,18 @@ void main() {
           var stream =
               MethodChannelGeolocator().getPositionStream();
 
-          var streamSubscription =
+          StreamSubscription<Position>? streamSubscription =
               stream.listen((event) {});
 
           streamController.onListen = () {};
-          streamController.onResume = () {};
           streamController.onCancel = () {};
-          streamController.onPause = () {};
 
           streamSubscription.pause();
           expect(streamSubscription.isPaused, true);
           streamSubscription.resume();
           expect(streamSubscription.isPaused, false);
           streamSubscription.cancel();
+          streamSubscription = null;
           expect(streamSubscription, null);
         });
       });
