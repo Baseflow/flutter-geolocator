@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
@@ -576,34 +577,19 @@ void main() {
         });
         test('PositionStream can be listened to and can be canceled', () {
           // Arrange
-          StreamController<Position>? streamController =
-              StreamController<Position>.broadcast();
+          final streamController = StreamController<Position>.broadcast();
           EventChannelMock(
-              channelName: 'flutter.baseflow.com/geolocator_service_updates',
+              channelName: 'flutter.baseflow.com/geolocator_updates',
               stream: streamController.stream);
 
-          final methodChannelGeolocator = MethodChannelGeolocator();
-          final firstStream = methodChannelGeolocator.getPositionStream();
-
-          late StreamSubscription<Position>? streamSubscription;
-          streamSubscription = firstStream.listen((event) {});
-
-          // Act
-          streamSubscription.pause();
-          streamSubscription.resume();
-          streamSubscription.cancel();
-
-          streamSubscription = null;
+          streamController.onCancel = () {};
+          streamController.onListen = () {};
 
           streamController.done;
           streamController.close();
 
-          // Assert
-          expect(streamSubscription, null);
           expect(streamController.isClosed, true);
 
-          // Clean up stream controller
-          streamController = null;
         });
       });
 
