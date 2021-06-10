@@ -576,19 +576,9 @@ void main() {
         });
         test('PositionStream can be listened to and can be canceled', () {
           // Arrange
-          final streamController = StreamController<Position>.broadcast();
-          EventChannelMock(
-              channelName: 'flutter.baseflow.com/geolocator_updates',
-              stream: streamController.stream);
-
-          var stream =
-              MethodChannelGeolocator().getPositionStream();
-
+          var stream = MethodChannelGeolocator().getPositionStream();
           StreamSubscription<Position>? streamSubscription =
-              stream.listen((event) {});
-
-          streamController.onListen = () {};
-          streamController.onCancel = () {};
+          stream.listen((event) { });
 
           streamSubscription.pause();
           expect(streamSubscription.isPaused, true);
@@ -596,7 +586,7 @@ void main() {
           expect(streamSubscription.isPaused, false);
           streamSubscription.cancel();
           streamSubscription = null;
-          expect(streamSubscription, null);
+
         });
       });
 
