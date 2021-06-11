@@ -5,6 +5,9 @@
 //  Created by Maurits van Beusekom on 26/06/2020.
 //
 
+#ifndef PermissionHandler_h
+#define PermissionHandler_h
+
 #import <CoreLocation/CoreLocation.h>
 #import <Foundation/Foundation.h>
 
@@ -18,3 +21,5 @@ typedef void (^PermissionError)(NSString *errorCode, NSString *errorDiscription)
               errorHandler:(PermissionError)errorHandler;
 
 @end
+
+#endif /* PermissionHandler_h */

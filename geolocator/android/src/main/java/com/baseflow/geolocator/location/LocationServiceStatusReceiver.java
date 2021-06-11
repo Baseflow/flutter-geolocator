@@ -42,7 +42,6 @@ public class LocationServiceStatusReceiver extends BroadcastReceiver {
                     isEnabled = false;
                     events.success(ServiceStatus.disabled.ordinal());
                 }
-
             }
         }
     }

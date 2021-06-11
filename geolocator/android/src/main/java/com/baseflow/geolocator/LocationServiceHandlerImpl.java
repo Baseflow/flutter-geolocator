@@ -46,6 +46,10 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler{
 
     @Override
     public void onListen(Object arguments, EventChannel.EventSink events) {
+        if (activity == null) {
+            return;
+        }
+
         IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
         this.receiver = new LocationServiceStatusReceiver(events);
