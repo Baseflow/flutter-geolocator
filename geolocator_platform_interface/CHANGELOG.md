@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Solves a bug which resulted in an issue when closing the position stream and requesting a new one (see issue [#703](https://github.com/Baseflow/flutter-geolocator/issues/703)).
+
 ## 2.1.0
 
 - Added the possibility to start a stream which will return an event when Location Services are manually enabled/disabled

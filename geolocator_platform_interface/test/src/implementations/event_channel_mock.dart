@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 
 class EventChannelMock {
   final MethodChannel _methodChannel;
-  final Stream stream;
   final log = <MethodCall>[];
 
+  Stream? stream;
   StreamSubscription? _streamSubscription;
 
   EventChannelMock({
@@ -34,36 +34,22 @@ class EventChannelMock {
   }
 
   void _onListen() {
-    _streamSubscription = stream.handleError((error) {
-      if (ServicesBinding.instance == null) {
-        return;
-      }
-
-      ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
-        _methodChannel.name,
-        _createErrorEnvelope(error),
-        (_) {},
-      );
-    }).listen((event) {
-      if (ServicesBinding.instance == null) {
-        return;
-      }
-
-      ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
-        _methodChannel.name,
-        _createSuccessEnvelope(event),
-        (_) {},
-      );
-    });
+    _streamSubscription = stream!.handleError(_sendErrorEnvelope).listen(
+      _sendSuccessEnvelope,
+      onDone: () {
+        _sendEnvelope(null);
+      },
+    );
   }
 
   void _onCancel() {
     if (_streamSubscription != null) {
       _streamSubscription!.cancel();
+      stream = null;
     }
   }
 
-  ByteData _createErrorEnvelope(Exception error) {
+  void _sendErrorEnvelope(Exception error) {
     var code = "UNKNOWN_EXCEPTION";
     String? message;
     dynamic details;
@@ -74,11 +60,26 @@ class EventChannelMock {
       details = error.details;
     }
 
-    return const StandardMethodCodec()
+    final envelope = const StandardMethodCodec()
         .encodeErrorEnvelope(code: code, message: message, details: details);
+
+    _sendEnvelope(envelope);
   }
 
-  ByteData _createSuccessEnvelope(dynamic event) {
-    return const StandardMethodCodec().encodeSuccessEnvelope(event);
+  void _sendSuccessEnvelope(dynamic event) {
+    final envelope = const StandardMethodCodec().encodeSuccessEnvelope(event);
+    _sendEnvelope(envelope);
+  }
+
+  void _sendEnvelope(ByteData? envelope) {
+    if (ServicesBinding.instance == null) {
+      return;
+    }
+
+    ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
+      _methodChannel.name,
+      envelope,
+      (_) {},
+    );
   }
 }
