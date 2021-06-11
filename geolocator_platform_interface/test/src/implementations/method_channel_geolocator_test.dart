@@ -554,6 +554,7 @@ void main() {
             true,
           );
         });
+
         test('Should return a new stream when original stream is closed', () {
           final methodChannelGeolocator = MethodChannelGeolocator();
           final firstStream =
@@ -574,109 +575,54 @@ void main() {
           // be the same
           expect(firstStream == secondStream, true);
         });
-        test('PositionStream can be listened to and can be canceled', () {
-          // Arrange
-          var stream = MethodChannelGeolocator().getPositionStream();
-          StreamSubscription<Position>? streamSubscription =
-          stream.listen((event) { });
-
-          streamSubscription.pause();
-          expect(streamSubscription.isPaused, true);
-          streamSubscription.resume();
-          expect(streamSubscription.isPaused, false);
-          streamSubscription.cancel();
-          streamSubscription = null;
-
-        });
       });
 
-      group(
-          // ignore: lines_longer_than_80_chars
-          'getServiceStream: When requesting a stream of location service status updates',
-          () {
-        group(
-            'And requesting for location service status updates multiple times',
-            () {
-          test('Should return the same stream', () {
-            final methodChannelGeolocator = MethodChannelGeolocator();
-            final firstStream =
-                methodChannelGeolocator.getServiceStatusStream();
-            final secondstream =
-                methodChannelGeolocator.getServiceStatusStream();
-
-            expect(
-              identical(firstStream, secondstream),
-              true,
-            );
-          });
-        });
-      });
-
-      test(
-          // ignore: lines_longer_than_80_chars
-          'Should receive a stream with location service updates if permissions are granted',
-          () async {
-        // Arrange
-        final streamController = StreamController<int>.broadcast();
-        EventChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator_service_updates',
-            stream: streamController.stream);
-
-        // Act
-        final locationServiceStream =
-            MethodChannelGeolocator().getServiceStatusStream();
-        final streamQueue = StreamQueue(locationServiceStream);
-
-        // Emit test events
-        streamController.add(0); // disabled value in native enum
-        streamController.add(1); // enabled value in native enum
-
-        //Assert
-        expect(await streamQueue.next, ServiceStatus.disabled);
-        expect(await streamQueue.next, ServiceStatus.enabled);
-
-        // Clean up
-        await streamQueue.cancel();
-        await streamController.close();
-      });
-
-      test(
-          // ignore: lines_longer_than_80_chars
-          'Should receive an exception if android activity is missing',
-          () async {
+      test('PositionStream can be listened to and can be canceled', () {
         // Arrange
         final streamController =
-            StreamController<PlatformException>.broadcast();
+            StreamController<Map<String, dynamic>>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_service_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates',
+          stream: streamController.stream,
+        );
+        
+        var stream = MethodChannelGeolocator().getPositionStream();
+        StreamSubscription<Position>? streamSubscription =
+            stream.listen((event) {});
+
+        streamSubscription.pause();
+        expect(streamSubscription.isPaused, true);
+        streamSubscription.resume();
+        expect(streamSubscription.isPaused, false);
+        streamSubscription.cancel();
+        streamSubscription = null;
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should correctly handle done event', () async {
+        // Arrange
+        final completer = Completer();
+        completer.future.timeout(Duration(milliseconds: 50),
+            onTimeout: () =>
+                fail('getPositionStream should trigger done and not timeout.'));
+        final streamController =
+            StreamController<Map<String, dynamic>>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_updates',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream =
-            MethodChannelGeolocator().getServiceStatusStream();
-        final streamQueue = StreamQueue(positionStream);
+        MethodChannelGeolocator().getPositionStream().listen(
+              (event) {},
+              onDone: completer.complete,
+            );
 
-        // Emit test error
-        streamController.addError(PlatformException(
-            code: 'ACTIVITY_MISSING',
-            message: 'Activity missing',
-            details: null));
+        await streamController.close();
 
-        // Assert
-        expect(
-            streamQueue.next,
-            throwsA(
-              isA<ActivityMissingException>().having(
-                (e) => e.message,
-                'message',
-                'Activity missing',
-              ),
-            ));
-
-        // Clean up
-        streamQueue.cancel();
-        streamController.close();
+        //Assert
+        await completer.future;
       });
 
       test(
@@ -907,6 +853,92 @@ void main() {
         // Assert
         expect(await streamQueue.next, mockPosition);
         expect(streamQueue.next, throwsA(isA<TimeoutException>()));
+      });
+    });
+
+    group(
+        // ignore: lines_longer_than_80_chars
+        'getServiceStream: When requesting a stream of location service status updates',
+        () {
+      group('And requesting for location service status updates multiple times',
+          () {
+        test('Should return the same stream', () {
+          final methodChannelGeolocator = MethodChannelGeolocator();
+          final firstStream = methodChannelGeolocator.getServiceStatusStream();
+          final secondstream = methodChannelGeolocator.getServiceStatusStream();
+
+          expect(
+            identical(firstStream, secondstream),
+            true,
+          );
+        });
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a stream with location service updates if permissions are granted',
+          () async {
+        // Arrange
+        final streamController = StreamController<int>.broadcast();
+        EventChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator_service_updates',
+            stream: streamController.stream);
+
+        // Act
+        final locationServiceStream =
+            MethodChannelGeolocator().getServiceStatusStream();
+        final streamQueue = StreamQueue(locationServiceStream);
+
+        // Emit test events
+        streamController.add(0); // disabled value in native enum
+        streamController.add(1); // enabled value in native enum
+
+        //Assert
+        expect(await streamQueue.next, ServiceStatus.disabled);
+        expect(await streamQueue.next, ServiceStatus.enabled);
+
+        // Clean up
+        await streamQueue.cancel();
+        await streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive an exception if android activity is missing',
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_service_updates',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final positionStream =
+            MethodChannelGeolocator().getServiceStatusStream();
+        final streamQueue = StreamQueue(positionStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'ACTIVITY_MISSING',
+            message: 'Activity missing',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<ActivityMissingException>().having(
+                (e) => e.message,
+                'message',
+                'Activity missing',
+              ),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
       });
     });
 

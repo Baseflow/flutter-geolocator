@@ -207,11 +207,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         subscription = incoming.listen(
           (item) => controller.add(item),
           onError: (error) => controller.addError(error),
-          onDone: () => controller.done,
+          onDone: () => controller.close(),
         );
       },
-      onPause: () => subscription.pause(),
-      onResume: () => subscription.resume(),
       onCancel: () {
         subscription.cancel();
         _positionStream = null;
