@@ -125,6 +125,13 @@ class Geolocator {
         timeLimit: timeLimit,
       );
 
+  /// Fires whenever the location services are disabled/enabled in the notification
+  /// bar or in the device settings. Returns ServiceStatus.enabled when location
+  /// services are enabled and returns ServiceStatus.disabled when location
+  /// services are disabled
+  static Stream<ServiceStatus> getServiceStatusStream() =>
+      GeolocatorPlatform.instance.getServiceStatusStream();
+
   /// Opens the App settings page.
   ///
   /// Returns [true] if the location settings page could be opened, otherwise
