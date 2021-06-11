@@ -16,9 +16,7 @@
 @end
 
 @implementation LocationServiceStreamHandler {
-
-FlutterEventSink _eventSink;
-
+    FlutterEventSink _eventSink;
 }
 
 - (FlutterError * _Nullable)onCancelWithArguments:(id _Nullable)arguments {
@@ -29,17 +27,17 @@ FlutterEventSink _eventSink;
 
 - (FlutterError * _Nullable)onListenWithArguments:(id _Nullable)arguments eventSink:(nonnull FlutterEventSink)events {
     _eventSink = events;
-            if(self.locationManager == nil){
-                self.locationManager = [[CLLocationManager alloc] init];
-                self.locationManager.delegate = self;
-            }
+    if (self.locationManager == nil) {
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+    }
     return nil;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
-    if([CLLocationManager locationServicesEnabled]){
+    if ([CLLocationManager locationServicesEnabled]) {
         _eventSink([NSNumber numberWithInt:(ServiceStatus)enabled]);
-    }else{
+    } else {
         _eventSink([NSNumber numberWithInt:(ServiceStatus)disabled]);
     }
 }

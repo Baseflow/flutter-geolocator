@@ -27,7 +27,6 @@
     
     FlutterEventChannel *locationServiceUpdatesEventChannel = [FlutterEventChannel eventChannelWithName:@"flutter.baseflow.com/geolocator_service_updates" binaryMessenger:registrar.messenger];
     
-    
     GeolocatorPlugin *instance = [[GeolocatorPlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:methodChannel];
   

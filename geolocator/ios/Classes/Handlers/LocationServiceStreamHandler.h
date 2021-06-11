@@ -14,5 +14,4 @@
 
 @end
 
-
 #endif /* LocationServiceStreamHandler_h */
