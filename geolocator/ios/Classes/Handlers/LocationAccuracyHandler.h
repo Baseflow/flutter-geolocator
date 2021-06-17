@@ -8,5 +8,10 @@
 #ifndef LocationAccuracyHandler_h
 #define LocationAccuracyHandler_h
 
+@interface LocationAccuracyHandler : NSObject
+
+-(BOOL)getLocationAccuracy;
+
+@end
 
 #endif /* LocationAccuracyHandler_h */

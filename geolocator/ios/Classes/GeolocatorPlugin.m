@@ -8,6 +8,7 @@
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
 #import "Utils/LocationMapper.h"
+#import "LocationAccuracyHandler.h"
 
 @interface GeolocatorPlugin()
 @property (strong, nonatomic) GeolocationHandler *geolocationHandler;
@@ -50,6 +51,9 @@
         [self openSettings:result];
     } else if ([@"openLocationSettings" isEqualToString:call.method]) {
         [self openSettings:result];
+    } else if ([@"getLocationAccuracy" isEqualToString:call.method]) {
+        LocationAccuracyHandler* locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
+        [locationAccuracyHandler getLocationAccuracy];
     } else { 
         result(FlutterMethodNotImplemented);
     }
