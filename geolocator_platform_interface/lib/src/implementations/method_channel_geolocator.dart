@@ -162,14 +162,13 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       forceAndroidLocationManager: forceAndroidLocationManager,
       timeInterval: timeInterval,
     );
-
     if (_positionStream != null) {
       return _positionStream!;
     }
-
-    var positionStream = _eventChannel.receiveBroadcastStream(
+    var originalStream = _eventChannel.receiveBroadcastStream(
       locationOptions.toJson(),
     );
+    var positionStream = _wrapStream(originalStream);
 
     if (timeLimit != null) {
       positionStream = positionStream.timeout(
@@ -194,12 +193,29 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         if (error is PlatformException) {
           _handlePlatformException(error);
         }
-
         throw error;
       },
     );
-
     return _positionStream!;
+  }
+
+  Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
+    late StreamSubscription subscription;
+    late StreamController<dynamic> controller;
+    controller = StreamController<dynamic>(
+      onListen: () {
+        subscription = incoming.listen(
+          (item) => controller.add(item),
+          onError: (error) => controller.addError(error),
+          onDone: () => controller.close(),
+        );
+      },
+      onCancel: () {
+        subscription.cancel();
+        _positionStream = null;
+      },
+    );
+    return controller.stream.asBroadcastStream();
   }
 
   @override

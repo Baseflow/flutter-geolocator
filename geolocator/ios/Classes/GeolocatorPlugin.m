@@ -8,6 +8,7 @@
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
 #import "Utils/LocationMapper.h"
+#import "LocationServiceStreamHandler.h"
 
 @interface GeolocatorPlugin()
 @property (strong, nonatomic) GeolocationHandler *geolocationHandler;
@@ -24,11 +25,17 @@
                                          eventChannelWithName:@"flutter.baseflow.com/geolocator_updates"
                                          binaryMessenger:registrar.messenger];
     
+    FlutterEventChannel *locationServiceUpdatesEventChannel = [FlutterEventChannel eventChannelWithName:@"flutter.baseflow.com/geolocator_service_updates" binaryMessenger:registrar.messenger];
+    
     GeolocatorPlugin *instance = [[GeolocatorPlugin alloc] init];
     [registrar addMethodCallDelegate:instance channel:methodChannel];
   
     PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.geolocationHandler
                                                                                            PermissionHandler:instance.permissionHandler];
+    
+    LocationServiceStreamHandler *locationServiceStreamHandler = [[LocationServiceStreamHandler alloc] init];
+    
+    [locationServiceUpdatesEventChannel setStreamHandler:locationServiceStreamHandler];
     [positionUpdatesEventChannel setStreamHandler:positionStreamHandler];
 }
 
