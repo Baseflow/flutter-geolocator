@@ -1,3 +1,7 @@
+# 7.1.1
+
+- Resolved a 404 error when clicking on the AndroidX migration link in the README.md
+
 ## 7.1.0
 
 - Added the locationServiceStream which fires an event if the location service of the device are disabled/enabled in the Android/iOS notification bar or in the Settings of the device.
