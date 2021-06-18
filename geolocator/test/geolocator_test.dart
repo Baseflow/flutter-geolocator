@@ -53,6 +53,12 @@ void main() {
       expect(position, mockPosition);
     });
 
+    test('getLocationAccuracy', () async {
+      final accuracy = await Geolocator.getLocationAccuracy();
+
+      expect(accuracy, LocationAccuracyStatus.reduced);
+    });
+
     test('getServiceStatusStream', () async {
       when(GeolocatorPlatform.instance.getServiceStatusStream())
           .thenAnswer((_) => Stream.value(ServiceStatus.enabled));
@@ -210,6 +216,10 @@ class MockGeolocatorPlatform extends Mock
 
   @override
   Future<bool> openAppSettings() => Future.value(true);
+
+  @override
+  Future<LocationAccuracyStatus> getLocationAccuracy() =>
+      Future.value(LocationAccuracyStatus.reduced);
 
   @override
   Future<bool> openLocationSettings() => Future.value(true);

@@ -125,6 +125,14 @@ class Geolocator {
         timeLimit: timeLimit,
       );
 
+  /// Returns a [Future] containing a [LocationAccuracyStatus]
+  /// When the user has given permission for approximate location,
+  /// [LocationAccuracyStatus.reduced] will be returned, if the user has
+  /// given permission for precise location, [LocationAccuracyStatus.precise]
+  /// will be returned
+  static Future<LocationAccuracyStatus> getLocationAccuracy() =>
+      GeolocatorPlatform.instance.getLocationAccuracy();
+
   /// Fires whenever the location services are disabled/enabled in the notification
   /// bar or in the device settings. Returns ServiceStatus.enabled when location
   /// services are enabled and returns ServiceStatus.disabled when location

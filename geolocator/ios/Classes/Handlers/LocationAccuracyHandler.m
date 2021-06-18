@@ -19,21 +19,18 @@
     CLLocationManager *locationManager = self.locationManager;
     if (@available(iOS 14, *)) {
         switch ([locationManager accuracyAuthorization]) {
-            case CLAccuracyAuthorizationFullAccuracy:
-                result([NSNumber numberWithInt:(LocationAccuracy)precise]);
-                break;
+            case ".fullAccuracy":
+                return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
             case CLAccuracyAuthorizationReducedAccuracy:
-                result([NSNumber numberWithInt:(LocationAccuracy)reduced]);
-                break;
+                return result([NSNumber numberWithInt:(LocationAccuracy)reduced]);
             default:
-                // The default location accuracy is reduced (approximate location) due to battery life choices
-                result([NSNumber numberWithInt:(LocationAccuracy)precise]);
-                break;
+                // in iOS 14, reduced location accuracy is the default
+                return result([NSNumber numberWithInt:(LocationAccuracy)reduced]);
         }
     } else {
         // If the version of iOS is below version number 14, approximate location is not available, thus
         // precise location is always returned
-        result([NSNumber numberWithInt:(LocationAccuracy)precise]);
+        return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
     }
 }
 
