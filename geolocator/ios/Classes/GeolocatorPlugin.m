@@ -52,7 +52,7 @@
     } else if ([@"openLocationSettings" isEqualToString:call.method]) {
         [self openSettings:result];
     } else if ([@"getLocationAccuracy" isEqualToString:call.method]) {
-        LocationAccuracyHandler* locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
+        LocationAccuracyHandler *locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
         [locationAccuracyHandler getLocationAccuracy];
     } else { 
         result(FlutterMethodNotImplemented);

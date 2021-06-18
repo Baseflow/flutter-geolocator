@@ -15,7 +15,7 @@
 
 @implementation LocationAccuracyHandler
 
--(BOOL)getLocationAccuracy:(CLLocationManager*)manager {
+-(BOOL)getLocationAccuracy {
     CLLocationManager *locationManager = self.locationManager;
     if (@available(iOS 14.0, *)) {
         switch([locationManager accuracyAuthorization]) {
