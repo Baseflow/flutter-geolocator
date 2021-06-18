@@ -8,6 +8,7 @@
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
 #import "Utils/LocationMapper.h"
+#import "Handlers/LocationAccuracyHandler.h"
 #import "LocationServiceStreamHandler.h"
 
 @interface GeolocatorPlugin()
@@ -53,6 +54,9 @@
     } else if ([@"getCurrentPosition" isEqualToString:call.method]) {
         [self onGetCurrentPositionWithArguments:call.arguments
                                          result:result];
+    } else if([@"getLocationAccuracy" isEqualToString:call.method]) {
+        LocationAccuracyHandler *locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
+        [locationAccuracyHandler getLocationAccuracyWithResult:result];
     } else if ([@"openAppSettings" isEqualToString:call.method]) {
         [self openSettings:result];
     } else if ([@"openLocationSettings" isEqualToString:call.method]) {
