@@ -16,10 +16,10 @@
 @implementation LocationAccuracyHandler
 
 - (void) getLocationAccuracyWithResult:(FlutterResult)result {
-    CLLocationManager *locationManager = self.locationManager;
+    self.locationManager = [[CLLocationManager alloc] init];
     if (@available(iOS 14, *)) {
-        switch ([locationManager accuracyAuthorization]) {
-            case ".fullAccuracy":
+        switch ([self.locationManager accuracyAuthorization]) {
+            case CLAccuracyAuthorizationFullAccuracy:
                 return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
             case CLAccuracyAuthorizationReducedAccuracy:
                 return result([NSNumber numberWithInt:(LocationAccuracy)reduced]);
