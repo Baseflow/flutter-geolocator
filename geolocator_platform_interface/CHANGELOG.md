@@ -1,6 +1,6 @@
 ## 2.2.0
 
-- Added the possibility to query for the LocationAccuracyStatus on iOS devices
+- Added the possibility to query for the LocationAccuracyStatus on devices running iOS 14.0 and higher.
 
 ## 2.1.1
 

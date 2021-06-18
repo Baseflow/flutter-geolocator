@@ -92,8 +92,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
-    final accuracy = await _methodChannel.invokeMethod('getLocationAccuracy');
-    return LocationAccuracyStatus.values[accuracy as int];
+    final int accuracy =
+        await _methodChannel.invokeMethod('getLocationAccuracy');
+    return LocationAccuracyStatus.values[accuracy];
   }
 
   @override
