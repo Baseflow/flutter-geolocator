@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../geolocator_platform_interface.dart';
@@ -93,8 +92,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
-    final accuracy = await _methodChannel.invokeMethod('getLocationAccuracy');
-    return LocationAccuracyStatus.values[accuracy as int];
+    final int accuracy =
+        await _methodChannel.invokeMethod('getLocationAccuracy');
+    return LocationAccuracyStatus.values[accuracy];
   }
 
   @override

@@ -151,7 +151,7 @@ void main() {
             await MethodChannelGeolocator().getLocationAccuracy();
 
         // Assert
-            expect(locationAccuracy, LocationAccuracyStatus.reduced);
+        expect(locationAccuracy, LocationAccuracyStatus.reduced);
       });
 
       test(
