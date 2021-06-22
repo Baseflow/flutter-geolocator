@@ -1,3 +1,7 @@
+## 2.2.0
+
+- Added the possibility to query for the LocationAccuracyStatus on devices running iOS 14.0 and higher.
+
 ## 2.1.1
 
 - Solves a bug which resulted in an issue when closing the position stream and requesting a new one (see issue [#703](https://github.com/Baseflow/flutter-geolocator/issues/703)).

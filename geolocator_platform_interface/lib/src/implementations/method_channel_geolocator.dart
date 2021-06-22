@@ -91,6 +91,13 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
+  Future<LocationAccuracyStatus> getLocationAccuracy() async {
+    final int accuracy =
+        await _methodChannel.invokeMethod('getLocationAccuracy');
+    return LocationAccuracyStatus.values[accuracy];
+  }
+
+  @override
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,

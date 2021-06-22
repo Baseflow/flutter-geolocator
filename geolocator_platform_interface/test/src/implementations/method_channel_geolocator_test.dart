@@ -134,6 +134,46 @@ void main() {
       });
     });
 
+    group('getLocationAccuracy: When requesting the Location Accuracy Status',
+        () {
+      test(
+          'Should receive reduced accuracy if Location Accuracy is reduced',
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'getLocationAccuracy',
+          result: 0,
+        );
+
+        // Act
+        final locationAccuracy =
+            await MethodChannelGeolocator().getLocationAccuracy();
+
+        // Assert
+        expect(locationAccuracy, LocationAccuracyStatus.reduced);
+      });
+
+      test(
+          'Should receive reduced accuracy if Location Accuracy is reduced',
+              () async {
+            // Arrange
+            MethodChannelMock(
+              channelName: 'flutter.baseflow.com/geolocator',
+              method: 'getLocationAccuracy',
+              result: 1,
+            );
+
+            // Act
+            final locationAccuracy =
+            await MethodChannelGeolocator().getLocationAccuracy();
+
+            // Assert
+            expect(locationAccuracy, LocationAccuracyStatus.precise);
+          });
+
+    });
+
     group('requestPermission: When requesting for permission', () {
       test(
           // ignore: lines_longer_than_80_chars
@@ -585,7 +625,7 @@ void main() {
           channelName: 'flutter.baseflow.com/geolocator_updates',
           stream: streamController.stream,
         );
-        
+
         var stream = MethodChannelGeolocator().getPositionStream();
         StreamSubscription<Position>? streamSubscription =
             stream.listen((event) {});

@@ -159,6 +159,16 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError('getPositionStream() has not been implemented.');
   }
 
+  /// Returns a [Future] containing a [LocationAccuracyStatus].
+  ///
+  /// When on iOS the user has given permission for approximate location,
+  /// [LocationAccuracyStatus.reduced] will be returned, if the user gave
+  /// permission for precise/full accuracy location, [LocationAccuracyStatus.precise]
+  /// will be returned.
+  Future<LocationAccuracyStatus> getLocationAccuracy() async {
+    throw UnimplementedError('getLocationAccuracy() has not been implemented.');
+  }
+
   /// Opens the App settings page.
   ///
   /// Returns [true] if the app settings page could be opened, otherwise
