@@ -158,6 +158,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   }) {
     throw UnimplementedError('getPositionStream() has not been implemented.');
   }
+
   /// Asks the user for Temporary Precise location access (iOS 14 or above).
   ///
   /// Throws a [AccuracyDictionaryNotFoundException] when the key
@@ -167,9 +168,10 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// permission to use Precise Accuracy location fetching.
   /// Throws a [ApproximateLocationNotSupportedException] when Approximate
   /// Location is not supported (iOS 13 or below)
-  Future<void> requestTemporaryFullAccuracy(){
+  Future<void> requestTemporaryFullAccuracy() {
     // ignore: lines_longer_than_80_chars
-    throw UnimplementedError('requestTemporaryFullAccuracy() has not been implemented');
+    throw UnimplementedError(
+        'requestTemporaryFullAccuracy() has not been implemented');
   }
 
   /// Returns a [Future] containing a [LocationAccuracyStatus].

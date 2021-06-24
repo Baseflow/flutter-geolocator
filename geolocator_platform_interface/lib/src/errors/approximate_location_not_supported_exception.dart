@@ -12,7 +12,7 @@ class ApproximateLocationNotSupportedException implements Exception {
 
   @override
   String toString() {
-    if(message == null || message == ''){
+    if (message == null || message == '') {
       return 'The \'requestTemporaryFullAccuracy\' method only supports iOS 14'
           'or above.';
     }

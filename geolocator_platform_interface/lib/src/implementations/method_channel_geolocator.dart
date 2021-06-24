@@ -228,8 +228,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   @override
   Future<void> requestTemporaryFullAccuracy() async {
     try {
-      final accuracyFuture = _methodChannel
-          .invokeMethod('requestTemporaryFullAccuracy');
+      final accuracyFuture =
+          _methodChannel.invokeMethod('requestTemporaryFullAccuracy');
       return accuracyFuture;
     } on PlatformException catch (e) {
       _handlePlatformException(e);
