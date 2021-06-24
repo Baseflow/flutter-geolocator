@@ -226,6 +226,18 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
+  Future<void> requestTemporaryFullAccuracy() async {
+    try {
+      final accuracyFuture = await _methodChannel
+          .invokeMethod('requestTemporaryFullAccuracy');
+      return accuracyFuture;
+    } on PlatformException catch (e) {
+      _handlePlatformException(e);
+      rethrow;
+    }
+  }
+
+  @override
   Future<bool> openAppSettings() async => _methodChannel
       .invokeMethod<bool>('openAppSettings')
       .then((value) => value ?? false);
@@ -251,6 +263,12 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         throw PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         throw PositionUpdateException(exception.message);
+      case 'ACCURACY_DICTIONARY_NOT_FOUND':
+        throw AccuracyDictionaryNotFoundException(exception.message);
+      case 'PRECISE_ACCURACY_ENABLED':
+        throw PreciseAccuracyEnabledException(exception.message);
+      case 'APPROXIMATE_LOCATION_NOT_SUPPORTED':
+        throw ApproximateLocationNotSupportedException(exception.message);
       default:
         throw exception;
     }

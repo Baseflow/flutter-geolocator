@@ -134,10 +134,100 @@ void main() {
       });
     });
 
+    group(
+        // ignore: lines_longer_than_80_chars
+        'requestTemporaryFullAccuracy: When requesting Temporary Precise location',
+        () {
+      test('Should receive an exception when precise location is enabled',
+          () async {
+            MethodChannelMock(
+              channelName: 'flutter.baseflow.com/geolocator',
+              method: 'requestTemporaryFullAccuracy',
+              result: PlatformException(
+                code: 'PRECISE_ACCURACY_ENABLED',
+                message: 'Precise location is enabled.',
+                details: null,
+              ),
+            );
+
+            // Act
+            final accuracyFuture = MethodChannelGeolocator()
+            .requestTemporaryFullAccuracy();
+
+            // Assert
+            expect(
+              accuracyFuture,
+              throwsA(
+                isA<PreciseAccuracyEnabledException>().having(
+                      (e) => e.message,
+                  'description',
+                  'Precise location is enabled.',
+                ),
+              ),
+            );
+          });
+      test('Should receive an exception when iOS 13 or below is used',
+              () async {
+                MethodChannelMock(
+                  channelName: 'flutter.baseflow.com/geolocator',
+                  method: 'requestTemporaryFullAccuracy',
+                  result: PlatformException(
+                    code: 'APPROXIMATE_LOCATION_NOT_SUPPORTED',
+                    message: 'Approximate location not supported.',
+                    details: null,
+                  ),
+                );
+
+                // Act
+                final accuracyFuture = MethodChannelGeolocator()
+                    .requestTemporaryFullAccuracy();
+
+                // Assert
+                expect(
+                  accuracyFuture,
+                  throwsA(
+                    isA<ApproximateLocationNotSupportedException>().having(
+                          (e) => e.message,
+                      'description',
+                      'Approximate location not supported.',
+                    ),
+                  ),
+                );
+          });
+      test('Should receive an exception when the location accuracy definition'
+          ' in the Info.plist is missing',
+              () async {
+                MethodChannelMock(
+                  channelName: 'flutter.baseflow.com/geolocator',
+                  method: 'requestTemporaryFullAccuracy',
+                  result: PlatformException(
+                    code: 'ACCURACY_DICTIONARY_NOT_FOUND',
+                    message: 'Accuracy definition missing.',
+                    details: null,
+                  ),
+                );
+
+                // Act
+                final accuracyFuture = MethodChannelGeolocator()
+                    .requestTemporaryFullAccuracy();
+
+                // Assert
+                expect(
+                  accuracyFuture,
+                  throwsA(
+                    isA<AccuracyDictionaryNotFoundException>().having(
+                          (e) => e.message,
+                      'description',
+                      'Accuracy definition missing.',
+                    ),
+                  ),
+                );
+          });
+    });
+
     group('getLocationAccuracy: When requesting the Location Accuracy Status',
         () {
-      test(
-          'Should receive reduced accuracy if Location Accuracy is reduced',
+      test('Should receive reduced accuracy if Location Accuracy is reduced',
           () async {
         // Arrange
         MethodChannelMock(
@@ -154,24 +244,22 @@ void main() {
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
       });
 
-      test(
-          'Should receive reduced accuracy if Location Accuracy is reduced',
-              () async {
-            // Arrange
-            MethodChannelMock(
-              channelName: 'flutter.baseflow.com/geolocator',
-              method: 'getLocationAccuracy',
-              result: 1,
-            );
+      test('Should receive reduced accuracy if Location Accuracy is reduced',
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'getLocationAccuracy',
+          result: 1,
+        );
 
-            // Act
-            final locationAccuracy =
+        // Act
+        final locationAccuracy =
             await MethodChannelGeolocator().getLocationAccuracy();
 
-            // Assert
-            expect(locationAccuracy, LocationAccuracyStatus.precise);
-          });
-
+        // Assert
+        expect(locationAccuracy, LocationAccuracyStatus.precise);
+      });
     });
 
     group('requestPermission: When requesting for permission', () {
