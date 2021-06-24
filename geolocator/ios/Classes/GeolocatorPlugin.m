@@ -14,6 +14,7 @@
 @interface GeolocatorPlugin()
 @property (strong, nonatomic) GeolocationHandler *geolocationHandler;
 @property (strong, nonatomic) PermissionHandler *permissionHandler;
+@property (strong, nonatomic) LocationAccuracyHandler *locationAccuracyHandler;
 @end
 
 @implementation GeolocatorPlugin
@@ -58,8 +59,8 @@
         LocationAccuracyHandler *locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
         [locationAccuracyHandler getLocationAccuracyWithResult:result];
     } else if([@"requestTemporaryFullAccuracy" isEqualToString:call.method]) {
-        LocationAccuracyHandler *locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
-        [locationAccuracyHandler requestTemporaryFullAccuracyWithResult:result];
+        self.locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
+        [self.locationAccuracyHandler requestTemporaryFullAccuracyWithResult:result];
     } else if ([@"openAppSettings" isEqualToString:call.method]) {
         [self openSettings:result];
     } else if ([@"openLocationSettings" isEqualToString:call.method]) {

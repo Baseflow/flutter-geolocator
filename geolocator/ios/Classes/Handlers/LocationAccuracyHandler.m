@@ -10,6 +10,10 @@
 #import "LocationAccuracyHandler.h"
 #import "ErrorCodes.h"
 
+@interface LocationAccuracyHandler()
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@end
+
 @implementation LocationAccuracyHandler
 
 - (void) getLocationAccuracyWithResult:(FlutterResult)result {
@@ -32,28 +36,27 @@
 }
 
 - (void) requestTemporaryFullAccuracyWithResult:(FlutterResult)result {
-    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    if ([dictionary objectForKey:@"TemporaryPreciseAccuracy"] == nil) {
+    if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationTemporaryUsageDescriptionDictionary"] == nil) {
         return result([FlutterError errorWithCode:GeolocatorErrorTemporaryAccuracyDictionaryNotFound
                                           message:@"The temporary accuracy dictionary key is not set in the infop.list"
                                           details:nil]);
     }
-    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+    if (self.locationManager == nil) {
+        self.locationManager = [[CLLocationManager alloc] init];
+    }
     if (@available(iOS 14.0, *)) {
-        switch ([locationManager accuracyAuthorization]) {
+        switch ([self.locationManager accuracyAuthorization]) {
             case CLAccuracyAuthorizationReducedAccuracy: {
-                [locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:@"TemporaryPreciseAccuracy"
-                                                                              completion:^(NSError *error) {
-                    if (error == nil) {
-                        return;
-                    } else {
+                [self.locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:@"TemporaryPreciseAccuracy"
+                                                                              completion:^(NSError *_Nullable error) {
+                    if (error != nil) {
                         // This error should never be thrown, since all the error cases are covered
                         return result([FlutterError errorWithCode:[[NSNumber numberWithInteger:error.code] stringValue]
                                                           message:error.description
                                                           details:nil]);
                     }
                 }];
-                return;
+                break;
             }
             case CLAccuracyAuthorizationFullAccuracy:
                 return result([FlutterError errorWithCode:GeolocatorErrorPreciseAccuracyEnabled
