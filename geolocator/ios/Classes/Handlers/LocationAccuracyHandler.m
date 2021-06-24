@@ -33,7 +33,7 @@
 
 - (void) requestTemporaryFullAccuracyWithResult:(FlutterResult)result {
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
-    if ([dictionary objectForKey:@"TemporaryPreciseAccuracy"]) {
+    if ([dictionary objectForKey:@"TemporaryPreciseAccuracy"] == nil) {
         return result([FlutterError errorWithCode:GeolocatorErrorTemporaryAccuracyDictionaryNotFound
                                           message:@"The temporary accuracy dictionary key is not set in the infop.list"
                                           details:nil]);
@@ -44,7 +44,7 @@
             case CLAccuracyAuthorizationReducedAccuracy: {
                 [locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:@"TemporaryPreciseAccuracy"
                                                                               completion:^(NSError *error) {
-                    if (error != nil) {
+                    if (error == nil) {
                         return;
                     } else {
                         // This error should never be thrown, since all the error cases are covered
