@@ -57,9 +57,6 @@
     } else if([@"getLocationAccuracy" isEqualToString:call.method]) {
         LocationAccuracyHandler *locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
         [locationAccuracyHandler getLocationAccuracyWithResult:result];
-    } else if([@"requestTemporaryFullAccuracy" isEqualToString:call.method]) {
-        LocationAccuracyHandler *locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
-        [locationAccuracyHandler requestTemporaryFullAccuracyWithResult:result];
     } else if ([@"openAppSettings" isEqualToString:call.method]) {
         [self openSettings:result];
     } else if ([@"openLocationSettings" isEqualToString:call.method]) {
