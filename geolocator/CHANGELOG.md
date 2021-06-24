@@ -1,6 +1,10 @@
+# 7.2.0
+
+- iOS 14: Users can now query whether they gave permission for Approximate location fetching or Precise location fetching.
+
 # 7.1.1
 
-- Resolved a 404 error when clicking on the AndroidX migration link in the README.md
+- Resolved a 404 error when clicking on the AndroidX migration link in the README.md.
 
 ## 7.1.0
 

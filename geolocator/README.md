@@ -201,6 +201,16 @@ StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceSta
     });
 ```
 
+**iOS 14+ only**
+To query if a user enabled Approximate location fetching or Precise location fetching, you can call the `Geolocator().getLocationAccuracy()` method. This will return a `Future<LocationAccuracyStatus>`, which when completed contains a `LocationAccuracyStatus.reduced` if the user has enabled Approximate location fetching or `LocationAccuracyStatus.precise` if the user has enabled Precise location fetching.
+When calling `getLocationAccuracy` before the user has given permission, the method will return `LocationAccuracyStatus.reduced` by default.
+On iOS 13 or below, the method `getLocationAccuracy` will always return `LocationAccuracyStatus.precise`, since that is the default value for iOS 13 and below.
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+var accuracy = await Geolocator.getLocationAccuracy();
+```
 
 To check if location services are enabled you can call the `isLocationServiceEnabled` method:
 
