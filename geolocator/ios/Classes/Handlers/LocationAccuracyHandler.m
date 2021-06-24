@@ -9,16 +9,12 @@
 #import <CoreLocation/CoreLocation.h>
 #import "LocationAccuracyHandler.h"
 
-@interface LocationAccuracyHandler()
-  @property (strong, nonatomic) CLLocationManager *locationManager;
-@end
-
 @implementation LocationAccuracyHandler
 
 - (void) getLocationAccuracyWithResult:(FlutterResult)result {
-    self.locationManager = [[CLLocationManager alloc] init];
+    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
     if (@available(iOS 14, *)) {
-        switch ([self.locationManager accuracyAuthorization]) {
+        switch ([locationManager accuracyAuthorization]) {
             case CLAccuracyAuthorizationFullAccuracy:
                 return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
             case CLAccuracyAuthorizationReducedAccuracy:
