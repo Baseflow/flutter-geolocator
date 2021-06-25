@@ -230,7 +230,7 @@ void main() {
           method: 'requestTemporaryFullAccuracy',
           result: PlatformException(
             code: 'PRECISE_ACCURACY_ENABLED',
-            message: '',
+            message: null,
             details: null,
           ),
         );
@@ -242,13 +242,7 @@ void main() {
         // Assert
         expect(
           accuracyFuture,
-          throwsA(
-            isA<PreciseAccuracyEnabledException>().having(
-              (e) => e.message,
-              'description',
-              '',
-            ),
-          ),
+          throwsA(isA<PreciseAccuracyEnabledException>()),
         );
       });
       test('Should receive an exception when iOS 13 or below is used',
@@ -258,7 +252,7 @@ void main() {
           method: 'requestTemporaryFullAccuracy',
           result: PlatformException(
             code: 'APPROXIMATE_LOCATION_NOT_SUPPORTED',
-            message: '',
+            message: null,
             details: null,
           ),
         );
@@ -270,13 +264,7 @@ void main() {
         // Assert
         expect(
           accuracyFuture,
-          throwsA(
-            isA<ApproximateLocationNotSupportedException>().having(
-              (e) => e.message,
-              'description',
-              '',
-            ),
-          ),
+          throwsA(isA<ApproximateLocationNotSupportedException>()),
         );
       });
       test(
@@ -287,7 +275,7 @@ void main() {
           method: 'requestTemporaryFullAccuracy',
           result: PlatformException(
             code: 'ACCURACY_DICTIONARY_NOT_FOUND',
-            message: '',
+            message: null,
             details: null,
           ),
         );
@@ -299,13 +287,7 @@ void main() {
         // Assert
         expect(
           accuracyFuture,
-          throwsA(
-            isA<AccuracyDictionaryNotFoundException>().having(
-              (e) => e.message,
-              'description',
-              '',
-            ),
-          ),
+          throwsA(isA<AccuracyDictionaryNotFoundException>()),
         );
       });
     });
