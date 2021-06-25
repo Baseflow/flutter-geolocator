@@ -242,7 +242,13 @@ void main() {
         // Assert
         expect(
           accuracyFuture,
-          throwsA(isA<PreciseAccuracyEnabledException>()),
+          throwsA(isA<PreciseAccuracyEnabledException>().having(
+              (e) => e.toString(),
+              '',
+              'The user already enabled Precise location fetching, when using '
+                  'the requestTemporaryFullAccuracy, make sure to check '
+                  'whether the user has already given permission to use '
+                  'Precise Accuracy.')),
         );
       });
       test('Should receive an exception when iOS 13 or below is used',
@@ -264,7 +270,13 @@ void main() {
         // Assert
         expect(
           accuracyFuture,
-          throwsA(isA<ApproximateLocationNotSupportedException>()),
+          throwsA(
+            isA<ApproximateLocationNotSupportedException>().having(
+                (e) => e.toString(),
+                '',
+                'The requestTemporaryFullAccuracy method only supports iOS 14'
+                    'or above.'),
+          ),
         );
       });
       test(
@@ -287,7 +299,14 @@ void main() {
         // Assert
         expect(
           accuracyFuture,
-          throwsA(isA<AccuracyDictionaryNotFoundException>()),
+          throwsA(
+            isA<AccuracyDictionaryNotFoundException>().having(
+                (e) => e.toString(),
+                '',
+                'Temporary Full accuracy key or description: '
+                    'NSLocationTemporaryUsageDescriptionDictionary'
+                    ' is missing in the Info.plist dictionary.'),
+          ),
         );
       });
     });

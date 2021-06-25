@@ -11,7 +11,7 @@ class AccuracyDictionaryNotFoundException implements Exception {
   String toString() {
     if (message == null || message == '') {
       return 'Temporary Full accuracy key or description: '
-          '\'NSLocationTemporaryUsageDescriptionDictionary\' is missing in the'
+          'NSLocationTemporaryUsageDescriptionDictionary is missing in the'
           ' Info.plist dictionary.';
     }
     return message!;
