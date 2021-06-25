@@ -223,6 +223,91 @@ void main() {
           ),
         );
       });
+      test('Should receive an exception when precise location is enabled',
+          () async {
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'requestTemporaryFullAccuracy',
+          result: PlatformException(
+            code: 'PRECISE_ACCURACY_ENABLED',
+            message: '',
+            details: null,
+          ),
+        );
+
+        // Act
+        final accuracyFuture =
+            MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(
+          accuracyFuture,
+          throwsA(
+            isA<PreciseAccuracyEnabledException>().having(
+              (e) => e.message,
+              'description',
+              '',
+            ),
+          ),
+        );
+      });
+      test('Should receive an exception when iOS 13 or below is used',
+          () async {
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'requestTemporaryFullAccuracy',
+          result: PlatformException(
+            code: 'APPROXIMATE_LOCATION_NOT_SUPPORTED',
+            message: '',
+            details: null,
+          ),
+        );
+
+        // Act
+        final accuracyFuture =
+            MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(
+          accuracyFuture,
+          throwsA(
+            isA<ApproximateLocationNotSupportedException>().having(
+              (e) => e.message,
+              'description',
+              '',
+            ),
+          ),
+        );
+      });
+      test(
+          'Should receive an exception when the location accuracy definition'
+          ' in the Info.plist is missing', () async {
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'requestTemporaryFullAccuracy',
+          result: PlatformException(
+            code: 'ACCURACY_DICTIONARY_NOT_FOUND',
+            message: '',
+            details: null,
+          ),
+        );
+
+        // Act
+        final accuracyFuture =
+            MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(
+          accuracyFuture,
+          throwsA(
+            isA<AccuracyDictionaryNotFoundException>().having(
+              (e) => e.message,
+              'description',
+              '',
+            ),
+          ),
+        );
+      });
     });
 
     group('getLocationAccuracy: When requesting the Location Accuracy Status',

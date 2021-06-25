@@ -12,7 +12,7 @@ class PreciseAccuracyEnabledException implements Exception {
   String toString() {
     if (message == null || message == '') {
       return 'The user already enabled Precise location fetching, when using '
-          'the \'requestTemporaryFullAccuracy\', make sure to check whether the'
+          'the requestTemporaryFullAccuracy, make sure to check whether the '
           'user has already given permission to use Precise Accuracy.';
     }
 
