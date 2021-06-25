@@ -125,7 +125,7 @@ void main() {
           permissionFuture,
           throwsA(
             isA<PermissionDefinitionsNotFoundException>().having(
-              (e) => e.toString(),
+              (e) => e.message,
               'description',
               'Permission definitions are not found.',
             ),
@@ -159,7 +159,7 @@ void main() {
           accuracyFuture,
           throwsA(
             isA<PreciseAccuracyEnabledException>().having(
-              (e) => e.message,
+              (e) => e.toString(),
               'description',
               'Precise location is enabled.',
             ),
