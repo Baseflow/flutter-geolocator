@@ -125,7 +125,7 @@ void main() {
           permissionFuture,
           throwsA(
             isA<PermissionDefinitionsNotFoundException>().having(
-              (e) => e.message,
+              (e) => e.toString(),
               'description',
               'Permission definitions are not found.',
             ),
@@ -187,7 +187,7 @@ void main() {
           accuracyFuture,
           throwsA(
             isA<ApproximateLocationNotSupportedException>().having(
-              (e) => e.message,
+              (e) => e.toString(),
               'description',
               'Approximate location not supported.',
             ),
@@ -216,7 +216,7 @@ void main() {
           accuracyFuture,
           throwsA(
             isA<AccuracyDictionaryNotFoundException>().having(
-              (e) => e.message,
+              (e) => e.toString(),
               'description',
               'Accuracy definition missing.',
             ),
