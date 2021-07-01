@@ -262,8 +262,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         throw PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         throw PositionUpdateException(exception.message);
-      case 'ACCURACY_DICTIONARY_NOT_FOUND':
-        throw AccuracyDictionaryNotFoundException(exception.message);
       case 'PRECISE_ACCURACY_ENABLED':
         throw PreciseAccuracyEnabledException(exception.message);
       case 'APPROXIMATE_LOCATION_NOT_SUPPORTED':

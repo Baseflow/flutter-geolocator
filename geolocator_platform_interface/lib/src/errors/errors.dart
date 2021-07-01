@@ -1,4 +1,3 @@
-export 'accuracy_dictionary_not_found_exception.dart';
 export 'activity_missing_exception.dart';
 export 'already_subscribed_exception.dart';
 export 'approximate_location_not_supported_exception.dart';

@@ -194,35 +194,6 @@ void main() {
           ),
         );
       });
-      test(
-          'Should receive an exception when the location accuracy definition'
-          ' in the Info.plist is missing', () async {
-        MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
-          method: 'requestTemporaryFullAccuracy',
-          result: PlatformException(
-            code: 'ACCURACY_DICTIONARY_NOT_FOUND',
-            message: 'Accuracy definition missing.',
-            details: null,
-          ),
-        );
-
-        // Act
-        final accuracyFuture =
-            MethodChannelGeolocator().requestTemporaryFullAccuracy();
-
-        // Assert
-        expect(
-          accuracyFuture,
-          throwsA(
-            isA<AccuracyDictionaryNotFoundException>().having(
-              (e) => e.toString(),
-              'description',
-              'Accuracy definition missing.',
-            ),
-          ),
-        );
-      });
       test('Should receive an exception when precise location is enabled',
           () async {
         MethodChannelMock(
@@ -276,36 +247,6 @@ void main() {
                 '',
                 'The requestTemporaryFullAccuracy method only supports iOS 14'
                     'or above.'),
-          ),
-        );
-      });
-      test(
-          'Should receive an exception when the location accuracy definition'
-          ' in the Info.plist is missing', () async {
-        MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
-          method: 'requestTemporaryFullAccuracy',
-          result: PlatformException(
-            code: 'ACCURACY_DICTIONARY_NOT_FOUND',
-            message: null,
-            details: null,
-          ),
-        );
-
-        // Act
-        final accuracyFuture =
-            MethodChannelGeolocator().requestTemporaryFullAccuracy();
-
-        // Assert
-        expect(
-          accuracyFuture,
-          throwsA(
-            isA<AccuracyDictionaryNotFoundException>().having(
-                (e) => e.toString(),
-                '',
-                'Temporary Full accuracy key or description: '
-                    'NSLocationTemporaryUsageDescriptionDictionary'
-                    ' is missing in the Info.plist dictionary.'),
           ),
         );
       });
