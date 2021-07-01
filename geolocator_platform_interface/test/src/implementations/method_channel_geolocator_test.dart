@@ -585,10 +585,12 @@ void main() {
         );
         final expectedFirstArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
+          defaultIosAccuracyAuthorization: false,
           forceAndroidLocationManager: false,
         );
         final expectedSecondArguments = LocationOptions(
           accuracy: LocationAccuracy.high,
+          defaultIosAccuracyAuthorization: true,
           forceAndroidLocationManager: true,
         );
 
@@ -596,10 +598,12 @@ void main() {
         final methodChannelGeolocator = MethodChannelGeolocator();
         final firstPosition = await methodChannelGeolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.low,
+          defaultIosAccuracyAuthorization: false,
           forceAndroidLocationManager: false,
         );
         final secondPosition = await methodChannelGeolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
+          defaultIosAccuracyAuthorization: true,
           forceAndroidLocationManager: true,
         );
 

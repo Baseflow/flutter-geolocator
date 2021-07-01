@@ -1,3 +1,7 @@
+## 2.4.0
+
+- Added the possibility to force the default location accuracy on iOS 14+ devices.
+
 ## 2.3.0
 
 - Added the possibility to request temporary Precise Accuracy on iOS 14+ devices.
