@@ -246,7 +246,7 @@ void main() {
                 (e) => e.toString(),
                 '',
                 'The requestTemporaryFullAccuracy method only supports iOS 14'
-                    'or above.'),
+                    ' or above.'),
           ),
         );
       });
