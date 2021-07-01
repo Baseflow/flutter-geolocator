@@ -16,6 +16,17 @@
 
 @implementation LocationAccuracyHandler
 
+- (id) init {
+    self = [super init];
+    
+    if (!self) {
+        return nil;
+    }
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    return self;
+}
+
 - (void) getLocationAccuracyWithResult:(FlutterResult)result {
     CLLocationManager *locationManager = [[CLLocationManager alloc] init];
     if (@available(iOS 14, *)) {

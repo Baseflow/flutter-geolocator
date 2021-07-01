@@ -37,6 +37,8 @@
     
     LocationServiceStreamHandler *locationServiceStreamHandler = [[LocationServiceStreamHandler alloc] init];
     
+    instance.locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
+
     [locationServiceUpdatesEventChannel setStreamHandler:locationServiceStreamHandler];
     [positionUpdatesEventChannel setStreamHandler:positionStreamHandler];
 }
@@ -56,10 +58,8 @@
         [self onGetCurrentPositionWithArguments:call.arguments
                                          result:result];
     } else if([@"getLocationAccuracy" isEqualToString:call.method]) {
-        LocationAccuracyHandler *locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
-        [locationAccuracyHandler getLocationAccuracyWithResult:result];
+        [self.locationAccuracyHandler getLocationAccuracyWithResult:result];
     } else if([@"requestTemporaryFullAccuracy" isEqualToString:call.method]) {
-        self.locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
         [self.locationAccuracyHandler requestTemporaryFullAccuracyWithResult:result];
     } else if ([@"openAppSettings" isEqualToString:call.method]) {
         [self openSettings:result];
