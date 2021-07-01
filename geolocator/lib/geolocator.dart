@@ -140,6 +140,9 @@ class Geolocator {
   static Stream<ServiceStatus> getServiceStatusStream() =>
       GeolocatorPlatform.instance.getServiceStatusStream();
 
+  static Future<void> requestTemporaryPreciseAccuracy() =>
+      GeolocatorPlatform.instance.requestTemporaryFullAccuracy();
+
   /// Opens the App settings page.
   ///
   /// Returns [true] if the location settings page could be opened, otherwise

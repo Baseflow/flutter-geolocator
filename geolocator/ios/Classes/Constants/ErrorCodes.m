@@ -13,6 +13,5 @@ NSString * const GeolocatorErrorLocationSubscriptionActive = @"LOCATION_SUBSCRIP
 NSString * const GeolocatorErrorPermissionDefinitionsNotFound = @"PERMISSION_DEFINITIONS_NOT_FOUND";
 NSString * const GeolocatorErrorPermissionDenied = @"PERMISSION_DENIED";
 NSString * const GeolocatorErrorPermissionRequestInProgress = @"PERMISSION_REQUEST_IN_PROGRESS";
-NSString * const GeolocatorErrorTemporaryAccuracyDictionaryNotFound = @"ACCURACY_DICTIONARY_NOT_FOUND";
 NSString * const GeolocatorErrorPreciseAccuracyEnabled = @"PRECISE_ACCURACY_ENABLED";
 NSString * const GeolocatorErrorApproximateLocationNotSupported = @"APPROXIMATE_LOCATION_NOT_SUPPORTED";

@@ -48,7 +48,7 @@
 
 - (void) requestTemporaryFullAccuracyWithResult:(FlutterResult)result {
     if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationTemporaryUsageDescriptionDictionary"] == nil) {
-        return result([FlutterError errorWithCode:GeolocatorErrorTemporaryAccuracyDictionaryNotFound
+        return result([FlutterError errorWithCode:GeolocatorErrorPermissionDefinitionsNotFound
                                           message:@"The temporary accuracy dictionary key is not set in the infop.list"
                                           details:nil]);
     }
