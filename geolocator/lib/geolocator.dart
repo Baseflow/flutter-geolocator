@@ -140,6 +140,15 @@ class Geolocator {
   static Stream<ServiceStatus> getServiceStatusStream() =>
       GeolocatorPlatform.instance.getServiceStatusStream();
 
+  /// Requests temporary precise location when the user only gave permission
+  /// for approximate location (iOS 14+ only)
+  ///
+  /// Throws a [PermissionDefinitionsNotFoundException] when the necessary key
+  /// in the Info.plist is not added
+  /// Throws a [PreciseAccuracyEnabledException] when the user already gave
+  /// permission to use the Precise location of the device
+  /// Throws a [ApproximateLocationNotSupportedException] when the user is using
+  /// iOS 13 or below
   static Future<void> requestTemporaryPreciseAccuracy() =>
       GeolocatorPlatform.instance.requestTemporaryFullAccuracy();
 

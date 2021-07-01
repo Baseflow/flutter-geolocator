@@ -71,7 +71,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             bottom: 10.0,
             right: 10.0,
             child: FloatingActionButton.extended(
-              onPressed: () async => await Geolocator.requestTemporaryPreciseAccuracy(),
+              onPressed: () => setState(_positionItems.clear),
               label: Text("clear"),
             ),
           ),
