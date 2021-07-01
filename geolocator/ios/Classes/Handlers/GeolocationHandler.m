@@ -24,6 +24,7 @@
 }
 
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
+          defaultIosAccuracyAuthorization:(bool)defaultIosAccuracyAuthorization
                            distanceFilter:(CLLocationDistance)distanceFilter
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
@@ -32,7 +33,25 @@
     self.resultHandler = resultHandler;
     
     CLLocationManager *locationManager = self.locationManager;
-    locationManager.desiredAccuracy = desiredAccuracy;
+    
+    if (defaultIosAccuracyAuthorization) {
+        if (@available(iOS 14.0, *)) {
+            if ([locationManager accuracyAuthorization] == CLAccuracyAuthorizationFullAccuracy) {
+                // If the default is set is precise location accuracy, the desiredAccuracy is set to the Best Accuracy.
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+            } else {
+                // If the default is set to reduced location accuracy, the desiredAccuracy is set to Reduced Accuracy.
+                locationManager.desiredAccuracy = kCLLocationAccuracyReduced;
+            }
+        } else {
+            // If the defaultIosAccuracyAuthorization is forced, but the device runs on iOS 13 or below
+            // precise location is always used.
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        }
+    } else {
+        locationManager.desiredAccuracy = desiredAccuracy;
+    }
+    
     locationManager.distanceFilter = distanceFilter == 0 ? kCLDistanceFilterNone : distanceFilter;
     if (@available(iOS 9.0, *)) {
         locationManager.allowsBackgroundLocationUpdates = [GeolocationHandler shouldEnableBackgroundLocationUpdates];

@@ -57,6 +57,7 @@
       CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
       
       [[weakSelf geolocationHandler] startListeningWithDesiredAccuracy:accuracy
+                                       defaultIosAccuracyAuthorization:(bool)arguments[@"defaultIosAccuracyAuthorization"]
                                                     distanceFilter:distanceFilter
                                                      resultHandler:^(CLLocation *location) {
           [weakSelf onLocationDidChange: location];

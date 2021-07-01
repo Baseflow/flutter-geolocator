@@ -116,6 +116,7 @@
         GeolocationHandler *geolocationHandler = [[GeolocationHandler alloc] init];
         
         [geolocationHandler startListeningWithDesiredAccuracy:accuracy
+                              defaultIosAccuracyAuthorization:(bool)arguments[@"defaultIosAccuracyAuthorization"]
                                                distanceFilter:distanceFilter
                                                 resultHandler:^(CLLocation *location) {
             [geolocationHandler stopListening];
