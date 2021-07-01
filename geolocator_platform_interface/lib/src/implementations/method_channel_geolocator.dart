@@ -100,11 +100,13 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   @override
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool defaultIosAccuracyAuthorization = false,
     bool forceAndroidLocationManager = false,
     Duration? timeLimit,
   }) async {
     final locationOptions = LocationOptions(
       accuracy: desiredAccuracy,
+      defaultIosAccuracyAuthorization: defaultIosAccuracyAuthorization,
       forceAndroidLocationManager: forceAndroidLocationManager,
     );
 
@@ -158,6 +160,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   @override
   Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool defaultIosAccuracyAuthorization = false,
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
     int timeInterval = 0,
@@ -165,6 +168,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }) {
     final locationOptions = LocationOptions(
       accuracy: desiredAccuracy,
+      defaultIosAccuracyAuthorization: defaultIosAccuracyAuthorization,
       distanceFilter: distanceFilter,
       forceAndroidLocationManager: forceAndroidLocationManager,
       timeInterval: timeInterval,

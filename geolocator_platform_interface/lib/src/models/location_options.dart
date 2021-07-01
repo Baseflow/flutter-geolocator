@@ -7,11 +7,13 @@ class LocationOptions {
   ///
   /// The following default values are used:
   /// - accuracy: best
+  /// - defaultIosAccuracyAuthorization: false
   /// - distanceFilter: 0
   /// - forceAndroidLocationManager: false
   /// - timeInterval: 0
   const LocationOptions(
       {this.accuracy = LocationAccuracy.best,
+      this.defaultIosAccuracyAuthorization = false,
       this.distanceFilter = 0,
       this.forceAndroidLocationManager = false,
       this.timeInterval = 0});
@@ -21,6 +23,14 @@ class LocationOptions {
   ///
   /// The default value for this field is [LocationAccuracy.best].
   final LocationAccuracy accuracy;
+
+  /// Forces the Geolocator plugin to use the default Accuracy Authorization
+  /// (iOS only).
+  ///
+  /// On iOS 13 or below, the default value will always be Precise Accuracy. On
+  /// iOS 14+ the default value is Reduced Accuracy, but the value can change
+  /// based on the choice of the user.
+  final bool defaultIosAccuracyAuthorization;
 
   /// The minimum distance (measured in meters) a device must move
   /// horizontally before an update event is generated.
@@ -49,6 +59,7 @@ class LocationOptions {
   /// Serializes the [LocationOptions] to a map message.
   Map<String, dynamic> toJson() => <String, dynamic>{
         'accuracy': accuracy.index,
+        'defaultIosAccuracyAuthorization': defaultIosAccuracyAuthorization,
         'distanceFilter': distanceFilter,
         'forceAndroidLocationManager': forceAndroidLocationManager,
         'timeInterval': timeInterval

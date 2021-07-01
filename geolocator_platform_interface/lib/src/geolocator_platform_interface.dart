@@ -92,6 +92,13 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// FusedLocationProvider by setting the [forceAndroidLocationManager]
   /// parameter to true. The [timeLimit] parameter allows you to specify a
   /// timeout interval (by default no time limit is configured).
+  /// On iOS you can force the use of the default accuracy
+  /// authorization status by setting the [defaultIosAccuracyAuthorization] to
+  /// true. For users using iOS 13 or below, the default will be
+  /// precise accuracy and for users using iOS 14+ the default is reduced
+  /// accuracy (except if the user explicitly chose for precise accuracy).
+  /// When setting the [defaultIosAccuracyAuthorization] to true, the
+  /// [desiredAccuracy] will be redundant.
   ///
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
@@ -101,6 +108,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// but the location services of the device are disabled.
   Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool defaultIosAccuracyAuthorization = false,
     bool forceAndroidLocationManager = false,
     Duration? timeLimit,
   }) {
@@ -138,7 +146,14 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// the update is emitted (default value is 0 indicator no filter is used).
   /// On Android you can force the use of the Android LocationManager instead
   /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
-  /// parameter to true. Using the [timeInterval] you can control the amount of
+  /// parameter to true. On iOS you can force the use of the default accuracy
+  /// authorization status by setting the [defaultIosAccuracyAuthorization] to
+  /// true. For users using iOS 13 or below, the default will be
+  /// precise accuracy and for users using iOS 14+ the default is reduced
+  /// accuracy (except if the user explicitly chose for precise accuracy).
+  /// When setting the [defaultIosAccuracyAuthorization] to true, the
+  /// [desiredAccuracy] will be redundant.
+  /// Using the [timeInterval] you can control the amount of
   /// time that needs to pass before the next position update is send. The
   /// [timeLimit] parameter allows you to specify a timeout interval (by
   /// default no time limit is configured).
@@ -151,6 +166,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// but the location services of the device are disabled.
   Stream<Position> getPositionStream({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
+    bool defaultIosAccuracyAuthorization = false,
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
     int timeInterval = 0,
