@@ -167,7 +167,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Throws a [PreciseAccuracyEnabledException] when the user already gave
   /// permission to use Precise Accuracy location fetching.
   /// Throws a [ApproximateLocationNotSupportedException] when Approximate
-  /// Location is not supported (iOS 13 or below)
+  /// Location is not supported (iOS 13 or below).
   Future<void> requestTemporaryFullAccuracy() {
     // ignore: lines_longer_than_80_chars
     throw UnimplementedError(

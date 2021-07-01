@@ -2,7 +2,7 @@
 /// 'requestTemporaryFullAccuracy' method.
 ///
 /// Since Approximate location only supports iOS 14 or above, the exception is
-/// only thrown when using iOS 13 or below
+/// only thrown when using iOS 13 or below.
 class ApproximateLocationNotSupportedException implements Exception {
   /// Constructs the [ApproximateLocationNotSupportedException]
   const ApproximateLocationNotSupportedException(this.message);
@@ -14,7 +14,7 @@ class ApproximateLocationNotSupportedException implements Exception {
   String toString() {
     if (message == null || message == '') {
       return 'The requestTemporaryFullAccuracy method only supports iOS 14'
-          'or above.';
+          ' or above.';
     }
     return message!;
   }
