@@ -93,9 +93,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      return LocationAccuracyStatus.unknown;
-    }
     final int accuracy =
         await _methodChannel.invokeMethod('getLocationAccuracy');
     return LocationAccuracyStatus.values[accuracy];

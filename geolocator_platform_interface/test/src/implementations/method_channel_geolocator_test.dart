@@ -153,7 +153,7 @@ void main() {
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
       });
 
-      test('Should receive reduced accuracy if Location Accuracy is reduced',
+      test('Should receive reduced accuracy if Location Accuracy is precise',
           () async {
         // Arrange
         MethodChannelMock(
@@ -168,23 +168,6 @@ void main() {
 
         // Assert
         expect(locationAccuracy, LocationAccuracyStatus.precise);
-      });
-
-      test('Should receive reduced accuracy if Location Accuracy is reduced',
-          () async {
-        // Arrange
-        MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
-          method: 'getLocationAccuracy',
-          result: 2,
-        );
-
-        // Act
-        final locationAccuracy =
-            await MethodChannelGeolocator().getLocationAccuracy();
-
-        // Assert
-        expect(locationAccuracy, LocationAccuracyStatus.unknown);
       });
     });
 

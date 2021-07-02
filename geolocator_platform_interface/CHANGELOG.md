@@ -1,7 +1,7 @@
 ## 2.2.1
 
-- Documentation `getLocationAccuracy()` method clarified
-- On Android devices, `getLocationAccuracy()` now returns a LocationAccuracyStatus.unknown value
+- Documentation `getLocationAccuracy()` method clarified.
+- Extended the `LocationAccuracyStatus` enum with a `LocationAccuracyStatus.unknown` value, which can be used by platforms that don't support location accuracy features.
 
 ## 2.2.0
 
