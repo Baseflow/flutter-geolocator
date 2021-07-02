@@ -170,6 +170,35 @@ void main() {
         // Assert
         expect(accuracy, LocationAccuracyStatus.precise);
       });
+
+      test('Should receive an exception when permission definitions not found',
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'requestTemporaryFullAccuracy',
+          result: PlatformException(
+            code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
+            message: 'Permission definitions are not found.',
+            details: null,
+          ),
+        );
+
+        // Act
+        final future = MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(
+          future,
+          throwsA(
+            isA<PermissionDefinitionsNotFoundException>().having(
+              (e) => e.message,
+              'description',
+              'Permission definitions are not found.',
+            ),
+          ),
+        );
+      });
     });
 
     group('getLocationAccuracy: When requesting the Location Accuracy Status',
