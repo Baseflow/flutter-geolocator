@@ -134,37 +134,38 @@ void main() {
       });
     });
 
-    group('requestTemporaryFullAccuracy: When requesting temporary full'
+    group(
+        'requestTemporaryFullAccuracy: When requesting temporary full'
         'accuracy.', () {
-      test('Should receive reduced accuracy if Location Accuracy is pinned to'
+      test(
+          'Should receive reduced accuracy if Location Accuracy is pinned to'
           ' reduced', () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
-          method: 'requestTemporaryFullAccuracy',
-          result: 0
-        );
+            channelName: 'flutter.baseflow.com/geolocator',
+            method: 'requestTemporaryFullAccuracy',
+            result: 0);
 
         // Act
-        final accuracy = await MethodChannelGeolocator()
-            .requestTemporaryFullAccuracy();
+        final accuracy =
+            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
 
         // Assert
         expect(accuracy, LocationAccuracyStatus.reduced);
       });
 
-      test('Should receive reduced accuracy if Location Accuracy is already set'
+      test(
+          'Should receive reduced accuracy if Location Accuracy is already set'
           ' to precise location accuracy', () async {
         // Arrange
         MethodChannelMock(
             channelName: 'flutter.baseflow.com/geolocator',
             method: 'requestTemporaryFullAccuracy',
-            result: 1
-        );
+            result: 1);
 
         // Act
-        final accuracy = await MethodChannelGeolocator()
-            .requestTemporaryFullAccuracy();
+        final accuracy =
+            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
 
         // Assert
         expect(accuracy, LocationAccuracyStatus.precise);
@@ -189,7 +190,6 @@ void main() {
         // Assert
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
       });
-
 
       test('Should receive reduced accuracy if Location Accuracy is reduced',
           () async {
