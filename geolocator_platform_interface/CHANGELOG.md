@@ -1,3 +1,8 @@
+## 2.2.1
+
+- Documentation `getLocationAccuracy()` method clarified
+- On Android devices, `getLocationAccuracy()` now returns a LocationAccuracyStatus.unknown value
+
 ## 2.2.0
 
 - Added the possibility to query for the LocationAccuracyStatus on devices running iOS 14.0 and higher.
