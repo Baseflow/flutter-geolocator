@@ -20,5 +20,10 @@ enum LocationAccuracy {
 
   /// Location accuracy is optimized for navigation on iOS and matches the
   /// [LocationAccuracy.best] on Android
-  bestForNavigation
+  bestForNavigation,
+
+  /// Location accuracy is reduced for iOS 14+ devices, matches the
+  /// [LocationAccuracy.low] and [LocationAccuracy.lowest] on Android and
+  /// matches [LocationAccuracy.lowest] on devices using iOS 13 or below.
+  reduced
 }

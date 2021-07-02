@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:vector_math/vector_math.dart';
 
@@ -161,15 +162,15 @@ abstract class GeolocatorPlatform extends PlatformInterface {
 
   /// Asks the user for Temporary Precise location access (iOS 14 or above).
   ///
-  /// Throws a [AccuracyDictionaryNotFoundException] when the key
+  /// Returns [LocationAccuracyStatus.precise] if the user already gave
+  /// permission to use Precise Accuracy. If the user uses iOS 13 or below,
+  /// [LocationAccuracyStatus.precise] will also be returned. On other platforms
+  /// an PlatformException will be thrown.
+  ///
+  /// Throws a [PermissionDefinitionsNotFoundException] when the key
   /// `NSLocationTemporaryUsageDescriptionDictionary` has not been set in the
   /// `Infop.list`.
-  /// Throws a [PreciseAccuracyEnabledException] when the user already gave
-  /// permission to use Precise Accuracy location fetching.
-  /// Throws a [ApproximateLocationNotSupportedException] when Approximate
-  /// Location is not supported (iOS 13 or below).
-  Future<void> requestTemporaryFullAccuracy() {
-    // ignore: lines_longer_than_80_chars
+  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy() async {
     throw UnimplementedError(
         'requestTemporaryFullAccuracy() has not been implemented');
   }

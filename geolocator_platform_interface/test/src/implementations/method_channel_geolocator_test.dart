@@ -134,121 +134,40 @@ void main() {
       });
     });
 
-    group(
-        // ignore: lines_longer_than_80_chars
-        'requestTemporaryFullAccuracy: When requesting Temporary Precise location',
-        () {
-      test('Should receive an exception when precise location is enabled',
-          () async {
+    group('requestTemporaryFullAccuracy: When requesting temporary full'
+        'accuracy.', () {
+      test('Should receive reduced accuracy if Location Accuracy is pinned to'
+          ' reduced', () async {
+        // Arrange
         MethodChannelMock(
           channelName: 'flutter.baseflow.com/geolocator',
           method: 'requestTemporaryFullAccuracy',
-          result: PlatformException(
-            code: 'PRECISE_ACCURACY_ENABLED',
-            message: 'Precise location is enabled.',
-            details: null,
-          ),
+          result: 0
         );
 
         // Act
-        final accuracyFuture =
-            MethodChannelGeolocator().requestTemporaryFullAccuracy();
+        final accuracy = await MethodChannelGeolocator()
+            .requestTemporaryFullAccuracy();
 
         // Assert
-        expect(
-          accuracyFuture,
-          throwsA(
-            isA<PreciseAccuracyEnabledException>().having(
-              (e) => e.toString(),
-              'description',
-              'Precise location is enabled.',
-            ),
-          ),
-        );
+        expect(accuracy, LocationAccuracyStatus.reduced);
       });
-      test('Should receive an exception when iOS 13 or below is used',
-          () async {
+
+      test('Should receive reduced accuracy if Location Accuracy is already set'
+          ' to precise location accuracy', () async {
+        // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
-          method: 'requestTemporaryFullAccuracy',
-          result: PlatformException(
-            code: 'APPROXIMATE_LOCATION_NOT_SUPPORTED',
-            message: 'Approximate location not supported.',
-            details: null,
-          ),
+            channelName: 'flutter.baseflow.com/geolocator',
+            method: 'requestTemporaryFullAccuracy',
+            result: 1
         );
 
         // Act
-        final accuracyFuture =
-            MethodChannelGeolocator().requestTemporaryFullAccuracy();
+        final accuracy = await MethodChannelGeolocator()
+            .requestTemporaryFullAccuracy();
 
         // Assert
-        expect(
-          accuracyFuture,
-          throwsA(
-            isA<ApproximateLocationNotSupportedException>().having(
-              (e) => e.toString(),
-              'description',
-              'Approximate location not supported.',
-            ),
-          ),
-        );
-      });
-      test('Should receive an exception when precise location is enabled',
-          () async {
-        MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
-          method: 'requestTemporaryFullAccuracy',
-          result: PlatformException(
-            code: 'PRECISE_ACCURACY_ENABLED',
-            message: null,
-            details: null,
-          ),
-        );
-
-        // Act
-        final accuracyFuture =
-            MethodChannelGeolocator().requestTemporaryFullAccuracy();
-
-        // Assert
-        expect(
-          accuracyFuture,
-          throwsA(isA<PreciseAccuracyEnabledException>().having(
-              (e) => e.toString(),
-              '',
-              'The user already enabled Precise location fetching, when using '
-                  'the requestTemporaryFullAccuracy, make sure to check '
-                  'whether the user has already given permission to use '
-                  'Precise Accuracy.')),
-        );
-      });
-      test('Should receive an exception when iOS 13 or below is used',
-          () async {
-        MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
-          method: 'requestTemporaryFullAccuracy',
-          result: PlatformException(
-            code: 'APPROXIMATE_LOCATION_NOT_SUPPORTED',
-            message: null,
-            details: null,
-          ),
-        );
-
-        // Act
-        final accuracyFuture =
-            MethodChannelGeolocator().requestTemporaryFullAccuracy();
-
-        // Assert
-        expect(
-          accuracyFuture,
-          throwsA(
-            isA<ApproximateLocationNotSupportedException>().having(
-                (e) => e.toString(),
-                '',
-                'The requestTemporaryFullAccuracy method only supports iOS 14'
-                    ' or above.'),
-          ),
-        );
+        expect(accuracy, LocationAccuracyStatus.precise);
       });
     });
 
@@ -270,6 +189,7 @@ void main() {
         // Assert
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
       });
+
 
       test('Should receive reduced accuracy if Location Accuracy is reduced',
           () async {
