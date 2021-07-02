@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class MethodChannelMock {
   final Duration delay;
@@ -13,7 +14,8 @@ class MethodChannelMock {
     this.delay = Duration.zero,
     this.result,
   }) : methodChannel = MethodChannel(channelName) {
-    methodChannel.setMockMethodCallHandler(_handler);
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockMethodCallHandler(methodChannel, _handler);
   }
 
   Future _handler(MethodCall methodCall) async {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class EventChannelMock {
   final MethodChannel _methodChannel;
@@ -13,7 +14,8 @@ class EventChannelMock {
     required String channelName,
     required this.stream,
   }) : _methodChannel = MethodChannel(channelName) {
-    _methodChannel.setMockMethodCallHandler(_handler);
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockMethodCallHandler(_methodChannel, _handler);
   }
 
   Future _handler(MethodCall methodCall) {
