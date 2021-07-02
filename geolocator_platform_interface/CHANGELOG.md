@@ -1,4 +1,4 @@
-## 3.0.0
+## 2.3.0
 
 - Changed the EventChannelMock and the MethodChannelMock due to breaking changes in platform channel test interface.
 
