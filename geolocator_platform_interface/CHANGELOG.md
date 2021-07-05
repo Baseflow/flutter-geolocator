@@ -1,3 +1,7 @@
+## 2.3.0
+
+- Added the possibility to request temporary Precise Accuracy on iOS 14+ devices.
+
 ## 2.2.1
 
 - Documentation `getLocationAccuracy()` method clarified.
