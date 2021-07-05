@@ -55,29 +55,16 @@
         self.locationManager = [[CLLocationManager alloc] init];
     }
     if (@available(iOS 14.0, *)) {
-        switch ([self.locationManager accuracyAuthorization]) {
-            case CLAccuracyAuthorizationReducedAccuracy: {
-                [self.locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:@"TemporaryPreciseAccuracy"
-                                                                              completion:^(NSError *_Nullable error) {
-                    if (error != nil) {
-                        // This error should never be thrown, since all the error cases are covered
-                        return result([FlutterError errorWithCode:[[NSNumber numberWithInteger:error.code] stringValue]
-                                                          message:error.description
-                                                          details:nil]);
-                    }
-                }];
-                break;
+        [self.locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:@"TemporaryPreciseAccuracy"
+                                                                           completion:^(NSError *_Nullable error) {
+            if ([self.locationManager accuracyAuthorization] == CLAccuracyAuthorizationFullAccuracy) {
+                return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
+            } else {
+                return result([NSNumber numberWithInt:(LocationAccuracy)reduced]);
             }
-            case CLAccuracyAuthorizationFullAccuracy:
-                return result([FlutterError errorWithCode:GeolocatorErrorPreciseAccuracyEnabled
-                                                  message:@"Precise Location Accuracy is already enabled"
-                                                  details:nil]);
+        }];    } else {
+            return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
         }
-    } else {
-        return result([FlutterError errorWithCode:GeolocatorErrorApproximateLocationNotSupported
-                                          message:@"iOS 13 and below does not support requesting temporary full accuracy"
-                                          details:nil]);
-    }
 }
 
 @end

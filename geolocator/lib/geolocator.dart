@@ -145,11 +145,9 @@ class Geolocator {
   ///
   /// Throws a [PermissionDefinitionsNotFoundException] when the necessary key
   /// in the Info.plist is not added
-  /// Throws a [PreciseAccuracyEnabledException] when the user already gave
-  /// permission to use the Precise location of the device
-  /// Throws a [ApproximateLocationNotSupportedException] when the user is using
-  /// iOS 13 or below
-  static Future<void> requestTemporaryPreciseAccuracy() =>
+  /// Returns [LocationAccuracyStatus.precise] when using iOS 13 or below or
+  /// using other platforms.
+  static Future<LocationAccuracyStatus> requestTemporaryFullAccuracy() =>
       GeolocatorPlatform.instance.requestTemporaryFullAccuracy();
 
   /// Opens the App settings page.
