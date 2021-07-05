@@ -136,8 +136,7 @@ void main() {
 
     group('getLocationAccuracy: When requesting the Location Accuracy Status',
         () {
-      test(
-          'Should receive reduced accuracy if Location Accuracy is reduced',
+      test('Should receive reduced accuracy if Location Accuracy is reduced',
           () async {
         // Arrange
         MethodChannelMock(
@@ -154,24 +153,22 @@ void main() {
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
       });
 
-      test(
-          'Should receive reduced accuracy if Location Accuracy is reduced',
-              () async {
-            // Arrange
-            MethodChannelMock(
-              channelName: 'flutter.baseflow.com/geolocator',
-              method: 'getLocationAccuracy',
-              result: 1,
-            );
+      test('Should receive reduced accuracy if Location Accuracy is precise',
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'getLocationAccuracy',
+          result: 1,
+        );
 
-            // Act
-            final locationAccuracy =
+        // Act
+        final locationAccuracy =
             await MethodChannelGeolocator().getLocationAccuracy();
 
-            // Assert
-            expect(locationAccuracy, LocationAccuracyStatus.precise);
-          });
-
+        // Assert
+        expect(locationAccuracy, LocationAccuracyStatus.precise);
+      });
     });
 
     group('requestPermission: When requesting for permission', () {
