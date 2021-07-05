@@ -2,6 +2,11 @@
 
 - Added the possibility to request temporary Precise Accuracy on iOS 14+ devices.
 
+## 2.2.1
+
+- Documentation `getLocationAccuracy()` method clarified.
+- Extended the `LocationAccuracyStatus` enum with a `LocationAccuracyStatus.unknown` value, which can be used by platforms that don't support location accuracy features.
+
 ## 2.2.0
 
 - Added the possibility to query for the LocationAccuracyStatus on devices running iOS 14.0 and higher.

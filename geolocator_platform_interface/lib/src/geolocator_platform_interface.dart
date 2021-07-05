@@ -181,6 +181,8 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// [LocationAccuracyStatus.reduced] will be returned, if the user gave
   /// permission for precise/full accuracy location, [LocationAccuracyStatus.precise]
   /// will be returned.
+  /// When executing the method on platforms that don't support location
+  /// accuracy features [LocationAccuracyStatus.unknown] should be returned.
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
     throw UnimplementedError('getLocationAccuracy() has not been implemented.');
   }
