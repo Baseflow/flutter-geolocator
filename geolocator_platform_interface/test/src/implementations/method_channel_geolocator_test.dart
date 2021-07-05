@@ -135,94 +135,70 @@ void main() {
     });
 
     group(
-        // ignore: lines_longer_than_80_chars
-        'requestTemporaryFullAccuracy: When requesting Temporary Precise location',
-        () {
-      test('Should receive an exception when precise location is enabled',
+        'requestTemporaryFullAccuracy: When requesting temporary full'
+        'accuracy.', () {
+      test(
+          'Should receive reduced accuracy if Location Accuracy is pinned to'
+          ' reduced', () async {
+        // Arrange
+        MethodChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator',
+            method: 'requestTemporaryFullAccuracy',
+            result: 0);
+
+        // Act
+        final accuracy =
+            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(accuracy, LocationAccuracyStatus.reduced);
+      });
+
+      test(
+          'Should receive reduced accuracy if Location Accuracy is already set'
+          ' to precise location accuracy', () async {
+        // Arrange
+        MethodChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator',
+            method: 'requestTemporaryFullAccuracy',
+            result: 1);
+
+        // Act
+        final accuracy =
+            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(accuracy, LocationAccuracyStatus.precise);
+      });
+
+      test('Should receive an exception when permission definitions not found',
           () async {
-            MethodChannelMock(
-              channelName: 'flutter.baseflow.com/geolocator',
-              method: 'requestTemporaryFullAccuracy',
-              result: PlatformException(
-                code: 'PRECISE_ACCURACY_ENABLED',
-                message: 'Precise location is enabled.',
-                details: null,
-              ),
-            );
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'requestTemporaryFullAccuracy',
+          result: PlatformException(
+            code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
+            message: 'Permission definitions are not found.',
+            details: null,
+          ),
+        );
 
-            // Act
-            final accuracyFuture = MethodChannelGeolocator()
-            .requestTemporaryFullAccuracy();
+        // Act
+        final future = MethodChannelGeolocator().requestTemporaryFullAccuracy();
 
-            // Assert
-            expect(
-              accuracyFuture,
-              throwsA(
-                isA<PreciseAccuracyEnabledException>().having(
-                      (e) => e.message,
-                  'description',
-                  'Precise location is enabled.',
-                ),
-              ),
-            );
-          });
-      test('Should receive an exception when iOS 13 or below is used',
-              () async {
-                MethodChannelMock(
-                  channelName: 'flutter.baseflow.com/geolocator',
-                  method: 'requestTemporaryFullAccuracy',
-                  result: PlatformException(
-                    code: 'APPROXIMATE_LOCATION_NOT_SUPPORTED',
-                    message: 'Approximate location not supported.',
-                    details: null,
-                  ),
-                );
-
-                // Act
-                final accuracyFuture = MethodChannelGeolocator()
-                    .requestTemporaryFullAccuracy();
-
-                // Assert
-                expect(
-                  accuracyFuture,
-                  throwsA(
-                    isA<ApproximateLocationNotSupportedException>().having(
-                          (e) => e.message,
-                      'description',
-                      'Approximate location not supported.',
-                    ),
-                  ),
-                );
-          });
-      test('Should receive an exception when the location accuracy definition'
-          ' in the Info.plist is missing',
-              () async {
-                MethodChannelMock(
-                  channelName: 'flutter.baseflow.com/geolocator',
-                  method: 'requestTemporaryFullAccuracy',
-                  result: PlatformException(
-                    code: 'ACCURACY_DICTIONARY_NOT_FOUND',
-                    message: 'Accuracy definition missing.',
-                    details: null,
-                  ),
-                );
-
-                // Act
-                final accuracyFuture = MethodChannelGeolocator()
-                    .requestTemporaryFullAccuracy();
-
-                // Assert
-                expect(
-                  accuracyFuture,
-                  throwsA(
-                    isA<AccuracyDictionaryNotFoundException>().having(
-                          (e) => e.message,
-                      'description',
-                      'Accuracy definition missing.',
-                    ),
-                  ),
-                );
-          });
+        // Assert
+        expect(
+          future,
+          throwsA(
+            isA<PermissionDefinitionsNotFoundException>().having(
+              (e) => e.message,
+              'description',
+              'Permission definitions are not found.',
+            ),
+          ),
+        );
+      });
     });
 
     group('getLocationAccuracy: When requesting the Location Accuracy Status',

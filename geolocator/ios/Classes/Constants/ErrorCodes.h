@@ -11,7 +11,3 @@ FOUNDATION_EXPORT NSString * const GeolocatorErrorLocationSubscriptionActive;
 FOUNDATION_EXPORT NSString * const GeolocatorErrorPermissionDefinitionsNotFound;
 FOUNDATION_EXPORT NSString * const GeolocatorErrorPermissionDenied;
 FOUNDATION_EXPORT NSString * const GeolocatorErrorPermissionRequestInProgress;
-FOUNDATION_EXPORT NSString * const GeolocatorErrorTemporaryAccuracyDictionaryNotFound;
-FOUNDATION_EXPORT NSString * const GeolocatorErrorPreciseAccuracyEnabled;
-FOUNDATION_EXPORT NSString * const GeolocatorErrorApproximateLocationNotSupported;
-

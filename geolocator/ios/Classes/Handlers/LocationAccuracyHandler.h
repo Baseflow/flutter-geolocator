@@ -18,7 +18,6 @@ typedef enum {
 @interface LocationAccuracyHandler : NSObject
 
 - (void) getLocationAccuracyWithResult:(FlutterResult)result;
-- (void) requestTemporaryFullAccuracyWithResult:(FlutterResult)result;
 
 @end
 
