@@ -12,13 +12,10 @@ class NmeaMessage {
 
   /// Date and time of the location fix, as reported by the GNSS chipset.
   /// The value is specified in milliseconds since 0:00 UTC 1 January 1970.
-  final DateTime timestamp;
+  final DateTime? timestamp;
 
   /// Converts the supplied [Map] to an instance of the [NmeaMessage] class.
   static NmeaMessage fromMap(dynamic message) {
-    if (message == null) {
-      return null;
-    }
 
     final Map<dynamic, dynamic> nmeaMessageMap = message;
 
