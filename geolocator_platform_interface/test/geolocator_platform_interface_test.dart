@@ -75,20 +75,6 @@ void main() {
 
     test(
         // ignore: lines_longer_than_80_chars
-        'Default implementation of reqquestTemporaryAccuracy should throw unimplemented error',
-        () {
-      // Arrange
-      final geolocatorPlatform = ExtendsGeolocatorPlatform();
-
-      // Act & Assert
-      expect(
-        geolocatorPlatform.requestTemporaryFullAccuracy,
-        throwsUnimplementedError,
-      );
-    });
-
-    test(
-        // ignore: lines_longer_than_80_chars
         'Default implementation of getCurrentPosition should throw unimplemented error',
         () {
       // Arrange
