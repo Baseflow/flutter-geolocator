@@ -159,6 +159,20 @@ void main() {
 
     test(
         // ignore: lines_longer_than_80_chars
+        'Default implementation of getNmeaMessageStream should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+      // Act & Assert
+      expect(
+        geolocatorPlatform.getNmeaMessageStream,
+        throwsUnimplementedError,
+      );
+    });
+
+    test(
+        // ignore: lines_longer_than_80_chars
         'Default implementation of openAppSettings should throw unimplemented error',
         () {
       // Arrange
@@ -249,7 +263,7 @@ void main() {
       expect(bearing, 0.0);
     });
 
-    test('the North pole to the Sounth pole bearing should be 180', () async {
+    test('the North pole to the South pole bearing should be 180', () async {
       final startLatitude = 90.0;
       final startLongitude = 0.0;
       final endLatitude = -90.0;

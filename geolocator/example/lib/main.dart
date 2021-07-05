@@ -20,7 +20,6 @@ void main() {
 
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
-  /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
     return ExamplePage(Icons.location_on, (context) => GeolocatorWidget());
   }
@@ -33,6 +32,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _locationServiceStatusSubscription;
+  StreamSubscription<NmeaMessage>? _nmeaStreamSubscription;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                       _positionItems.add(_PositionItem(
                           _PositionItemType.position, value.toString()))
                     });
-
                 setState(
                   () {},
                 );
@@ -101,7 +100,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                         _positionItems.add(_PositionItem(
                             _PositionItemType.position, value.toString()))
                       });
-
                   setState(
                     () {},
                   );
@@ -124,7 +122,23 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                   return "$buttonText position updates stream";
                 }
               }()),
-              backgroundColor: _determineButtonColor(),
+              backgroundColor: _determineButtonColorForPositionStreamButton(),
+            ),
+          ),
+          Positioned(
+            bottom: 360.0,
+            right: 10.0,
+            child: FloatingActionButton.extended(
+              onPressed: _toggleListeningToNmeaStream,
+              label: Text(() {
+                if (_nmeaStreamSubscription == null) {
+                  return "getNmeaMessageStream= null";
+                } else {
+                  return "getNmeaMessageStream ="
+                      " ${_nmeaStreamSubscription!.isPaused ? "off" : "on"}";
+                }
+              }()),
+              backgroundColor: _determineButtonColorForNmeaButton(),
             ),
           ),
           Positioned(
@@ -185,7 +199,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       !(_locationServiceStatusSubscription == null ||
           _locationServiceStatusSubscription!.isPaused);
 
-  Color _determineButtonColor() {
+  Color _determineButtonColorForPositionStreamButton() {
     return _isListening() ? Colors.green : Colors.red;
   }
 
@@ -218,13 +232,17 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _toggleListening() {
+
     if (_positionStreamSubscription == null) {
       final positionStream = Geolocator.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
-      }).listen((position) => setState(() => _positionItems.add(
-          _PositionItem(_PositionItemType.position, position.toString()))));
+      }).listen((position) => setState(() {
+        _positionItems.add(
+          _PositionItem(_PositionItemType.position, position.toString()));
+      }
+          ));
       _positionStreamSubscription?.pause();
     }
 
@@ -241,11 +259,43 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     });
   }
 
+  bool _isListeningToNmeaStream() =>
+      !(_nmeaStreamSubscription == null || _nmeaStreamSubscription!.isPaused);
+
+  Color _determineButtonColorForNmeaButton() {
+    return _isListeningToNmeaStream() ? Colors.green : Colors.red;
+  }
+
+  void _toggleListeningToNmeaStream() {
+    if (_nmeaStreamSubscription == null) {
+      final nmeaStream = Geolocator.getNmeaMessageStream();
+      _nmeaStreamSubscription = nmeaStream.handleError((error) {
+        _nmeaStreamSubscription!.cancel();
+        _nmeaStreamSubscription = null;
+      }).listen((nmeaMessage) => setState(() => _positionItems.add(
+          _PositionItem(_PositionItemType.nmea,
+              nmeaMessage.message + nmeaMessage.timestamp.toString()))));
+      _nmeaStreamSubscription!.pause();
+    }
+
+    setState(() {
+      if (_nmeaStreamSubscription!.isPaused) {
+        _nmeaStreamSubscription!.resume();
+      } else {
+        _nmeaStreamSubscription!.pause();
+      }
+    });
+  }
+
   @override
   void dispose() {
     if (_positionStreamSubscription != null) {
       _positionStreamSubscription!.cancel();
       _positionStreamSubscription = null;
+    }
+    if (_nmeaStreamSubscription != null) {
+      _nmeaStreamSubscription!.cancel();
+      _nmeaStreamSubscription = null;
     }
 
     super.dispose();
@@ -256,6 +306,7 @@ enum _PositionItemType {
   permission,
   position,
   locationServiceStatus,
+  nmea
 }
 
 class _PositionItem {
