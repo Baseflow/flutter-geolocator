@@ -134,6 +134,73 @@ void main() {
       });
     });
 
+    group(
+        'requestTemporaryFullAccuracy: When requesting temporary full'
+        'accuracy.', () {
+      test(
+          'Should receive reduced accuracy if Location Accuracy is pinned to'
+          ' reduced', () async {
+        // Arrange
+        MethodChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator',
+            method: 'requestTemporaryFullAccuracy',
+            result: 0);
+
+        // Act
+        final accuracy =
+            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(accuracy, LocationAccuracyStatus.reduced);
+      });
+
+      test(
+          'Should receive reduced accuracy if Location Accuracy is already set'
+          ' to precise location accuracy', () async {
+        // Arrange
+        MethodChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator',
+            method: 'requestTemporaryFullAccuracy',
+            result: 1);
+
+        // Act
+        final accuracy =
+            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(accuracy, LocationAccuracyStatus.precise);
+      });
+
+      test('Should receive an exception when permission definitions not found',
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'requestTemporaryFullAccuracy',
+          result: PlatformException(
+            code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
+            message: 'Permission definitions are not found.',
+            details: null,
+          ),
+        );
+
+        // Act
+        final future = MethodChannelGeolocator().requestTemporaryFullAccuracy();
+
+        // Assert
+        expect(
+          future,
+          throwsA(
+            isA<PermissionDefinitionsNotFoundException>().having(
+              (e) => e.message,
+              'description',
+              'Permission definitions are not found.',
+            ),
+          ),
+        );
+      });
+    });
+
     group('getLocationAccuracy: When requesting the Location Accuracy Status',
         () {
       test('Should receive reduced accuracy if Location Accuracy is reduced',
@@ -153,7 +220,7 @@ void main() {
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
       });
 
-      test('Should receive reduced accuracy if Location Accuracy is precise',
+      test('Should receive reduced accuracy if Location Accuracy is reduced',
           () async {
         // Arrange
         MethodChannelMock(
