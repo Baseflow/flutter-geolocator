@@ -6,14 +6,15 @@ import 'package:geolocator/geolocator.dart';
 
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
-    BaseflowPluginExample.createMaterialColor(
-        const Color.fromRGBO(48, 49, 60, 1));
+BaseflowPluginExample.createMaterialColor(
+    const Color.fromRGBO(48, 49, 60, 1));
 
 void main() {
   runApp(BaseflowPluginExample(
     pluginName: 'Geolocator',
     githubURL: 'https://github.com/Baseflow/flutter-geolocator',
     pubDevURL: 'https://pub.dev/packages/geolocator',
+    appBarActions: [],
     pages: [GeolocatorWidget.createPage()],
   ));
 }
@@ -81,12 +82,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
               onPressed: () async {
                 await Geolocator.getLastKnownPosition().then((value) => {
-                      _positionItems.add(_PositionItem(
-                          _PositionItemType.position, value.toString()))
-                    });
+                  _positionItems.add(_PositionItem(
+                      _PositionItemType.position, value.toString()))
+                });
 
                 setState(
-                  () {},
+                      () {},
                 );
               },
               label: Text("Last Position"),
@@ -98,12 +99,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
                 onPressed: () async {
                   await Geolocator.getCurrentPosition().then((value) => {
-                        _positionItems.add(_PositionItem(
-                            _PositionItemType.position, value.toString()))
-                      });
+                    _positionItems.add(_PositionItem(
+                        _PositionItemType.position, value.toString()))
+                  });
 
                   setState(
-                    () {},
+                        () {},
                   );
                 },
                 label: Text("Current Position")),
@@ -137,9 +138,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                     return "Start location service stream";
                   } else {
                     final buttonText =
-                        _locationServiceStatusSubscription!.isPaused
-                            ? "Resume"
-                            : "Pause";
+                    _locationServiceStatusSubscription!.isPaused
+                        ? "Resume"
+                        : "Pause";
                     return "$buttonText location service stream";
                   }
                 }()),
@@ -151,9 +152,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
               onPressed: () async {
                 await Geolocator.checkPermission().then((value) => {
-                      _positionItems.add(_PositionItem(
-                          _PositionItemType.permission, value.toString()))
-                    });
+                  _positionItems.add(_PositionItem(
+                      _PositionItemType.permission, value.toString()))
+                });
                 setState(() {});
               },
               label: Text("Check Permission"),
@@ -165,9 +166,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             child: FloatingActionButton.extended(
               onPressed: () async {
                 await Geolocator.requestPermission().then((value) => {
-                      _positionItems.add(_PositionItem(
-                          _PositionItemType.permission, value.toString()))
-                    });
+                  _positionItems.add(_PositionItem(
+                      _PositionItemType.permission, value.toString()))
+                });
                 setState(() {});
               },
               label: Text("Request Permission"),
@@ -201,7 +202,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         _locationServiceStatusSubscription?.cancel();
         _locationServiceStatusSubscription = null;
       }).listen((status) => setState(() => _positionItems.add(_PositionItem(
-              _PositionItemType.locationServiceStatus, status.toString()))));
+          _PositionItemType.locationServiceStatus, status.toString()))));
       _locationServiceStatusSubscription?.pause();
     }
 

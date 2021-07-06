@@ -1,3 +1,7 @@
+## 7.3.0
+
+- iOS 14: Users can now request Temporary Precise Location fetching by using the `requestTemporaryFullAccuracy()` method.
+
 ## 7.2.0+1
 
 - Fix formatting of the CHANGELOG.md.
