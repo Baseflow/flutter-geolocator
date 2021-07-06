@@ -16,7 +16,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # Job configuration for the Flutter State Challenge App
   format:
     name: Format
 
@@ -36,7 +35,7 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}
@@ -65,7 +64,7 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}
@@ -93,7 +92,7 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}

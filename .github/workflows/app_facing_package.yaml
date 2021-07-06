@@ -16,7 +16,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # Job configuration for the Flutter State Challenge App
   format:
     name: Format
 
@@ -36,7 +35,7 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}
@@ -65,7 +64,7 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}
@@ -100,12 +99,12 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}
 
-      # Build Android version of the Flutter State Management App
+      # Build Android version of the example App
       - name: Run Android build
         run: flutter build apk --release
         working-directory: ${{env.example-directory}}
@@ -130,12 +129,12 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}
 
-      # Build iOS version of the Flutter State Management App
+      # Build iOS version of the example App
       - name: Run iOS build
         run: flutter build ios --release --no-codesign
         working-directory: ${{env.example-directory}}
@@ -160,12 +159,12 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}
 
-      # Build Web version of the Flutter State Management App
+      # Build Web version of the example App
       - name: Run Web build
         run: flutter build web --release
         working-directory: ${{env.example-directory}}
@@ -188,7 +187,7 @@ jobs:
         with:
           channel: 'stable'
 
-      # Download all Flutter packages the Flutter State Challenge App depends on
+      # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}

@@ -1,16 +1,11 @@
 # geolocator_example
 
-Demonstrates how to use the geolocator plugin.
+Demonstrates how to directly use the geolocator_web package in a Flutter web application.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To run the example App take the following steps:
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Change into the `geolocator_web/example` directory (assuming the current directory is the root of the repository execute `cd geolocator_web/example`);
+2. Run `flutter pub get` to download all required dependencies;
+3. Finally run `flutter run -d chrome` to run the example App in the Chrome browser.
