@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build.VERSION_CODES;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.permission.PermissionManager;
 
@@ -33,10 +35,9 @@ public class NmeaMessageManager {
     client.stopNmeaUpdates();
   }
 
+  @RequiresApi(api = VERSION_CODES.N)
   public NmeaMessageaClient createNmeaClient(Context context) {
-    return android.os.Build.VERSION.SDK_INT >= VERSION_CODES.N
-        ? new GnssNmeaMessageClient(context)
-        : new GpsNmeaMessageClient(context);
+    return new GnssNmeaMessageClient(context);
   }
 
 }

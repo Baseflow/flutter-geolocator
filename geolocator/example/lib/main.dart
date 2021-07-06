@@ -126,16 +126,31 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             ),
           ),
           Positioned(
+            bottom: 290.0,
+            right: 10.0,
+            child: FloatingActionButton.extended(
+              onPressed: () async {
+                await Geolocator.checkPermission().then((value) => {
+                  _positionItems.add(_PositionItem(
+                      _PositionItemType.permission, value.toString()))
+                });
+                setState(() {});
+              },
+              label: Text("Check Permission"),
+            ),
+          ),
+          Positioned(
             bottom: 360.0,
             right: 10.0,
             child: FloatingActionButton.extended(
               onPressed: _toggleListeningToNmeaStream,
               label: Text(() {
                 if (_nmeaStreamSubscription == null) {
-                  return "getNmeaMessageStream= null";
+                  return "Start NMEA message stream";
                 } else {
-                  return "getNmeaMessageStream ="
-                      " ${_nmeaStreamSubscription!.isPaused ? "off" : "on"}";
+                  return " ${_nmeaStreamSubscription!.isPaused
+                      ? "Resume " : "Stop "}"
+                        "NMEA message stream";
                 }
               }()),
               backgroundColor: _determineButtonColorForNmeaButton(),
@@ -160,21 +175,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                 backgroundColor: _determineLocationServiceButtonColor(),
               )),
           Positioned(
-            bottom: 290.0,
-            right: 10.0,
-            child: FloatingActionButton.extended(
-              onPressed: () async {
-                await Geolocator.checkPermission().then((value) => {
-                      _positionItems.add(_PositionItem(
-                          _PositionItemType.permission, value.toString()))
-                    });
-                setState(() {});
-              },
-              label: Text("Check Permission"),
-            ),
-          ),
-          Positioned(
-            bottom: 360.0,
+            bottom: 500.0,
             right: 10.0,
             child: FloatingActionButton.extended(
               onPressed: () async {

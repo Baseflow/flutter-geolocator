@@ -11,7 +11,6 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /** GeolocatorPlugin */
 public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
@@ -33,10 +32,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   @Nullable private io.flutter.plugin.common.PluginRegistry.Registrar pluginRegistrar;
   @Nullable
   private NmeaStreamHandlerImpl nmeaStreamHandler;
-
-
-  @Nullable
-  private Registrar pluginRegistrar;
 
   @Nullable
   private ActivityPluginBinding pluginBinding;
@@ -68,7 +63,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     methodCallHandler.startListening(registrar.context(), registrar.messenger());
     methodCallHandler.setActivity(registrar.activity());
 
-    StreamHandlerImpl streamHandler = new StreamHandlerImpl(geolocatorPlugin.geolocationManager);
+    PositionStreamHandlerImpl streamHandler =
+            new PositionStreamHandlerImpl(geolocatorPlugin.geolocationManager);
     streamHandler.startListening(registrar.context(), registrar.messenger());
     streamHandler.setActivity(registrar.activity());
 
@@ -84,8 +80,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     methodCallHandler = new MethodCallHandlerImpl(this.permissionManager, this.geolocationManager);
     methodCallHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
-    streamHandler = new StreamHandlerImpl(this.geolocationManager);
-    streamHandler.startListening(
+    positionStreamHandler = new PositionStreamHandlerImpl(this.geolocationManager);
+    positionStreamHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
 
     locationServiceHandler = new LocationServiceHandlerImpl();
@@ -123,8 +119,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     if (methodCallHandler != null) {
       methodCallHandler.setActivity(binding.getActivity());
     }
-    if (streamHandler != null) {
-      streamHandler.setActivity(binding.getActivity());
+    if (positionStreamHandler != null) {
+      positionStreamHandler.setActivity(binding.getActivity());
     }
 
     if(locationServiceHandler != null){
@@ -174,7 +170,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       nmeaStreamHandler.setActivity(activity);
     }
     if(locationServiceHandler != null){
-        streamHandler.setActivity(null);
+        locationServiceHandler.setActivity(activity);
     }
 
     if (activity != null) {
