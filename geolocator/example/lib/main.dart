@@ -163,6 +163,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                     child: Icon(Icons.my_location),
                     onPressed: _getCurrentPosition,
                   ),
+                  sizedBox,
+                  FloatingActionButton(
+                    child: Icon(Icons.bookmark),
+                    onPressed: _getLastKnownPosition,
+                  ),
                 ],
               ),
             ),
@@ -316,6 +321,21 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     }
 
     super.dispose();
+  }
+
+  void _getLastKnownPosition() async {
+    final position = await _geolocatorPlatform.getLastKnownPosition();
+    if (position != null) {
+      _updatePositionList(
+        _PositionItemType.position,
+        position.toString(),
+      );
+    } else {
+      _updatePositionList(
+        _PositionItemType.log,
+        'No last known position available',
+      );
+    }
   }
 
   void _getLocationAccuracy() async {
