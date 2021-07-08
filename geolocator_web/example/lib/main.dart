@@ -30,12 +30,12 @@ class GeolocatorWidget extends StatefulWidget {
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
-  static final String _kLocationServicesDisabledMessage =
+  static const String _locationServicesDisabledMessage =
       'Location services are disabled.';
-  static final String _kPermissionDeniedMessage = 'Permission denied.';
-  static final String _kPermissionDeniedForeverMessage =
+  static const String _permissionDeniedMessage = 'Permission denied.';
+  static const String _permissionDeniedForeverMessage =
       'Permission denied forever.';
-  static final String _kPermissionGrantedMessage = 'Permission granted.';
+  static const String _permissionGrantedMessage = 'Permission granted.';
 
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
@@ -43,7 +43,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    const sizedBox = SizedBox(
+    const buttonSpacer = SizedBox(
       height: 10,
     );
 
@@ -93,12 +93,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                     : 'Pause',
             backgroundColor: _determineButtonColor(),
           ),
-          sizedBox,
+          buttonSpacer,
           FloatingActionButton(
             child: Icon(Icons.my_location),
             onPressed: _getCurrentPosition,
           ),
-          sizedBox,
+          buttonSpacer,
           FloatingActionButton(
             child: Icon(Icons.close),
             onPressed: () => setState(_positionItems.clear),
@@ -135,7 +135,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       // App to enable the location services.
       _updatePositionList(
         _PositionItemType.log,
-        _kLocationServicesDisabledMessage,
+        _locationServicesDisabledMessage,
       );
 
       return false;
@@ -152,7 +152,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         // your App should show an explanatory UI now.
         _updatePositionList(
           _PositionItemType.log,
-          _kPermissionDeniedMessage,
+          _permissionDeniedMessage,
         );
 
         return false;
@@ -163,7 +163,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       // Permissions are denied forever, handle appropriately.
       _updatePositionList(
         _PositionItemType.log,
-        _kPermissionDeniedForeverMessage,
+        _permissionDeniedForeverMessage,
       );
 
       return false;
@@ -173,7 +173,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     // continue accessing the position of the device.
     _updatePositionList(
       _PositionItemType.log,
-      _kPermissionGrantedMessage,
+      _permissionGrantedMessage,
     );
     return true;
   }
