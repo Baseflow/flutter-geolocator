@@ -207,22 +207,10 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
-    late StreamSubscription subscription;
-    late StreamController<dynamic> controller;
-    controller = StreamController<dynamic>(
-      onListen: () {
-        subscription = incoming.listen(
-          (item) => controller.add(item),
-          onError: (error) => controller.addError(error),
-          onDone: () => controller.close(),
-        );
-      },
-      onCancel: () {
-        subscription.cancel();
-        _positionStream = null;
-      },
-    );
-    return controller.stream.asBroadcastStream();
+    return incoming.asBroadcastStream(onCancel: (subscription) {
+      subscription.cancel();
+      _positionStream = null;
+    });
   }
 
   @override

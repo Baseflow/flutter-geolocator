@@ -4,8 +4,9 @@ import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
-import 'package:geolocator_platform_interface/src/implementations/method_channel_geolocator.dart';
 import 'package:geolocator_platform_interface/src/enums/location_service.dart';
+import 'package:geolocator_platform_interface/src/implementations/method_channel_geolocator.dart';
+
 import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
 
@@ -659,25 +660,39 @@ void main() {
           );
         });
 
-        test('Should return a new stream when original stream is closed', () {
+        test('Should return a new stream when all subscriptions are cancelled',
+            () {
           final methodChannelGeolocator = MethodChannelGeolocator();
-          final firstStream =
-              methodChannelGeolocator.getPositionStream(distanceFilter: 10);
 
-          // Start listening so u can cancel the stream subscription
+          // Get two position streams
+          final firstStream = methodChannelGeolocator.getPositionStream();
+          final secondStream = methodChannelGeolocator.getPositionStream();
+
+          // Streams are the same object
+          expect(firstStream == secondStream, true);
+
+          // Add multiple subscriptions
           StreamSubscription<Position>? firstSubscription =
               firstStream.listen((event) {});
+          StreamSubscription<Position>? secondSubscription =
+              secondStream.listen((event) {});
 
-          // Cancel subscription
+          // Cancel first subscription
           firstSubscription.cancel();
           firstSubscription = null;
 
-          final secondStream =
-              methodChannelGeolocator.getPositionStream(distanceFilter: 100);
+          // Stream is still the same as the first one
+          final cachedStream = methodChannelGeolocator.getPositionStream();
+          expect(firstStream == cachedStream, true);
 
-          // Pro stream different options are used, thus the stream shouldn't
-          // be the same
-          expect(firstStream == secondStream, true);
+          // Cancel second subscription
+          secondSubscription.cancel();
+          secondSubscription = null;
+
+          // After all listeners have been removed, the next stream
+          // retrieved is a new one.
+          final thirdStream = methodChannelGeolocator.getPositionStream();
+          expect(firstStream != thirdStream, true);
         });
       });
 
