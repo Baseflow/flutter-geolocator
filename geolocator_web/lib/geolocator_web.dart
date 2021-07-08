@@ -9,6 +9,8 @@ import 'src/permissions_manager.dart';
 import 'src/html_geolocation_manager.dart';
 import 'src/html_permissions_manager.dart';
 
+export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+
 /// The web implementation of [GeolocatorPlatform].
 ///
 /// This class implements the `package:geolocator` functionality for the web.

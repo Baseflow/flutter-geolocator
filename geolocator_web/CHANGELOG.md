@@ -1,3 +1,7 @@
+## 2.0.4
+
+- Added an example App to demonstrate how to directly use the geolocator_web package in a Flutter application.
+
 ## 2.0.3
 
 - Implement missing `isLocationServiceEnabled` for web implementation (see issue[#694](https://github.com/Baseflow/flutter-geolocator/issues/694)).
