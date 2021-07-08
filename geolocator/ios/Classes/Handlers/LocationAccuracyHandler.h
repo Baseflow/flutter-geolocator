@@ -11,8 +11,8 @@
 #import <Flutter/Flutter.h>
 
 typedef enum {
-    reduced,
-    precise
+  reduced,
+  precise
 } LocationAccuracy;
 
 @interface LocationAccuracyHandler : NSObject
