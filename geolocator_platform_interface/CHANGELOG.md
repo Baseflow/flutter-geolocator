@@ -1,3 +1,7 @@
+## 2.3.1
+
+- Solves a bug which resulted in an issue when closing the position stream.
+
 ## 2.3.0
 
 - Added the possibility to request temporary Precise Accuracy on iOS 14+ devices.
