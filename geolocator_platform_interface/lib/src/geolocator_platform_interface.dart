@@ -170,13 +170,14 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// The `required` property [purposeKey] should correspond with the [key]
   /// value set in the [NSLocationTemporaryUsageDescriptionDictionary]
   /// dictionary, which should be added to the `Info.plist` as stated in the
-  /// documentation.
+  /// documentation. The default value of the [purposeKey] is set to
+  /// `TemporaryFullAccuracyDescription`.
   ///
   /// Throws a [PermissionDefinitionsNotFoundException] when the key
   /// `NSLocationTemporaryUsageDescriptionDictionary` has not been set in the
   /// `Infop.list`.
   Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
-    required String purposeKey,
+    String purposeKey = "TemporaryFullAccuracyDescription",
   }) async {
     throw UnimplementedError(
         'requestTemporaryFullAccuracy() has not been implemented');
