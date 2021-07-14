@@ -142,17 +142,30 @@ void main() {
           'Should receive reduced accuracy if Location Accuracy is pinned to'
           ' reduced', () async {
         // Arrange
-        MethodChannelMock(
+        final methodChannel = MethodChannelMock(
             channelName: 'flutter.baseflow.com/geolocator',
             method: 'requestTemporaryFullAccuracy',
             result: 0);
 
+        final expectedArguments = <String, dynamic>{
+          'purposeKey': 'purposeKeyValue',
+        };
+
         // Act
         final accuracy =
-            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
+            await MethodChannelGeolocator().requestTemporaryFullAccuracy(
+          purposeKey: 'purposeKeyValue',
+        );
 
         // Assert
         expect(accuracy, LocationAccuracyStatus.reduced);
+
+        expect(methodChannel.log, <Matcher>[
+          isMethodCall(
+            'requestTemporaryFullAccuracy',
+            arguments: expectedArguments,
+          ),
+        ]);
       });
 
       test(
@@ -166,7 +179,9 @@ void main() {
 
         // Act
         final accuracy =
-            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
+            await MethodChannelGeolocator().requestTemporaryFullAccuracy(
+          purposeKey: 'purposeKeyValue',
+        );
 
         // Assert
         expect(accuracy, LocationAccuracyStatus.precise);
@@ -186,7 +201,9 @@ void main() {
         );
 
         // Act
-        final future = MethodChannelGeolocator().requestTemporaryFullAccuracy();
+        final future = MethodChannelGeolocator().requestTemporaryFullAccuracy(
+          purposeKey: 'purposeKeyValue',
+        );
 
         // Assert
         expect(

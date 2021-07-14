@@ -214,10 +214,16 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
-  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy() async {
+  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
+    required String purposeKey,
+  }) async {
     try {
-      final int status =
-          await _methodChannel.invokeMethod('requestTemporaryFullAccuracy');
+      final int status = await _methodChannel.invokeMethod(
+        'requestTemporaryFullAccuracy',
+        <String, dynamic>{
+          'purposeKey': purposeKey,
+        },
+      );
       return LocationAccuracyStatus.values[status];
     } on PlatformException catch (e) {
       _handlePlatformException(e);
