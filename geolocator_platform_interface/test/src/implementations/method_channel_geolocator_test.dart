@@ -178,8 +178,8 @@ void main() {
             result: 1);
 
         // Act
-        final accuracy =
-            await MethodChannelGeolocator().requestTemporaryFullAccuracy();
+        final accuracy = await MethodChannelGeolocator()
+            .requestTemporaryFullAccuracy(purposeKey: 'purposeKey');
 
         // Assert
         expect(accuracy, LocationAccuracyStatus.precise);
@@ -199,7 +199,8 @@ void main() {
         );
 
         // Act
-        final future = MethodChannelGeolocator().requestTemporaryFullAccuracy();
+        final future = MethodChannelGeolocator()
+            .requestTemporaryFullAccuracy(purposeKey: 'purposeKey');
 
         // Assert
         expect(
