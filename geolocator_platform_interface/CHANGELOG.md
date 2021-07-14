@@ -1,3 +1,7 @@
+## 2.3.2
+
+- Added the possibility to pass your own purposeKey name to the requestTemporaryFullAccuracy method.
+
 ## 2.3.1
 
 - Solves a bug which resulted in an issue when closing the position stream.
