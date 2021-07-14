@@ -177,7 +177,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// `Infop.list`.
   Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
     required String purposeKey,
-  }) {
+  }) async {
     throw UnimplementedError(
         'requestTemporaryFullAccuracy() has not been implemented');
   }
