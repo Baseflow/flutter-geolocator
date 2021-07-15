@@ -143,12 +143,21 @@ class Geolocator {
   /// Requests temporary precise location when the user only gave permission
   /// for approximate location (iOS 14+ only)
   ///
+  /// When using this method, the value of the required property `purposeKey`
+  /// should match the <key> value given in the
+  /// `NSLocationTemporaryUsageDescription` dictionary in the
+  /// Info.plist.
+  ///
   /// Throws a [PermissionDefinitionsNotFoundException] when the necessary key
   /// in the Info.plist is not added
   /// Returns [LocationAccuracyStatus.precise] when using iOS 13 or below or
   /// using other platforms.
-  static Future<LocationAccuracyStatus> requestTemporaryFullAccuracy() =>
-      GeolocatorPlatform.instance.requestTemporaryFullAccuracy();
+  static Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
+    required String purposeKey,
+  }) =>
+      GeolocatorPlatform.instance.requestTemporaryFullAccuracy(
+        purposeKey: purposeKey,
+      );
 
   /// Opens the App settings page.
   ///

@@ -60,7 +60,8 @@
   } else if([@"getLocationAccuracy" isEqualToString:call.method]) {
     [self.locationAccuracyHandler getLocationAccuracyWithResult:result];
   } else if([@"requestTemporaryFullAccuracy" isEqualToString:call.method]) {
-    [self.locationAccuracyHandler requestTemporaryFullAccuracyWithResult:result];
+    [self.locationAccuracyHandler requestTemporaryFullAccuracyWithResult:result
+                                                               arguments:call.arguments];
   } else if ([@"openAppSettings" isEqualToString:call.method]) {
     [self openSettings:result];
   } else if ([@"openLocationSettings" isEqualToString:call.method]) {

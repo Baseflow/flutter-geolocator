@@ -344,7 +344,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _requestTemporaryFullAccuracy() async {
-    final status = await _geolocatorPlatform.requestTemporaryFullAccuracy();
+    final status = await _geolocatorPlatform.requestTemporaryFullAccuracy(
+      purposeKey: "TemporaryPreciseAccuracy",
+    );
     _handleLocationAccuracyStatus(status);
   }
 

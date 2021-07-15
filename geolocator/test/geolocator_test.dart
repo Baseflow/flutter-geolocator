@@ -60,7 +60,9 @@ void main() {
     });
 
     test('requestTemporaryFullAccuracy', () async {
-      final accuracy = await Geolocator.requestTemporaryFullAccuracy();
+      final accuracy = await Geolocator.requestTemporaryFullAccuracy(
+        purposeKey: "purposeKeyValue",
+      );
 
       expect(accuracy, LocationAccuracyStatus.reduced);
     });
@@ -228,7 +230,9 @@ class MockGeolocatorPlatform extends Mock
       Future.value(LocationAccuracyStatus.reduced);
 
   @override
-  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy() =>
+  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
+    required String purposeKey,
+  }) =>
       Future.value(LocationAccuracyStatus.reduced);
 
   @override

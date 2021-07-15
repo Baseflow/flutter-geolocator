@@ -11,14 +11,15 @@
 #import <Flutter/Flutter.h>
 
 typedef enum {
-  reduced,
-  precise
+    reduced,
+    precise
 } LocationAccuracy;
 
 @interface LocationAccuracyHandler : NSObject
 
-- (void) getLocationAccuracyWithResult:(FlutterResult)result;
-- (void) requestTemporaryFullAccuracyWithResult:(FlutterResult)result;
+- (void) getLocationAccuracyWithResult:(FlutterResult _Nonnull)result;
+- (void) requestTemporaryFullAccuracyWithResult:(FlutterResult _Nonnull)result
+                                      arguments:(id _Nullable)arguments;
 
 @end
 
