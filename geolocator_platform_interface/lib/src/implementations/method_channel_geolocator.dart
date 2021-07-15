@@ -207,29 +207,23 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
-    late StreamSubscription subscription;
-    late StreamController<dynamic> controller;
-    controller = StreamController<dynamic>(
-      onListen: () {
-        subscription = incoming.listen(
-          (item) => controller.add(item),
-          onError: (error) => controller.addError(error),
-          onDone: () => controller.close(),
-        );
-      },
-      onCancel: () {
-        subscription.cancel();
-        _positionStream = null;
-      },
-    );
-    return controller.stream.asBroadcastStream();
+    return incoming.asBroadcastStream(onCancel: (subscription) {
+      subscription.cancel();
+      _positionStream = null;
+    });
   }
 
   @override
-  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy() async {
+  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
+    required String purposeKey,
+  }) async {
     try {
-      final int status =
-          await _methodChannel.invokeMethod('requestTemporaryFullAccuracy');
+      final int status = await _methodChannel.invokeMethod(
+        'requestTemporaryFullAccuracy',
+        <String, dynamic>{
+          'purposeKey': purposeKey,
+        },
+      );
       return LocationAccuracyStatus.values[status];
     } on PlatformException catch (e) {
       _handlePlatformException(e);

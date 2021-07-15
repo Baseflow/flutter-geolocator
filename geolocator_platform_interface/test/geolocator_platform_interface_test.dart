@@ -82,7 +82,8 @@ void main() {
 
       // Act & Assert
       expect(
-        geolocatorPlatform.requestTemporaryFullAccuracy,
+        geolocatorPlatform.requestTemporaryFullAccuracy(
+            purposeKey: 'purposeKey'),
         throwsUnimplementedError,
       );
     });
