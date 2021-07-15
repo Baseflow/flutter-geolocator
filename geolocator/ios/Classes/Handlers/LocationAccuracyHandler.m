@@ -45,7 +45,7 @@
     }
 }
 
-- (void) requestTemporaryFullAccuracyWithResult:(FlutterResult)result arguments:(id _Nullable)arguments {
+- (void) requestTemporaryFullAccuracyWithResult:(FlutterResult)result purposeKey:(NSString *)purposeKey {
     if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationTemporaryUsageDescriptionDictionary"] == nil) {
         return result([FlutterError errorWithCode:GeolocatorErrorPermissionDefinitionsNotFound
                                           message:@"The temporary accuracy dictionary key is not set in the infop.list"
@@ -53,7 +53,7 @@
     }
     
     if (@available(iOS 14.0, *)) {
-        [self.locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:(NSString *)arguments[@"purposeKey"]
+        [self.locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:purposeKey
                                                                            completion:^(NSError *_Nullable error) {
             if ([self.locationManager accuracyAuthorization] == CLAccuracyAuthorizationFullAccuracy) {
                 return result([NSNumber numberWithInt:(LocationAccuracy)precise]);

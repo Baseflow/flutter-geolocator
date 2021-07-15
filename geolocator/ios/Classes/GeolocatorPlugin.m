@@ -60,8 +60,9 @@
   } else if([@"getLocationAccuracy" isEqualToString:call.method]) {
     [self.locationAccuracyHandler getLocationAccuracyWithResult:result];
   } else if([@"requestTemporaryFullAccuracy" isEqualToString:call.method]) {
+    NSString* purposeKey = (NSString *)call.arguments[@"purposeKey"];
     [self.locationAccuracyHandler requestTemporaryFullAccuracyWithResult:result
-                                                               arguments:call.arguments];
+                                                               purposeKey:purposeKey];
   } else if ([@"openAppSettings" isEqualToString:call.method]) {
     [self openSettings:result];
   } else if ([@"openLocationSettings" isEqualToString:call.method]) {

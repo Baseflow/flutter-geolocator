@@ -87,16 +87,15 @@ On iOS you'll need to add the following entries to your Info.plist file (located
 
 If you would like to receive updates when your App is in the background, you'll also need to add the Background Modes capability to your XCode project (Project > Signing and Capabilities > "+ Capability" button) and select Location Updates. Be careful with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
 
-When using the `requestTemporaryFullAccuracy({purposeKey: "TemporaryPreciseAccuracy"})` method, a dictionary should be added to the Info.plist file.
-
-``` xml
+When using the `requestTemporaryFullAccuracy({purposeKey: "YourPurposeKey"})` method, a dictionary should be added to the Info.plist file.
+```xml
 <key>NSLocationTemporaryUsageDescriptionDictionary</key>
 <dict>
-<key>TemporaryPreciseAccuracy</key>
-<string>The example App requires temporary access to the device&apos;s precise location.</string>
+  <key>YourPurposeKey</key>
+  <string>The example App requires temporary access to the device&apos;s precise location.</string>
 </dict>
 ```
-The second key `TemporaryPreciseAccuracy` should match the purposeKey that is passed in the `requestTemporaryFullAccuracy()` method.
+The second key (in this example called `YourPurposeKey`) should match the purposeKey that is passed in the `requestTemporaryFullAccuracy()` method. It is possible to define multiple keys for different features in your app. More information can be found in Apple's [documentation](https://developer.apple.com/documentation/bundleresources/information_property_list/nslocationtemporaryusagedescriptiondictionary).
 </details>
 
 <details>

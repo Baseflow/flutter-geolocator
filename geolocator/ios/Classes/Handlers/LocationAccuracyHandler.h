@@ -19,7 +19,7 @@ typedef enum {
 
 - (void) getLocationAccuracyWithResult:(FlutterResult _Nonnull)result;
 - (void) requestTemporaryFullAccuracyWithResult:(FlutterResult _Nonnull)result
-                                      arguments:(id _Nullable)arguments;
+                                      purposeKey:(NSString *)purposeKey;
 
 @end
 
