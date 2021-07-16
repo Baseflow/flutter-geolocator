@@ -5,11 +5,11 @@ void main() {
   test('toString: Should return the default description when message is null',
       () {
     // Arrange
-    final expected =
+    const expected =
         'Permission definitions are not found. Please make sure you have '
         'added the necessary definitions to the configuration file (e.g. '
         'the AndroidManifest.xml on Android or the Info.plist on iOS).';
-    final exception = PermissionDefinitionsNotFoundException(null);
+    const exception = PermissionDefinitionsNotFoundException(null);
 
     // Act
     final actual = exception.toString();
@@ -21,11 +21,11 @@ void main() {
   test('toString: Should return the default description when message is empty',
       () {
     // Arrange
-    final expected =
+    const expected =
         'Permission definitions are not found. Please make sure you have '
         'added the necessary definitions to the configuration file (e.g. '
         'the AndroidManifest.xml on Android or the Info.plist on iOS).';
-    final exception = PermissionDefinitionsNotFoundException('');
+    const exception = PermissionDefinitionsNotFoundException('');
 
     // Act
     final actual = exception.toString();
@@ -36,8 +36,8 @@ void main() {
 
   test('toString: Should return the message as description', () {
     // Arrange
-    final expected = 'Dummy error message.';
-    final exception = PermissionDefinitionsNotFoundException(expected);
+    const expected = 'Dummy error message.';
+    const exception = PermissionDefinitionsNotFoundException(expected);
 
     // Act
     final actual = exception.toString();

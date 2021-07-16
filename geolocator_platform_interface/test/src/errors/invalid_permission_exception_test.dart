@@ -6,8 +6,8 @@ void main() {
       'valueToConvert: Should return the value that should have been converted',
       () {
     // Arrange
-    final expected = 5;
-    final exception = InvalidPermissionException(expected);
+    const expected = 5;
+    const exception = InvalidPermissionException(expected);
 
     // Act
     final actual = exception.valueToConvert;
@@ -18,9 +18,9 @@ void main() {
 
   test('toString: Should return a description of the exception', () {
     // Arrange
-    final expected =
+    const expected =
         'Unable to convert the value "5" into a LocationPermission.';
-    final exception = InvalidPermissionException(5);
+    const exception = InvalidPermissionException(5);
 
     // Act
     final actual = exception.toString();

@@ -6,7 +6,7 @@ class Position {
   /// Constructs an instance with the given values for testing. [Position]
   /// instances constructed this way won't actually reflect any real information
   /// from the platform, just whatever was passed in at construction time.
-  Position({
+  const Position({
     required this.longitude,
     required this.latitude,
     required this.timestamp,
@@ -75,18 +75,18 @@ class Position {
   final bool isMocked;
 
   @override
-  bool operator ==(Object o) {
-    var areEqual = o is Position &&
-        o.accuracy == accuracy &&
-        o.altitude == altitude &&
-        o.heading == heading &&
-        o.latitude == latitude &&
-        o.longitude == longitude &&
-        o.floor == o.floor &&
-        o.speed == speed &&
-        o.speedAccuracy == speedAccuracy &&
-        o.timestamp == timestamp &&
-        o.isMocked == isMocked;
+  bool operator ==(Object other) {
+    var areEqual = other is Position &&
+        other.accuracy == accuracy &&
+        other.altitude == altitude &&
+        other.heading == heading &&
+        other.latitude == latitude &&
+        other.longitude == longitude &&
+        other.floor == floor &&
+        other.speed == speed &&
+        other.speedAccuracy == speedAccuracy &&
+        other.timestamp == timestamp &&
+        other.isMocked == isMocked;
 
     return areEqual;
   }

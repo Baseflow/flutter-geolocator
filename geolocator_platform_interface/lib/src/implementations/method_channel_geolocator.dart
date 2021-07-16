@@ -246,9 +246,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       case 'ACTIVITY_MISSING':
         throw ActivityMissingException(exception.message);
       case 'LOCATION_SERVICES_DISABLED':
-        throw LocationServiceDisabledException();
+        throw const LocationServiceDisabledException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':
-        throw AlreadySubscribedException();
+        throw const AlreadySubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':
         throw PermissionDefinitionsNotFoundException(exception.message);
       case 'PERMISSION_DENIED':
