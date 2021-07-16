@@ -59,10 +59,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   @override
   Future<LocationPermission> requestPermission() async {
     try {
-      _geolocation.getCurrentPosition();
+      await _geolocation.getCurrentPosition();
       return LocationPermission.whileInUse;
     } catch (e) {
-      return LocationPermission.denied;
+      return LocationPermission.deniedForever;
     }
   }
 
