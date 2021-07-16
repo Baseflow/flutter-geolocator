@@ -23,6 +23,12 @@
             return kCLLocationAccuracyNearestTenMeters;
         case 5:
             return kCLLocationAccuracyBestForNavigation;
+        case 6:
+            if (@available(iOS 14.0, *)) {
+                return kCLLocationAccuracyReduced;
+            } else {
+                return kCLLocationAccuracyThreeKilometers;
+            }
         case 4:
         default:
             return kCLLocationAccuracyBest;

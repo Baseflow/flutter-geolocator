@@ -59,6 +59,14 @@ void main() {
       expect(accuracy, LocationAccuracyStatus.reduced);
     });
 
+    test('requestTemporaryFullAccuracy', () async {
+      final accuracy = await Geolocator.requestTemporaryFullAccuracy(
+        purposeKey: "purposeKeyValue",
+      );
+
+      expect(accuracy, LocationAccuracyStatus.reduced);
+    });
+
     test('getServiceStatusStream', () async {
       when(GeolocatorPlatform.instance.getServiceStatusStream())
           .thenAnswer((_) => Stream.value(ServiceStatus.enabled));
@@ -219,6 +227,12 @@ class MockGeolocatorPlatform extends Mock
 
   @override
   Future<LocationAccuracyStatus> getLocationAccuracy() =>
+      Future.value(LocationAccuracyStatus.reduced);
+
+  @override
+  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
+    required String purposeKey,
+  }) =>
       Future.value(LocationAccuracyStatus.reduced);
 
   @override
