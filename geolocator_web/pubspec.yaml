@@ -1,7 +1,7 @@
 name: geolocator_web
 description: Official web implementation of the geolocator plugin.
 homepage: https://github.com/Baseflow/flutter-geolocator/tree/geolocator_web
-version: 2.0.4
+version: 2.0.5
 
 flutter:
   plugin:
@@ -16,7 +16,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  geolocator_platform_interface: ^2.3.0
+  geolocator_platform_interface: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +26,4 @@ dev_dependencies:
 environment:
   sdk: '>=2.12.0 <3.0.0'
   flutter: ">=1.20.0"
+
