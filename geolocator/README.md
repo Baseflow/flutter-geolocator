@@ -96,6 +96,8 @@ When using the `requestTemporaryFullAccuracy({purposeKey: "YourPurposeKey"})` me
 </dict>
 ```
 The second key (in this example called `YourPurposeKey`) should match the purposeKey that is passed in the `requestTemporaryFullAccuracy()` method. It is possible to define multiple keys for different features in your app. More information can be found in Apple's [documentation](https://developer.apple.com/documentation/bundleresources/information_property_list/nslocationtemporaryusagedescriptiondictionary).
+
+> NOTE: the first time requesting temporary full accuracy access it might take several seconds for the pop-up to show. This is due to the fact that iOS is determining the exact user location and may take several seconds. Unfortunately this is out of our hands.
 </details>
 
 <details>
