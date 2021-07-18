@@ -29,8 +29,8 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   }
 
   /// Creates a GeolocatorPlugin
-  /// 
-  /// This constructor is public for testing purposes only. It should not be 
+  ///
+  /// This constructor is public for testing purposes only. It should not be
   /// used outside this class.
   @visibleForTesting
   GeolocatorPlugin.private(

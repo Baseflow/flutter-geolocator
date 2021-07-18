@@ -25,7 +25,8 @@ class GeolocatorWidget extends StatefulWidget {
 
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
-    return ExamplePage(Icons.location_on, (context) => const GeolocatorWidget());
+    return ExamplePage(
+        Icons.location_on, (context) => const GeolocatorWidget());
   }
 
   @override
