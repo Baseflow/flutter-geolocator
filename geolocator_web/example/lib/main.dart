@@ -20,9 +20,13 @@ void main() {
 
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
+  /// Create a GeolocatorWidget.
+  const GeolocatorWidget({Key? key}) : super(key: key);
+
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
-    return ExamplePage(Icons.location_on, (context) => GeolocatorWidget());
+    return ExamplePage(
+        Icons.location_on, (context) => const GeolocatorWidget());
   }
 
   @override
@@ -58,7 +62,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             return ListTile(
               title: Text(positionItem.displayValue,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   )),
@@ -69,7 +73,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                 tileColor: themeMaterialColor,
                 title: Text(
                   positionItem.displayValue,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             );
@@ -83,8 +87,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           FloatingActionButton(
             child: (_positionStreamSubscription == null ||
                     _positionStreamSubscription!.isPaused)
-                ? Icon(Icons.play_arrow)
-                : Icon(Icons.pause),
+                ? const Icon(Icons.play_arrow)
+                : const Icon(Icons.pause),
             onPressed: _toggleListening,
             tooltip: (_positionStreamSubscription == null)
                 ? 'Start position updates'
@@ -95,12 +99,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           ),
           buttonSpacer,
           FloatingActionButton(
-            child: Icon(Icons.my_location),
+            child: const Icon(Icons.my_location),
             onPressed: _getCurrentPosition,
           ),
           buttonSpacer,
           FloatingActionButton(
-            child: Icon(Icons.close),
+            child: const Icon(Icons.close),
             onPressed: () => setState(_positionItems.clear),
             tooltip: 'clear',
           ),
@@ -180,7 +184,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _updatePositionList(_PositionItemType type, String displayValue) {
     _positionItems.add(_PositionItem(type, displayValue));
-    print(displayValue);
     setState(() {});
   }
 
