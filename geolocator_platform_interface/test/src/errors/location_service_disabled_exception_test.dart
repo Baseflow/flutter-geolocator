@@ -4,8 +4,8 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 void main() {
   test('toString: Should return a description of the exception', () {
     // Arrange
-    final expected = 'The location service on the device is disabled.';
-    final exception = LocationServiceDisabledException();
+    const expected = 'The location service on the device is disabled.';
+    const exception = LocationServiceDisabledException();
 
     // Act
     final actual = exception.toString();

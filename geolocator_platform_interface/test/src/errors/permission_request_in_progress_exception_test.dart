@@ -5,10 +5,10 @@ void main() {
   test('toString: Should return the default description when message is null',
       () {
     // Arrange
-    final expected =
+    const expected =
         'A request for location permissions is already running, please '
         'wait for it to complete before doing another request.';
-    final exception = PermissionRequestInProgressException(null);
+    const exception = PermissionRequestInProgressException(null);
 
     // Act
     final actual = exception.toString();
@@ -20,10 +20,10 @@ void main() {
   test('toString: Should return the default description when message is empty',
       () {
     // Arrange
-    final expected =
+    const expected =
         'A request for location permissions is already running, please '
         'wait for it to complete before doing another request.';
-    final exception = PermissionRequestInProgressException('');
+    const exception = PermissionRequestInProgressException('');
 
     // Act
     final actual = exception.toString();
@@ -34,8 +34,8 @@ void main() {
 
   test('toString: Should return the message as description', () {
     // Arrange
-    final expected = 'Dummy error message.';
-    final exception = PermissionRequestInProgressException(expected);
+    const expected = 'Dummy error message.';
+    const exception = PermissionRequestInProgressException(expected);
 
     // Act
     final actual = exception.toString();
