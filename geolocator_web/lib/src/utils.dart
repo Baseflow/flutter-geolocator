@@ -3,11 +3,12 @@ import 'dart:html' as html;
 import 'package:flutter/services.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
+/// Converts the Geoposition object into a [Position] object.
 Position toPosition(html.Geoposition webPosition) {
   final coords = webPosition.coords;
 
   if (coords == null) {
-    throw new PositionUpdateException('Received invalid position result.');
+    throw const PositionUpdateException('Received invalid position result.');
   }
 
   return Position(
@@ -26,6 +27,8 @@ Position toPosition(html.Geoposition webPosition) {
   );
 }
 
+/// Converts the permission result received from the browser into a
+/// [LocationPermission] value.
 LocationPermission toLocationPermission(String? webPermission) {
   switch (webPermission) {
     case 'granted':
@@ -40,6 +43,8 @@ LocationPermission toLocationPermission(String? webPermission) {
   }
 }
 
+/// Converts an error received from the browser into a custom Geolocator
+/// exception.
 Exception convertPositionError(html.PositionError error) {
   switch (error.code) {
     case 1:

@@ -11,14 +11,18 @@ final MaterialColor themeMaterialColor =
         const Color.fromRGBO(48, 49, 60, 1));
 
 void main() {
-  runApp(GeolocatorWidget());
+  runApp(const GeolocatorWidget());
 }
 
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
+  /// Creates a new GeolocatorWidget.
+  const GeolocatorWidget({Key? key}) : super(key: key);
+
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
-    return ExamplePage(Icons.location_on, (context) => GeolocatorWidget());
+    return ExamplePage(
+        Icons.location_on, (context) => const GeolocatorWidget());
   }
 
   @override
@@ -26,12 +30,12 @@ class GeolocatorWidget extends StatefulWidget {
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
-  static final String _kLocationServicesDisabledMessage =
+  static const String _kLocationServicesDisabledMessage =
       'Location services are disabled.';
-  static final String _kPermissionDeniedMessage = 'Permission denied.';
-  static final String _kPermissionDeniedForeverMessage =
+  static const String _kPermissionDeniedMessage = 'Permission denied.';
+  static const String _kPermissionDeniedForeverMessage =
       'Permission denied forever.';
-  static final String _kPermissionGrantedMessage = 'Permission granted.';
+  static const String _kPermissionGrantedMessage = 'Permission granted.';
 
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
@@ -70,25 +74,25 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       },
       itemBuilder: (context) => [
         if (Platform.isIOS)
-          PopupMenuItem(
+          const PopupMenuItem(
             child: Text("Get Location Accuracy"),
             value: 1,
           ),
         if (Platform.isIOS)
-          PopupMenuItem(
+          const PopupMenuItem(
             child: Text("Request Temporary Full Accuracy"),
             value: 2,
           ),
-        PopupMenuItem(
+        const PopupMenuItem(
           child: Text("Open App Settings"),
           value: 3,
         ),
         if (Platform.isAndroid)
-          PopupMenuItem(
+          const PopupMenuItem(
             child: Text("Open Location Settings"),
             value: 4,
           ),
-        PopupMenuItem(
+        const PopupMenuItem(
           child: Text("Clear"),
           value: 5,
         ),
@@ -123,7 +127,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                     return ListTile(
                       title: Text(positionItem.displayValue,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           )),
@@ -134,7 +138,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                         tileColor: themeMaterialColor,
                         title: Text(
                           positionItem.displayValue,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     );
@@ -148,8 +152,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                   FloatingActionButton(
                     child: (_positionStreamSubscription == null ||
                             _positionStreamSubscription!.isPaused)
-                        ? Icon(Icons.play_arrow)
-                        : Icon(Icons.pause),
+                        ? const Icon(Icons.play_arrow)
+                        : const Icon(Icons.pause),
                     onPressed: _toggleListening,
                     tooltip: (_positionStreamSubscription == null)
                         ? 'Start position updates'
@@ -160,12 +164,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                   ),
                   sizedBox,
                   FloatingActionButton(
-                    child: Icon(Icons.my_location),
+                    child: const Icon(Icons.my_location),
                     onPressed: _getCurrentPosition,
                   ),
                   sizedBox,
                   FloatingActionButton(
-                    child: Icon(Icons.bookmark),
+                    child: const Icon(Icons.bookmark),
                     onPressed: _getLastKnownPosition,
                   ),
                 ],
@@ -246,7 +250,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _updatePositionList(_PositionItemType type, String displayValue) {
     _positionItems.add(_PositionItem(type, displayValue));
-    print(displayValue);
     setState(() {});
   }
 
