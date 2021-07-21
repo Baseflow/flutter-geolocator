@@ -1,3 +1,7 @@
+## 2.0.6
+
+- Fixes a bug where the `LocationAccuracy.reduced` accuracy value is treated as high accuracy on web.
+
 ## 2.0.5
 
 - Ensure the `requestPermission` method correctly awaits the users input and not return prematurely (see issue [#783](https://github.com/Baseflow/flutter-geolocator/issues/783)).
