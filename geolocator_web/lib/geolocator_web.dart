@@ -134,8 +134,19 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   Future<bool> openLocationSettings() =>
       throw _unsupported('openLocationSettings');
 
-  bool _enableHighAccuracy(LocationAccuracy accuracy) =>
-      accuracy.index >= LocationAccuracy.high.index;
+  bool _enableHighAccuracy(LocationAccuracy accuracy) {
+    switch (accuracy) {
+      case LocationAccuracy.lowest:
+      case LocationAccuracy.low:
+      case LocationAccuracy.medium:
+      case LocationAccuracy.reduced:
+        return false;
+      case LocationAccuracy.high:
+      case LocationAccuracy.best:
+      case LocationAccuracy.bestForNavigation:
+        return true;
+    }
+  }
 
   PlatformException _unsupported(String method) {
     return PlatformException(
