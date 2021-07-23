@@ -1,3 +1,7 @@
+## 7.3.1
+
+- Android 10 and above: Fixed a bug causing the `requestPermission` method failing to show a prompt when requesting for background location permission.
+
 ## 7.3.0
 
 - iOS 14: Users can now request Temporary Precise Location fetching by using the `requestTemporaryFullAccuracy()` method.

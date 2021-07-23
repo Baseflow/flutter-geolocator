@@ -83,7 +83,10 @@ public class PermissionManager
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         && PermissionUtils.hasPermissionInManifest(
             activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-      permissionsToRequest.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        final int permissionStatus = ContextCompat.checkSelfPermission(activity, permission);
+        if (permissionStatus != PackageManager.PERMISSION_DENIED) {
+            permissionsToRequest.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        }
     }
 
     this.errorCallback = errorCallback;
