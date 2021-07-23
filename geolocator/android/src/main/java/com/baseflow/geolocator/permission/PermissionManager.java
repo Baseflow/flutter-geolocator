@@ -80,11 +80,10 @@ public class PermissionManager
     String permission = determineFineOrCoarse(activity);
     permissionsToRequest.add(permission);
 
-    final int permissionStatus = ContextCompat.checkSelfPermission(activity, permission);
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         && PermissionUtils.hasPermissionInManifest(
-            activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) { 
+            activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+        final int permissionStatus = ContextCompat.checkSelfPermission(activity, permission);
         if (permissionStatus != PackageManager.PERMISSION_DENIED) {
             permissionsToRequest.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
         }
