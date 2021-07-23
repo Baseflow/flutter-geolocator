@@ -28,6 +28,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     );
   }
 
+  /// Creates a GeolocatorPlugin
+  ///
+  /// This constructor is public for testing purposes only. It should not be
+  /// used outside this class.
   @visibleForTesting
   GeolocatorPlugin.private(
       GeolocationManager geolocation, PermissionsManager permissions)
@@ -59,10 +63,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   @override
   Future<LocationPermission> requestPermission() async {
     try {
-      _geolocation.getCurrentPosition();
+      await _geolocation.getCurrentPosition();
       return LocationPermission.whileInUse;
     } catch (e) {
-      return LocationPermission.denied;
+      return LocationPermission.deniedForever;
     }
   }
 
@@ -130,8 +134,19 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   Future<bool> openLocationSettings() =>
       throw _unsupported('openLocationSettings');
 
-  bool _enableHighAccuracy(LocationAccuracy accuracy) =>
-      accuracy.index >= LocationAccuracy.high.index;
+  bool _enableHighAccuracy(LocationAccuracy accuracy) {
+    switch (accuracy) {
+      case LocationAccuracy.lowest:
+      case LocationAccuracy.low:
+      case LocationAccuracy.medium:
+      case LocationAccuracy.reduced:
+        return false;
+      case LocationAccuracy.high:
+      case LocationAccuracy.best:
+      case LocationAccuracy.bestForNavigation:
+        return true;
+    }
+  }
 
   PlatformException _unsupported(String method) {
     return PlatformException(

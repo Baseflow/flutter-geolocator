@@ -521,7 +521,7 @@ void main() {
             channelName: 'flutter.baseflow.com/geolocator',
             method: 'getCurrentPosition',
             result: mockPosition.toJson());
-        final expectedArguments = LocationOptions(
+        const expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
         );
 
@@ -547,11 +547,11 @@ void main() {
           method: 'getCurrentPosition',
           result: mockPosition.toJson(),
         );
-        final expectedFirstArguments = LocationOptions(
+        const expectedFirstArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
           forceAndroidLocationManager: false,
         );
-        final expectedSecondArguments = LocationOptions(
+        const expectedSecondArguments = LocationOptions(
           accuracy: LocationAccuracy.high,
           forceAndroidLocationManager: true,
         );
@@ -641,7 +641,7 @@ void main() {
         // Arrange
         MethodChannelMock(
           channelName: 'flutter.baseflow.com/geolocator',
-          delay: Duration(milliseconds: 10),
+          delay: const Duration(milliseconds: 10),
           method: 'getCurrentPosition',
           result: mockPosition.toJson(),
         );
@@ -650,7 +650,7 @@ void main() {
           await MethodChannelGeolocator().getCurrentPosition(
             desiredAccuracy: LocationAccuracy.low,
             forceAndroidLocationManager: true,
-            timeLimit: Duration(milliseconds: 5),
+            timeLimit: const Duration(milliseconds: 5),
           );
 
           fail('Expected a TimeoutException and should not reach here.');
@@ -736,7 +736,7 @@ void main() {
           'Should correctly handle done event', () async {
         // Arrange
         final completer = Completer();
-        completer.future.timeout(Duration(milliseconds: 50),
+        completer.future.timeout(const Duration(milliseconds: 50),
             onTimeout: () =>
                 fail('getPositionStream should trigger done and not timeout.'));
         final streamController =
@@ -968,7 +968,7 @@ void main() {
           channelName: 'flutter.baseflow.com/geolocator_updates',
           stream: streamController.stream,
         );
-        final expectedArguments = LocationOptions(
+        const expectedArguments = LocationOptions(
           accuracy: LocationAccuracy.low,
           distanceFilter: 0,
         );
@@ -976,12 +976,12 @@ void main() {
         // Act
         final positionStream = MethodChannelGeolocator().getPositionStream(
             desiredAccuracy: expectedArguments.accuracy,
-            timeLimit: Duration(milliseconds: 5));
+            timeLimit: const Duration(milliseconds: 5));
         final streamQueue = StreamQueue(positionStream);
 
         streamController.add(mockPosition.toJson());
 
-        await Future.delayed(Duration(milliseconds: 5));
+        await Future.delayed(const Duration(milliseconds: 5));
 
         // Assert
         expect(await streamQueue.next, mockPosition);

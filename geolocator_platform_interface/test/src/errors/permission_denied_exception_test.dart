@@ -5,9 +5,9 @@ void main() {
   test('toString: Should return the default description when message is null',
       () {
     // Arrange
-    final expected =
+    const expected =
         'Access to the location of the device is denied by the user.';
-    final exception = PermissionDeniedException(null);
+    const exception = PermissionDeniedException(null);
 
     // Act
     final actual = exception.toString();
@@ -19,9 +19,9 @@ void main() {
   test('toString: Should return the default description when message is empty',
       () {
     // Arrange
-    final expected =
+    const expected =
         'Access to the location of the device is denied by the user.';
-    final exception = PermissionDeniedException('');
+    const exception = PermissionDeniedException('');
 
     // Act
     final actual = exception.toString();
@@ -32,8 +32,8 @@ void main() {
 
   test('toString: Should return the message as description', () {
     // Arrange
-    final expected = 'Location permission denied.';
-    final exception = PermissionDeniedException(expected);
+    const expected = 'Location permission denied.';
+    const exception = PermissionDeniedException(expected);
 
     // Act
     final actual = exception.toString();

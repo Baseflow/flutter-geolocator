@@ -9,8 +9,8 @@
 #define ServiceStatus_h
 
 typedef enum {
-    disabled,
-    enabled
+  disabled,
+  enabled
 } ServiceStatus;
 
 #endif /* ServiceStatus_h */

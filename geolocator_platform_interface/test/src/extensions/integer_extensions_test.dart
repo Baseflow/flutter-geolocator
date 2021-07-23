@@ -6,7 +6,7 @@ import 'package:geolocator_platform_interface/src/extensions/extensions.dart';
 void main() {
   test('toLocationPermission: Should return denied when 0 is supplied', () {
     // Arrange
-    final expected = LocationPermission.denied;
+    const expected = LocationPermission.denied;
 
     // Act
     final actual = 0.toLocationPermission();
@@ -18,7 +18,7 @@ void main() {
   test('toLocationPermission: Should return deniedForever when 1 is supplied',
       () {
     // Arrange
-    final expected = LocationPermission.deniedForever;
+    const expected = LocationPermission.deniedForever;
 
     // Act
     final actual = 1.toLocationPermission();
@@ -29,7 +29,7 @@ void main() {
 
   test('toLocationPermission: Should return whileInUse when 2 is supplied', () {
     // Arrange
-    final expected = LocationPermission.whileInUse;
+    const expected = LocationPermission.whileInUse;
 
     // Act
     final actual = 2.toLocationPermission();
@@ -40,7 +40,7 @@ void main() {
 
   test('toLocationPermission: Should return always when 4 is supplied', () {
     // Arrange
-    final expected = LocationPermission.always;
+    const expected = LocationPermission.always;
 
     // Act
     final actual = 3.toLocationPermission();
