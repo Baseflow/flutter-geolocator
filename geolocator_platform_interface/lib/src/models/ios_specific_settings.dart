@@ -1,4 +1,5 @@
 import 'package:geolocator_platform_interface/src/enums/activity_type.dart';
+import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart';
 import 'package:geolocator_platform_interface/src/models/platform_specific_settings.dart';
 
 /// Represents different iOS specific settings with which you can set a value
@@ -12,7 +13,13 @@ class IosSpecificSettings extends PlatformSpecificSettings {
   IosSpecificSettings({
     this.pauseLocationUpdatesAutomatically = false,
     this.activityType = ActivityType.other,
-  });
+    LocationAccuracy accuracy = LocationAccuracy.best,
+    int distanceFilter = 0,
+    int timeInterval = 0,
+  }) : super(
+            accuracy: accuracy,
+            distanceFilter: distanceFilter,
+            timeInterval: timeInterval);
 
   /// Allows the location manager to pause updates to improve battery life
   /// on the target device without sacrificing location data.
@@ -30,7 +37,7 @@ class IosSpecificSettings extends PlatformSpecificSettings {
     return super.toJson()
       ..addAll({
         'pauseLocationUpdatesAutomatically': pauseLocationUpdatesAutomatically,
-        'this.activityType': activityType,
+        'this.activityType': activityType.index,
       });
   }
 }

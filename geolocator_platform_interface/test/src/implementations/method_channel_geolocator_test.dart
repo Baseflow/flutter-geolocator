@@ -521,19 +521,70 @@ void main() {
             channelName: 'flutter.baseflow.com/geolocator',
             method: 'getCurrentPosition',
             result: mockPosition.toJson());
-        const expectedArguments = PlatformSpecificSettings(
-          accuracy: LocationAccuracy.low
-        );
+        const expectedArguments =
+            PlatformSpecificSettings(accuracy: LocationAccuracy.low);
 
         // Act
         final position = await MethodChannelGeolocator().getCurrentPosition(
-          platformSpecificSettings: const PlatformSpecificSettings(
-            accuracy: LocationAccuracy.low
-          )
-        );
+            platformSpecificSettings:
+                const PlatformSpecificSettings(accuracy: LocationAccuracy.low));
 
         // Assert
         expect(position, mockPosition);
+        expect(channel.log, <Matcher>[
+          isMethodCall(
+            'getCurrentPosition',
+            arguments: expectedArguments.toJson(),
+          ),
+        ]);
+      });
+
+      test('Passed iOS specific arguments should match', () async {
+        // Arrange
+        final channel = MethodChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator',
+            method: 'getCurrentPosition',
+            result: mockPosition.toJson());
+
+        var expectedArguments = IosSpecificSettings(
+          pauseLocationUpdatesAutomatically: true,
+          activityType: ActivityType.fitness,
+        );
+
+        // Act
+        await MethodChannelGeolocator().getCurrentPosition(
+            platformSpecificSettings: IosSpecificSettings(
+          pauseLocationUpdatesAutomatically: true,
+          activityType: ActivityType.fitness,
+        ));
+
+        // Assert
+        expect(channel.log, <Matcher>[
+          isMethodCall(
+            'getCurrentPosition',
+            arguments: expectedArguments.toJson(),
+          ),
+        ]);
+      });
+
+      test('Passed Android specific arguments should match', () async {
+        // Arrange
+        final channel = MethodChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator',
+            method: 'getCurrentPosition',
+            result: mockPosition.toJson());
+
+        var expectedArguments =
+            AndroidSpecificSettings(forceLocationManager: true);
+
+        // Act
+        await MethodChannelGeolocator().getCurrentPosition(
+          platformSpecificSettings: AndroidSpecificSettings(
+            forceLocationManager: true,
+          ),
+        );
+
+        // Assert
         expect(channel.log, <Matcher>[
           isMethodCall(
             'getCurrentPosition',
@@ -551,27 +602,21 @@ void main() {
         );
         const expectedFirstArguments = PlatformSpecificSettings(
           accuracy: LocationAccuracy.low,
-          forceAndroidLocationManager: false,
         );
         const expectedSecondArguments = PlatformSpecificSettings(
           accuracy: LocationAccuracy.high,
-          forceAndroidLocationManager: true,
         );
 
         // Act
         final methodChannelGeolocator = MethodChannelGeolocator();
         final firstPosition = await methodChannelGeolocator.getCurrentPosition(
-          platformSpecificSettings: const PlatformSpecificSettings(
-            accuracy: LocationAccuracy.low,
-            forceAndroidLocationManager: false,
-          )
-        );
+            platformSpecificSettings: const PlatformSpecificSettings(
+          accuracy: LocationAccuracy.low,
+        ));
         final secondPosition = await methodChannelGeolocator.getCurrentPosition(
-          platformSpecificSettings: const PlatformSpecificSettings(
-            accuracy: LocationAccuracy.high,
-            forceAndroidLocationManager: true,
-          )
-        );
+            platformSpecificSettings: const PlatformSpecificSettings(
+          accuracy: LocationAccuracy.high,
+        ));
 
         // Assert
         expect(firstPosition, mockPosition);
@@ -656,7 +701,6 @@ void main() {
           await MethodChannelGeolocator().getCurrentPosition(
             platformSpecificSettings: const PlatformSpecificSettings(
               accuracy: LocationAccuracy.low,
-              forceAndroidLocationManager: true,
             ),
             timeLimit: const Duration(milliseconds: 5),
           );
