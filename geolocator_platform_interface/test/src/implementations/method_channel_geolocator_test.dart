@@ -521,13 +521,15 @@ void main() {
             channelName: 'flutter.baseflow.com/geolocator',
             method: 'getCurrentPosition',
             result: mockPosition.toJson());
-        const expectedArguments = LocationOptions(
-          accuracy: LocationAccuracy.low,
+        const expectedArguments = PlatformSpecificSettings(
+          accuracy: LocationAccuracy.low
         );
 
         // Act
         final position = await MethodChannelGeolocator().getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.low,
+          platformSpecificSettings: const PlatformSpecificSettings(
+            accuracy: LocationAccuracy.low
+          )
         );
 
         // Assert
@@ -547,11 +549,11 @@ void main() {
           method: 'getCurrentPosition',
           result: mockPosition.toJson(),
         );
-        const expectedFirstArguments = LocationOptions(
+        const expectedFirstArguments = PlatformSpecificSettings(
           accuracy: LocationAccuracy.low,
           forceAndroidLocationManager: false,
         );
-        const expectedSecondArguments = LocationOptions(
+        const expectedSecondArguments = PlatformSpecificSettings(
           accuracy: LocationAccuracy.high,
           forceAndroidLocationManager: true,
         );
@@ -559,12 +561,16 @@ void main() {
         // Act
         final methodChannelGeolocator = MethodChannelGeolocator();
         final firstPosition = await methodChannelGeolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.low,
-          forceAndroidLocationManager: false,
+          platformSpecificSettings: const PlatformSpecificSettings(
+            accuracy: LocationAccuracy.low,
+            forceAndroidLocationManager: false,
+          )
         );
         final secondPosition = await methodChannelGeolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high,
-          forceAndroidLocationManager: true,
+          platformSpecificSettings: const PlatformSpecificSettings(
+            accuracy: LocationAccuracy.high,
+            forceAndroidLocationManager: true,
+          )
         );
 
         // Assert
@@ -648,8 +654,10 @@ void main() {
 
         try {
           await MethodChannelGeolocator().getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.low,
-            forceAndroidLocationManager: true,
+            platformSpecificSettings: const PlatformSpecificSettings(
+              accuracy: LocationAccuracy.low,
+              forceAndroidLocationManager: true,
+            ),
             timeLimit: const Duration(milliseconds: 5),
           );
 
@@ -968,14 +976,16 @@ void main() {
           channelName: 'flutter.baseflow.com/geolocator_updates',
           stream: streamController.stream,
         );
-        const expectedArguments = LocationOptions(
+        const expectedArguments = PlatformSpecificSettings(
           accuracy: LocationAccuracy.low,
           distanceFilter: 0,
         );
 
         // Act
         final positionStream = MethodChannelGeolocator().getPositionStream(
-            desiredAccuracy: expectedArguments.accuracy,
+            platformSpecificSettings: PlatformSpecificSettings(
+              accuracy: expectedArguments.accuracy,
+            ),
             timeLimit: const Duration(milliseconds: 5));
         final streamQueue = StreamQueue(positionStream);
 

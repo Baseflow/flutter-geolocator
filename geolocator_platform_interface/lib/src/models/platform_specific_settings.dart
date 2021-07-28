@@ -1,16 +1,16 @@
-import '../enums/enums.dart';
+import '../enums/location_accuracy.dart';
 
-/// Represents different options to configure the quality and frequency
-/// of location updates.
-class LocationOptions {
-  /// Initializes a new [LocationOptions] instance with default values.
+/// Represents the abstract [PlatformSpecificSettings] class with which you can
+/// configure platform specific settings.
+class PlatformSpecificSettings {
+  /// Initializes a new [PlatformSpecificSettings] instance with default values.
   ///
   /// The following default values are used:
   /// - accuracy: best
   /// - distanceFilter: 0
   /// - forceAndroidLocationManager: false
   /// - timeInterval: 0
-  const LocationOptions(
+  const PlatformSpecificSettings(
       {this.accuracy = LocationAccuracy.best,
       this.distanceFilter = 0,
       this.forceAndroidLocationManager = false,
@@ -46,11 +46,13 @@ class LocationOptions {
   /// intervals are not supported.
   final int timeInterval;
 
-  /// Serializes the [LocationOptions] to a map message.
-  Map<String, dynamic> toJson() => <String, dynamic>{
-        'accuracy': accuracy.index,
-        'distanceFilter': distanceFilter,
-        'forceAndroidLocationManager': forceAndroidLocationManager,
-        'timeInterval': timeInterval
-      };
+  /// Serializes the [PlatformSpecificSettings] to a map message
+  Map<String, dynamic> toJson() {
+    return {
+      'accuracy': accuracy.index,
+      'distanceFilter': distanceFilter,
+      'forceAndroidLocationManager': forceAndroidLocationManager,
+      'timeInterval': timeInterval,
+    };
+  }
 }

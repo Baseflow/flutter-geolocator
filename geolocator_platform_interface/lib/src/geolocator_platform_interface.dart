@@ -101,8 +101,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   Future<Position> getCurrentPosition({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    bool forceAndroidLocationManager = false,
+    PlatformSpecificSettings? platformSpecificSettings,
     Duration? timeLimit,
   }) {
     throw UnimplementedError('getCurrentPosition() has not been implemented.');
@@ -151,10 +150,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   Stream<Position> getPositionStream({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    int distanceFilter = 0,
-    bool forceAndroidLocationManager = false,
-    int timeInterval = 0,
+    PlatformSpecificSettings? platformSpecificSettings,
     Duration? timeLimit,
   }) {
     throw UnimplementedError('getPositionStream() has not been implemented.');
