@@ -5,11 +5,11 @@ name: geolocator_web
 # events but only for the develop branch
 on:
   push:
-    branches: [ master ]
+    branches: [ master, next ]
     paths:
     - 'geolocator_web/**'
   pull_request:
-    branches: [ master ]
+    branches: [ master, next ]
     paths:
     - 'geolocator_web/**'
 
