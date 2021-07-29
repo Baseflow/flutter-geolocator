@@ -101,8 +101,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   Future<Position> getCurrentPosition({
-    PlatformSpecificSettings? platformSpecificSettings,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) {
     throw UnimplementedError('getCurrentPosition() has not been implemented.');
   }
@@ -139,19 +138,14 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// On Android you can force the use of the Android LocationManager instead
   /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
   /// parameter to true. Using the [timeInterval] you can control the amount of
-  /// time that needs to pass before the next position update is send. The
-  /// [timeLimit] parameter allows you to specify a timeout interval (by
-  /// default no time limit is configured).
+  /// time that needs to pass before the next position update is send.
   ///
-  /// Throws a [TimeoutException] when no location is received within the
-  /// supplied [timeLimit] duration.
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   Stream<Position> getPositionStream({
-    PlatformSpecificSettings? platformSpecificSettings,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) {
     throw UnimplementedError('getPositionStream() has not been implemented.');
   }

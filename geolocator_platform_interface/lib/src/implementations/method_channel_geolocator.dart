@@ -98,23 +98,24 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<Position> getCurrentPosition({
-    PlatformSpecificSettings? platformSpecificSettings,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) async {
     try {
       Future<dynamic> positionFuture;
+
+      var timeLimit = locationSettings?.timeLimit;
 
       if (timeLimit != null) {
         positionFuture = _methodChannel
             .invokeMethod(
               'getCurrentPosition',
-              platformSpecificSettings?.toJson(),
+              locationSettings?.toJson(),
             )
             .timeout(timeLimit);
       } else {
         positionFuture = _methodChannel.invokeMethod(
           'getCurrentPosition',
-          platformSpecificSettings?.toJson(),
+          locationSettings?.toJson(),
         );
       }
 
@@ -150,16 +151,17 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Stream<Position> getPositionStream({
-    PlatformSpecificSettings? platformSpecificSettings,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) {
     if (_positionStream != null) {
       return _positionStream!;
     }
     var originalStream = _eventChannel.receiveBroadcastStream(
-      platformSpecificSettings?.toJson(),
+      locationSettings?.toJson(),
     );
     var positionStream = _wrapStream(originalStream);
+
+    var timeLimit = locationSettings?.timeLimit;
 
     if (timeLimit != null) {
       positionStream = positionStream.timeout(

@@ -1,19 +1,21 @@
 import '../enums/location_accuracy.dart';
 
-/// Represents the abstract [PlatformSpecificSettings] class with which you can
+/// Represents the abstract [LocationSettings] class with which you can
 /// configure platform specific settings.
-class PlatformSpecificSettings {
-  /// Initializes a new [PlatformSpecificSettings] instance with default values.
+class LocationSettings {
+  /// Initializes a new [LocationSettings] instance with default values.
   ///
   /// The following default values are used:
   /// - accuracy: best
   /// - distanceFilter: 0
   /// - forceAndroidLocationManager: false
   /// - timeInterval: 0
-  const PlatformSpecificSettings(
+  /// - timeLimit: 0
+  const LocationSettings(
       {this.accuracy = LocationAccuracy.best,
       this.distanceFilter = 0,
-      this.timeInterval = 0});
+      this.timeInterval = 0,
+      this.timeLimit});
 
   /// Defines the desired accuracy that should be used to determine the
   /// location data.
@@ -33,6 +35,13 @@ class PlatformSpecificSettings {
   /// On iOS this value is ignored since position updates based on time
   /// intervals are not supported.
   final int timeInterval;
+
+  /// The [timeLimit] parameter allows you to specify a timeout interval (by
+  /// default no time limit is configured).
+  ///
+  /// Throws a [TimeoutException] when no location is received within the
+  /// supplied [timeLimit] duration.
+  final Duration? timeLimit;
 
   /// Serializes the [PlatformSpecificSettings] to a map message
   Map<String, dynamic> toJson() {

@@ -522,69 +522,15 @@ void main() {
             method: 'getCurrentPosition',
             result: mockPosition.toJson());
         const expectedArguments =
-            PlatformSpecificSettings(accuracy: LocationAccuracy.low);
+            LocationSettings(accuracy: LocationAccuracy.low);
 
         // Act
         final position = await MethodChannelGeolocator().getCurrentPosition(
-            platformSpecificSettings:
-                const PlatformSpecificSettings(accuracy: LocationAccuracy.low));
+            locationSettings:
+                const LocationSettings(accuracy: LocationAccuracy.low));
 
         // Assert
         expect(position, mockPosition);
-        expect(channel.log, <Matcher>[
-          isMethodCall(
-            'getCurrentPosition',
-            arguments: expectedArguments.toJson(),
-          ),
-        ]);
-      });
-
-      test('Passed iOS specific arguments should match', () async {
-        // Arrange
-        final channel = MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
-            method: 'getCurrentPosition',
-            result: mockPosition.toJson());
-
-        var expectedArguments = IosSpecificSettings(
-          pauseLocationUpdatesAutomatically: true,
-          activityType: ActivityType.fitness,
-        );
-
-        // Act
-        await MethodChannelGeolocator().getCurrentPosition(
-            platformSpecificSettings: IosSpecificSettings(
-          pauseLocationUpdatesAutomatically: true,
-          activityType: ActivityType.fitness,
-        ));
-
-        // Assert
-        expect(channel.log, <Matcher>[
-          isMethodCall(
-            'getCurrentPosition',
-            arguments: expectedArguments.toJson(),
-          ),
-        ]);
-      });
-
-      test('Passed Android specific arguments should match', () async {
-        // Arrange
-        final channel = MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
-            method: 'getCurrentPosition',
-            result: mockPosition.toJson());
-
-        var expectedArguments =
-            AndroidSpecificSettings(forceLocationManager: true);
-
-        // Act
-        await MethodChannelGeolocator().getCurrentPosition(
-          platformSpecificSettings: AndroidSpecificSettings(
-            forceLocationManager: true,
-          ),
-        );
-
-        // Assert
         expect(channel.log, <Matcher>[
           isMethodCall(
             'getCurrentPosition',
@@ -600,21 +546,21 @@ void main() {
           method: 'getCurrentPosition',
           result: mockPosition.toJson(),
         );
-        const expectedFirstArguments = PlatformSpecificSettings(
+        const expectedFirstArguments = LocationSettings(
           accuracy: LocationAccuracy.low,
         );
-        const expectedSecondArguments = PlatformSpecificSettings(
+        const expectedSecondArguments = LocationSettings(
           accuracy: LocationAccuracy.high,
         );
 
         // Act
         final methodChannelGeolocator = MethodChannelGeolocator();
         final firstPosition = await methodChannelGeolocator.getCurrentPosition(
-            platformSpecificSettings: const PlatformSpecificSettings(
+            locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.low,
         ));
         final secondPosition = await methodChannelGeolocator.getCurrentPosition(
-            platformSpecificSettings: const PlatformSpecificSettings(
+            locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
         ));
 
@@ -699,10 +645,10 @@ void main() {
 
         try {
           await MethodChannelGeolocator().getCurrentPosition(
-            platformSpecificSettings: const PlatformSpecificSettings(
+            locationSettings: const LocationSettings(
               accuracy: LocationAccuracy.low,
+              timeLimit: Duration(milliseconds: 10),
             ),
-            timeLimit: const Duration(milliseconds: 5),
           );
 
           fail('Expected a TimeoutException and should not reach here.');
@@ -1020,17 +966,18 @@ void main() {
           channelName: 'flutter.baseflow.com/geolocator_updates',
           stream: streamController.stream,
         );
-        const expectedArguments = PlatformSpecificSettings(
+        const expectedArguments = LocationSettings(
           accuracy: LocationAccuracy.low,
           distanceFilter: 0,
         );
 
         // Act
         final positionStream = MethodChannelGeolocator().getPositionStream(
-            platformSpecificSettings: PlatformSpecificSettings(
-              accuracy: expectedArguments.accuracy,
-            ),
-            timeLimit: const Duration(milliseconds: 5));
+          locationSettings: LocationSettings(
+            accuracy: expectedArguments.accuracy,
+            timeLimit: const Duration(milliseconds: 5),
+          ),
+        );
         final streamQueue = StreamQueue(positionStream);
 
         streamController.add(mockPosition.toJson());
