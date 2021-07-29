@@ -132,12 +132,12 @@ class Geolocator {
   static Stream<ServiceStatus> getServiceStatusStream() =>
       GeolocatorPlatform.instance.getServiceStatusStream();
 
-  /// Not supported on Android and will always return 
+  /// Not supported on Android and will always return
   /// [LocationAccuracyStatus.precise].
   static Future<LocationAccuracyStatus> getLocationAccuracy() =>
-      Future.value(LocationAccuracyStatus.precise);      
+      Future.value(LocationAccuracyStatus.precise);
 
-  /// Not supported on Android and will always return 
+  /// Not supported on Android and will always return
   /// [LocationAccuracyStatus.precise].
   static Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
     required String purposeKey,
