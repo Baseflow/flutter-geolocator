@@ -1,7 +1,7 @@
-name: geolocator_android
-description: Geolocation plugin for Flutter. This plugin provides the Android implementation for the geolocator.
+name: geolocator_ios
+description: Geolocation iOS plugin for Flutter. This plugin provides the iOS implementation for the geolocator.
 version: 1.0.0
-repository: https://github.com/Baseflow/flutter-geolocator/tree/master/geolocator_android
+repository: https://github.com/Baseflow/flutter-geolocator/tree/master/geolocator_ios
 issue_tracker: https://github.com/Baseflow/flutter-geolocator/issues?q=is%3Aissue+is%3Aopen
 
 environment:
@@ -11,8 +11,7 @@ environment:
 flutter:
   plugin:
     platforms:
-      android:
-        package: com.baseflow.geolocator
+      ios:
         pluginClass: GeolocatorPlugin
 
 dependencies:
