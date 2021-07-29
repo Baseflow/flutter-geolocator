@@ -1,3 +1,7 @@
+## 7.4.0
+
+- Moved to fully federated architecture (moved Android and iOS implementations into separate packages, geolocator_android and geolocator_apple respectivily).
+
 ## 7.3.1
 
 - Android 10 and above: Fixed a bug causing the `requestPermission` method failing to show a prompt when requesting for background location permission.

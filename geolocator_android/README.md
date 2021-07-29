@@ -1,12 +1,12 @@
-# geolocator_web
+# geolocator_android
 
-[![pub package](https://img.shields.io/pub/v/geolocator.svg)](https://pub.dartlang.org/packages/geolocator) ![Build status](https://github.com/Baseflow/flutter-geolocator/workflows/geolocator_web/badge.svg?branch=master) [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
+[![pub package](https://img.shields.io/pub/v/geolocator.svg)](https://pub.dartlang.org/packages/geolocator) ![Build status](https://github.com/Baseflow/flutter-geolocator/workflows/geolocator_android/badge.svg?branch=master) [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
 
-The official web implementation of the [geolocator](https://pub.dev/packages/geolocator) plugin by [Baseflow](https://baseflow.com).
+The official Android implementation of the [geolocator](https://pub.dev/packages/geolocator) plugin by [Baseflow](https://baseflow.com).
 
 ## Usage
 
-Since version 6.2.0 of the [geolocator](https://pub.dev/packages/geolocator) plugin this is the endorsed web implementation. This means it will automatically be added to your dependencies when you depend on `geolocator: ^6.2.0` in your applications pubspec.yaml.
+Since version 7.4.0 of the [geolocator](https://pub.dev/packages/geolocator) plugin this is the endorsed Android implementation. This means it will automatically be added to your dependencies when you depend on `geolocator: ^7.4.0` in your applications pubspec.yaml.
 
 More detailed instructions on using the API can be found in the [README.md](../geolocator/README.md) of the [geolocator](https://pub.dev/packages/geolocator) package.
 
