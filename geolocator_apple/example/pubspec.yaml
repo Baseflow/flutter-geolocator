@@ -1,4 +1,4 @@
-name: geolocator_ios_example
+name: geolocator_apple_example
 description: Demonstrates how to use the geolocator_ios plugin.
 
 # The following line prevents the package from being accidentally published to
@@ -16,9 +16,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  geolocator_ios:
+  geolocator_apple:
     # When depending on this package from a real application you should use:
-    #   geolocator_ios: ^x.y.z
+    #   geolocator_apple: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.

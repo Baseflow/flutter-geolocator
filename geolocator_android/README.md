@@ -6,7 +6,7 @@ The official Android implementation of the [geolocator](https://pub.dev/packages
 
 ## Usage
 
-Since version 8.0.0 of the [geolocator](https://pub.dev/packages/geolocator) plugin this is the endorsed Android implementation. This means it will automatically be added to your dependencies when you depend on `geolocator: ^8.0.0` in your applications pubspec.yaml.
+Since version 7.4.0 of the [geolocator](https://pub.dev/packages/geolocator) plugin this is the endorsed Android implementation. This means it will automatically be added to your dependencies when you depend on `geolocator: ^7.4.0` in your applications pubspec.yaml.
 
 More detailed instructions on using the API can be found in the [README.md](../geolocator/README.md) of the [geolocator](https://pub.dev/packages/geolocator) package.
 

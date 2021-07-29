@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator_android/geolocator.dart';
+import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
@@ -37,7 +37,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       'Permission denied forever.';
   static const String _kPermissionGrantedMessage = 'Permission granted.';
 
-  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+  final GeolocatorPlatform geolocatorAndroid = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
@@ -186,7 +186,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return;
     }
 
-    final position = await _geolocatorPlatform.getCurrentPosition();
+    final position = await geolocatorAndroid.getCurrentPosition();
     _updatePositionList(
       _PositionItemType.position,
       position.toString(),
@@ -198,7 +198,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     LocationPermission permission;
 
     // Test if location services are enabled.
-    serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
+    serviceEnabled = await geolocatorAndroid.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
@@ -211,9 +211,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return false;
     }
 
-    permission = await _geolocatorPlatform.checkPermission();
+    permission = await geolocatorAndroid.checkPermission();
     if (permission == LocationPermission.denied) {
-      permission = await _geolocatorPlatform.requestPermission();
+      permission = await geolocatorAndroid.requestPermission();
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
@@ -262,7 +262,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleServiceStatusStream() {
     if (_serviceStatusStreamSubscription == null) {
-      final serviceStatusStream = _geolocatorPlatform.getServiceStatusStream();
+      final serviceStatusStream = geolocatorAndroid.getServiceStatusStream();
       _serviceStatusStreamSubscription =
           serviceStatusStream.handleError((error) {
         _serviceStatusStreamSubscription?.cancel();
@@ -284,7 +284,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      final positionStream = _geolocatorPlatform.getPositionStream();
+      final positionStream = geolocatorAndroid.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
@@ -327,7 +327,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLastKnownPosition() async {
-    final position = await _geolocatorPlatform.getLastKnownPosition();
+    final position = await geolocatorAndroid.getLastKnownPosition();
     if (position != null) {
       _updatePositionList(
         _PositionItemType.position,
@@ -342,12 +342,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLocationAccuracy() async {
-    final status = await _geolocatorPlatform.getLocationAccuracy();
+    final status = await geolocatorAndroid.getLocationAccuracy();
     _handleLocationAccuracyStatus(status);
   }
 
   void _requestTemporaryFullAccuracy() async {
-    final status = await _geolocatorPlatform.requestTemporaryFullAccuracy(
+    final status = await geolocatorAndroid.requestTemporaryFullAccuracy(
       purposeKey: "TemporaryPreciseAccuracy",
     );
     _handleLocationAccuracyStatus(status);
@@ -369,7 +369,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _openAppSettings() async {
-    final opened = await _geolocatorPlatform.openAppSettings();
+    final opened = await geolocatorAndroid.openAppSettings();
     String displayValue;
 
     if (opened) {
@@ -385,7 +385,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _openLocationSettings() async {
-    final opened = await _geolocatorPlatform.openLocationSettings();
+    final opened = await geolocatorAndroid.openLocationSettings();
     String displayValue;
 
     if (opened) {
