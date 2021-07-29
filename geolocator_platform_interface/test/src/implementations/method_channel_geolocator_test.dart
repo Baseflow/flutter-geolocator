@@ -646,7 +646,6 @@ void main() {
         try {
           await MethodChannelGeolocator().getCurrentPosition(
             locationSettings: const LocationSettings(
-              accuracy: LocationAccuracy.low,
               timeLimit: Duration(milliseconds: 10),
             ),
           );
