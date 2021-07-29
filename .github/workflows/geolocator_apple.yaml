@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: geolocator_ios
+name: geolocator_apple
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the develop branch
@@ -8,11 +8,11 @@ on:
   push:
     branches: [ master, next ]
     paths:
-    - 'geolocator_ios/**'
+    - 'geolocator_apple/**'
   pull_request:
     branches: [ master, next ]
     paths:
-    - 'geolocator_ios/**'
+    - 'geolocator_apple/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      source-directory: ./geolocator_ios 
+      source-directory: ./geolocator_apple 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      source-directory: ./geolocator_ios
+      source-directory: ./geolocator_apple
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -81,8 +81,8 @@ jobs:
     runs-on: macos-latest
 
     env:
-      source-directory: ./geolocator_ios 
-      example-directory: ./geolocator_ios/example
+      source-directory: ./geolocator_apple 
+      example-directory: ./geolocator_apple/example
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -103,38 +103,3 @@ jobs:
       - name: Run iOS build
         run: flutter build ios --release --no-codesign
         working-directory: ${{env.example-directory}}
-
-  tests:
-    name: Unit-tests
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    env:
-      source-directory: ./geolocator_ios 
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      
-      # Make sure the stable version of Flutter is available
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: 'stable'
-
-      # Download all Flutter packages
-      - name: Download dependencies
-        run: flutter pub get
-        working-directory: ${{env.source-directory}}
-      
-      # Run all unit-tests with code coverage
-      - name: Run unit tests
-        run: flutter test --coverage
-        working-directory: ${{env.source-directory}}
-
-      # Upload code coverage information
-      - uses: codecov/codecov-action@v1
-        with:
-          file: ${{env.source-directory}}/coverage/lcov.info # optional
-          name: Geolocator (App Facing Package) # optional
-          fail_ci_if_error: true

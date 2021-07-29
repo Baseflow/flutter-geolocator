@@ -1,6 +1,6 @@
-# geolocator_example
+# geolocator_android_example
 
-Demonstrates how to use the geolocator plugin.
+Demonstrates how to use the geolocator_android plugin.
 
 ## Getting Started
 

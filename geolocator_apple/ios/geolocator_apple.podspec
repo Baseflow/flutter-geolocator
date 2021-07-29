@@ -3,11 +3,11 @@
 # Run `pod lib lint geolocator.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'geolocator_ios'
+  s.name             = 'geolocator_apple'
   s.version          = '1.0.0'
-  s.summary          = 'Geolocation iOS plugin for Flutter.'
+  s.summary          = 'Geolocation Apple plugin for Flutter.'
   s.description      = <<-DESC
-  Geolocation iOS plugin for Flutter. This plugin provides the iOS implementation for the geolocator plugin.
+  Geolocation Apple plugin for Flutter. This plugin provides the Apple implementation for the geolocator plugin.
                        DESC
   s.homepage         = 'http://github.com/baseflow/flutter-geolocator'
   s.license          = { :file => '../LICENSE' }

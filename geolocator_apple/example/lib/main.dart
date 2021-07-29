@@ -3,7 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator_ios/geolocator.dart';
+import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
@@ -37,7 +37,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       'Permission denied forever.';
   static const String _kPermissionGrantedMessage = 'Permission granted.';
 
-  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+  final GeolocatorPlatform geolocatorApple = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
@@ -186,7 +186,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return;
     }
 
-    final position = await _geolocatorPlatform.getCurrentPosition();
+    final position = await geolocatorApple.getCurrentPosition();
     _updatePositionList(
       _PositionItemType.position,
       position.toString(),
@@ -198,7 +198,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     LocationPermission permission;
 
     // Test if location services are enabled.
-    serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
+    serviceEnabled = await geolocatorApple.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
@@ -211,9 +211,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return false;
     }
 
-    permission = await _geolocatorPlatform.checkPermission();
+    permission = await geolocatorApple.checkPermission();
     if (permission == LocationPermission.denied) {
-      permission = await _geolocatorPlatform.requestPermission();
+      permission = await geolocatorApple.requestPermission();
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
@@ -262,7 +262,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleServiceStatusStream() {
     if (_serviceStatusStreamSubscription == null) {
-      final serviceStatusStream = _geolocatorPlatform.getServiceStatusStream();
+      final serviceStatusStream = geolocatorApple.getServiceStatusStream();
       _serviceStatusStreamSubscription =
           serviceStatusStream.handleError((error) {
         _serviceStatusStreamSubscription?.cancel();
@@ -284,7 +284,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      final positionStream = _geolocatorPlatform.getPositionStream();
+      final positionStream = geolocatorApple.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
@@ -327,7 +327,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLastKnownPosition() async {
-    final position = await _geolocatorPlatform.getLastKnownPosition();
+    final position = await geolocatorApple.getLastKnownPosition();
     if (position != null) {
       _updatePositionList(
         _PositionItemType.position,
@@ -342,12 +342,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLocationAccuracy() async {
-    final status = await _geolocatorPlatform.getLocationAccuracy();
+    final status = await geolocatorApple.getLocationAccuracy();
     _handleLocationAccuracyStatus(status);
   }
 
   void _requestTemporaryFullAccuracy() async {
-    final status = await _geolocatorPlatform.requestTemporaryFullAccuracy(
+    final status = await geolocatorApple.requestTemporaryFullAccuracy(
       purposeKey: "TemporaryPreciseAccuracy",
     );
     _handleLocationAccuracyStatus(status);
@@ -369,7 +369,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _openAppSettings() async {
-    final opened = await _geolocatorPlatform.openAppSettings();
+    final opened = await geolocatorApple.openAppSettings();
     String displayValue;
 
     if (opened) {
@@ -385,7 +385,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _openLocationSettings() async {
-    final opened = await _geolocatorPlatform.openLocationSettings();
+    final opened = await geolocatorApple.openLocationSettings();
     String displayValue;
 
     if (opened) {
