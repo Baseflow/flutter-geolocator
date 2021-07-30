@@ -1,2 +1,2 @@
-import 'src/types/activity_type.dart';
-import 'src/types/apple_settings.dart';
+export 'src/types/activity_type.dart';
+export 'src/types/apple_settings.dart';
