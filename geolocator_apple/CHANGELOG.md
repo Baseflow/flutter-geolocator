@@ -1,3 +1,5 @@
+# TODO: Path reference should be removed from pubspec.yaml
+
 # 1.1.0
 
 - Added the [ActivityType] enum needed for the `pauseLocationUpdatesAutomatically` property.
