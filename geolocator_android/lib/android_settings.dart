@@ -2,20 +2,20 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 
 /// Represents different Android specific settings with which you can set a value
 /// other then the default value of the setting.
-class AndroidOptions extends LocationOptions {
+class AndroidSettings extends LocationSettings {
   /// Initializes a new [AndroidSpecificSettings] instance with default values.
   ///
   /// The following default values are used:
   /// - forceLocationManager: false
-  AndroidOptions({
+  AndroidSettings({
     this.forceLocationManager = false,
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 0,
-    int timeInterval = 0,
+    Duration? intervalDuration,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
-            timeInterval: timeInterval);
+            intervalDuration: intervalDuration);
 
   /// Forces the Geolocator plugin to use the legacy LocationManager instead of
   /// the FusedLocationProviderClient (Android only).
