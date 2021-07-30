@@ -55,9 +55,11 @@
       
       CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
       CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
+      BOOL pausesLocationUpdatesAutomatically = [[arguments objectForKey: @"iosPausesLocationUpdatesAutomatically"] boolValue];
       
       [[weakSelf geolocationHandler] startListeningWithDesiredAccuracy:accuracy
                                                     distanceFilter:distanceFilter
+                                                    pausesLocationUpdatesAutomatically: pausesLocationUpdatesAutomatically
                                                      resultHandler:^(CLLocation *location) {
           [weakSelf onLocationDidChange: location];
       }

@@ -14,6 +14,7 @@ class LocationOptions {
       {this.accuracy = LocationAccuracy.best,
       this.distanceFilter = 0,
       this.forceAndroidLocationManager = false,
+      this.iosPausesLocationUpdatesAutomatically = false,
       this.timeInterval = 0});
 
   /// Defines the desired accuracy that should be used to determine the
@@ -39,6 +40,10 @@ class LocationOptions {
   /// set this property to true.
   final bool forceAndroidLocationManager;
 
+  /// Allowing the location manager to pause updates can improve battery life on
+  /// the target device without sacrificing location data.
+  final bool iosPausesLocationUpdatesAutomatically;
+
   /// The desired interval for active location updates, in milliseconds
   /// (Android only).
   ///
@@ -51,6 +56,7 @@ class LocationOptions {
         'accuracy': accuracy.index,
         'distanceFilter': distanceFilter,
         'forceAndroidLocationManager': forceAndroidLocationManager,
+        'iosPausesLocationUpdatesAutomatically': iosPausesLocationUpdatesAutomatically,
         'timeInterval': timeInterval
       };
 }

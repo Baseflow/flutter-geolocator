@@ -114,6 +114,7 @@ class Geolocator {
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
+    bool iosPausesLocationUpdatesAutomatically = false,
     Duration? intervalDuration,
     Duration? timeLimit,
   }) =>
@@ -121,6 +122,7 @@ class Geolocator {
         desiredAccuracy: desiredAccuracy,
         distanceFilter: distanceFilter,
         forceAndroidLocationManager: forceAndroidLocationManager,
+        iosPausesLocationUpdatesAutomatically: iosPausesLocationUpdatesAutomatically,
         timeInterval: intervalDuration?.inMilliseconds ?? 0,
         timeLimit: timeLimit,
       );

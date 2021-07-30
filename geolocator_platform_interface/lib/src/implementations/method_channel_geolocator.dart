@@ -160,6 +160,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     bool forceAndroidLocationManager = false,
+    bool iosPausesLocationUpdatesAutomatically = false,
     int timeInterval = 0,
     Duration? timeLimit,
   }) {
@@ -167,6 +168,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       accuracy: desiredAccuracy,
       distanceFilter: distanceFilter,
       forceAndroidLocationManager: forceAndroidLocationManager,
+      iosPausesLocationUpdatesAutomatically: iosPausesLocationUpdatesAutomatically,
       timeInterval: timeInterval,
     );
     if (_positionStream != null) {

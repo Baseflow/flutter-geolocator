@@ -123,7 +123,8 @@
     
     [geolocationHandler startListeningWithDesiredAccuracy:accuracy
                                            distanceFilter:distanceFilter
-                                            resultHandler:^(CLLocation *location) {
+                                           pausesLocationUpdatesAutomatically:NO
+                                           resultHandler:^(CLLocation *location) {
       [geolocationHandler stopListening];
       
       result([LocationMapper toDictionary:location]);
