@@ -17,7 +17,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  
+  # TODO: Path reference should be removed
   geolocator_platform_interface:
     path: ../geolocator_platform_interface
   
