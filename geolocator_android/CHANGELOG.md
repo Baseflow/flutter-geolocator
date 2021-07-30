@@ -1,5 +1,3 @@
-# TODO: Path references should be removed from the pubspec.yaml
-
 ## 1.1.0
 
 - Added the [AndroidOptions] class to the `lib` directory.
