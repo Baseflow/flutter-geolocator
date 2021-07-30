@@ -8,13 +8,12 @@ class LocationSettings {
   /// The following default values are used:
   /// - accuracy: best
   /// - distanceFilter: 0
-  /// - forceAndroidLocationManager: false
   /// - timeInterval: 0
   /// - timeLimit: 0
   const LocationSettings(
       {this.accuracy = LocationAccuracy.best,
       this.distanceFilter = 0,
-      this.timeInterval = 0,
+      this.intervalDuration,
       this.timeLimit});
 
   /// Defines the desired accuracy that should be used to determine the
@@ -34,7 +33,7 @@ class LocationSettings {
   ///
   /// On iOS this value is ignored since position updates based on time
   /// intervals are not supported.
-  final int timeInterval;
+  final Duration? intervalDuration;
 
   /// The [timeLimit] parameter allows you to specify a timeout interval (by
   /// default no time limit is configured).
@@ -48,7 +47,7 @@ class LocationSettings {
     return {
       'accuracy': accuracy.index,
       'distanceFilter': distanceFilter,
-      'timeInterval': timeInterval,
+      'timeInterval': intervalDuration?.inMilliseconds ?? 0,
     };
   }
 }
