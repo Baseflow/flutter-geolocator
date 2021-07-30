@@ -1,16 +1,15 @@
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
-
 import 'activity_type.dart';
 
 /// Represents different iOS specific settings with which you can set a value
 /// other then the default value of the setting.
-class IosSpecificSettings extends PlatformSpecificSettings {
+class IosOptions extends LocationOptions {
   /// Initializes a new [IosSpecificSettings] instance with default values.
   ///
   /// The following default values are used:
   /// - pauseLocationUpdatesAutomatically: false
   /// - activityType: ActivityType.other
-  IosSpecificSettings({
+  IosOptions({
     this.pauseLocationUpdatesAutomatically = false,
     this.activityType = ActivityType.other,
     LocationAccuracy accuracy = LocationAccuracy.best,
