@@ -3,22 +3,22 @@ import 'activity_type.dart';
 
 /// Represents different iOS specific settings with which you can set a value
 /// other then the default value of the setting.
-class IosOptions extends LocationOptions {
+class AppleSettings extends LocationSettings {
   /// Initializes a new [IosSpecificSettings] instance with default values.
   ///
   /// The following default values are used:
   /// - pauseLocationUpdatesAutomatically: false
   /// - activityType: ActivityType.other
-  IosOptions({
+  AppleSettings({
     this.pauseLocationUpdatesAutomatically = false,
     this.activityType = ActivityType.other,
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 0,
-    int timeInterval = 0,
+    Duration? timeInterval,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
-            timeInterval: timeInterval);
+            intervalDuration: timeInterval);
 
   /// Allows the location manager to pause updates to improve battery life
   /// on the target device without sacrificing location data.

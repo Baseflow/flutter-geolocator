@@ -8,6 +8,7 @@
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
 #import "Utils/LocationMapper.h"
+#import "Utils/ActivityTypeMapper.h"
 #import "Handlers/LocationAccuracyHandler.h"
 #import "Handlers/LocationServiceStreamHandler.h"
 
@@ -119,10 +120,14 @@
     
     CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
     CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
+      NSNumber* pauseLocationUpdatesAutomatically = [NSNumber numberWithBool:(bool)arguments[@"pauseLocationUpdatesAutomatically"]];
+      CLActivityType activityType = [ActivityTypeMapper toCLActivityType:(NSNumber *)arguments[@"activityType"]];
     GeolocationHandler *geolocationHandler = [[GeolocationHandler alloc] init];
     
     [geolocationHandler startListeningWithDesiredAccuracy:accuracy
                                            distanceFilter:distanceFilter
+                        pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically
+                                             activityType:activityType
                                             resultHandler:^(CLLocation *location) {
       [geolocationHandler stopListening];
       
