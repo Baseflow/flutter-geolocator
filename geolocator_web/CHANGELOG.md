@@ -1,3 +1,6 @@
+## 2.1.0
+- Made changes to the implementation of the `getCurrentPosition` and `getPositionStream` method. 
+
 ## 2.0.6
 
 - Fixes a bug where the `LocationAccuracy.reduced` accuracy value is treated as high accuracy on web.
