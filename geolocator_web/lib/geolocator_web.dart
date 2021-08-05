@@ -78,13 +78,11 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   @override
   Future<Position> getCurrentPosition({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    bool forceAndroidLocationManager = false,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) async {
     final result = await _geolocation.getCurrentPosition(
-      enableHighAccuracy: _enableHighAccuracy(desiredAccuracy),
-      timeout: timeLimit,
+      enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
+      timeout: locationSettings?.timeLimit ?? const Duration(seconds: 0),
     );
 
     return result;
@@ -92,21 +90,18 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   @override
   Stream<Position> getPositionStream({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    int distanceFilter = 0,
-    bool forceAndroidLocationManager = false,
-    int timeInterval = 0,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) {
     Position? previousPosition;
 
     return _geolocation
         .watchPosition(
-      enableHighAccuracy: _enableHighAccuracy(desiredAccuracy),
-      timeout: timeLimit,
+      enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
+      timeout: locationSettings?.timeLimit ?? const Duration(seconds: 0),
     )
         .skipWhile((geoposition) {
-      if (distanceFilter == 0) {
+      if (locationSettings?.distanceFilter == 0 ||
+          locationSettings?.distanceFilter == null) {
         return false;
       }
 
@@ -123,7 +118,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       }
 
       previousPosition = geoposition;
-      return distance < distanceFilter;
+      return distance < locationSettings!.distanceFilter;
     });
   }
 
@@ -134,7 +129,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   Future<bool> openLocationSettings() =>
       throw _unsupported('openLocationSettings');
 
-  bool _enableHighAccuracy(LocationAccuracy accuracy) {
+  bool _enableHighAccuracy(LocationAccuracy? accuracy) {
+    if (accuracy == null) {
+      return false;
+    }
     switch (accuracy) {
       case LocationAccuracy.lowest:
       case LocationAccuracy.low:
