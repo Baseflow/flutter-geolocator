@@ -12,10 +12,12 @@ class AndroidSettings extends LocationSettings {
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     Duration? intervalDuration,
+    Duration? timeLimit,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
-            intervalDuration: intervalDuration);
+            intervalDuration: intervalDuration,
+            timeLimit: timeLimit);
 
   /// Forces the Geolocator plugin to use the legacy LocationManager instead of
   /// the FusedLocationProviderClient (Android only).
