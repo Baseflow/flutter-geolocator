@@ -20,8 +20,8 @@ typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
 
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
-pauseLocationUpdatesAutomatically:(NSNumber* _Nullable)pauseLocationUpdatesAutomatically
-activityType:(CLActivityType)activityType
+        pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
+                             activityType:(CLActivityType)activityType
                             resultHandler:(GeolocatorResult _Nonnull)resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler;
 

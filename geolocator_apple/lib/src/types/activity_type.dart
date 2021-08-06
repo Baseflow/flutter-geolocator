@@ -1,4 +1,4 @@
-/// Represents the possible iOS activity types
+/// Represents the possible iOS activity types.
 enum ActivityType {
   /// The location manager is being used specifically during vehicular
   /// navigation to track location changes to the automobile.

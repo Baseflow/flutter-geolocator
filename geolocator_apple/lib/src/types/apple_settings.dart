@@ -4,7 +4,7 @@ import 'activity_type.dart';
 /// Represents different iOS specific settings with which you can set a value
 /// other then the default value of the setting.
 class AppleSettings extends LocationSettings {
-  /// Initializes a new [IosSpecificSettings] instance with default values.
+  /// Initializes a new [AppleSettings] instance with default values.
   ///
   /// The following default values are used:
   /// - pauseLocationUpdatesAutomatically: false

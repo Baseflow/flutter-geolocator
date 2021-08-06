@@ -37,12 +37,7 @@
     locationManager.desiredAccuracy = desiredAccuracy;
     locationManager.distanceFilter = distanceFilter == 0 ? kCLDistanceFilterNone : distanceFilter;
     locationManager.activityType = activityType;
-    
-    if (!(pauseLocationUpdatesAutomatically == nil)) {
-        if ([pauseLocationUpdatesAutomatically boolValue]) {
-            locationManager.pausesLocationUpdatesAutomatically = true;
-        }
-    }
+    locationManager.pausesLocationUpdatesAutomatically = pauseLocationUpdatesAutomatically;
     
     if (@available(iOS 9.0, *)) {
         locationManager.allowsBackgroundLocationUpdates = [GeolocationHandler shouldEnableBackgroundLocationUpdates];

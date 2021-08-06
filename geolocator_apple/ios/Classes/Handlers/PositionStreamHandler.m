@@ -56,12 +56,12 @@
       
       CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
       CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
-      NSNumber* pauseLocationUpdatesAutomatically = [NSNumber numberWithBool:(bool)arguments[@"pauseLocationUpdatesAutomatically"]];
+      NSNumber* pauseLocationUpdatesAutomatically = arguments[@"pauseLocationUpdatesAutomatically"];
       CLActivityType activityType = [ActivityTypeMapper toCLActivityType:(NSNumber *)arguments[@"activityType"]];
       
       [[weakSelf geolocationHandler] startListeningWithDesiredAccuracy:accuracy
                                                     distanceFilter:distanceFilter
-                                     pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically
+                                     pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically && [pauseLocationUpdatesAutomatically boolValue]
                                                           activityType:activityType
        
                                                      resultHandler:^(CLLocation *location) {

@@ -12,7 +12,9 @@
 @implementation ActivityTypeMapper
 
 + (CLActivityType)toCLActivityType:(NSNumber *)value {
-    if(!value) return CLActivityTypeOther;
+    if(!value) {
+        return CLActivityTypeOther;
+    }
     switch(value.intValue) {
         case 0:
             return CLActivityTypeAutomotiveNavigation;
