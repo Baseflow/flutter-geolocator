@@ -5,11 +5,11 @@ void main() {
   test('toString: Should return the default description when message is null',
       () {
     // Arrange
-    final expected =
+    const expected =
         'Activity is missing. This might happen when running a certain '
         'function from the background that requires a UI element (e.g. '
         'requesting permissions or enabling the location services).';
-    final exception = ActivityMissingException(null);
+    const exception = ActivityMissingException(null);
 
     // Act
     final actual = exception.toString();
@@ -21,11 +21,11 @@ void main() {
   test('toString: Should return the default description when message is empty',
       () {
     // Arrange
-    final expected =
+    const expected =
         'Activity is missing. This might happen when running a certain '
         'function from the background that requires a UI element (e.g. '
         'requesting permissions or enabling the location services).';
-    final exception = ActivityMissingException('');
+    const exception = ActivityMissingException('');
 
     // Act
     final actual = exception.toString();
@@ -36,8 +36,8 @@ void main() {
 
   test('toString: Should return the message as description', () {
     // Arrange
-    final expected = 'Dummy error message.';
-    final exception = ActivityMissingException(expected);
+    const expected = 'Dummy error message.';
+    const exception = ActivityMissingException(expected);
 
     // Act
     final actual = exception.toString();

@@ -82,7 +82,8 @@ void main() {
 
       // Act & Assert
       expect(
-        geolocatorPlatform.requestTemporaryFullAccuracy,
+        geolocatorPlatform.requestTemporaryFullAccuracy(
+            purposeKey: 'purposeKey'),
         throwsUnimplementedError,
       );
     });
@@ -202,8 +203,8 @@ void main() {
 
   group('distanceBetween: When requesting the distance between points', () {
     test('the distance should be zero between the same points', () {
-      final latitude = 52.561270;
-      final longitude = 5.639382;
+      const latitude = 52.561270;
+      const longitude = 5.639382;
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
       final distance = geolocatorPlatform.distanceBetween(
@@ -213,10 +214,10 @@ void main() {
     });
 
     test('the distance should always be non negative', () {
-      final startLatitude = 52.561270;
-      final startLongitude = 5.639382;
-      final endLatitude = 52.157296;
-      final endLongitude = 5.3851278;
+      const startLatitude = 52.561270;
+      const startLongitude = 5.639382;
+      const endLatitude = 52.157296;
+      const endLongitude = 5.3851278;
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
       final firstDistance = geolocatorPlatform.distanceBetween(
@@ -230,11 +231,11 @@ void main() {
     });
 
     test('the distance should be in range', () {
-      final startLatitude = 52.1058731;
-      final startLongitude = 5.9076873;
-      final endLatitude = 52.157296;
-      final endLongitude = 5.3851278;
-      final expectedDistance = 36164.15150480236;
+      const startLatitude = 52.1058731;
+      const startLongitude = 5.9076873;
+      const endLatitude = 52.157296;
+      const endLongitude = 5.3851278;
+      const expectedDistance = 36164.15150480236;
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
       final distance = geolocatorPlatform.distanceBetween(
@@ -249,8 +250,8 @@ void main() {
 
   group('bearingBetween: When requesting the bearing between points', () {
     test('the same points the bearing should be 0', () async {
-      final latitude = 56.0;
-      final longitude = 5.6;
+      const latitude = 56.0;
+      const longitude = 5.6;
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
       final bearing = geolocatorPlatform.bearingBetween(
@@ -268,6 +269,7 @@ void main() {
       final startLongitude = 0.0;
       final endLatitude = -90.0;
       final endLongitude = 0.0;
+
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
       final bearing = geolocatorPlatform.bearingBetween(
@@ -281,10 +283,10 @@ void main() {
     });
 
     test('the South pole to the North pole bearing should be 0', () async {
-      final startLatitude = -90.0;
-      final startLongitude = 0.0;
-      final endLatitude = 90.0;
-      final endLongitude = 0.0;
+      const startLatitude = -90.0;
+      const startLongitude = 0.0;
+      const endLatitude = 90.0;
+      const endLongitude = 0.0;
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
       final bearing = geolocatorPlatform.bearingBetween(
@@ -298,10 +300,10 @@ void main() {
     });
 
     test('the West to the East bearing should be 90', () async {
-      final startLatitude = 0.0;
-      final startLongitude = 180.0;
-      final endLatitude = 0.0;
-      final endLongitude = -180.0;
+      const startLatitude = 0.0;
+      const startLongitude = 180.0;
+      const endLatitude = 0.0;
+      const endLongitude = -180.0;
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
       final bearing = geolocatorPlatform.bearingBetween(
@@ -315,10 +317,10 @@ void main() {
     });
 
     test('the East to the West bearing should be -90', () async {
-      final startLatitude = 0.0;
-      final startLongitude = -180.0;
-      final endLatitude = 0.0;
-      final endLongitude = 180.0;
+      const startLatitude = 0.0;
+      const startLongitude = -180.0;
+      const endLatitude = 0.0;
+      const endLongitude = 180.0;
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 
       final bearing = geolocatorPlatform.bearingBetween(

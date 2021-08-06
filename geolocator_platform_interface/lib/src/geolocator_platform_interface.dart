@@ -22,7 +22,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Constructs a GeolocatorPlatform.
   GeolocatorPlatform() : super(token: _token);
 
-  static final Object _token = const Object();
+  static const Object _token = Object();
 
   static GeolocatorPlatform _instance = MethodChannelGeolocator();
 
@@ -203,10 +203,17 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// [LocationAccuracyStatus.precise] will also be returned. On other platforms
   /// an PlatformException will be thrown.
   ///
+  /// The `required` property [purposeKey] should correspond with the [key]
+  /// value set in the [NSLocationTemporaryUsageDescriptionDictionary]
+  /// dictionary, which should be added to the `Info.plist` as stated in the
+  /// [documentation](https://developer.apple.com/documentation/bundleresources/information_property_list/nslocationtemporaryusagedescriptiondictionary).
+  ///
   /// Throws a [PermissionDefinitionsNotFoundException] when the key
   /// `NSLocationTemporaryUsageDescriptionDictionary` has not been set in the
   /// `Infop.list`.
-  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy() async {
+  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
+    required String purposeKey,
+  }) async {
     throw UnimplementedError(
         'requestTemporaryFullAccuracy() has not been implemented');
   }

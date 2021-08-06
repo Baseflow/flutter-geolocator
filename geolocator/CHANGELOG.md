@@ -1,3 +1,15 @@
+## 7.4.0
+
+- Moved to fully federated architecture (moved Android and iOS implementations into separate packages, geolocator_android and geolocator_apple respectivily).
+
+## 7.3.1
+
+- Android 10 and above: Fixed a bug causing the `requestPermission` method failing to show a prompt when requesting for background location permission.
+
+## 7.3.0
+
+- iOS 14: Users can now request Temporary Precise Location fetching by using the `requestTemporaryFullAccuracy()` method.
+
 ## 7.2.0+1
 
 - Fix formatting of the CHANGELOG.md.
