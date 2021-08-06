@@ -28,8 +28,14 @@ dependencies:
     git:
       url: git://github.com/juanmanjarres/flutter-geolocator.git
       path: geolocator_web
-  geolocator_android: ^1.0.0
-  geolocator_apple: ^1.0.0
+  geolocator_android:
+    git:
+      url: git://github.com/juanmanjarres/flutter-geolocator.git
+      path: geolocator_android
+  geolocator_apple:
+    git:
+      url: git://github.com/juanmanjarres/flutter-geolocator.git
+      path: geolocator_apple
 
 dev_dependencies:
   flutter_test:
