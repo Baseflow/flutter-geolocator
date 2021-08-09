@@ -233,7 +233,7 @@ bool isLocationServiceEnabled  = await Geolocator.isLocationServiceEnabled();
 
 ### Permissions
 
-The geolocator will automatically try to request permissions when you try to acquire a location trough the `getCurrentPosition` or `getPositionStream` methods. We do however provide methods that will allow you to manually handle requesting permissions.
+The geolocator will automatically try to request permissions when you try to acquire a location through the `getCurrentPosition` or `getPositionStream` methods. We do however provide methods that will allow you to manually handle requesting permissions.
 
 If you want to check if the user already granted permissions to acquire the device's location you can make a call to the `checkPermission` method:
 
