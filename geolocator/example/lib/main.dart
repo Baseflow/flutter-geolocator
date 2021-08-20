@@ -16,7 +16,6 @@ void main() {
 
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
-
   /// Creates a new GeolocatorWidget.
   const GeolocatorWidget({Key? key}) : super(key: key);
 
@@ -290,7 +289,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _toggleListening() {
-
     if (_positionStreamSubscription == null) {
       final positionStream = _geolocatorPlatform.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((error) {

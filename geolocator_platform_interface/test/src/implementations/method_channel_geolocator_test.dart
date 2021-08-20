@@ -1000,8 +1000,9 @@ void main() {
         //ignore: lines_longer_than_80_chars
         'getServiceStream: When requesting a stream of location service status and NMEA updates',
         () {
-          //ignore: lines_longer_than_80_chars
-          group('And requesting for NMEA and location service status updates multiple times',
+      //ignore: lines_longer_than_80_chars
+      group(
+          'And requesting for NMEA and location service status updates multiple times',
           () {
         test('Should return the same stream', () {
           final methodChannelGeolocator = MethodChannelGeolocator();
@@ -1009,7 +1010,9 @@ void main() {
           final secondstream = methodChannelGeolocator.getServiceStatusStream();
 
           expect(
-            identical(firstStream, secondstream), true, );
+            identical(firstStream, secondstream),
+            true,
+          );
 
           final firstStreamNmea =
               methodChannelGeolocator.getNmeaMessageStream();
@@ -1052,36 +1055,35 @@ void main() {
       });
 
       test(
-        // ignore: lines_longer_than_80_chars
+          // ignore: lines_longer_than_80_chars
           'Should receive a stream with NMEA updates if permissions are granted',
-            () async {
-              // Arrange
-              final streamController =
-              StreamController<Map<String, dynamic>>.broadcast();
-              EventChannelMock(
-                channelName: 'flutter.baseflow.com/nmea_updates',
-                stream: streamController.stream,
-              );
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<Map<String, dynamic>>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/nmea_updates',
+          stream: streamController.stream,
+        );
 
-              // Act
-              final nmeaStream = MethodChannelGeolocator()
-                  .getNmeaMessageStream();
-              final streamQueue = StreamQueue(nmeaStream);
+        // Act
+        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final streamQueue = StreamQueue(nmeaStream);
 
-              // Emit test events
-              streamController.add(mockNmeaMessage.toJson());
-              streamController.add(mockNmeaMessage.toJson());
-              streamController.add(mockNmeaMessage.toJson());
+        // Emit test events
+        streamController.add(mockNmeaMessage.toJson());
+        streamController.add(mockNmeaMessage.toJson());
+        streamController.add(mockNmeaMessage.toJson());
 
-              // Assert
-              expect(await streamQueue.next, mockNmeaMessage);
-              expect(await streamQueue.next, mockNmeaMessage);
-              expect(await streamQueue.next, mockNmeaMessage);
+        // Assert
+        expect(await streamQueue.next, mockNmeaMessage);
+        expect(await streamQueue.next, mockNmeaMessage);
+        expect(await streamQueue.next, mockNmeaMessage);
 
-              // Clean up
-              await streamQueue.cancel();
-              await streamController.close();
-          });
+        // Clean up
+        await streamQueue.cancel();
+        await streamController.close();
+      });
 
       test(
           // ignore: lines_longer_than_80_chars

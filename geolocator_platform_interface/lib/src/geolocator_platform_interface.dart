@@ -109,7 +109,6 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError('getCurrentPosition() has not been implemented.');
   }
 
-
   /// Fires when the Location Service is manually disabled or enabled f.e.
   /// when Location Service in Settings is disabled, a event will be fired which
   /// returns a [LocationServiceStatus].
@@ -117,8 +116,6 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError(
         'getServiceStatusStream() has not been implemented.');
   }
-
-
 
   /// Returns a stream emitting NMEA-0183 sentences when they are received from
   /// the GNSS engine. With devices running a Android API level lower than 24

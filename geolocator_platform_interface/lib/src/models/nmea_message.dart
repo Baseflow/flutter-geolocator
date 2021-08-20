@@ -16,7 +16,6 @@ class NmeaMessage {
 
   /// Converts the supplied [Map] to an instance of the [NmeaMessage] class.
   static NmeaMessage fromMap(dynamic message) {
-
     final Map<dynamic, dynamic> nmeaMessageMap = message;
 
     if (!nmeaMessageMap.containsKey('message')) {

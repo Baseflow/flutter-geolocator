@@ -37,11 +37,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   /// ignored.
   bool forceAndroidLocationManager = false;
 
-
   Stream<Position>? _positionStream;
   Stream<ServiceStatus>? _serviceStatusStream;
   Stream<NmeaMessage>? _nmeaMessageStream;
-
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -181,7 +179,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       return _positionStream!;
     }
     var originalStream = _eventChannel.receiveBroadcastStream(
-
       locationOptions.toJson(),
     );
     var positionStream = _wrapStream(originalStream);
@@ -241,7 +238,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
-
   Future<bool> openAppSettings() async => _methodChannel
       .invokeMethod<bool>('openAppSettings')
       .then((value) => value ?? false);
@@ -269,7 +265,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
     return _nmeaMessageStream!;
   }
-
 
   @override
   Future<bool> openLocationSettings() async => _methodChannel
