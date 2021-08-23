@@ -49,8 +49,9 @@ class NmeaMessage {
 
   @override
   bool operator ==(Object other) {
-    var areEqual =
-        other is NmeaMessage && other.message == message && other.timestamp == timestamp;
+    var areEqual = other is NmeaMessage &&
+        other.message == message &&
+        other.timestamp == timestamp;
 
     return areEqual;
   }
