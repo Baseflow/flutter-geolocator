@@ -40,7 +40,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
-  StreamSubscription<ServiceStatus>? _locationServiceStatusSubscription;
   StreamSubscription<NmeaMessage>? _nmeaStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
 
@@ -258,10 +257,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   bool _isListening() => !(_positionStreamSubscription == null ||
       _positionStreamSubscription!.isPaused);
 
-  bool _isLocationServiceListening() =>
-      !(_locationServiceStatusSubscription == null ||
-          _locationServiceStatusSubscription!.isPaused);
-
   Color _determineButtonColor() {
     return _isListening() ? Colors.green : Colors.red;
   }
@@ -319,34 +314,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         _PositionItemType.log,
         'Listening for position updates $statusDisplayValue',
       );
-    });
-  }
-
-  bool _isListeningToNmeaStream() =>
-      !(_nmeaStreamSubscription == null || _nmeaStreamSubscription!.isPaused);
-
-  Color _determineButtonColorForNmeaButton() {
-    return _isListeningToNmeaStream() ? Colors.green : Colors.red;
-  }
-
-  void _toggleListeningToNmeaStream() {
-    if (_nmeaStreamSubscription == null) {
-      final nmeaStream = Geolocator.getNmeaMessageStream();
-      _nmeaStreamSubscription = nmeaStream.handleError((error) {
-        _nmeaStreamSubscription!.cancel();
-        _nmeaStreamSubscription = null;
-      }).listen((nmeaMessage) => setState(() => _positionItems.add(
-          _PositionItem(_PositionItemType.nmea,
-              nmeaMessage.message + nmeaMessage.timestamp.toString()))));
-      _nmeaStreamSubscription!.pause();
-    }
-
-    setState(() {
-      if (_nmeaStreamSubscription!.isPaused) {
-        _nmeaStreamSubscription!.resume();
-      } else {
-        _nmeaStreamSubscription!.pause();
-      }
     });
   }
 
@@ -442,9 +409,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 enum _PositionItemType {
   log,
   position,
-  locationServiceStatus,
-  nmea,
-  permission
 }
 
 class _PositionItem {

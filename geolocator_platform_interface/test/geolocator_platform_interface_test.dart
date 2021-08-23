@@ -265,10 +265,10 @@ void main() {
     });
 
     test('the North pole to the South pole bearing should be 180', () async {
-      final startLatitude = 90.0;
-      final startLongitude = 0.0;
-      final endLatitude = -90.0;
-      final endLongitude = 0.0;
+      const startLatitude = 90.0;
+      const startLongitude = 0.0;
+      const endLatitude = -90.0;
+      const endLongitude = 0.0;
 
       final geolocatorPlatform = ExtendsGeolocatorPlatform();
 

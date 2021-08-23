@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 /// Contains all the NMEA information.
 class NmeaMessage {
   /// Constructs a NMEA message instance with the given values.
-  NmeaMessage(this.message, this.timestamp);
+  const NmeaMessage(this.message, this.timestamp);
 
   /// The full NMEA-0183 message, as reported by the GNSS chipset.
   final String message;
@@ -15,7 +15,7 @@ class NmeaMessage {
   final DateTime? timestamp;
 
   /// Converts the supplied [Map] to an instance of the [NmeaMessage] class.
-  static NmeaMessage fromMap(dynamic message) {
+  static NmeaMessage fromMap(Map<dynamic, dynamic> message) {
     final Map<dynamic, dynamic> nmeaMessageMap = message;
 
     if (!nmeaMessageMap.containsKey('message')) {
@@ -48,9 +48,9 @@ class NmeaMessage {
       };
 
   @override
-  bool operator ==(dynamic o) {
+  bool operator ==(Object other) {
     var areEqual =
-        o is NmeaMessage && o.message == message && o.timestamp == timestamp;
+        other is NmeaMessage && other.message == message && other.timestamp == timestamp;
 
     return areEqual;
   }

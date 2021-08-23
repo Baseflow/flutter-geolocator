@@ -242,6 +242,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       .invokeMethod<bool>('openAppSettings')
       .then((value) => value ?? false);
 
+  @override
   Stream<NmeaMessage> getNmeaMessageStream() {
     if (_nmeaMessageStream != null) {
       return _nmeaMessageStream!;

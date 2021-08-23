@@ -142,7 +142,7 @@ void main() {
     });
 
     test('getNmeaMessageStream', () async {
-      final nmeaMessage = await Geolocator.getNmeaMessageStream();
+      final nmeaMessage = Geolocator.getNmeaMessageStream();
 
       expect(nmeaMessage, emitsInOrder([emits(mockNmeaMessage), emitsDone]));
     });

@@ -58,14 +58,6 @@ void main() {
   });
 
   group('fromMap tests:', () {
-    test('fromMap should return null when message is null', () {
-      // Act
-      final actual = NmeaMessage.fromMap(null);
-
-      // Assert
-      expect(actual, null);
-    });
-
     test(
         // ignore: lines_longer_than_80_chars
         'fromMap should throw argument error when map does not contain message',
