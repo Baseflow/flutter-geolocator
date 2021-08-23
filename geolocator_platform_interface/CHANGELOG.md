@@ -1,3 +1,7 @@
+## 2.3.4
+
+- Added a functionality to receive NMEA messages.
+
 ## 2.3.3
 
 - Migrated to [flutter_lints](https://pub.dev/packages/flutter_lints) as linter rule set as it replaces the deprecated [effective_dart](https://pub.dev/packages/effective_dart) package.

@@ -1,3 +1,7 @@
+## 7.4.1
+
+- Added a functionality to receive NMEA messages.
+
 ## 7.4.0
 
 - Moved to fully federated architecture (moved Android and iOS implementations into separate packages, geolocator_android and geolocator_apple respectivily).
