@@ -25,7 +25,7 @@
 
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
-        pauseLocationUpdatesAutomatically:(NSNumber* _Nullable)pauseLocationUpdatesAutomatically
+        pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
                              activityType:(CLActivityType)activityType
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
