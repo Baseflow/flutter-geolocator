@@ -13,6 +13,8 @@ flutter:
     platforms:
       ios:
         pluginClass: GeolocatorPlugin
+      macos:
+        pluginClass: GeolocatorPlugin
 
 dependencies:
   flutter:
