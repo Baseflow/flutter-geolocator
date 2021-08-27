@@ -270,8 +270,15 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       }).listen((serviceStatus) {
         String serviceStatusValue;
         if (serviceStatus == ServiceStatus.enabled) {
+          if (_positionStreamSubscription == null) {
+            _toggleListening();
+          }
           serviceStatusValue = 'enabled';
         } else {
+          if(_positionStreamSubscription != null) {
+            _positionStreamSubscription?.cancel();
+            _positionStreamSubscription = null;
+          }
           serviceStatusValue = 'disabled';
         }
         _updatePositionList(
