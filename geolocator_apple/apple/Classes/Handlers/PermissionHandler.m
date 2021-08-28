@@ -7,6 +7,7 @@
 
 #import "PermissionHandler.h"
 #import "../Constants/ErrorCodes.h"
+#import "../Utils/PermissionUtils.h"
 
 @interface PermissionHandler() <CLLocationManagerDelegate>
 
@@ -19,87 +20,85 @@
 @implementation PermissionHandler
 
 + (BOOL) hasPermission {
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    
-#if TARGET_OS_OSX
-  if (@available(macOS 10.12, *)) {
-    return (status == kCLAuthorizationStatusAuthorized ||
-           status == kCLAuthorizationStatusAuthorizedAlways);
-  }
+  CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
   
-  return status == kCLAuthorizationStatusAuthorized;
-#else
-    return (status == kCLAuthorizationStatusAuthorizedWhenInUse ||
-            status == kCLAuthorizationStatusAuthorizedAlways);
-#endif
+  return [PermissionUtils isStatusGranted:status];
 }
 
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler
               errorHandler:(PermissionError)errorHandler {
-    // When we already have permission we don't have to request it again
-    CLAuthorizationStatus authorizationStatus = CLLocationManager.authorizationStatus;
-    if (authorizationStatus != kCLAuthorizationStatusNotDetermined) {
-        confirmationHandler(authorizationStatus);
-        return;
+  // When we already have permission we don't have to request it again
+  CLAuthorizationStatus authorizationStatus = CLLocationManager.authorizationStatus;
+  if (authorizationStatus != kCLAuthorizationStatusNotDetermined) {
+    confirmationHandler(authorizationStatus);
+    return;
+  }
+  
+  if (self.confirmationHandler) {
+    // Permission request is already running, return immediatly with error
+    errorHandler(GeolocatorErrorPermissionRequestInProgress,
+                 @"A request for location permissions is already running, please wait for it to complete before doing another request.");
+    return;
+  }
+  
+  self.confirmationHandler = confirmationHandler;
+  self.errorHandler = errorHandler;
+  self.locationManager = [[CLLocationManager alloc] init];
+  self.locationManager.delegate = self;
+  
+#if TARGET_OS_OSX
+  if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationUsageDescription"] != nil) {
+    if (@available(macOS 10.15, *)) {
+      [self.locationManager requestWhenInUseAuthorization];
     }
-    
-    if (self.confirmationHandler) {
-        // Permission request is already running, return immediatly with error
-        errorHandler(GeolocatorErrorPermissionRequestInProgress,
-                     @"A request for location permissions is already running, please wait for it to complete before doing another request.");
-        return;
-    }
-    
-    self.confirmationHandler = confirmationHandler;
-    self.errorHandler = errorHandler;
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    
-    if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil) {
-        [self.locationManager requestWhenInUseAuthorization];
-    }
-    else if ([self containsLocationAlwaysDescription]) {
-        [self.locationManager requestAlwaysAuthorization];
-    }
-    else {
-        if (self.errorHandler) {
-            self.errorHandler(GeolocatorErrorPermissionDefinitionsNotFound,
-                              @"Permission definitions not found in the app's Info.plist. Please make sure to "
-                              "add either NSLocationWhenInUseUsageDescription or "
-                              "NSLocationAlwaysUsageDescription to the app's Info.plist file.");
-        }
-        
-        [self cleanUp];
-        return;
-    }
-}
-
-- (BOOL) containsLocationAlwaysDescription {
-    BOOL containsAlwaysDescription = NO;
-    if (@available(iOS 11.0, *)) {
-        containsAlwaysDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysAndWhenInUseUsageDescription"] != nil;
-    }
-    
-    return containsAlwaysDescription
-        ? containsAlwaysDescription
-        : [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"] != nil;
-}
-
-- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    if (status == kCLAuthorizationStatusNotDetermined) {
-        return;
-    }
-    
-    if (self.confirmationHandler) {
-        self.confirmationHandler(status);
+  }
+#else
+  if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil) {
+    [self.locationManager requestWhenInUseAuthorization];
+  }
+  else if ([self containsLocationAlwaysDescription]) {
+    [self.locationManager requestAlwaysAuthorization];
+  }
+#endif
+  else {
+    if (self.errorHandler) {
+      self.errorHandler(GeolocatorErrorPermissionDefinitionsNotFound,
+                        @"Permission definitions not found in the app's Info.plist. Please make sure to "
+                        "add either NSLocationWhenInUseUsageDescription or "
+                        "NSLocationAlwaysUsageDescription to the app's Info.plist file on iOS. If running on macOS please add NSLocationUsageDescription to the app's Info.plist file.");
     }
     
     [self cleanUp];
+    return;
+  }
+}
+
+- (BOOL) containsLocationAlwaysDescription {
+  BOOL containsAlwaysDescription = NO;
+  if (@available(iOS 11.0, *)) {
+    containsAlwaysDescription = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysAndWhenInUseUsageDescription"] != nil;
+  }
+  
+  return containsAlwaysDescription
+  ? containsAlwaysDescription
+  : [[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"] != nil;
+}
+
+- (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+  if (status == kCLAuthorizationStatusNotDetermined) {
+    return;
+  }
+  
+  if (self.confirmationHandler) {
+    self.confirmationHandler(status);
+  }
+  
+  [self cleanUp];
 }
 
 - (void) cleanUp {
-    self.locationManager = nil;
-    self.errorHandler = nil;
-    self.confirmationHandler = nil;
+  self.locationManager = nil;
+  self.errorHandler = nil;
+  self.confirmationHandler = nil;
 }
 @end

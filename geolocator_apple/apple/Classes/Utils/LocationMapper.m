@@ -32,8 +32,10 @@
     [locationMap setObject:@(speedAccuracy) forKey: @"speed_accuracy"];
     [locationMap setObject:@(location.course) forKey: @"heading"];
     
-    if(location.floor && location.floor.level) {
+    if (@available(macOS 10.15, *)) {
+      if(location.floor && location.floor.level) {
         [locationMap setObject:@(location.floor.level) forKey:@"floor"];
+      }
     }
     
     return locationMap;

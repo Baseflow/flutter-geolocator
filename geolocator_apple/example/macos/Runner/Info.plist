@@ -28,9 +28,7 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>The example App requires access to the device&apos;s location.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
+	<key>NSLocationUsageDescription</key>
 	<string>The example App requires access to the device&apos;s location.</string>
 </dict>
 </plist>

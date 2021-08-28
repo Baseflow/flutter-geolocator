@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'geolocator_apple'
-  s.version          = '1.0.0'
+  s.version          = '1.1.0'
   s.summary          = 'Geolocation iOS plugin for Flutter.'
   s.description      = <<-DESC
   Geolocation iOS plugin for Flutter. This plugin provides the Apple implementation for the geolocator plugin.
