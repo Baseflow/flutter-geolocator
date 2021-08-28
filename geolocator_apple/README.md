@@ -2,11 +2,11 @@
 
 [![pub package](https://img.shields.io/pub/v/geolocator.svg)](https://pub.dartlang.org/packages/geolocator) ![Build status](https://github.com/Baseflow/flutter-geolocator/workflows/geolocator_apple/badge.svg?branch=master) [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
 
-The official iOS implementation of the [geolocator](https://pub.dev/packages/geolocator) plugin by [Baseflow](https://baseflow.com).
+The official iOS and macOS implementation of the [geolocator](https://pub.dev/packages/geolocator) plugin by [Baseflow](https://baseflow.com).
 
 ## Usage
 
-Since version 7.4.0 of the [geolocator](https://pub.dev/packages/geolocator) plugin this is the endorsed iOS implementation. This means it will automatically be added to your dependencies when you depend on `geolocator: ^7.4.0` in your applications pubspec.yaml.
+Since version 7.5.0 of the [geolocator](https://pub.dev/packages/geolocator) plugin this is the endorsed iOS and macOS implementation. This means it will automatically be added to your dependencies when you depend on `geolocator: ^7.5.0` in your applications pubspec.yaml.
 
 More detailed instructions on using the API can be found in the [README.md](../geolocator/README.md) of the [geolocator](https://pub.dev/packages/geolocator) package.
 

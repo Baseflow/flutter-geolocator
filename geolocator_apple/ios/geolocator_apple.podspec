@@ -4,15 +4,15 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'geolocator_apple'
-  s.version          = '1.0.0'
-  s.summary          = 'Geolocation Apple plugin for Flutter.'
+  s.version          = '1.1.0'
+  s.summary          = 'Geolocation iOS plugin for Flutter.'
   s.description      = <<-DESC
-  Geolocation Apple plugin for Flutter. This plugin provides the Apple implementation for the geolocator plugin.
+  Geolocation iOS plugin for Flutter. This plugin provides the Apple implementation for the geolocator plugin.
                        DESC
   s.homepage         = 'http://github.com/baseflow/flutter-geolocator'
-  s.license          = { :file => '../LICENSE' }
+  s.license          = { :type => 'MIT', :file => '../LICENSE' }
   s.author           = { 'Baseflow' => 'hello@baseflow.com' }
-  s.source           = { :path => '.' }
+  s.source           = { :http => 'https://github.com/baseflow/flutter-geolocator/tree/master/' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
