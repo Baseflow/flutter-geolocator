@@ -124,12 +124,16 @@ jobs:
         with:
           channel: 'stable'
 
+      # Enable macOS Desktop support
+      - name: Enable macOS Desktop support
+        run: flutter config --enable-macos-desktop
+
       # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
         working-directory: ${{env.source-directory}}
 
-      # Build iOS version of the example App
-      - name: Run iOS build
+      # Build macOS version of the example App
+      - name: Run macOS build
         run: flutter build macos --release
         working-directory: ${{env.example-directory}}
