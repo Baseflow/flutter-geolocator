@@ -170,7 +170,7 @@ jobs:
 
       # Build macOS version of the example App
       - name: Run macOS build
-        run: flutter build macOS --release
+        run: flutter build macos --release
         working-directory: ${{env.example-directory}}
 
   build_web:
