@@ -1,3 +1,7 @@
+## 7.5.0
+
+- Added support for macOS Desktop.
+
 ## 7.4.1
 
 - Updated README.md to include information about using the Geolocator web version in release mode.

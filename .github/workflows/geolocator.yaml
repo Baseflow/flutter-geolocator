@@ -139,6 +139,40 @@ jobs:
         run: flutter build ios --release --no-codesign
         working-directory: ${{env.example-directory}}
 
+  build_macos:
+    name: Build macOS App
+    
+    # The type of runner that the job will run on
+    runs-on: macos-latest
+
+    env:
+      source-directory: ./geolocator 
+      example-directory: ./geolocator/example
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      # Make sure the stable version of Flutter is available
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+
+      # Enable macOS Desktop support
+      - name: Enable macOS Desktop support
+        run: flutter config --enable-macos-desktop
+
+      # Download all Flutter packages
+      - name: Download dependencies
+        run: flutter pub get
+        working-directory: ${{env.source-directory}}
+
+      # Build macOS version of the example App
+      - name: Run macOS build
+        run: flutter build macOS --release
+        working-directory: ${{env.example-directory}}
+
   build_web:
     name: Build Web App
     
