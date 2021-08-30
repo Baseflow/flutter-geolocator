@@ -117,14 +117,9 @@
                                  details:nil]);
       return;
     }
-    
-    CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
-    CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
     GeolocationHandler *geolocationHandler = [[GeolocationHandler alloc] init];
     
-    [geolocationHandler startListeningWithDesiredAccuracy:accuracy
-                                           distanceFilter:distanceFilter
-                                            resultHandler:^(CLLocation *location) {
+    [geolocationHandler requestPosition:^(CLLocation *location) {
       [geolocationHandler stopListening];
       
       result([LocationMapper toDictionary:location]);

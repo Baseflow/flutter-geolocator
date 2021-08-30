@@ -18,6 +18,9 @@ typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
 
 - (CLLocation *_Nullable)getLastKnownPosition;
 
+- (void)requestPosition:(GeolocatorResult _Nonnull)resultHandler
+           errorHandler:(GeolocatorError _Nonnull)errorHandler;
+
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
                             resultHandler:(GeolocatorResult _Nonnull)resultHandler
