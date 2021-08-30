@@ -23,6 +23,20 @@
     return [self.locationManager location];
 }
 
+- (void)requestPosition:(GeolocatorResult _Nonnull)resultHandler
+           errorHandler:(GeolocatorError _Nonnull)errorHandler {
+  self.errorHandler = errorHandler;
+  self.resultHandler = resultHandler;
+  
+  if (@available(iOS 9.0, macOS 10.14, *)) {
+    [self.locationManager requestLocation];
+    return;
+  }
+  
+  [self startUpdatingLocationWithDesiredAccuracy:kCLLocationAccuracyBest
+                                  distanceFilter:kCLDistanceFilterNone];
+}
+
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
@@ -31,14 +45,20 @@
     self.errorHandler = errorHandler;
     self.resultHandler = resultHandler;
     
-    CLLocationManager *locationManager = self.locationManager;
-    locationManager.desiredAccuracy = desiredAccuracy;
-    locationManager.distanceFilter = distanceFilter == 0 ? kCLDistanceFilterNone : distanceFilter;
-    if (@available(iOS 9.0, macOS 10.15, *)) {
-        locationManager.allowsBackgroundLocationUpdates = [GeolocationHandler shouldEnableBackgroundLocationUpdates];
-    }
-    
-    [locationManager startUpdatingLocation];
+  [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
+                                  distanceFilter:distanceFilter];
+}
+
+- (void)startUpdatingLocationWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
+                                  distanceFilter:(CLLocationDistance)distanceFilter {
+  CLLocationManager *locationManager = self.locationManager;
+  locationManager.desiredAccuracy = desiredAccuracy;
+  locationManager.distanceFilter = distanceFilter;
+  if (@available(iOS 9.0, macOS 10.15, *)) {
+      locationManager.allowsBackgroundLocationUpdates = [GeolocationHandler shouldEnableBackgroundLocationUpdates];
+  }
+  
+  [locationManager startUpdatingLocation];
 }
 
 - (void)stopListening {
