@@ -1,3 +1,7 @@
+## 7.6.0
+
+- Make sure the `getCurrentPosition` method returns the current position and not a cached location which might be wrong (see issue [#629](https://github.com/Baseflow/flutter-geolocator/issues/629)). Note that this means that in some cases fetching the current position might take several seconds. If you want to have a fast initial result, call the `getLastKnownPosition` first and update the position with the result from `getCurrentPosition`.
+
 ## 7.5.0
 
 - Added support for macOS Desktop.
