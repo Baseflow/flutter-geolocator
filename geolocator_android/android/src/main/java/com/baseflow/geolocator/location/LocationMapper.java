@@ -6,6 +6,7 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("deprecation")
 public class LocationMapper {
   public static Map<String, Object> toHashMap(Location location) {
     if (location == null) {
