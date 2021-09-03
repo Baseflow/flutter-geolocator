@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.location.provider.ProviderProperties;
 import android.os.Bundle;
 import android.os.Looper;
 
@@ -132,14 +133,23 @@ class LocationManagerClient implements LocationClient, LocationListener {
     }
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public void onStatusChanged(String provider, int status, Bundle extras) {
-    if (status == LocationProvider.AVAILABLE) {
-      onProviderEnabled(provider);
-    } else if (status == LocationProvider.OUT_OF_SERVICE) {
-      onProviderDisabled(provider);
-    }
+      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            ProviderProperties properties = this.locationManager.getProviderProperties(provider);
+            // If the provider properties are unknown, null will be returned.
+            if(properties != null) {
+                onProviderEnabled(provider);
+            } else {
+                onProviderDisabled(provider);
+            }
+      } else {
+          if (status == LocationProvider.AVAILABLE) {
+              onProviderEnabled(provider);
+          } else if (status == LocationProvider.OUT_OF_SERVICE) {
+              onProviderDisabled(provider);
+          }
+      }
   }
 
   @Override
