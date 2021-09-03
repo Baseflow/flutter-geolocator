@@ -133,6 +133,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
     }
   }
 
+  @SuppressWarnings("deprecation")
   @Override
   public void onStatusChanged(String provider, int status, Bundle extras) {
       if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
