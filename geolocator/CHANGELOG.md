@@ -1,3 +1,7 @@
+## 7.4.2
+
+- Refactored the example app and rollbacked the apple deployment target from 9.0 to 8.0.
+
 ## 7.4.1
 
 - Updated README.md to include information about using the Geolocator web version in release mode.
