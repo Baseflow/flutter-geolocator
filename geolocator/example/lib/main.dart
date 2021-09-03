@@ -156,11 +156,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                         ? const Icon(Icons.play_arrow)
                         : const Icon(Icons.pause),
                     onPressed: () {
-                      if (positionStreamStarted) {
-                        positionStreamStarted = false;
-                      } else {
-                        positionStreamStarted = true;
-                      }
+                      positionStreamStarted = !positionStreamStarted;
                       _toggleListening();
                     },
                     tooltip: (_positionStreamSubscription == null)
