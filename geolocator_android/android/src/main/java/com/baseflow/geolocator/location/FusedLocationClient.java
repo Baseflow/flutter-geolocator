@@ -114,7 +114,7 @@ class FusedLocationClient implements LocationClient {
           return false;
         }
 
-        startPositionUpdates(this.activity, this.positionChangedCallback, this.errorCallback);
+        startPositionUpdates(true, this.activity, this.positionChangedCallback, this.errorCallback);
 
         return true;
       } else {
@@ -127,8 +127,17 @@ class FusedLocationClient implements LocationClient {
     return false;
   }
 
+    @SuppressLint("MissingPermission")
+    public void startPositionUpdates(
+            @Nullable Activity activity,
+            @NonNull PositionChangedCallback positionChangedCallback,
+            @NonNull ErrorCallback errorCallback) {
+      startPositionUpdates(false, activity, positionChangedCallback, errorCallback);
+    }
+
   @SuppressLint("MissingPermission")
   public void startPositionUpdates(
+      @NonNull boolean forceRequest,
       @Nullable Activity activity,
       @NonNull PositionChangedCallback positionChangedCallback,
       @NonNull ErrorCallback errorCallback) {
@@ -139,6 +148,12 @@ class FusedLocationClient implements LocationClient {
 
     LocationRequest locationRequest = buildLocationRequest(this.locationOptions);
     LocationSettingsRequest settingsRequest = buildLocationSettingsRequest(locationRequest);
+
+      if (forceRequest) {
+          fusedLocationProviderClient.requestLocationUpdates(
+                  locationRequest, locationCallback, Looper.getMainLooper());
+          return;
+      }
 
     SettingsClient settingsClient = LocationServices.getSettingsClient(context);
     settingsClient
