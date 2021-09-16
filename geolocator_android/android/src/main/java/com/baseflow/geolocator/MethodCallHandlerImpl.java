@@ -118,7 +118,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private void onCheckPermission(MethodChannel.Result result) {
     try {
       LocationPermission permission =
-          this.permissionManager.checkPermissionStatus(context, activity);
+          this.permissionManager.checkPermissionStatus(context);
       result.success(permission.toInt());
     } catch (PermissionUndefinedException e) {
       ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
@@ -145,11 +145,20 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   }
 
   private void onGetLastKnownPosition(MethodCall call, MethodChannel.Result result) {
+    try{
+        if (!permissionManager.hasPermission(this.context)){
+            result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
+            return;
+        }
+    } catch (PermissionUndefinedException e) {
+        result.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
+        return;
+    }
+
     Boolean forceLocationManager = call.argument("forceLocationManager");
 
     this.geolocationManager.getLastKnownPosition(
         this.context,
-        this.activity,
         forceLocationManager != null && forceLocationManager,
         (Location location) -> result.success(LocationMapper.toHashMap(location)),
         (ErrorCodes errorCode) ->
@@ -157,6 +166,16 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   }
 
   private void onGetCurrentPosition(MethodCall call, MethodChannel.Result result) {
+    try{
+          if (!permissionManager.hasPermission(this.context)){
+           result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
+           return;
+         }
+    } catch (PermissionUndefinedException e) {
+       result.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
+       return;
+    }
+
     Boolean forceLocationManager = call.argument("forceLocationManager");
     @SuppressWarnings("unchecked")
     Map<String, Object> map = (Map<String, Object>) call.arguments;
@@ -168,9 +187,8 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             this.context, forceLocationManager != null && forceLocationManager, locationOptions);
 
     geolocationManager.startPositionUpdates(
-        this.context,
-        this.activity,
         locationClient,
+        this.activity,
         (Location location) -> {
           if (replySubmitted[0]) {
             return;
