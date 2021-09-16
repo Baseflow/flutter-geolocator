@@ -7,7 +7,6 @@ import '../enums/enums.dart';
 import '../errors/errors.dart';
 import '../extensions/extensions.dart';
 import '../geolocator_platform_interface.dart';
-import '../models/location_options.dart';
 import '../models/position.dart';
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
@@ -99,29 +98,24 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<Position> getCurrentPosition({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    bool forceAndroidLocationManager = false,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) async {
-    final locationOptions = LocationOptions(
-      accuracy: desiredAccuracy,
-      forceAndroidLocationManager: forceAndroidLocationManager,
-    );
-
     try {
       Future<dynamic> positionFuture;
+
+      var timeLimit = locationSettings?.timeLimit;
 
       if (timeLimit != null) {
         positionFuture = _methodChannel
             .invokeMethod(
               'getCurrentPosition',
-              locationOptions.toJson(),
+              locationSettings?.toJson(),
             )
             .timeout(timeLimit);
       } else {
         positionFuture = _methodChannel.invokeMethod(
           'getCurrentPosition',
-          locationOptions.toJson(),
+          locationSettings?.toJson(),
         );
       }
 
@@ -157,25 +151,17 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Stream<Position> getPositionStream({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    int distanceFilter = 0,
-    bool forceAndroidLocationManager = false,
-    int timeInterval = 0,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) {
-    final locationOptions = LocationOptions(
-      accuracy: desiredAccuracy,
-      distanceFilter: distanceFilter,
-      forceAndroidLocationManager: forceAndroidLocationManager,
-      timeInterval: timeInterval,
-    );
     if (_positionStream != null) {
       return _positionStream!;
     }
     var originalStream = _eventChannel.receiveBroadcastStream(
-      locationOptions.toJson(),
+      locationSettings?.toJson(),
     );
     var positionStream = _wrapStream(originalStream);
+
+    var timeLimit = locationSettings?.timeLimit;
 
     if (timeLimit != null) {
       positionStream = positionStream.timeout(

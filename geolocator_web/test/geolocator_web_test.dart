@@ -33,10 +33,17 @@ void main() {
         GeolocatorPlugin.private(mockGeolocationManager, mockPermissionManager);
 
     geolocatorPlugin.getPositionStream(
-        desiredAccuracy: LocationAccuracy.medium);
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.medium,
+      ),
+    );
     expect(mockGeolocationManager.enableHighAccuracy, false);
 
-    geolocatorPlugin.getPositionStream(desiredAccuracy: LocationAccuracy.high);
+    geolocatorPlugin.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.best,
+      ),
+    );
     expect(mockGeolocationManager.enableHighAccuracy, true);
   });
 
@@ -49,10 +56,17 @@ void main() {
         GeolocatorPlugin.private(mockGeolocationManager, mockPermissionManager);
 
     geolocatorPlugin.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.medium);
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.medium,
+      ),
+    );
     expect(mockGeolocationManager.enableHighAccuracy, false);
 
-    geolocatorPlugin.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    geolocatorPlugin.getCurrentPosition(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+      ),
+    );
     expect(mockGeolocationManager.enableHighAccuracy, true);
   });
 
@@ -102,7 +116,8 @@ void main() {
       final geolocatorPlugin = GeolocatorPlugin.private(
           mockGeolocationManager, mockPermissionManager);
 
-      final position = await geolocatorPlugin.getCurrentPosition();
+      final position = await geolocatorPlugin.getCurrentPosition(
+          locationSettings: const LocationSettings());
       expect(position, mockPositions.first);
     });
   });
@@ -114,7 +129,8 @@ void main() {
       final geolocatorPlugin = GeolocatorPlugin.private(
           mockGeolocationManager, mockPermissionManager);
 
-      final positionsStream = geolocatorPlugin.getPositionStream();
+      final positionsStream = geolocatorPlugin.getPositionStream(
+          locationSettings: const LocationSettings());
 
       expect(positionsStream, emitsInOrder(mockPositions));
     });
@@ -142,8 +158,11 @@ void main() {
         }
       }());
 
-      final positionsStream =
-          geolocatorPlugin.getPositionStream(distanceFilter: 7);
+      final positionsStream = geolocatorPlugin.getPositionStream(
+        locationSettings: const LocationSettings(
+          distanceFilter: 7,
+        ),
+      );
 
       expect(positionsStream, emitsInOrder(mockPositionsForFilter));
     });
