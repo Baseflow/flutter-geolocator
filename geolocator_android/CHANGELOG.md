@@ -1,4 +1,4 @@
-## 1.2.0
+## NEXT
 
 - Removed implicit request for permissions when getting a position.
 
