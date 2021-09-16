@@ -87,10 +87,14 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Returns the current position taking the supplied [desiredAccuracy] into
   /// account.
   ///
-  /// You can control the precision of the location updates by supplying the
-  /// [desiredAccuracy] parameter (defaults to "best"). On Android you can
-  /// force the use of the Android LocationManager instead of the
-  /// FusedLocationProvider by setting the [forceAndroidLocationManager]
+  /// Calling the `getCurrentPosition` method will request the platform to
+  /// obtain a location fix, depending on the availability of different location
+  /// services this can take several seconds. The recommended use would be to
+  /// call the `getLastKnownPosition` method to receive a cached position and
+  /// update it with the result of the `getCurrentPosition` method.
+  ///
+  /// On Android you can force the use of the Android LocationManager instead of
+  /// the FusedLocationProvider by setting the [forceAndroidLocationManager]
   /// parameter to true. The [timeLimit] parameter allows you to specify a
   /// timeout interval (by default no time limit is configured).
   ///
