@@ -51,7 +51,7 @@ class EventChannelMock {
     }
   }
 
-  void _sendErrorEnvelope(Exception error) {
+  void _sendErrorEnvelope(Object error) {
     var code = "UNKNOWN_EXCEPTION";
     String? message;
     dynamic details;
@@ -78,7 +78,7 @@ class EventChannelMock {
       return;
     }
 
-    ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
+    ServicesBinding.instance!.channelBuffers.push(
       _methodChannel.name,
       envelope,
       (_) {},
