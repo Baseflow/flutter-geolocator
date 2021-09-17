@@ -1,6 +1,27 @@
+## 2.3.4
+
+- Update the documentation of the `getCurrentPosition` method to explain why it can take several seconds to execute.
+
+## 2.3.3
+
+- Migrated to [flutter_lints](https://pub.dev/packages/flutter_lints) as linter rule set as it replaces the deprecated [effective_dart](https://pub.dev/packages/effective_dart) package.
+
+## 2.3.2
+
+- Added the possibility to pass your own purposeKey name to the requestTemporaryFullAccuracy method.
+
+## 2.3.1
+
+- Solves a bug which resulted in an issue when closing the position stream.
+
 ## 2.3.0
 
-- Changed the EventChannelMock and the MethodChannelMock due to breaking changes in the platform channel test interface.
+- Added the possibility to request temporary Precise Accuracy on iOS 14+ devices.
+
+## 2.2.1
+
+- Documentation `getLocationAccuracy()` method clarified.
+- Extended the `LocationAccuracyStatus` enum with a `LocationAccuracyStatus.unknown` value, which can be used by platforms that don't support location accuracy features.
 
 ## 2.2.0
 

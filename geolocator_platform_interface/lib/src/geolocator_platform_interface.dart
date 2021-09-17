@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:vector_math/vector_math.dart';
 
+import '../geolocator_platform_interface.dart';
 import 'enums/enums.dart';
 import 'implementations/method_channel_geolocator.dart';
 import 'models/models.dart';
@@ -20,7 +21,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Constructs a GeolocatorPlatform.
   GeolocatorPlatform() : super(token: _token);
 
-  static final Object _token = const Object();
+  static const Object _token = Object();
 
   static GeolocatorPlatform _instance = MethodChannelGeolocator();
 
@@ -86,10 +87,14 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Returns the current position taking the supplied [desiredAccuracy] into
   /// account.
   ///
-  /// You can control the precision of the location updates by supplying the
-  /// [desiredAccuracy] parameter (defaults to "best"). On Android you can
-  /// force the use of the Android LocationManager instead of the
-  /// FusedLocationProvider by setting the [forceAndroidLocationManager]
+  /// Calling the `getCurrentPosition` method will request the platform to
+  /// obtain a location fix, depending on the availability of different location
+  /// services this can take several seconds. The recommended use would be to
+  /// call the `getLastKnownPosition` method to receive a cached position and
+  /// update it with the result of the `getCurrentPosition` method.
+  ///
+  /// On Android you can force the use of the Android LocationManager instead of
+  /// the FusedLocationProvider by setting the [forceAndroidLocationManager]
   /// parameter to true. The [timeLimit] parameter allows you to specify a
   /// timeout interval (by default no time limit is configured).
   ///
@@ -159,12 +164,36 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError('getPositionStream() has not been implemented.');
   }
 
+  /// Asks the user for Temporary Precise location access (iOS 14 or above).
+  ///
+  /// Returns [LocationAccuracyStatus.precise] if the user already gave
+  /// permission to use Precise Accuracy. If the user uses iOS 13 or below,
+  /// [LocationAccuracyStatus.precise] will also be returned. On other platforms
+  /// an PlatformException will be thrown.
+  ///
+  /// The `required` property [purposeKey] should correspond with the [key]
+  /// value set in the [NSLocationTemporaryUsageDescriptionDictionary]
+  /// dictionary, which should be added to the `Info.plist` as stated in the
+  /// [documentation](https://developer.apple.com/documentation/bundleresources/information_property_list/nslocationtemporaryusagedescriptiondictionary).
+  ///
+  /// Throws a [PermissionDefinitionsNotFoundException] when the key
+  /// `NSLocationTemporaryUsageDescriptionDictionary` has not been set in the
+  /// `Infop.list`.
+  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
+    required String purposeKey,
+  }) async {
+    throw UnimplementedError(
+        'requestTemporaryFullAccuracy() has not been implemented');
+  }
+
   /// Returns a [Future] containing a [LocationAccuracyStatus].
   ///
   /// When on iOS the user has given permission for approximate location,
   /// [LocationAccuracyStatus.reduced] will be returned, if the user gave
   /// permission for precise/full accuracy location, [LocationAccuracyStatus.precise]
   /// will be returned.
+  /// When executing the method on platforms that don't support location
+  /// accuracy features [LocationAccuracyStatus.unknown] should be returned.
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
     throw UnimplementedError('getLocationAccuracy() has not been implemented.');
   }

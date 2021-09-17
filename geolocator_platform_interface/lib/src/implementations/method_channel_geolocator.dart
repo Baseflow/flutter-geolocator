@@ -207,22 +207,28 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
-    late StreamSubscription subscription;
-    late StreamController<dynamic> controller;
-    controller = StreamController<dynamic>(
-      onListen: () {
-        subscription = incoming.listen(
-          (item) => controller.add(item),
-          onError: (error) => controller.addError(error),
-          onDone: () => controller.close(),
-        );
-      },
-      onCancel: () {
-        subscription.cancel();
-        _positionStream = null;
-      },
-    );
-    return controller.stream.asBroadcastStream();
+    return incoming.asBroadcastStream(onCancel: (subscription) {
+      subscription.cancel();
+      _positionStream = null;
+    });
+  }
+
+  @override
+  Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
+    required String purposeKey,
+  }) async {
+    try {
+      final int status = await _methodChannel.invokeMethod(
+        'requestTemporaryFullAccuracy',
+        <String, dynamic>{
+          'purposeKey': purposeKey,
+        },
+      );
+      return LocationAccuracyStatus.values[status];
+    } on PlatformException catch (e) {
+      _handlePlatformException(e);
+      rethrow;
+    }
   }
 
   @override
@@ -240,9 +246,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       case 'ACTIVITY_MISSING':
         throw ActivityMissingException(exception.message);
       case 'LOCATION_SERVICES_DISABLED':
-        throw LocationServiceDisabledException();
+        throw const LocationServiceDisabledException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':
-        throw AlreadySubscribedException();
+        throw const AlreadySubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':
         throw PermissionDefinitionsNotFoundException(exception.message);
       case 'PERMISSION_DENIED':

@@ -12,7 +12,7 @@ dependencies:
   baseflow_plugin_template:
     git:
       url: git://github.com/Baseflow/baseflow_plugin_template.git
-      ref: v2.0.0-nullsafety
+      ref: v2.1.0
   flutter:
     sdk: flutter
 
@@ -35,6 +35,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^1.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

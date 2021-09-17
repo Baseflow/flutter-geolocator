@@ -1,6 +1,6 @@
 # geolocator_platform_interface
 
-[![pub package](https://img.shields.io/pub/v/geolocator.svg)](https://pub.dartlang.org/packages/geolocator) ![Build status](https://github.com/Baseflow/flutter-geolocator/workflows/platform_interface_package/badge.svg?branch=master) [![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://github.com/tenhobi/effective_dart)
+[![pub package](https://img.shields.io/pub/v/geolocator_platform_interface.svg)](https://pub.dartlang.org/packages/geolocator_platform_interface) ![Build status](https://github.com/Baseflow/flutter-geolocator/workflows/geolocator_platform_interface/badge.svg?branch=master) [![style: flutter_lints](https://img.shields.io/badge/style-flutter_lints-40c4ff.svg)](https://pub.dev/packages/flutter_lints)
 
 A common platform interface for the [`geolocator`][1] plugin.
 

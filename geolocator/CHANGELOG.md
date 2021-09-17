@@ -1,3 +1,37 @@
+
+## 7.6.2
+
+- Migrate Android example App to mavenCentral as jFrog has sunset jCenter (see [official announcement](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter) for more details);
+- Upgrade Android example App to Gradle 4.1.0 to stay in sync with current stable version of Flutter.
+
+## 7.6.1
+
+- Refactored the example app and rollbacked the apple deployment target from 9.0 to 8.0.
+
+## 7.6.0
+
+- Make sure the `getCurrentPosition` method returns the current position and not a cached location which might be wrong (see issue [#629](https://github.com/Baseflow/flutter-geolocator/issues/629)). Note that this means that in some cases fetching the current position might take several seconds. If you want to have a fast initial result, call the `getLastKnownPosition` first and update the position with the result from `getCurrentPosition`.
+
+## 7.5.0
+
+- Added support for macOS Desktop.
+
+## 7.4.1
+
+- Updated README.md to include information about using the Geolocator web version in release mode.
+
+## 7.4.0
+
+- Moved to fully federated architecture (moved Android and iOS implementations into separate packages, geolocator_android and geolocator_apple respectivily).
+
+## 7.3.1
+
+- Android 10 and above: Fixed a bug causing the `requestPermission` method failing to show a prompt when requesting for background location permission.
+
+## 7.3.0
+
+- iOS 14: Users can now request Temporary Precise Location fetching by using the `requestTemporaryFullAccuracy()` method.
+
 ## 7.2.0+1
 
 - Fix formatting of the CHANGELOG.md.
