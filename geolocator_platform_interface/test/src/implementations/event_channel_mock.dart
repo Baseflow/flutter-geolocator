@@ -36,7 +36,9 @@ class EventChannelMock {
   }
 
   void _onListen() {
-    _streamSubscription = stream!.handleError(_sendErrorEnvelope).listen(
+    _streamSubscription = stream!.handleError((e) {
+      _sendErrorEnvelope(e);
+    }).listen(
       _sendSuccessEnvelope,
       onDone: () {
         _sendEnvelope(null);
@@ -51,7 +53,7 @@ class EventChannelMock {
     }
   }
 
-  void _sendErrorEnvelope(Object error) {
+  void _sendErrorEnvelope(Exception error) {
     var code = "UNKNOWN_EXCEPTION";
     String? message;
     dynamic details;
