@@ -76,11 +76,12 @@ class EventChannelMock {
   }
 
   void _sendEnvelope(ByteData? envelope) {
-    if (ServicesBinding.instance == null) {
+    if (TestDefaultBinaryMessengerBinding.instance == null) {
       return;
     }
 
-    ServicesBinding.instance!.channelBuffers.push(
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .handlePlatformMessage(
       _methodChannel.name,
       envelope,
       (_) {},
