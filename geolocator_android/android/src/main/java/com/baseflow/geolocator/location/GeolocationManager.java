@@ -21,29 +21,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GeolocationManager
     implements io.flutter.plugin.common.PluginRegistry.ActivityResultListener {
 
-  @NonNull private final PermissionManager permissionManager;
   private final List<LocationClient> locationClients;
 
-  public GeolocationManager(@NonNull PermissionManager permissionManager) {
-    this.permissionManager = permissionManager;
+  public GeolocationManager() {
     this.locationClients = new CopyOnWriteArrayList<>();
   }
 
   public void getLastKnownPosition(
       Context context,
-      Activity activity,
       boolean forceLocationManager,
       PositionChangedCallback positionChangedCallback,
       ErrorCallback errorCallback) {
 
-    handlePermissions(
-        context,
-        activity,
-        () -> {
-          LocationClient locationClient = createLocationClient(context, forceLocationManager, null);
-          locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
-        },
-        errorCallback);
+      LocationClient locationClient = createLocationClient(context, forceLocationManager, null);
+      locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
   }
 
   public void isLocationServiceEnabled(
@@ -57,19 +48,13 @@ public class GeolocationManager
   }
 
   public void startPositionUpdates(
-      Context context,
-      Activity activity,
-      LocationClient locationClient,
-      PositionChangedCallback positionChangedCallback,
-      ErrorCallback errorCallback) {
+      @NonNull LocationClient locationClient,
+      @Nullable Activity activity,
+      @NonNull PositionChangedCallback positionChangedCallback,
+      @NonNull ErrorCallback errorCallback) {
 
     this.locationClients.add(locationClient);
-
-    handlePermissions(
-        context,
-        activity,
-        () -> locationClient.startPositionUpdates(activity, positionChangedCallback, errorCallback),
-        errorCallback);
+    locationClient.startPositionUpdates(activity, positionChangedCallback, errorCallback);
   }
 
   public void stopPositionUpdates(@NonNull LocationClient locationClient) {
@@ -94,46 +79,6 @@ public class GeolocationManager
     GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
     int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
     return resultCode == ConnectionResult.SUCCESS;
-  }
-
-  private void handlePermissions(
-      Context context,
-      @Nullable Activity activity,
-      Runnable hasPermissionCallback,
-      ErrorCallback errorCallback) {
-    try {
-      LocationPermission permissionStatus =
-          permissionManager.checkPermissionStatus(context, activity);
-
-      if (permissionStatus == LocationPermission.deniedForever) {
-        errorCallback.onError(ErrorCodes.permissionDenied);
-        return;
-      }
-
-      if (permissionStatus == LocationPermission.whileInUse
-          || permissionStatus == LocationPermission.always) {
-        hasPermissionCallback.run();
-        return;
-      }
-
-      if (permissionStatus == LocationPermission.denied && activity != null) {
-        permissionManager.requestPermission(
-            activity,
-            (permission) -> {
-              if (permission == LocationPermission.whileInUse
-                  || permission == LocationPermission.always) {
-                hasPermissionCallback.run();
-              } else {
-                errorCallback.onError(ErrorCodes.permissionDenied);
-              }
-            },
-            errorCallback);
-      } else {
-        errorCallback.onError(ErrorCodes.permissionDenied);
-      }
-    } catch (PermissionUndefinedException ex) {
-      errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
-    }
   }
 
   @Override

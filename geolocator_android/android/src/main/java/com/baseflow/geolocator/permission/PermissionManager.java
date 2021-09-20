@@ -27,7 +27,7 @@ public class PermissionManager
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PermissionResultCallback resultCallback;
 
-  public LocationPermission checkPermissionStatus(Context context, Activity activity)
+  public LocationPermission checkPermissionStatus(Context context)
       throws PermissionUndefinedException {
     String permission = determineFineOrCoarse(context);
 
@@ -187,4 +187,10 @@ public class PermissionManager
         ? Manifest.permission.ACCESS_FINE_LOCATION
         : Manifest.permission.ACCESS_COARSE_LOCATION;
   }
+
+    public boolean hasPermission(Context context) throws PermissionUndefinedException {
+        LocationPermission locationPermission = this.checkPermissionStatus(context);
+
+        return locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always;
+    }
 }
