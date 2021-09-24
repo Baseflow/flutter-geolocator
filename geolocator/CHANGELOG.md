@@ -1,4 +1,9 @@
 
+## 7.6.2
+
+- Migrate Android example App to mavenCentral as jFrog has sunset jCenter (see [official announcement](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter) for more details);
+- Upgrade Android example App to Gradle 4.1.0 to stay in sync with current stable version of Flutter.
+
 ## 7.6.1
 
 - Refactored the example app and rollbacked the apple deployment target from 9.0 to 8.0.
