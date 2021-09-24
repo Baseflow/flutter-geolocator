@@ -1,3 +1,7 @@
+## 2.3.5
+
+- Fixed an issue causing all the Unit tests to fail.
+
 ## 2.3.4
 
 - Update the documentation of the `getCurrentPosition` method to explain why it can take several seconds to execute.
