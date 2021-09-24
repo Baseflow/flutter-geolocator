@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class EventChannelMock {
   final MethodChannel _methodChannel;
@@ -13,7 +14,8 @@ class EventChannelMock {
     required String channelName,
     required this.stream,
   }) : _methodChannel = MethodChannel(channelName) {
-    _methodChannel.setMockMethodCallHandler(_handler);
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockMethodCallHandler(_methodChannel, _handler);
   }
 
   Future _handler(MethodCall methodCall) {
@@ -34,7 +36,9 @@ class EventChannelMock {
   }
 
   void _onListen() {
-    _streamSubscription = stream!.handleError(_sendErrorEnvelope).listen(
+    _streamSubscription = stream!.handleError((e) {
+      _sendErrorEnvelope(e);
+    }).listen(
       _sendSuccessEnvelope,
       onDone: () {
         _sendEnvelope(null);
@@ -72,11 +76,12 @@ class EventChannelMock {
   }
 
   void _sendEnvelope(ByteData? envelope) {
-    if (ServicesBinding.instance == null) {
+    if (TestDefaultBinaryMessengerBinding.instance == null) {
       return;
     }
 
-    ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .handlePlatformMessage(
       _methodChannel.name,
       envelope,
       (_) {},

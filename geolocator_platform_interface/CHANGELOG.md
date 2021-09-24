@@ -1,3 +1,7 @@
+## 2.3.5
+
+- Changed the EventChannelMock and the MethodChannelMockd due to breaking changes in the platform channel test interface.
+
 ## 2.3.4
 
 - Update the documentation of the `getCurrentPosition` method to explain why it can take several seconds to execute.
