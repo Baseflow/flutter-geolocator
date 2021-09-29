@@ -28,19 +28,18 @@
 }
 
 - (void) getLocationAccuracyWithResult:(FlutterResult)result {
-  if (@available(iOS 14, macOS 11, *)) {
+  if (@available(iOS 14, macOS 10.16, *)) {
     switch ([self.locationManager accuracyAuthorization]) {
       case CLAccuracyAuthorizationFullAccuracy:
         return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
       case CLAccuracyAuthorizationReducedAccuracy:
         return result([NSNumber numberWithInt:(LocationAccuracy)reduced]);
       default:
-        // in iOS 14, reduced location accuracy is the default
+        // Reduced location accuracy is the default on iOS 14+ and macOS 11+.
         return result([NSNumber numberWithInt:(LocationAccuracy)reduced]);
     }
   } else {
-    // If the version of iOS is below version number 14, approximate location is not available, thus
-    // precise location is always returned
+    // Approximate location is not available, return precise location.
     return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
   }
 }
@@ -52,7 +51,7 @@
                                       details:nil]);
   }
   
-  if (@available(iOS 14.0, macOS 11.0, *)) {
+  if (@available(iOS 14.0, macOS 10.16, *)) {
     [self.locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:purposeKey
                                                                        completion:^(NSError *_Nullable error) {
       if ([self.locationManager accuracyAuthorization] == CLAccuracyAuthorizationFullAccuracy) {
