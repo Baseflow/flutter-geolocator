@@ -54,9 +54,12 @@
   CLLocationManager *locationManager = self.locationManager;
   locationManager.desiredAccuracy = desiredAccuracy;
   locationManager.distanceFilter = distanceFilter;
+  
+#if TARGET_OS_IOS
   if (@available(iOS 9.0, macOS 10.15, *)) {
       locationManager.allowsBackgroundLocationUpdates = [GeolocationHandler shouldEnableBackgroundLocationUpdates];
   }
+#endif
   
   [locationManager startUpdatingLocation];
 }
