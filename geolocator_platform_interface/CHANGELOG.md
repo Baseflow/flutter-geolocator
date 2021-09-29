@@ -1,3 +1,7 @@
+## 2.3.6
+
+- Updated API documentation on `GeolocatorPlatform.getServiceStream()` method, describing it is not supported on the web platform.
+
 ## 2.3.5
 
 - Changed the EventChannelMock and the MethodChannelMockd due to breaking changes in the platform channel test interface.
