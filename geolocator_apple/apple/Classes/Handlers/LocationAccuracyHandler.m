@@ -28,6 +28,9 @@
 }
 
 - (void) getLocationAccuracyWithResult:(FlutterResult)result {
+#if TARGET_OS_OSX
+  return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
+#else
   if (@available(iOS 14, macOS 10.16, *)) {
     switch ([self.locationManager accuracyAuthorization]) {
       case CLAccuracyAuthorizationFullAccuracy:
@@ -42,6 +45,7 @@
     // Approximate location is not available, return precise location.
     return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
   }
+#endif
 }
 
 - (void) requestTemporaryFullAccuracyWithResult:(FlutterResult)result purposeKey:(NSString * _Nullable)purposeKey {
@@ -51,6 +55,9 @@
                                       details:nil]);
   }
   
+#if TARGET_OS_OSX
+  return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
+#else
   if (@available(iOS 14.0, macOS 10.16, *)) {
     [self.locationManager requestTemporaryFullAccuracyAuthorizationWithPurposeKey:purposeKey
                                                                        completion:^(NSError *_Nullable error) {
@@ -63,6 +70,7 @@
   } else {
     return result([NSNumber numberWithInt:(LocationAccuracy)precise]);
   }
+#endif
 }
 
 @end

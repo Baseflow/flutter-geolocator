@@ -24,11 +24,15 @@
         case 5:
             return kCLLocationAccuracyBestForNavigation;
         case 6:
+#if TARGET_OS_OSX
+        return kCLLocationAccuracyThreeKilometers;
+#else
             if (@available(iOS 14.0, macOS 10.16, *)) {
                 return kCLLocationAccuracyReduced;
             } else {
                 return kCLLocationAccuracyThreeKilometers;
             }
+#endif
         case 4:
         default:
             return kCLLocationAccuracyBest;
