@@ -110,9 +110,12 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError('getCurrentPosition() has not been implemented.');
   }
 
-  /// Fires when the Location Service is manually disabled or enabled f.e.
-  /// when Location Service in Settings is disabled, a event will be fired which
-  /// returns a [LocationServiceStatus].
+  /// Fires when the location Service is manually disabled or enabled.
+  ///
+  /// An instance of [LocationServiceStatus] will be emitted each time the
+  /// location service is enabled or disabled.
+  /// Throws an [UnimplementedError] on the web as the concept of location
+  /// service doesn't exist on the web platform.
   Stream<ServiceStatus> getServiceStatusStream() {
     throw UnimplementedError(
         'getServiceStatusStream() has not been implemented.');
