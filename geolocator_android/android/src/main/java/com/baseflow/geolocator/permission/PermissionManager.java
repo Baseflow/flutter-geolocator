@@ -44,7 +44,7 @@ public class PermissionManager
         if (permissions.length == 1) {
             permissionStatus = ContextCompat.checkSelfPermission(context, permissions[0]);
         } else {
-            if(ContextCompat.checkSelfPermission(context, permissions[0]) == 0
+            if (ContextCompat.checkSelfPermission(context, permissions[0]) == 0
                     || ContextCompat.checkSelfPermission(context, permissions[1]) == 0) {
                 permissionStatus = PackageManager.PERMISSION_GRANTED;
             }
@@ -155,7 +155,7 @@ public class PermissionManager
             return false;
         }
 
-        if(requestedPermissions.length == 1) {
+        if (requestedPermissions.length == 1) {
             if (grantResults[requestedPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                     int backgroundPermissionIndex =
@@ -176,7 +176,7 @@ public class PermissionManager
             }
         } else {
             if (grantResults[requestedPermissionIndex] == PackageManager.PERMISSION_GRANTED
-                    || grantResults[requestedPermissionIndex+1] == PackageManager.PERMISSION_GRANTED) {
+                    || grantResults[requestedPermissionIndex + 1] == PackageManager.PERMISSION_GRANTED) {
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                     int backgroundPermissionIndex =
                             indexOf(permissions, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
@@ -191,7 +191,7 @@ public class PermissionManager
                 }
             } else {
                 if (activity != null && !ActivityCompat.shouldShowRequestPermissionRationale(activity, requestedPermissions[0])
-                    && !ActivityCompat.shouldShowRequestPermissionRationale(activity, requestedPermissions[1])) {
+                        && !ActivityCompat.shouldShowRequestPermissionRationale(activity, requestedPermissions[1])) {
                     permission = LocationPermission.deniedForever;
                 }
             }
