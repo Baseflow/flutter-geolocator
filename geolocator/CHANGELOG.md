@@ -1,3 +1,7 @@
+## 7.7.0
+
+- Added Approximate Location support for Android 12.
+
 
 ## 7.6.2
 
