@@ -73,7 +73,6 @@ public class PermissionManager
   public void requestPermission(
       Activity activity, PermissionResultCallback resultCallback, ErrorCallback errorCallback)
       throws PermissionUndefinedException {
-    final List<String> permissionsToRequest;
 
     if (activity == null) {
       errorCallback.onError(ErrorCodes.activityMissing);
@@ -86,7 +85,7 @@ public class PermissionManager
       return;
     }
 
-    permissionsToRequest = getLocationPermissions(activity);
+    final List<String> permissionsToRequest = getLocationPermissions(activity);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         && PermissionUtils.hasPermissionInManifest(
