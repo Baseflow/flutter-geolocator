@@ -2,7 +2,6 @@
 
 - Added Approximate Location support for Android 12.
 
-
 ## 7.6.2
 
 - Migrate Android example App to mavenCentral as jFrog has sunset jCenter (see [official announcement](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter) for more details);
