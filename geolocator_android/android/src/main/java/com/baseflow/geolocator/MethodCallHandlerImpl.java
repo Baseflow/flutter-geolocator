@@ -118,7 +118,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private void onCheckPermission(MethodChannel.Result result) {
     try {
       LocationPermission permission =
-          this.permissionManager.checkPermissionStatus(context, activity);
+          this.permissionManager.checkPermissionStatus(context);
       result.success(permission.toInt());
     } catch (PermissionUndefinedException e) {
       ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
