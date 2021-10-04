@@ -30,7 +30,7 @@ public class PermissionManager
 
   public LocationPermission checkPermissionStatus(Context context)
       throws PermissionUndefinedException {
-    List<String> permissions = getLocationPermissions(context);
+    List<String> permissions = getLocationPermissionsFromManifest(context);
 
     // If target is before Android M, permission is always granted
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -43,6 +43,7 @@ public class PermissionManager
       if (ContextCompat.checkSelfPermission(context, permission)
           == PackageManager.PERMISSION_GRANTED) {
         permissionStatus = PackageManager.PERMISSION_GRANTED;
+        break;
       }
     }
 
@@ -85,7 +86,7 @@ public class PermissionManager
       return;
     }
 
-    final List<String> permissionsToRequest = getLocationPermissions(activity);
+    final List<String> permissionsToRequest = getLocationPermissionsFromManifest(activity);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         && PermissionUtils.hasPermissionInManifest(
@@ -122,28 +123,13 @@ public class PermissionManager
     List<String> requestedPermissions;
 
     try {
-      requestedPermissions = getLocationPermissions(this.activity);
+      requestedPermissions = getLocationPermissionsFromManifest(this.activity);
     } catch (PermissionUndefinedException ex) {
       if (this.errorCallback != null) {
         this.errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
       }
 
       return false;
-    }
-
-    LocationPermission locationPermission = LocationPermission.denied;
-
-    List<Integer> requestedPermissionIndexes = new ArrayList<>();
-
-    for (String permission : requestedPermissions) {
-      int requestedPermissionIndex = indexOf(permissions, permission);
-      if (requestedPermissionIndex < 0) {
-        Log.w(
-            "Geolocator",
-            "Location permissions not part of permissions send to onRequestPermissionsResult method.");
-        return false;
-      }
-      requestedPermissionIndexes.add(requestedPermissionIndex);
     }
 
     if (grantResults.length == 0) {
@@ -153,13 +139,30 @@ public class PermissionManager
       return false;
     }
 
+    LocationPermission locationPermission = LocationPermission.denied;
     int grantedResult = PackageManager.PERMISSION_DENIED;
+    boolean shouldShowRationale = false;
+    boolean permissionsPartOfPermissionsResult = false;
 
-    for (int permissionIndex : requestedPermissionIndexes) {
-      if (permissionIndex == PackageManager.PERMISSION_GRANTED) {
+    for (String permission : requestedPermissions) {
+      int requestedPermissionIndex = indexOf(permissions, permission);
+      if (requestedPermissionIndex > 0) {
+          permissionsPartOfPermissionsResult = true;
+      }
+      if (requestedPermissionIndex == PackageManager.PERMISSION_GRANTED) {
         grantedResult = PackageManager.PERMISSION_GRANTED;
+      }
+      if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+        shouldShowRationale = true;
         break;
       }
+    }
+
+    if(!permissionsPartOfPermissionsResult) {
+        Log.w(
+                "Geolocator",
+                "Location permissions not part of permissions send to onRequestPermissionsResult method.");
+        return false;
     }
 
     if (grantedResult == PackageManager.PERMISSION_GRANTED) {
@@ -173,13 +176,6 @@ public class PermissionManager
         locationPermission = LocationPermission.always;
       }
     } else {
-      boolean shouldShowRationale = false;
-      for (String permission : requestedPermissions) {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-          shouldShowRationale = true;
-          break;
-        }
-      }
       if (activity != null && !shouldShowRationale) {
         locationPermission = LocationPermission.deniedForever;
       }
@@ -204,7 +200,7 @@ public class PermissionManager
     return Arrays.asList(arr).indexOf(val);
   }
 
-  private static List<String> getLocationPermissions(Context context)
+  private static List<String> getLocationPermissionsFromManifest(Context context)
       throws PermissionUndefinedException {
     boolean fineLocationPermissionExists =
         PermissionUtils.hasPermissionInManifest(context, Manifest.permission.ACCESS_FINE_LOCATION);
