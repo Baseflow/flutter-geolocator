@@ -12,6 +12,8 @@ import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
 import com.baseflow.geolocator.location.FlutterLocationServiceListener;
 import com.baseflow.geolocator.location.GeolocationManager;
+import com.baseflow.geolocator.location.LocationAccuracyStatus;
+import com.baseflow.geolocator.location.LocationAccuracyStatusManager;
 import com.baseflow.geolocator.location.LocationClient;
 import com.baseflow.geolocator.location.LocationMapper;
 import com.baseflow.geolocator.location.LocationOptions;
@@ -33,15 +35,17 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private static final String TAG = "MethodCallHandlerImpl";
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
+  private final LocationAccuracyStatusManager locationAccuracyStatusManager;
 
   @Nullable private Context context;
 
   @Nullable private Activity activity;
 
   MethodCallHandlerImpl(
-      PermissionManager permissionManager, GeolocationManager geolocationManager) {
+      PermissionManager permissionManager, GeolocationManager geolocationManager, LocationAccuracyStatusManager locationAccuracyStatusManager) {
     this.permissionManager = permissionManager;
     this.geolocationManager = geolocationManager;
+    this.locationAccuracyStatusManager = locationAccuracyStatusManager;
   }
 
   @Nullable private MethodChannel channel;
@@ -61,6 +65,9 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       case "getLastKnownPosition":
         onGetLastKnownPosition(call, result);
         break;
+        case "getLocationAccuracy":
+            getLocationAccuracy(result, this.context);
+            break;
       case "getCurrentPosition":
         onGetCurrentPosition(call, result);
         break;
@@ -142,6 +149,11 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
       result.error(errorCode.toString(), errorCode.toDescription(), null);
     }
+  }
+
+  private void getLocationAccuracy(MethodChannel.Result result, Context context) {
+      final LocationAccuracyStatus status = this.locationAccuracyStatusManager.getLocationAccuracy(context);
+      result.success(status.ordinal());
   }
 
   private void onGetLastKnownPosition(MethodCall call, MethodChannel.Result result) {

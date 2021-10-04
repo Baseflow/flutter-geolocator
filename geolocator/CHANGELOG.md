@@ -1,6 +1,7 @@
 ## 7.7.0
 
 - Added Approximate Location support for Android 12.
+- Added the 'getLocationAccuracy' method for Android.
 
 ## 7.6.2
 
