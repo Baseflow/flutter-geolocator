@@ -154,7 +154,6 @@ public class PermissionManager
       }
       if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
         shouldShowRationale = true;
-        break;
       }
     }
 
