@@ -165,15 +165,9 @@ public class PermissionManager
     }
 
     if (grantedResult == PackageManager.PERMISSION_GRANTED) {
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
-        if (hasBackgroundAccess(permissions, grantResults)) {
-          locationPermission = LocationPermission.always;
-        } else {
-          locationPermission = LocationPermission.whileInUse;
-        }
-      } else {
-        locationPermission = LocationPermission.always;
-      }
+        locationPermission = (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q || hasBackgroundAccess(permissions, grantResults))
+                ? LocationPermission.always
+                : LocationPermission.whileInUse;
     } else {
       if (activity != null && !shouldShowRationale) {
         locationPermission = LocationPermission.deniedForever;
