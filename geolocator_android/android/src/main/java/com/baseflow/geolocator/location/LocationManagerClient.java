@@ -1,13 +1,13 @@
 package com.baseflow.geolocator.location;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Looper;
 
@@ -132,12 +132,13 @@ class LocationManagerClient implements LocationClient, LocationListener {
     }
   }
 
+  @TargetApi(28)
   @SuppressWarnings("deprecation")
   @Override
   public void onStatusChanged(String provider, int status, Bundle extras) {
-    if (status == LocationProvider.AVAILABLE) {
+    if (status == android.location.LocationProvider.AVAILABLE) {
       onProviderEnabled(provider);
-    } else if (status == LocationProvider.OUT_OF_SERVICE) {
+    } else if (status == android.location.LocationProvider.OUT_OF_SERVICE) {
       onProviderDisabled(provider);
     }
   }

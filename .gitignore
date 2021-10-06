@@ -21,9 +21,9 @@ coverage/
 .idea/
 
 # Android Studio related
-android/.classpath
-android/.settings/
-example/android/.settings/
+.classpath
+.project
+**/.settings/
 
 # Visual Studio Code related
 .vscode/

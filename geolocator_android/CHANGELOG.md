@@ -1,4 +1,9 @@
+## 1.0.3
+
+- Fixed the deprecation warnings/errors which caused the `flutter build appbundle` to fail when using `compileSdkVersion 29`
+
 ## 1.0.2
+
 - Fixed **didChangeAppLifecycleState** goes into a loop after location request (see issue: https://github.com/Baseflow/flutter-geolocator/issues/816).
 
 ## 1.0.1
