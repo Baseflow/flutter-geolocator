@@ -1,3 +1,13 @@
+
+## 7.6.2
+
+- Migrate Android example App to mavenCentral as jFrog has sunset jCenter (see [official announcement](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter) for more details);
+- Upgrade Android example App to Gradle 4.1.0 to stay in sync with current stable version of Flutter.
+
+## 7.6.1
+
+- Refactored the example app and rollbacked the apple deployment target from 9.0 to 8.0.
+
 ## 7.6.0
 
 - Make sure the `getCurrentPosition` method returns the current position and not a cached location which might be wrong (see issue [#629](https://github.com/Baseflow/flutter-geolocator/issues/629)). Note that this means that in some cases fetching the current position might take several seconds. If you want to have a fast initial result, call the `getLastKnownPosition` first and update the position with the result from `getCurrentPosition`.
