@@ -1,6 +1,9 @@
-## 1.0.3
+## 2.0.0
 
-- Fixed the deprecation warnings/errors which caused the `flutter build appbundle` to fail when using `compileSdkVersion 29`
+> **IMPORTANT:** when updating to version 2.0.0 make sure to also set the compileSdkVersion in the app/build.gradle file to 31.
+
+- Set Android `compileSdkVersion` to `31` (Android 12);
+- Fixed the deprecation warnings/errors which caused the `flutter build appbundle` to fail when using `compileSdkVersion 31`.
 
 ## 1.0.2
 
