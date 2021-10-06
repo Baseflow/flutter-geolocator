@@ -136,11 +136,11 @@ class LocationManagerClient implements LocationClient, LocationListener {
   @SuppressWarnings("deprecation")
   @Override
   public void onStatusChanged(String provider, int status, Bundle extras) {
-      if (status == android.location.LocationProvider.AVAILABLE) {
-          onProviderEnabled(provider);
-      } else if (status == android.location.LocationProvider.OUT_OF_SERVICE) {
-          onProviderDisabled(provider);
-      }
+    if (status == android.location.LocationProvider.AVAILABLE) {
+      onProviderEnabled(provider);
+    } else if (status == android.location.LocationProvider.OUT_OF_SERVICE) {
+      onProviderDisabled(provider);
+    }
   }
 
   @Override
