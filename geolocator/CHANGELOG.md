@@ -1,3 +1,7 @@
+## 7.7.1
+
+- Make sure the `getServiceStatusStream` method returns an event when initially the Service Status is enabled on Android Devices (see issue[#812](https://github.com/Baseflow/flutter-geolocator/issues/812).
+
 ## 7.7.0
 
 > **IMPORTANT:** when updating to version 7.7.0 make sure to also set the compileSdkVersion in the android/app/build.gradle file to 31.
