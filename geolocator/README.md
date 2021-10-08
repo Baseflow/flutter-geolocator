@@ -252,7 +252,6 @@ To query if a user enabled Approximate location fetching or Precise location fet
 When calling `getLocationAccuracy` before the user has given permission, the method will return `LocationAccuracyStatus.reduced` by default.
 On iOS 13 or below, the method `getLocationAccuracy` will always return `LocationAccuracyStatus.precise`, since that is the default value for iOS 13 and below.
 
-
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
