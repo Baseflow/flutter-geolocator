@@ -1,7 +1,7 @@
 ## 7.8.0
 
-- Added Approximate Location support for Android 12.
-- Added the 'getLocationAccuracy' method for Android.
+- Added Approximate Location support for Android 12;
+- Added support to request the location accuracy on Android through the `Geolocator.getLocationAccuracy()` method.
 
 ## 7.7.0
 
