@@ -1,3 +1,8 @@
+## 7.8.0
+
+- Added Approximate Location support for Android 12;
+- Added support to request the location accuracy on Android through the `Geolocator.getLocationAccuracy()` method.
+
 ## 7.7.0
 
 > **IMPORTANT:** when updating to version 7.7.0 make sure to also set the compileSdkVersion in the android/app/build.gradle file to 31.
