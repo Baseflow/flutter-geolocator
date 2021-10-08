@@ -31,7 +31,7 @@ public class LocationServiceStatusReceiver extends BroadcastReceiver {
       if (isGpsEnabled || isNetworkEnabled) {
         /*
         It may occur that the [BroadcastReceiver] receives several events of the same type,
-        that's why u should check whether or not the event is fired more then one time.
+        that's why you should check whether or not the event is fired more than one time.
         This is realised by saving the [lastKnownServiceStatus].
          */
         if (lastKnownServiceStatus == null || lastKnownServiceStatus == ServiceStatus.disabled) {
