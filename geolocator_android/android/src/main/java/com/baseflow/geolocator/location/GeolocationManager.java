@@ -103,7 +103,7 @@ public class GeolocationManager
       ErrorCallback errorCallback) {
     try {
       LocationPermission permissionStatus =
-          permissionManager.checkPermissionStatus(context, activity);
+          permissionManager.checkPermissionStatus(context);
 
       if (permissionStatus == LocationPermission.deniedForever) {
         errorCallback.onError(ErrorCodes.permissionDenied);
