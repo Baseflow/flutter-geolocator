@@ -1,4 +1,12 @@
+## 2.0.0
+
+> **IMPORTANT:** when updating to version 2.0.0 make sure to also set the compileSdkVersion in the app/build.gradle file to 31.
+
+- Set Android `compileSdkVersion` to `31` (Android 12);
+- Fixed the deprecation warnings/errors which caused the `flutter build appbundle` to fail when using `compileSdkVersion 31`.
+
 ## 1.0.2
+
 - Fixed **didChangeAppLifecycleState** goes into a loop after location request (see issue: https://github.com/Baseflow/flutter-geolocator/issues/816).
 
 ## 1.0.1
