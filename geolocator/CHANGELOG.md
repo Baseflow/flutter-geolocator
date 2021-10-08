@@ -2,6 +2,7 @@
 
 - Added Approximate Location support for Android 12;
 - Added support to request the location accuracy on Android through the `Geolocator.getLocationAccuracy()` method.
+- Make sure the `getServiceStatusStream` method returns an event when initially the Service Status is enabled on Android Devices (see issue[#812](https://github.com/Baseflow/flutter-geolocator/issues/812).
 
 ## 7.7.0
 
