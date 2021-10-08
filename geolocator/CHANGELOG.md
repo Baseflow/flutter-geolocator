@@ -1,3 +1,8 @@
+## 7.8.0
+
+- Added Approximate Location support for Android 12.
+- Added the 'getLocationAccuracy' method for Android.
+
 ## 7.7.0
 
 > **IMPORTANT:** when updating to version 7.7.0 make sure to also set the compileSdkVersion in the android/app/build.gradle file to 31.

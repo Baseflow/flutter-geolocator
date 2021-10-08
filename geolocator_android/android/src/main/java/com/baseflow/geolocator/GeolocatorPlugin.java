@@ -3,7 +3,7 @@ package com.baseflow.geolocator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.location.GeolocationManager;
-import com.baseflow.geolocator.location.LocationAccuracyStatusManager;
+import com.baseflow.geolocator.location.LocationAccuracyManager;
 import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -15,7 +15,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private static final String TAG = "GeocodingPlugin";
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
-  private final LocationAccuracyStatusManager locationAccuracyStatusManager;
+  private final LocationAccuracyManager locationAccuracyManager;
 
   @Nullable private MethodCallHandlerImpl methodCallHandler;
 
@@ -32,7 +32,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   public GeolocatorPlugin() {
     this.permissionManager = new PermissionManager();
     this.geolocationManager = new GeolocationManager(permissionManager);
-    this.locationAccuracyStatusManager = new LocationAccuracyStatusManager();
+    this.locationAccuracyManager = new LocationAccuracyManager();
   }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -54,7 +54,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         new MethodCallHandlerImpl(
             geolocatorPlugin.permissionManager,
             geolocatorPlugin.geolocationManager,
-            geolocatorPlugin.locationAccuracyStatusManager);
+            geolocatorPlugin.locationAccuracyManager);
     methodCallHandler.startListening(registrar.context(), registrar.messenger());
     methodCallHandler.setActivity(registrar.activity());
 
@@ -71,7 +71,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     methodCallHandler =
         new MethodCallHandlerImpl(
-            this.permissionManager, this.geolocationManager, this.locationAccuracyStatusManager);
+            this.permissionManager, this.geolocationManager, this.locationAccuracyManager);
     methodCallHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
     streamHandler = new StreamHandlerImpl(this.geolocationManager);

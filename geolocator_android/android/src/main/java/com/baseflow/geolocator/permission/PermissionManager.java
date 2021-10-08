@@ -146,10 +146,10 @@ public class PermissionManager
 
     for (String permission : requestedPermissions) {
       int requestedPermissionIndex = indexOf(permissions, permission);
-      if (requestedPermissionIndex > 0) {
+      if (requestedPermissionIndex >= 0) {
           permissionsPartOfPermissionsResult = true;
       }
-      if (requestedPermissionIndex == PackageManager.PERMISSION_GRANTED) {
+      if (grantResults[requestedPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
         grantedResult = PackageManager.PERMISSION_GRANTED;
       }
       if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
@@ -169,7 +169,7 @@ public class PermissionManager
                 ? LocationPermission.always
                 : LocationPermission.whileInUse;
     } else {
-      if (activity != null && !shouldShowRationale) {
+      if (!shouldShowRationale) {
         locationPermission = LocationPermission.deniedForever;
       }
     }
