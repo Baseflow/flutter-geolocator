@@ -40,7 +40,7 @@ public class LocationServiceStatusReceiver extends BroadcastReceiver {
         }
       } else {
         if (lastKnownServiceStatus == null || lastKnownServiceStatus == ServiceStatus.enabled) {
-            lastKnownServiceStatus = ServiceStatus.disabled;
+          lastKnownServiceStatus = ServiceStatus.disabled;
           events.success(ServiceStatus.disabled.ordinal());
         }
       }
