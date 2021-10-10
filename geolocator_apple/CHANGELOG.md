@@ -1,3 +1,6 @@
+## 1.2.2
+- Fixed iOS cancelation of positionStream
+
 ## 1.2.1
 
 - Use `requestAlwaysAuthorization` instead of `requestWhenInUseAuthorization` on macOS as both result in the same behaviour but the former has better support on Catelina.

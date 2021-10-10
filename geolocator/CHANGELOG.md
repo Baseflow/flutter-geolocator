@@ -1,3 +1,5 @@
+## 7.6.3
+- Fixed iOS cancelation of positionStream
 
 ## 7.6.2
 
