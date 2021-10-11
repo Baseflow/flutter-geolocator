@@ -61,6 +61,9 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       case "isLocationServiceEnabled":
         onIsLocationServiceEnabled(result);
         break;
+      case "isGoogleLocationAccuracyEnabled":
+        onIsGoogleLocationAccuracyEnabled(result);
+        break;
       case "requestPermission":
         onRequestPermission(result);
         break;
@@ -136,6 +139,11 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void onIsLocationServiceEnabled(MethodChannel.Result result) {
     geolocationManager.isLocationServiceEnabled(
+        context, new FlutterLocationServiceListener(result));
+  }
+
+  private void onIsGoogleLocationAccuracyEnabled(MethodChannel.Result result) {
+    geolocationManager.isGoogleLocationAccuracyEnabled(
         context, new FlutterLocationServiceListener(result));
   }
 

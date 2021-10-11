@@ -455,6 +455,51 @@ void main() {
       });
     });
 
+    group(
+        'isGoogleLocationAccuracyEnabled: When checking the Google Location Accuracy setting status',
+        () {
+      test('Should receive true if Google Location Accuracy is enabled',
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'isGoogleLocationAccuracyEnabled',
+          result: true,
+        );
+
+        // Act
+        final isGoogleLocationAccuracyEnabled =
+            await MethodChannelGeolocator().isGoogleLocationAccuracyEnabled();
+
+        // Assert
+        expect(
+          isGoogleLocationAccuracyEnabled,
+          true,
+        );
+      });
+
+      test(
+          'Should receive false if Google Location Accuracy setting is disabled',
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator',
+          method: 'isGoogleLocationAccuracyEnabled',
+          result: false,
+        );
+
+        // Act
+        final isGoogleLocationAccuracyEnabled =
+            await MethodChannelGeolocator().isGoogleLocationAccuracyEnabled();
+
+        // Assert
+        expect(
+          isGoogleLocationAccuracyEnabled,
+          false,
+        );
+      });
+    });
+
     group('getLastKnownPosition: When requesting the last know position', () {
       test('Should receive a position if permissions are granted', () async {
         // Arrange

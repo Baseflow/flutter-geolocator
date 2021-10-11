@@ -71,6 +71,11 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       .then((value) => value ?? false);
 
   @override
+  Future<bool> isGoogleLocationAccuracyEnabled() async => _methodChannel
+      .invokeMethod<bool>('isGoogleLocationAccuracyEnabled')
+      .then((value) => value ?? false);
+
+  @override
   Future<Position?> getLastKnownPosition({
     bool forceAndroidLocationManager = false,
   }) async {

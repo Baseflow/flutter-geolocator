@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Provide an interface `isGoogleLocationAccuracyEnabled` to check the Google Location Accuracy setting.
+
 ## 1.2.1
 
 - Use `requestAlwaysAuthorization` instead of `requestWhenInUseAuthorization` on macOS as both result in the same behaviour but the former has better support on Catelina.

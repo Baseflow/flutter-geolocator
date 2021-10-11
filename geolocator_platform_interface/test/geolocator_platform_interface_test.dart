@@ -75,6 +75,20 @@ void main() {
 
     test(
         // ignore: lines_longer_than_80_chars
+        'Default implementation of isGoogleLocationAccuracyEnabled should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+      // Act & Assert
+      expect(
+        geolocatorPlatform.isGoogleLocationAccuracyEnabled,
+        throwsUnimplementedError,
+      );
+    });
+
+    test(
+        // ignore: lines_longer_than_80_chars
         'Default implementation of requestTemporaryAccuracy should throw unimplemented error',
         () {
       // Arrange

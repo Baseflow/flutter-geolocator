@@ -41,6 +41,13 @@ void main() {
       expect(isLocationServiceEnabled, true);
     });
 
+    test('isGoogleLocationAccuracyEnabled', () async {
+      final isGoogleLocationAccuracyEnabled =
+          await Geolocator.isGoogleLocationAccuracyEnabled();
+
+      expect(isGoogleLocationAccuracyEnabled, true);
+    });
+
     test('getLastKnownPosition', () async {
       final position = await Geolocator.getLastKnownPosition();
 
@@ -172,6 +179,9 @@ class MockGeolocatorPlatform extends Mock
 
   @override
   Future<bool> isLocationServiceEnabled() => Future.value(true);
+
+  @override
+  Future<bool> isGoogleLocationAccuracyEnabled() => Future.value(true);
 
   @override
   Future<Position> getLastKnownPosition({

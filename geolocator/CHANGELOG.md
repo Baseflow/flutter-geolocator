@@ -1,3 +1,7 @@
+## 7.8.0
+
+- Provide an interface `isGoogleLocationAccuracyEnabled` to check the Google Location Accuracy setting.
+
 ## 7.7.0
 
 > **IMPORTANT:** when updating to version 7.7.0 make sure to also set the compileSdkVersion in the android/app/build.gradle file to 31.

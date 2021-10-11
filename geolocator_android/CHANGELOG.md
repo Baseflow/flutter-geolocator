@@ -1,3 +1,7 @@
+## 2.2.0
+
+- Provide an interface `isGoogleLocationAccuracyEnabled` to check the Google Location Accuracy setting.
+
 ## 2.1.0
 
 - Added Approximate Location support for Android 12;

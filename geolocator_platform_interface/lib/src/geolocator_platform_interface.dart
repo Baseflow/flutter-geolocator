@@ -67,6 +67,17 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     );
   }
 
+  /// Returns a [Future] containing a [bool] value indicating whether the
+  /// Google Location Accuracy for the FusedLocationProvider is enabled on
+  /// the device.
+  /// Returns hardcoded `false` on iOS.
+  /// Returns hardcoded `false` when Google Play Services are not installed.
+  Future<bool> isGoogleLocationAccuracyEnabled() {
+    throw UnimplementedError(
+      'isGoogleLocationAccuracyEnabled() has not been implemented.',
+    );
+  }
+
   /// Returns the last known position stored on the users device.
   ///
   /// On Android you can force the plugin to use the old Android

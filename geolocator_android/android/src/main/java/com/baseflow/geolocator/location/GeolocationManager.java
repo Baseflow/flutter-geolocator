@@ -13,6 +13,10 @@ import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -54,6 +58,35 @@ public class GeolocationManager
 
     LocationClient locationClient = createLocationClient(context, false, null);
     locationClient.isLocationServiceEnabled(listener);
+  }
+
+  public void isGoogleLocationAccuracyEnabled(@Nullable Context context, LocationServiceListener listener) {
+    if (context == null) {
+        listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+        return;
+    }
+
+    if (isGooglePlayServicesAvailable(context)) {
+      LocationRequest locationRequest = new LocationRequest();
+      locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+      LocationSettingsRequest locationSettingsRequest = new LocationSettingsRequest.Builder()
+          .addLocationRequest(locationRequest)
+          .build();
+
+      LocationServices.getSettingsClient(context)
+          .checkLocationSettings(locationSettingsRequest)
+          .addOnCompleteListener(task -> {
+              try {
+                  task.getResult(ApiException.class);
+                  listener.onLocationServiceResult(true);
+              } catch (ApiException exception) {
+                  listener.onLocationServiceResult(false);
+              }
+          });
+    } else {
+        listener.onLocationServiceResult(false);
+    }
   }
 
   public void startPositionUpdates(

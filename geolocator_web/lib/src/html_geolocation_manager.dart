@@ -5,6 +5,7 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 import 'geolocation_manager.dart';
 import 'utils.dart';
 
+// ignore_for_file: public_member_api_docs
 class HtmlGeolocationManager implements GeolocationManager {
   final html.Geolocation _geolocation;
 

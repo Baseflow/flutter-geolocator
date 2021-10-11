@@ -1,3 +1,7 @@
+## 2.3.7
+
+- Provide an interface `isGoogleLocationAccuracyEnabled` to check the Google Location Accuracy setting.
+
 ## 2.3.6
 
 - Updated API documentation on `GeolocatorPlatform.getServiceStream()` method, describing it is not supported on the web platform.

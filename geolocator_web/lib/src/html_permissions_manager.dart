@@ -5,6 +5,7 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 import 'permissions_manager.dart';
 import 'utils.dart';
 
+// ignore_for_file: public_member_api_docs
 class HtmlPermissionsManager implements PermissionsManager {
   static const _permissionQuery = {'name': 'geolocation'};
   final html.Permissions? _permissions;

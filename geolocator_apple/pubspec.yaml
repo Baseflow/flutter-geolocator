@@ -3,6 +3,7 @@ description: Geolocation Apple plugin for Flutter. This plugin provides the Appl
 version: 1.2.1
 repository: https://github.com/Baseflow/flutter-geolocator/tree/master/geolocator_apple
 issue_tracker: https://github.com/Baseflow/flutter-geolocator/issues?q=is%3Aissue+is%3Aopen
+publish_to: none
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -19,8 +20,9 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  
-  geolocator_platform_interface: ^2.3.2
+
+  geolocator_platform_interface:
+    path: ../geolocator_platform_interface
   
 dev_dependencies:
   flutter_test:
