@@ -69,6 +69,13 @@ class FusedLocationClient implements LocationClient {
     return random.nextInt(1 << 16);
   }
 
+  @SuppressLint("MissingPermission")
+  private void requestPositionUpdates(LocationOptions locationOptions) {
+    LocationRequest locationRequest = buildLocationRequest(locationOptions);
+    fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest, locationCallback, Looper.getMainLooper());
+  }
+
   @Override
   public void isLocationServiceEnabled(LocationServiceListener listener) {
     LocationServices.getSettingsClient(context)
@@ -114,7 +121,7 @@ class FusedLocationClient implements LocationClient {
           return false;
         }
 
-        startPositionUpdates(this.activity, this.positionChangedCallback, this.errorCallback);
+        requestPositionUpdates(this.locationOptions);
 
         return true;
       } else {
@@ -145,8 +152,8 @@ class FusedLocationClient implements LocationClient {
         .checkLocationSettings(settingsRequest)
         .addOnSuccessListener(
             locationSettingsResponse ->
-                fusedLocationProviderClient.requestLocationUpdates(
-                    locationRequest, locationCallback, Looper.getMainLooper()))
+                requestPositionUpdates(this.locationOptions)
+        )
         .addOnFailureListener(
             e -> {
               if (e instanceof ResolvableApiException) {
@@ -174,8 +181,7 @@ class FusedLocationClient implements LocationClient {
                 ApiException ae = (ApiException) e;
                 int statusCode = ae.getStatusCode();
                 if (statusCode == LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE) {
-                  fusedLocationProviderClient.requestLocationUpdates(
-                      locationRequest, locationCallback, Looper.getMainLooper());
+                  requestPositionUpdates(this.locationOptions);
                 } else {
                   // This should not happen according to Android documentation but it has been
                   // observed on some phones.

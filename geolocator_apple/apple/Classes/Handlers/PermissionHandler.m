@@ -49,7 +49,7 @@
 #if TARGET_OS_OSX
   if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationUsageDescription"] != nil) {
     if (@available(macOS 10.15, *)) {
-      [self.locationManager requestWhenInUseAuthorization];
+      [self.locationManager requestAlwaysAuthorization];
     }
   }
 #else
