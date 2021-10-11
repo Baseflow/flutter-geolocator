@@ -1,5 +1,6 @@
 ## 1.2.2
-- Fixed iOS cancelation of positionStream
+
+- Fixed iOS cancelation of positionStream.
 
 ## 1.2.1
 
