@@ -1,3 +1,7 @@
+## NEXT
+
+- Removed implicit request for permissions when getting a position.
+
 # 1.3.0
 
 - Added the [ActivityType] enum needed for the `pauseLocationUpdatesAutomatically` property.
