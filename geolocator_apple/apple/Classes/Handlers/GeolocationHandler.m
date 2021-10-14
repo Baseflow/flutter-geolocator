@@ -6,7 +6,6 @@
 //
 
 #import "GeolocationHandler.h"
-#import "PermissionHandler.h"
 #import "../Constants/ErrorCodes.h"
 
 @interface GeolocationHandler() <CLLocationManagerDelegate>
