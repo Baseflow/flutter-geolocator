@@ -291,9 +291,11 @@ Possible results from the `checkPermission` and `requestPermission` methods are:
 Permission | Description
 -----------|------------
 denied | Permission to access the device's location is denied by the user. You are free to request permission again (this is also the initial permission state).
-deniedForever | Android only: Permission to access the device's location is denied forever. If requesting permission the permission dialog will NOT been shown until the user updates the permission in the App settings.
+deniedForever | Permission to access the device's location is permenantly denied. When requesting permissions the permission dialog will not been shown until the user updates the permission in the App settings.
 whileInUse | Permission to access the device's location is allowed only while the App is in use.
 always | Permission to access the device's location is allowed even when the App is running in the background.
+
+> Note: Android can only return `whileInUser`, `always` or `denied` when checking permissions. Due to limitations on the Android OS it is not possible to determine if permissions are denied permanently when checking permissions. Using a workaround the geolocator is only able to do so as a result of the `requestPermission` method. More information can be found in our [wiki](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0#android-permission-update).
 
 ### Settings
 
