@@ -1,11 +1,12 @@
-## NEXT
+# NEXT
 
 - Removed implicit request for permissions when getting a position.
-
-# 1.3.0
-
 - Added the [ActivityType] enum needed for the `pauseLocationUpdatesAutomatically` property.
 - Added the `pauseLocationUpdatesAutomatically` and `activityType` property to the iOS options class.
+
+## 1.2.2
+
+- Fixed iOS cancelation of positionStream.
 
 ## 1.2.1
 
