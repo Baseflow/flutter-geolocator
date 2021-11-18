@@ -46,15 +46,6 @@
   
   __weak typeof(self) weakSelf = self;
   
-  [_permissionHandler
-   requestPermission:^(CLAuthorizationStatus status) {
-    
-    if (![PermissionUtils isStatusGranted:status]) {
-      [weakSelf onLocationFailureWithErrorCode: GeolocatorErrorPermissionDenied
-                              errorDescription: @"User denied permissions to access the device's location."];
-      return;
-    }
-    
     CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
     CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
     
@@ -67,12 +58,6 @@
       [weakSelf onLocationFailureWithErrorCode:errorCode
                               errorDescription:errorDescription];
     }];
-  }
-   errorHandler:^(NSString *errorCode, NSString *errorDescription) {
-    [weakSelf onLocationFailureWithErrorCode:errorCode
-                            errorDescription:errorDescription];
-  }];
-  
   return nil;
 }
 
