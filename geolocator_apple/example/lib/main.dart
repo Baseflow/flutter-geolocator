@@ -283,11 +283,15 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _toggleListening() {
+    Exception? error;
+
     if (_positionStreamSubscription == null) {
-      final positionStream = geolocatorApple.getPositionStream();
-      _positionStreamSubscription = positionStream.handleError((error) {
+      final Stream<Position> positionStream =
+          geolocatorApple.getPositionStream();
+      _positionStreamSubscription = positionStream.handleError((e) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
+        error = e;
       }).listen((position) => _updatePositionList(
             _PositionItemType.position,
             position.toString(),
@@ -297,6 +301,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
     setState(() {
       if (_positionStreamSubscription == null) {
+        return;
+      }
+
+      if (error != null) {
+        _updatePositionList(_PositionItemType.log, error.toString());
         return;
       }
 
