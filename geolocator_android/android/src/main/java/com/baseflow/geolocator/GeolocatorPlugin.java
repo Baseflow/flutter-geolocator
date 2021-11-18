@@ -3,6 +3,7 @@ package com.baseflow.geolocator;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.location.GeolocationManager;
+import com.baseflow.geolocator.location.LocationAccuracyManager;
 import com.baseflow.geolocator.permission.PermissionManager;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -14,6 +15,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private static final String TAG = "GeocodingPlugin";
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
+  private final LocationAccuracyManager locationAccuracyManager;
 
   @Nullable private MethodCallHandlerImpl methodCallHandler;
 
@@ -22,13 +24,15 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   @Nullable private LocationServiceHandlerImpl locationServiceHandler;
 
   @SuppressWarnings("deprecation")
-  @Nullable private io.flutter.plugin.common.PluginRegistry.Registrar pluginRegistrar;
+  @Nullable
+  private io.flutter.plugin.common.PluginRegistry.Registrar pluginRegistrar;
 
   @Nullable private ActivityPluginBinding pluginBinding;
 
   public GeolocatorPlugin() {
     this.permissionManager = new PermissionManager();
     this.geolocationManager = new GeolocationManager();
+    this.locationAccuracyManager = new LocationAccuracyManager();
   }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -48,7 +52,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
     MethodCallHandlerImpl methodCallHandler =
         new MethodCallHandlerImpl(
-            geolocatorPlugin.permissionManager, geolocatorPlugin.geolocationManager);
+            geolocatorPlugin.permissionManager,
+            geolocatorPlugin.geolocationManager,
+            geolocatorPlugin.locationAccuracyManager);
     methodCallHandler.startListening(registrar.context(), registrar.messenger());
     methodCallHandler.setActivity(registrar.activity());
 
@@ -63,7 +69,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    methodCallHandler = new MethodCallHandlerImpl(this.permissionManager, this.geolocationManager);
+    methodCallHandler =
+        new MethodCallHandlerImpl(
+            this.permissionManager, this.geolocationManager, this.locationAccuracyManager);
     methodCallHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
     streamHandler = new StreamHandlerImpl(this.geolocationManager, this.permissionManager);
@@ -72,8 +80,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
     locationServiceHandler = new LocationServiceHandlerImpl();
     locationServiceHandler.startListening(
-            flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger()
-    );
+        flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
   }
 
   @Override
@@ -88,9 +95,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       streamHandler = null;
     }
 
-    if(locationServiceHandler != null){
-        locationServiceHandler.stopListening();
-        locationServiceHandler = null;
+    if (locationServiceHandler != null) {
+      locationServiceHandler.stopListening();
+      locationServiceHandler = null;
     }
   }
 
@@ -103,8 +110,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       streamHandler.setActivity(binding.getActivity());
     }
 
-    if(locationServiceHandler != null){
-        locationServiceHandler.setActivity(binding.getActivity());
+    if (locationServiceHandler != null) {
+      locationServiceHandler.setActivity(binding.getActivity());
     }
 
     this.pluginBinding = binding;
@@ -129,8 +136,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     if (streamHandler != null) {
       streamHandler.setActivity(null);
     }
-    if(locationServiceHandler != null){
-        streamHandler.setActivity(null);
+    if (locationServiceHandler != null) {
+      streamHandler.setActivity(null);
     }
 
     deregisterListeners();

@@ -76,7 +76,7 @@
   return nil;
 }
 
-- (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
+- (FlutterError *)onCancelWithArguments:(id)arguments{
   [_geolocationHandler stopListening];
   _eventSink = nil;
   

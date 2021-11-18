@@ -1,7 +1,11 @@
-# 1.3.0
+# NEXT
 
 - Added the [ActivityType] enum needed for the `pauseLocationUpdatesAutomatically` property.
 - Added the `pauseLocationUpdatesAutomatically` and `activityType` property to the iOS options class.
+
+## 1.2.2
+
+- Fixed iOS cancelation of positionStream.
 
 ## 1.2.1
 
