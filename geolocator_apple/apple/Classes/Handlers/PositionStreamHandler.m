@@ -7,10 +7,10 @@
 
 #import "PositionStreamHandler.h"
 #import "../Constants/ErrorCodes.h"
+#import "../Utils/ActivityTypeMapper.h"
 #import "../Utils/LocationAccuracyMapper.h"
 #import "../Utils/LocationDistanceMapper.h"
 #import "../Utils/LocationMapper.h"
-#import "../Utils/PermissionUtils.h"
 
 @interface PositionStreamHandler()
 @property (strong, nonatomic, nonnull) GeolocationHandler *geolocationHandler;
@@ -21,15 +21,13 @@
   FlutterEventSink _eventSink;
 }
 
-- (id) initWithGeolocationHandler: (GeolocationHandler * _Nonnull)geolocationHandler
-                PermissionHandler: (PermissionHandler * _Nonnull)permissionHandler {
+- (id) initWithGeolocationHandler: (GeolocationHandler * _Nonnull)geolocationHandler {
   self = [super init];
   if (!self) {
     return nil;
   }
   
   self.geolocationHandler = geolocationHandler;
-  self.permissionHandler = permissionHandler;
   
   return self;
 }
@@ -48,9 +46,13 @@
   
     CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
     CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
-    
+    NSNumber* pauseLocationUpdatesAutomatically = arguments[@"pauseLocationUpdatesAutomatically"];
+    CLActivityType activityType = [ActivityTypeMapper toCLActivityType:(NSNumber *)arguments[@"activityType"]];
+	      
     [[weakSelf geolocationHandler] startListeningWithDesiredAccuracy:accuracy
                                                       distanceFilter:distanceFilter
+                                   pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically && [pauseLocationUpdatesAutomatically boolValue]
+                                                        activityType:activityType
                                                        resultHandler:^(CLLocation *location) {
       [weakSelf onLocationDidChange: location];
     }
@@ -61,11 +63,11 @@
   return nil;
 }
 
-- (FlutterError *)onCancelWithArguments:(id)arguments{
-  [_geolocationHandler stopListening];
-  _eventSink = nil;
-  
-  return nil;
+- (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
+    [_geolocationHandler stopListening];
+    _eventSink = nil;
+    
+    return nil;
 }
 
 - (void)onLocationDidChange:(CLLocation *_Nullable)location {

@@ -33,11 +33,15 @@
   }
   
   [self startUpdatingLocationWithDesiredAccuracy:kCLLocationAccuracyBest
-                                  distanceFilter:kCLDistanceFilterNone];
+                                  distanceFilter:kCLDistanceFilterNone
+               pauseLocationUpdatesAutomatically:NO
+                                    activityType:CLActivityTypeOther];
 }
 
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
+        pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
+                             activityType:(CLActivityType)activityType
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
     
@@ -45,14 +49,22 @@
     self.resultHandler = resultHandler;
     
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
-                                  distanceFilter:distanceFilter];
+                                  distanceFilter:distanceFilter
+               pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically
+                                    activityType:activityType];
 }
 
 - (void)startUpdatingLocationWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
-                                  distanceFilter:(CLLocationDistance)distanceFilter {
+                                  distanceFilter:(CLLocationDistance)distanceFilter
+               pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
+                                    activityType:(CLActivityType)activityType {
   CLLocationManager *locationManager = self.locationManager;
   locationManager.desiredAccuracy = desiredAccuracy;
   locationManager.distanceFilter = distanceFilter;
+  if (@available(iOS 6.0, macOS 10.15, *)) {
+    locationManager.activityType = activityType;
+    locationManager.pausesLocationUpdatesAutomatically = pauseLocationUpdatesAutomatically;
+  }
   
 #if TARGET_OS_IOS
   if (@available(iOS 9.0, macOS 11.0, *)) {

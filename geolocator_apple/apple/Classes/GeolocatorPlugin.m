@@ -4,6 +4,7 @@
 #import "Handlers/GeolocationHandler.h"
 #import "Handlers/PermissionHandler.h"
 #import "Handlers/PositionStreamHandler.h"
+#import "Utils/ActivityTypeMapper.h"
 #import "Utils/AuthorizationStatusMapper.h"
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
