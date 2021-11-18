@@ -109,7 +109,7 @@
         return;
     }
     
-    [self stopListening];
+    
     
     if (self.errorHandler) {
         self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);

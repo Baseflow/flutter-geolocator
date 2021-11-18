@@ -787,6 +787,48 @@ void main() {
       });
 
       test(
+        // ignore: lines_longer_than_80_chars
+          'Should continue listening to the stream when exception is thrown ',
+              () async {
+            // Arrange
+            final streamController =
+            StreamController<Map<String, dynamic>>.broadcast();
+            EventChannelMock(
+              channelName: 'flutter.baseflow.com/geolocator_updates',
+              stream: streamController.stream,
+            );
+
+            // Act
+            final positionStream = MethodChannelGeolocator().getPositionStream();
+            final streamQueue = StreamQueue(positionStream);
+
+            // Emit test events
+            streamController.add(mockPosition.toJson());
+            streamController.addError(PlatformException(
+                code: 'PERMISSION_DENIED',
+                message: 'Permission denied',
+                details: null));
+            streamController.add(mockPosition.toJson());
+
+            // Assert
+            expect(await streamQueue.next, mockPosition);
+            expect(
+                streamQueue.next,
+                throwsA(
+                  isA<PermissionDeniedException>().having(
+                        (e) => e.message,
+                    'message',
+                    'Permission denied',
+                  ),
+                ));
+            expect(await streamQueue.next, mockPosition);
+
+            // Clean up
+            await streamQueue.cancel();
+            await streamController.close();
+          });
+
+      test(
           // ignore: lines_longer_than_80_chars
           'Should receive a permission denied exception if permission is denied',
           () async {
