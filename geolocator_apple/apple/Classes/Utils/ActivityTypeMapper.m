@@ -23,7 +23,7 @@
         case 2:
             return CLActivityTypeOtherNavigation;
         case 3:
-            if (@available(iOS 12.0, *)) {
+            if (@available(iOS 12.0, macOS 10.14, *)) {
                 return CLActivityTypeAirborne;
             } else {
                 return CLActivityTypeOther;
