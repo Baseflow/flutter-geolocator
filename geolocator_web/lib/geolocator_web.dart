@@ -15,7 +15,6 @@ export 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 ///
 /// This class implements the `package:geolocator` functionality for the web.
 class GeolocatorPlugin extends GeolocatorPlatform {
-  static const _permissionQuery = {'name': 'geolocation'};
 
   final GeolocationManager _geolocation;
   final PermissionsManager _permissions;
