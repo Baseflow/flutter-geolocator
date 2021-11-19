@@ -1,3 +1,7 @@
+## 7.8.1
+
+- Updated README.md to clarify the use of the `Geolocator.checkPermission()` method.
+
 ## 7.8.0
 
 - Added Approximate Location support for Android 12;
