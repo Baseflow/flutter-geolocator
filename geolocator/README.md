@@ -270,6 +270,10 @@ bool isLocationServiceEnabled  = await Geolocator.isLocationServiceEnabled();
 
 The geolocator will automatically try to request permissions when you try to acquire a location through the `getCurrentPosition` or `getPositionStream` methods. We do however provide methods that will allow you to manually handle requesting permissions.
 
+**NOTE**
+
+When using the web platform, the `checkPermission` method will always return the `LocationPermission.denied` status, since not every browser is supporting the JavaScript Permissions API. Nevertheless, the `getCurrentPosition` and `getPositionStream` methods can still be used on the web platform.
+
 If you want to check if the user already granted permissions to acquire the device's location you can make a call to the `checkPermission` method:
 
 ``` dart

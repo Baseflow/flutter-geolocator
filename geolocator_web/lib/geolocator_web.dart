@@ -55,9 +55,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       );
     }
 
-    return await _permissions.query(
-      _permissionQuery,
-    );
+    return LocationPermission.denied;
   }
 
   @override
