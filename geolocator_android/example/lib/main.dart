@@ -73,11 +73,10 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         }
       },
       itemBuilder: (context) => [
-        if (Platform.isIOS)
-          const PopupMenuItem(
-            child: Text("Get Location Accuracy"),
-            value: 1,
-          ),
+        const PopupMenuItem(
+          child: Text("Get Location Accuracy"),
+          value: 1,
+        ),
         if (Platform.isIOS)
           const PopupMenuItem(
             child: Text("Request Temporary Full Accuracy"),
