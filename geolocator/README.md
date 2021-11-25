@@ -295,7 +295,7 @@ deniedForever | Permission to access the device's location is permenantly denied
 whileInUse | Permission to access the device's location is allowed only while the App is in use.
 always | Permission to access the device's location is allowed even when the App is running in the background.
 
-> Note: Android can only return `whileInUser`, `always` or `denied` when checking permissions. Due to limitations on the Android OS it is not possible to determine if permissions are denied permanently when checking permissions. Using a workaround the geolocator is only able to do so as a result of the `requestPermission` method. More information can be found in our [wiki](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0#android-permission-update).
+> Note: Android can only return `whileInUse`, `always` or `denied` when checking permissions. Due to limitations on the Android OS it is not possible to determine if permissions are denied permanently when checking permissions. Using a workaround the geolocator is only able to do so as a result of the `requestPermission` method. More information can be found in our [wiki](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0#android-permission-update).
 
 ### Settings
 
