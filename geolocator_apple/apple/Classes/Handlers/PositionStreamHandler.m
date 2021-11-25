@@ -84,7 +84,6 @@
   _eventSink([FlutterError errorWithCode:errorCode
                                  message:errorDescription
                                  details:nil]);
-  _eventSink = nil;
 }
 
 @end

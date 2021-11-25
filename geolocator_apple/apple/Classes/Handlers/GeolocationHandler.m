@@ -108,9 +108,7 @@
     if([error.domain isEqualToString:kCLErrorDomain] && error.code == kCLErrorLocationUnknown) {
         return;
     }
-    
-    [self stopListening];
-    
+
     if (self.errorHandler) {
         self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
     }

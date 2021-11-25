@@ -43,9 +43,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
-      _handlePlatformException(e);
+      final error = _handlePlatformException(e);
 
-      rethrow;
+      throw error;
     }
   }
 
@@ -58,9 +58,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
-      _handlePlatformException(e);
+      final error = _handlePlatformException(e);
 
-      rethrow;
+      throw error;
     }
   }
 
@@ -83,9 +83,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
       return positionMap != null ? Position.fromMap(positionMap) : null;
     } on PlatformException catch (e) {
-      _handlePlatformException(e);
+      final error = _handlePlatformException(e);
 
-      rethrow;
+      throw error;
     }
   }
 
@@ -122,9 +122,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       final positionMap = await positionFuture;
       return Position.fromMap(positionMap);
     } on PlatformException catch (e) {
-      _handlePlatformException(e);
+      final error = _handlePlatformException(e);
 
-      rethrow;
+      throw error;
     }
   }
 
@@ -141,7 +141,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         .handleError((error) {
       _serviceStatusStream = null;
       if (error is PlatformException) {
-        _handlePlatformException(error);
+        error = _handlePlatformException(error);
       }
       throw error;
     });
@@ -182,9 +182,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
             Position.fromMap(element.cast<String, dynamic>()))
         .handleError(
       (error) {
-        _positionStream = null;
         if (error is PlatformException) {
-          _handlePlatformException(error);
+          error = _handlePlatformException(error);
         }
         throw error;
       },
@@ -212,8 +211,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       );
       return LocationAccuracyStatus.values[status];
     } on PlatformException catch (e) {
-      _handlePlatformException(e);
-      rethrow;
+      final error = _handlePlatformException(e);
+      throw error;
     }
   }
 
@@ -227,24 +226,24 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       .invokeMethod<bool>('openLocationSettings')
       .then((value) => value ?? false);
 
-  void _handlePlatformException(PlatformException exception) {
+  Exception _handlePlatformException(PlatformException exception) {
     switch (exception.code) {
       case 'ACTIVITY_MISSING':
-        throw ActivityMissingException(exception.message);
+        return ActivityMissingException(exception.message);
       case 'LOCATION_SERVICES_DISABLED':
-        throw const LocationServiceDisabledException();
+        return const LocationServiceDisabledException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':
-        throw const AlreadySubscribedException();
+        return const AlreadySubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':
-        throw PermissionDefinitionsNotFoundException(exception.message);
+        return PermissionDefinitionsNotFoundException(exception.message);
       case 'PERMISSION_DENIED':
-        throw PermissionDeniedException(exception.message);
+        return PermissionDeniedException(exception.message);
       case 'PERMISSION_REQUEST_IN_PROGRESS':
-        throw PermissionRequestInProgressException(exception.message);
+        return PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
-        throw PositionUpdateException(exception.message);
+        return PositionUpdateException(exception.message);
       default:
-        throw exception;
+        return exception;
     }
   }
 }
