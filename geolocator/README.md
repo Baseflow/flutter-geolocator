@@ -272,7 +272,7 @@ The geolocator will automatically try to request permissions when you try to acq
 
 **NOTE**
 
-When using the web platform, the `checkPermission` method will always return the `LocationPermission.denied` status, since not every browser is supporting the JavaScript Permissions API. Nevertheless, the `getCurrentPosition` and `getPositionStream` methods can still be used on the web platform.
+When using the web platform, the `checkPermission` method will return the `LocationPermission.denied` status, when the browser doesn't support the JavaScript Permissions API. Nevertheless, the `getCurrentPosition` and `getPositionStream` methods can still be used on the web platform.
 
 If you want to check if the user already granted permissions to acquire the device's location you can make a call to the `checkPermission` method:
 
