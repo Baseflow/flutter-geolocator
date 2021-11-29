@@ -1,3 +1,7 @@
+## 3.0.0+1
+
+- Adds `intervalDuration` to the `AndroidSettings` class.
+
 ## 3.0.0
 
 - Removed implicit request for permissions when getting a position.

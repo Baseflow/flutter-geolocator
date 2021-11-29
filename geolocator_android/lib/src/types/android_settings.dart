@@ -11,7 +11,7 @@ class AndroidSettings extends LocationSettings {
     this.forceLocationManager = false,
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 0,
-    Duration? intervalDuration,
+    this.intervalDuration,
     Duration? timeLimit,
   }) : super(
             accuracy: accuracy,
@@ -29,7 +29,9 @@ class AndroidSettings extends LocationSettings {
   /// set this property to true.
   final bool forceLocationManager;
 
-  /// The desired interval for active location updates, in milliseconds.
+  /// The desired interval for active location updates.
+  ///
+  /// If this value is `null` no interval duration is applied.
   final Duration? intervalDuration;
 
   @override
