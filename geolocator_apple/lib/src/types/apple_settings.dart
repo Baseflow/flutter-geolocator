@@ -14,12 +14,10 @@ class AppleSettings extends LocationSettings {
     this.activityType = ActivityType.other,
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 0,
-    Duration? timeInterval,
     Duration? timeLimit,
   }) : super(
           accuracy: accuracy,
           distanceFilter: distanceFilter,
-          intervalDuration: timeInterval,
           timeLimit: timeLimit,
         );
 

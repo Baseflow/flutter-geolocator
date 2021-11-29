@@ -6,6 +6,9 @@ import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+export 'package:geolocator_android/geolocator_android.dart'
+    show AndroidSettings;
+export 'package:geolocator_apple/geolocator_apple.dart' show AppleSettings;
 
 /// Wraps CLLocationManager (on iOS) and FusedLocationProviderClient or
 /// LocationManager
@@ -45,8 +48,6 @@ class Geolocator {
   /// passing true to the [forceAndroidLocationManager] parameter. On iOS
   /// this parameter is ignored.
   /// When no position is available, null is returned.
-  /// Throws a [PermissionDeniedException] when trying to request the device's
-  /// location when the user denied access.
   static Future<Position?> getLastKnownPosition(
           {bool forceAndroidLocationManager = false}) =>
       GeolocatorPlatform.instance.getLastKnownPosition(
@@ -64,8 +65,6 @@ class Geolocator {
   ///
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
-  /// Throws a [PermissionDeniedException] when trying to request the device's
-  /// location when the user denied access.
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   static Future<Position> getCurrentPosition({
@@ -117,18 +116,15 @@ class Geolocator {
   /// * `LocationSettings.distanceFilter`: allows controlling the minimum
   /// distance the device needs to move before the update is emitted (default
   /// value is 0 which indicates no filter is used);
-  /// * `LocationSettings.intervalDuration`
-  /// On Android you can force the use of the Android LocationManager instead
-  /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
-  /// parameter to true. Using the [intervalDuration] you can control the amount
-  /// of time that needs to pass before the next position update is send. The
-  /// [timeLimit] parameter allows you to specify a timeout interval (by
-  /// default no time limit is configured).
+  /// * `LocationSettings.timeLimit`: allows for setting a timeout interval. If
+  /// between fetching locations the timeout interval is exceeded a
+  /// [TimeoutException] will be thrown. By default no time limit is configured.
+  ///
+  /// If you want to specify platform specific settings you can use the
+  /// [AndroidSettings] and [AppleSettings] classes.
   ///
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
-  /// Throws a [PermissionDeniedException] when trying to request the device's
-  /// location when the user denied access.
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   static Stream<Position> getPositionStream({

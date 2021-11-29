@@ -1,3 +1,7 @@
+## 2.0.0+2
+
+- Removes the Android specific `timeInterval` parameter from `AppleSettings`.
+
 ## 2.0.0+1
 
 - Adds missing `timeLimit` to the `AppleSettings` class.
