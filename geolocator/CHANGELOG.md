@@ -1,3 +1,7 @@
+## 7.7.2
+
+- Updated README.md to clarify the use of the `Geolocator.checkPermission()` method.
+
 ## 7.7.1
 
 * Update the documentation on permissions in the README.md.

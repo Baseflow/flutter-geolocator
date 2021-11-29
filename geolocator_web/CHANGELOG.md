@@ -1,3 +1,7 @@
+## 2.0.7
+
+- Removed Permissions query in the `requestPermission` method.
+
 ## 2.0.6
 
 - Fixes a bug where the `LocationAccuracy.reduced` accuracy value is treated as high accuracy on web.
