@@ -1,8 +1,14 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+import 'package:geolocator_android/geolocator_android.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+export 'package:geolocator_android/geolocator_android.dart'
+    show AndroidSettings;
+export 'package:geolocator_apple/geolocator_apple.dart' show AppleSettings;
 
 /// Wraps CLLocationManager (on iOS) and FusedLocationProviderClient or
 /// LocationManager
@@ -42,8 +48,6 @@ class Geolocator {
   /// passing true to the [forceAndroidLocationManager] parameter. On iOS
   /// this parameter is ignored.
   /// When no position is available, null is returned.
-  /// Throws a [PermissionDeniedException] when trying to request the device's
-  /// location when the user denied access.
   static Future<Position?> getLastKnownPosition(
           {bool forceAndroidLocationManager = false}) =>
       GeolocatorPlatform.instance.getLastKnownPosition(
@@ -61,23 +65,34 @@ class Geolocator {
   ///
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
-  /// Throws a [PermissionDeniedException] when trying to request the device's
-  /// location when the user denied access.
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   static Future<Position> getCurrentPosition({
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
     Duration? timeLimit,
-  }) =>
-      GeolocatorPlatform.instance.getCurrentPosition(
-        desiredAccuracy: desiredAccuracy,
-        forceAndroidLocationManager: forceAndroidLocationManager,
+  }) {
+    late LocationSettings locationSettings;
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      locationSettings = AndroidSettings(
+        accuracy: desiredAccuracy,
+        forceLocationManager: forceAndroidLocationManager,
         timeLimit: timeLimit,
       );
+    } else {
+      locationSettings = LocationSettings(
+        accuracy: desiredAccuracy,
+        timeLimit: timeLimit,
+      );
+    }
+
+    return GeolocatorPlatform.instance.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+  }
 
   /// Fires whenever the location changes inside the bounds of the
-  /// [desiredAccuracy].
+  /// supplied [LocationSettings.accuracy].
   ///
   /// This event starts all location sensors on the device and will keep them
   /// active until you cancel listening to the stream or when the application
@@ -93,36 +108,30 @@ class Geolocator {
   /// positionStream.cancel();
   /// ```
   ///
-  /// You can control the precision of the location updates by supplying the
-  /// [desiredAccuracy] parameter (defaults to "best"). The [distanceFilter]
-  /// parameter controls the minimum distance the device needs to move before
-  /// the update is emitted (default value is 0 indicator no filter is used).
-  /// On Android you can force the use of the Android LocationManager instead
-  /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
-  /// parameter to true. Using the [intervalDuration] you can control the amount
-  /// of time that needs to pass before the next position update is send. The
-  /// [timeLimit] parameter allows you to specify a timeout interval (by
-  /// default no time limit is configured).
+  /// You can control the behavior of the stream by specifying an instance of
+  /// the [LocationSettings] class for the [locationSettings] parameter.
+  /// Standard settings are:
+  /// * `LocationSettings.accuracy`: allows controlling the precision of the position updates by
+  /// supplying (defaults to "best");
+  /// * `LocationSettings.distanceFilter`: allows controlling the minimum
+  /// distance the device needs to move before the update is emitted (default
+  /// value is 0 which indicates no filter is used);
+  /// * `LocationSettings.timeLimit`: allows for setting a timeout interval. If
+  /// between fetching locations the timeout interval is exceeded a
+  /// [TimeoutException] will be thrown. By default no time limit is configured.
+  ///
+  /// If you want to specify platform specific settings you can use the
+  /// [AndroidSettings] and [AppleSettings] classes.
   ///
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
-  /// Throws a [PermissionDeniedException] when trying to request the device's
-  /// location when the user denied access.
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   static Stream<Position> getPositionStream({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    int distanceFilter = 0,
-    bool forceAndroidLocationManager = false,
-    Duration? intervalDuration,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) =>
       GeolocatorPlatform.instance.getPositionStream(
-        desiredAccuracy: desiredAccuracy,
-        distanceFilter: distanceFilter,
-        forceAndroidLocationManager: forceAndroidLocationManager,
-        timeInterval: intervalDuration?.inMilliseconds ?? 0,
-        timeLimit: timeLimit,
+        locationSettings: locationSettings,
       );
 
   /// Returns a [Future] containing a [LocationAccuracyStatus]

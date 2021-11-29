@@ -201,6 +201,8 @@ Future<Position> _determinePosition() async {
 
 ### Geolocation
 
+#### Current location
+
 To query the current location of the device simply make a call to the `getCurrentPosition` method. You can finetune the results by specifying the following parameters:
 
 - `desiredAccuracy`: the accuracy of the location data that your app wants to receive;
@@ -212,6 +214,8 @@ import 'package:geolocator/geolocator.dart';
 Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 ```
 
+#### Last known location
+
 To query the last known location retrieved stored on the device you can use the `getLastKnownPosition` method (note that this can result in a `null` value when no location details are available):
 
 ``` dart
@@ -220,20 +224,81 @@ import 'package:geolocator/geolocator.dart';
 Position position = await Geolocator.getLastKnownPosition();
 ```
 
+#### Listen to location updates
+
 To listen for location changes you can call the `getPositionStream` to receive stream you can listen to and receive position updates. You can finetune the results by specifying the following parameters:
 
-- `desiredAccuracy`: the accuracy of the location data that your app wants to receive;
+- `accuracy`: the accuracy of the location data that your app wants to receive;
 - `distanceFilter`: the minimum distance (measured in meters) a device must move horizontally before an update event is generated;
-- `timeInterval`: (Android only) the minimum amount of time that needs to pass before an update event is generated;
 - `timeLimit`: the maximum amount of time allowed between location updates. When the time limit is passed a `TimeOutException` will be thrown and the stream will be cancelled. By default no limit is configured.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationOptions).listen(
+final LocationSettings locationSettings = LocationSettings(
+  accuracy: LocationAccuracy.high,
+  distanceFilter: 100,
+);
+StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
     (Position position) {
         print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
     });
+```
+
+In certain situation it is necessary to specify some platform specific settings. This can be accomplished using the platform specific `AndroidSettings` or `AppleSettings` classes. For example:
+
+```dart
+import 'package:geolocator/geolocator.dart';
+
+late LocationSettings locationSettings
+
+if (defaultTargetPlatform == TargetPlatform.android) {
+  locationSettings = AndroidSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 100,
+    forceLocationManager: true,
+    intervalDuration: const Duration(seconds: 10),
+  );
+} else if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
+  locationSettings = AppleSettings(
+    accuracy: LocationAccuracy.high,
+    activityType: ActivityType.fitness,
+    distanceFilter: 100,
+    pauseLocationUpdatesAutomatically: true,
+  );
+} else {
+    locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 100,
+  );
+}
+
+StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+    (Position position) {
+        print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+    });
+```
+
+#### Location accuracy (Android and iOS 14+ only)
+
+To query if a user enabled Approximate location fetching or Precise location fetching, you can call the `Geolocator().getLocationAccuracy()` method. This will return a `Future<LocationAccuracyStatus>`, which when completed contains a `LocationAccuracyStatus.reduced` if the user has enabled Approximate location fetching or `LocationAccuracyStatus.precise` if the user has enabled Precise location fetching.
+When calling `getLocationAccuracy` before the user has given permission, the method will return `LocationAccuracyStatus.reduced` by default.
+On iOS 13 or below, the method `getLocationAccuracy` will always return `LocationAccuracyStatus.precise`, since that is the default value for iOS 13 and below.
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+var accuracy = await Geolocator.getLocationAccuracy();
+```
+
+#### Location service information
+
+To check if location services are enabled you can call the `isLocationServiceEnabled` method:
+
+``` dart
+import 'package:geolocator/geolocator.dart';
+
+bool isLocationServiceEnabled  = await Geolocator.isLocationServiceEnabled();
 ```
 
 To listen for service status changes you can call the `getServiceStatusStream`. This will return a `Stream<ServiceStatus>` which can be listened to, to receive location service status updates.
@@ -245,25 +310,6 @@ StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceSta
     (ServiceStatus status) {
         print(status);
     });
-```
-
-**Get location accuracy (Android and iOS 14+ only)**
-To query if a user enabled Approximate location fetching or Precise location fetching, you can call the `Geolocator().getLocationAccuracy()` method. This will return a `Future<LocationAccuracyStatus>`, which when completed contains a `LocationAccuracyStatus.reduced` if the user has enabled Approximate location fetching or `LocationAccuracyStatus.precise` if the user has enabled Precise location fetching.
-When calling `getLocationAccuracy` before the user has given permission, the method will return `LocationAccuracyStatus.reduced` by default.
-On iOS 13 or below, the method `getLocationAccuracy` will always return `LocationAccuracyStatus.precise`, since that is the default value for iOS 13 and below.
-
-``` dart
-import 'package:geolocator/geolocator.dart';
-
-var accuracy = await Geolocator.getLocationAccuracy();
-```
-
-To check if location services are enabled you can call the `isLocationServiceEnabled` method:
-
-``` dart
-import 'package:geolocator/geolocator.dart';
-
-bool isLocationServiceEnabled  = await Geolocator.isLocationServiceEnabled();
 ```
 
 ### Permissions

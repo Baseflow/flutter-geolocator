@@ -4,6 +4,7 @@
 #import "Handlers/GeolocationHandler.h"
 #import "Handlers/PermissionHandler.h"
 #import "Handlers/PositionStreamHandler.h"
+#import "Utils/ActivityTypeMapper.h"
 #import "Utils/AuthorizationStatusMapper.h"
 #import "Utils/LocationAccuracyMapper.h"
 #import "Utils/LocationDistanceMapper.h"
@@ -33,8 +34,7 @@
   GeolocatorPlugin *instance = [[GeolocatorPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:methodChannel];
   
-  PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.geolocationHandler
-                                                                                         PermissionHandler:instance.permissionHandler];
+  PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.geolocationHandler];
   
   LocationServiceStreamHandler *locationServiceStreamHandler = [[LocationServiceStreamHandler alloc] init];
   
@@ -86,37 +86,25 @@
 }
 
 - (void)onGetLastKnownPosition:(FlutterResult)result {
-  __weak typeof(self) weakSelf = self;
-  
-  [self.permissionHandler
-   requestPermission:^(CLAuthorizationStatus status) {
-    if (![PermissionUtils isStatusGranted:status]) {
-      result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
-                                 message: @"User denied permissions to access the device's location."
-                                 details:nil]);
-      return;
-    }
+    if (![PermissionHandler hasPermission]) {
+            result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
+                                  message:@"User denied permissions to access the device's location."
+                                       details:nil]);
+            return;
+        }
     
-    CLLocation *location = [weakSelf.geolocationHandler getLastKnownPosition];
+    CLLocation *location = [self.geolocationHandler getLastKnownPosition];
     result([LocationMapper toDictionary:location]);
-  }
-   errorHandler:^(NSString *errorCode, NSString *errorDescription) {
-    result([FlutterError errorWithCode: errorCode
-                               message: errorDescription
-                               details: nil]);
-  }];
 }
 
 - (void)onGetCurrentPositionWithArguments:(id _Nullable)arguments
                                    result:(FlutterResult)result {
-  [self.permissionHandler
-   requestPermission:^(CLAuthorizationStatus status) {
-    if (![PermissionUtils isStatusGranted:status]) {
-      result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
-                                 message: @"User denied permissions to access the device's location."
-                                 details:nil]);
-      return;
-    }
+    if (![PermissionHandler hasPermission]) {
+            result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
+                                  message:@"User denied permissions to access the device's location."
+                                       details:nil]);
+            return;
+        }
     GeolocationHandler *geolocationHandler = [[GeolocationHandler alloc] init];
     
     [geolocationHandler requestPosition:^(CLLocation *location) {
@@ -131,13 +119,8 @@
                                  message: errorDescription
                                  details: nil]);
     }];
-  }
-   errorHandler:^(NSString *errorCode, NSString *errorDescription) {
-    result([FlutterError errorWithCode: errorCode
-                               message: errorDescription
-                               details: nil]);
-  }];
 }
+   
 
 - (void)openSettings:(FlutterResult)result {
 #if TARGET_OS_OSX

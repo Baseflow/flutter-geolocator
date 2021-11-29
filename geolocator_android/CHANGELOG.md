@@ -1,3 +1,13 @@
+## 3.0.0+1
+
+- Adds `intervalDuration` to the `AndroidSettings` class.
+
+## 3.0.0
+
+- Removed implicit request for permissions when getting a position.
+- Added the [AndroidOptions] class to the `lib` directory.
+- Added the `forceLocationManager` property to the [AndroidOptions] instance.
+
 ## 2.1.0
 
 - Added Approximate Location support for Android 12;

@@ -1,2 +1,2 @@
-export 'location_options.dart';
 export 'position.dart';
+export 'location_settings.dart';

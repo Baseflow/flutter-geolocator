@@ -14,12 +14,10 @@
 #import <Flutter/Flutter.h>
 #endif
 #import "GeolocationHandler.h"
-#import "PermissionHandler.h"
 
 @interface PositionStreamHandler : NSObject<FlutterStreamHandler>
 
-- (id) initWithGeolocationHandler: (GeolocationHandler *)geolocationHandler
-                PermissionHandler: (PermissionHandler *)permissionHandler;
+- (id) initWithGeolocationHandler: (GeolocationHandler *)geolocationHandler;
 
 @end
 

@@ -217,4 +217,10 @@ public class PermissionManager
 
     return permissions;
   }
+
+    public boolean hasPermission(Context context) throws PermissionUndefinedException {
+        LocationPermission locationPermission = this.checkPermissionStatus(context);
+
+        return locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always;
+    }
 }
