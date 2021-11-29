@@ -1,3 +1,7 @@
+## 3.0.0+3
+
+- Fixes cast exception when converting Integer to Long.
+
 ## 3.0.0+2
 
 - Fixes NPE when accessing the position stream.

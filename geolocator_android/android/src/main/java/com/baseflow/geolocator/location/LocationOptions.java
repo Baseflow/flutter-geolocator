@@ -13,8 +13,8 @@ public class LocationOptions {
     }
 
     final Integer accuracy = (Integer) arguments.get("accuracy");
-    final Long distanceFilter = (Long) arguments.get("distanceFilter");
-    final Long timeInterval = (Long) arguments.get("timeInterval");
+    final Integer distanceFilter = (Integer) arguments.get("distanceFilter");
+    final Integer timeInterval = (Integer) arguments.get("timeInterval");
 
     LocationAccuracy locationAccuracy = LocationAccuracy.best;
 
