@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 ## 8.0.0
 
 - Removed implicit request for permissions when getting a position.
 
+||||||| 9e380a7
+=======
+## 7.7.2
+
+- Updated README.md to clarify the use of the `Geolocator.checkPermission()` method.
+
+>>>>>>> origin/master
 ## 7.7.1
 
 * Update the documentation on permissions in the README.md.

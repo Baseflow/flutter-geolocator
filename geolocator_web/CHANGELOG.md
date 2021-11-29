@@ -1,5 +1,7 @@
 ## 2.1.0
-- Made changes to the implementation of the `getCurrentPosition` and `getPositionStream` method. 
+
+- Made changes to the implementation of the `getCurrentPosition` and `getPositionStream` method to match new platform interface. 
+- Fixes issues where geolocator doesn't work on Safari due to missing implementation of `query` method in the browser.
 
 ## 2.0.6
 
