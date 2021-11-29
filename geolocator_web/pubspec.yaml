@@ -2,9 +2,8 @@ name: geolocator_web
 description: Official web implementation of the geolocator plugin.
 repository: https://github.com/Baseflow/flutter-geolocator/tree/geolocator_web
 issue_tracker: https://github.com/Baseflow/flutter-geolocator/issues?q=is%3Aissue+is%3Aopen
-version: 2.0.6
-# TODO : Remove the publish_to: none when publishing the final version of the geolocator_platform_interface
-publish_to: none
+version: 2.0.7
+
 flutter:
   plugin:
     platforms:
@@ -17,9 +16,7 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-# TODO : Remove the path reference when the final version of geolocator_platform_interface is published
-  geolocator_platform_interface:
-    path: ../geolocator_platform_interface
+  geolocator_platform_interface: ^3.0.0
 
 dev_dependencies:
   flutter_test:
