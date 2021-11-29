@@ -1,3 +1,7 @@
+## 3.0.0
+
+- Defines the `LocationSettings` class which bundles platform specific settings when communicating with the host platform.
+
 ## 2.3.6
 
 - Updated API documentation on `GeolocatorPlatform.getServiceStream()` method, describing it is not supported on the web platform.

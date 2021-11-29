@@ -1,12 +1,8 @@
 name: geolocator_android
 description: Geolocation plugin for Flutter. This plugin provides the Android implementation for the geolocator.
-# TODO: Change the version code when the final version of geolocator_android is published
-version: NEXT
+version: 3.0.0
 repository: https://github.com/Baseflow/flutter-geolocator/tree/master/geolocator_android
 issue_tracker: https://github.com/Baseflow/flutter-geolocator/issues?q=is%3Aissue+is%3Aopen
-
-# TODO: Remove this line when the final version of geolocator_platform_interface is published
-publish_to: none
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -22,9 +18,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  # TODO: Path references should be removed from the pubspec.yaml
-  geolocator_platform_interface:
-    path: ../geolocator_platform_interface
+  geolocator_platform_interface: ^2.3.6
   
 dev_dependencies:
   flutter_test:

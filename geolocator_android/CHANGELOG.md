@@ -1,4 +1,4 @@
-## NEXT
+## 3.0.0
 
 - Removed implicit request for permissions when getting a position.
 - Added the [AndroidOptions] class to the `lib` directory.
