@@ -187,24 +187,27 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void onGetCurrentPosition(MethodCall call, MethodChannel.Result result) {
     try{
-          if (!permissionManager.hasPermission(this.context)){
-           result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
-           return;
-         }
+      if (!permissionManager.hasPermission(this.context)){
+        result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
+        return;
+      }
     } catch (PermissionUndefinedException e) {
        result.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
        return;
     }
 
-    Boolean forceLocationManager = call.argument("forceLocationManager");
     @SuppressWarnings("unchecked")
     Map<String, Object> map = (Map<String, Object>) call.arguments;
+    boolean forceLocationManager = false;
+    if (map != null && map.get("forceLocationManager") != null) {
+      forceLocationManager = (boolean) map.get("forceLocationManager");
+    }
     LocationOptions locationOptions = LocationOptions.parseArguments(map);
     final boolean[] replySubmitted = {false};
 
     LocationClient locationClient =
         geolocationManager.createLocationClient(
-            this.context, forceLocationManager != null && forceLocationManager, locationOptions);
+            this.context, forceLocationManager, locationOptions);
 
     geolocationManager.startPositionUpdates(
         locationClient,
