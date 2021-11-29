@@ -1,3 +1,7 @@
+## 3.0.0+2
+
+- Fixes NPE when accessing the position stream.
+
 ## 3.0.0+1
 
 - Adds `intervalDuration` to the `AndroidSettings` class.
