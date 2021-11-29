@@ -1,3 +1,7 @@
+## 3.0.0+4
+
+- Resolve merge conflict.
+
 ## 3.0.0+3
 
 - Fixes cast exception when converting Integer to Long.

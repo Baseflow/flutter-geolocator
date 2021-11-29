@@ -8,7 +8,6 @@ public class LocationOptions {
   private final long timeInterval;
 
   public static LocationOptions parseArguments(Map<String, Object> arguments) {
-<<<<<<< HEAD
     if (arguments == null) {
       return new LocationOptions(LocationAccuracy.best, 0, 0);
     }
@@ -16,19 +15,6 @@ public class LocationOptions {
     final Integer accuracy = (Integer) arguments.get("accuracy");
     final Integer distanceFilter = (Integer) arguments.get("distanceFilter");
     final Integer timeInterval = (Integer) arguments.get("timeInterval");
-||||||| 2de37b0
-    final int accuracy = (int) arguments.get("accuracy");
-    final long distanceFilter = (int) arguments.get("distanceFilter");
-    final long timeInterval = (int) arguments.get("timeInterval");
-=======
-    if (arguments == null) {
-      return new LocationOptions(LocationAccuracy.best, 0, 0);
-    }
-
-    final Integer accuracy = (Integer) arguments.get("accuracy");
-    final Long distanceFilter = (Long) arguments.get("distanceFilter");
-    final Long timeInterval = (Long) arguments.get("timeInterval");
->>>>>>> origin/master
 
     LocationAccuracy locationAccuracy = LocationAccuracy.best;
 
