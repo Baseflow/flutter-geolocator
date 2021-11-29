@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+import 'package:geolocator_android/geolocator_android.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
@@ -69,12 +72,25 @@ class Geolocator {
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
     bool forceAndroidLocationManager = false,
     Duration? timeLimit,
-  }) =>
-      GeolocatorPlatform.instance.getCurrentPosition(
-        desiredAccuracy: desiredAccuracy,
-        forceAndroidLocationManager: forceAndroidLocationManager,
+  }) {
+    late LocationSettings locationSettings;
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      locationSettings = AndroidSettings(
+        accuracy: desiredAccuracy,
+        forceLocationManager: forceAndroidLocationManager,
         timeLimit: timeLimit,
       );
+    } else if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
+      locationSettings = AppleSettings(
+        accuracy: desiredAccuracy,
+        timeLimit: timeLimit,
+      );
+    }
+
+    GeolocatorPlatform.instance.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+  }
 
   /// Fires whenever the location changes inside the bounds of the
   /// [desiredAccuracy].

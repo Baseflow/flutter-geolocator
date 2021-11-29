@@ -1,3 +1,7 @@
+## 2.0.0+1
+
+- Adds missing `timeLimit` to the `AppleSettings` class.
+
 ## 2.0.0
 
 - iOS: Keep `PositionStream` alive when the `Location Services` has been turned off and on again in the settings.

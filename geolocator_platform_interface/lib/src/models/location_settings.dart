@@ -10,11 +10,12 @@ class LocationSettings {
   /// - distanceFilter: 0
   /// - timeInterval: 0
   /// - timeLimit: 0
-  const LocationSettings(
-      {this.accuracy = LocationAccuracy.best,
-      this.distanceFilter = 0,
-      this.intervalDuration,
-      this.timeLimit});
+  const LocationSettings({
+    this.accuracy = LocationAccuracy.best,
+    this.distanceFilter = 0,
+    this.intervalDuration,
+    this.timeLimit,
+  });
 
   /// Defines the desired accuracy that should be used to determine the
   /// location data.

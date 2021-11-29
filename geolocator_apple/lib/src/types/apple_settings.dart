@@ -15,10 +15,13 @@ class AppleSettings extends LocationSettings {
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     Duration? timeInterval,
+    Duration? timeLimit,
   }) : super(
-            accuracy: accuracy,
-            distanceFilter: distanceFilter,
-            intervalDuration: timeInterval);
+          accuracy: accuracy,
+          distanceFilter: distanceFilter,
+          intervalDuration: timeInterval,
+          timeLimit: timeLimit,
+        );
 
   /// Allows the location manager to pause updates to improve battery life
   /// on the target device without sacrificing location data.
