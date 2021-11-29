@@ -80,20 +80,20 @@ class Geolocator {
         forceLocationManager: forceAndroidLocationManager,
         timeLimit: timeLimit,
       );
-    } else if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
-      locationSettings = AppleSettings(
+    } else {
+      locationSettings = LocationSettings(
         accuracy: desiredAccuracy,
         timeLimit: timeLimit,
       );
     }
 
-    GeolocatorPlatform.instance.getCurrentPosition(
+    return GeolocatorPlatform.instance.getCurrentPosition(
       locationSettings: locationSettings,
     );
   }
 
   /// Fires whenever the location changes inside the bounds of the
-  /// [desiredAccuracy].
+  /// supplied [LocationSettings.accuracy].
   ///
   /// This event starts all location sensors on the device and will keep them
   /// active until you cancel listening to the stream or when the application
@@ -109,10 +109,15 @@ class Geolocator {
   /// positionStream.cancel();
   /// ```
   ///
-  /// You can control the precision of the location updates by supplying the
-  /// [desiredAccuracy] parameter (defaults to "best"). The [distanceFilter]
-  /// parameter controls the minimum distance the device needs to move before
-  /// the update is emitted (default value is 0 indicator no filter is used).
+  /// You can control the behavior of the stream by specifying an instance of
+  /// the [LocationSettings] class for the [locationSettings] parameter.
+  /// Standard settings are:
+  /// * `LocationSettings.accuracy`: allows controlling the precision of the position updates by
+  /// supplying (defaults to "best");
+  /// * `LocationSettings.distanceFilter`: allows controlling the minimum
+  /// distance the device needs to move before the update is emitted (default
+  /// value is 0 which indicates no filter is used);
+  /// * `LocationSettings.intervalDuration`
   /// On Android you can force the use of the Android LocationManager instead
   /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
   /// parameter to true. Using the [intervalDuration] you can control the amount
@@ -127,18 +132,10 @@ class Geolocator {
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
   static Stream<Position> getPositionStream({
-    LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    int distanceFilter = 0,
-    bool forceAndroidLocationManager = false,
-    Duration? intervalDuration,
-    Duration? timeLimit,
+    LocationSettings? locationSettings,
   }) =>
       GeolocatorPlatform.instance.getPositionStream(
-        desiredAccuracy: desiredAccuracy,
-        distanceFilter: distanceFilter,
-        forceAndroidLocationManager: forceAndroidLocationManager,
-        timeInterval: intervalDuration?.inMilliseconds ?? 0,
-        timeLimit: timeLimit,
+        locationSettings: locationSettings,
       );
 
   /// Returns a [Future] containing a [LocationAccuracyStatus]

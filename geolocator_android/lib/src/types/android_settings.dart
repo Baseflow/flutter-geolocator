@@ -16,7 +16,6 @@ class AndroidSettings extends LocationSettings {
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
-            intervalDuration: intervalDuration,
             timeLimit: timeLimit);
 
   /// Forces the Geolocator plugin to use the legacy LocationManager instead of
@@ -30,11 +29,15 @@ class AndroidSettings extends LocationSettings {
   /// set this property to true.
   final bool forceLocationManager;
 
+  /// The desired interval for active location updates, in milliseconds.
+  final Duration? intervalDuration;
+
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
       ..addAll({
         'forceLocationManager': forceLocationManager,
+        'timeInterval': intervalDuration?.inMilliseconds ?? 0,
       });
   }
 }

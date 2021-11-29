@@ -1,3 +1,7 @@
+## 3.0.0+1
+
+- Removed Android specific `LocationSettings.intervalDuration` field.
+
 ## 3.0.0
 
 - Defines the `LocationSettings` class which bundles platform specific settings when communicating with the host platform.

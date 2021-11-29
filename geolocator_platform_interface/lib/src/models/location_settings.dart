@@ -13,7 +13,6 @@ class LocationSettings {
   const LocationSettings({
     this.accuracy = LocationAccuracy.best,
     this.distanceFilter = 0,
-    this.intervalDuration,
     this.timeLimit,
   });
 
@@ -29,13 +28,6 @@ class LocationSettings {
   /// Supply 0 when you want to be notified of all movements. The default is 0.
   final int distanceFilter;
 
-  /// The desired interval for active location updates, in milliseconds
-  /// (Android only).
-  ///
-  /// On iOS this value is ignored since position updates based on time
-  /// intervals are not supported.
-  final Duration? intervalDuration;
-
   /// The [timeLimit] parameter allows you to specify a timeout interval (by
   /// default no time limit is configured).
   ///
@@ -48,7 +40,6 @@ class LocationSettings {
     return {
       'accuracy': accuracy.index,
       'distanceFilter': distanceFilter,
-      'timeInterval': intervalDuration?.inMilliseconds ?? 0,
     };
   }
 }
