@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Defines the main theme color.
@@ -283,7 +284,13 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      final positionStream = geolocatorAndroid.getPositionStream();
+      final androidSettings = AndroidSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 10,
+        forceLocationManager: false,
+      );
+      final positionStream = geolocatorAndroid.getPositionStream(
+          locationSettings: androidSettings);
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
