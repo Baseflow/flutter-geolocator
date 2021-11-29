@@ -19,8 +19,8 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-    
-  geolocator_platform_interface: ^2.3.6
+
+  geolocator_platform_interface: ^3.0.0
   
 dev_dependencies:
   flutter_test:

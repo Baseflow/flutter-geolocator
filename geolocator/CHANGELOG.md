@@ -1,3 +1,7 @@
+## 8.0.0
+
+- Removed implicit request for permissions when getting a position.
+
 ## 7.7.1
 
 * Update the documentation on permissions in the README.md.
