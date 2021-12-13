@@ -94,7 +94,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   ///
   /// On Android you can force the use of the Android LocationManager instead of
   /// the FusedLocationProvider by setting the [forceLocationManager]
-  /// parameter of [LocationSettings] to true. The [timeLimit] parameter of 
+  /// parameter of [LocationSettings] to true. The [timeLimit] parameter of
   /// [LocationSettings] allows you to specify a timeout interval (by default no
   /// time limit is configured).
   ///
@@ -144,8 +144,8 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// the update is emitted (default value is 0 indicator no filter is used).
   /// On Android you can force the use of the Android LocationManager instead
   /// of the FusedLocationProvider by setting the [forceLocationManager]
-  /// parameter of [LocationSettings] to true. Using the [timeInterval] 
-  /// of [LocationSettings] you can control the amount of time that needs to 
+  /// parameter of [LocationSettings] to true. Using the [timeInterval]
+  /// of [LocationSettings] you can control the amount of time that needs to
   /// pass before the next position update is send.
   ///
   /// Throws a [PermissionDeniedException] when trying to request the device's
