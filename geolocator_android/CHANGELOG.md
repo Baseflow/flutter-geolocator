@@ -1,3 +1,7 @@
+## 3.0.0+5
+
+- Replace usage of unofficial GMS library
+
 ## 3.0.0+4
 
 - Resolve merge conflict.
