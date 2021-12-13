@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-import '../../geolocator_platform_interface.dart';
 import '../enums/enums.dart';
 import '../errors/errors.dart';
 import '../extensions/extensions.dart';
 import '../geolocator_platform_interface.dart';
 import '../models/position.dart';
+import '../models/location_settings.dart';
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class MethodChannelGeolocator extends GeolocatorPlatform {
