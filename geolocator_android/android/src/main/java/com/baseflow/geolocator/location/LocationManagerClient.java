@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
-import com.google.android.gms.common.util.Strings;
 
 import java.util.List;
 
@@ -93,7 +92,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
 
     this.currentLocationProvider = getBestProvider(this.locationManager, locationAccuracy);
 
-    if (Strings.isEmptyOrWhitespace(this.currentLocationProvider)) {
+    if (this.currentLocationProvider.trim().isEmpty()) {
       errorCallback.onError(ErrorCodes.locationServicesDisabled);
       return;
     }
@@ -227,7 +226,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
 
     String provider = locationManager.getBestProvider(criteria, true);
 
-    if (Strings.isEmptyOrWhitespace(provider)) {
+    if (provider.trim().isEmpty()) {
       List<String> providers = locationManager.getProviders(true);
       if (providers.size() > 0) provider = providers.get(0);
     }
