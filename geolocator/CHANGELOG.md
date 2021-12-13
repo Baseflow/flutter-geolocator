@@ -1,7 +1,7 @@
 ## 8.0.1
 
 - Fix "forceAndroidLocationManager" for getLastKnownPosition 
-- Upgrade geolocator_platform_interface to 3.1.0
+- Upgrade geolocator_platform_interface to 3.0.1
 
 ## 8.0.0
 
