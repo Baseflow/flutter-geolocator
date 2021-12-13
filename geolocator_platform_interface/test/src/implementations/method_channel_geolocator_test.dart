@@ -464,7 +464,7 @@ void main() {
         );
 
         final expectedArguments = <String, dynamic>{
-          "forceAndroidLocationManager": false,
+          "forceLocationManager": false,
         };
 
         // Act
