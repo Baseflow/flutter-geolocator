@@ -72,7 +72,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   @override
   Future<Position> getLastKnownPosition({
-    bool forceAndroidLocationManager = false,
+    bool forceLocationManager = false,
   }) =>
       throw _unsupported('getLastKnownPosition');
 
