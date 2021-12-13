@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:vector_math/vector_math.dart';
 
-import '../geolocator_platform_interface.dart';
 import 'enums/enums.dart';
 import 'implementations/method_channel_geolocator.dart';
 import 'models/models.dart';

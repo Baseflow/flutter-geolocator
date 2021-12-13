@@ -1,3 +1,7 @@
+## NEXT
+
+- Remove unnexessary import statements from several source files.
+
 ## 3.0.0+1
 
 - Removed Android specific `LocationSettings.intervalDuration` field.
