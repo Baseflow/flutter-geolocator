@@ -1,9 +1,6 @@
-## NEXT
-
-- Remove unnexessary import statements from several source files.
-
 ## 3.0.1
 
+- Remove unnexessary import statements from several source files.
 - Fix "forceAndroidLocationManager" for getLastKnownPosition
 
 ## 3.0.0+1
