@@ -1,3 +1,7 @@
+## 3.0.1
+
+- Fix "forceAndroidLocationManager" feature in android bindings
+
 ## 3.0.0+4
 
 - Resolve merge conflict.
