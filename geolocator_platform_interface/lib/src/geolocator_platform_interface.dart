@@ -70,13 +70,13 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   ///
   /// On Android you can force the plugin to use the old Android
   /// LocationManager implementation over the newer FusedLocationProvider by
-  /// passing true to the [forceAndroidLocationManager] parameter. On iOS
+  /// passing true to the [forceLocationManager] parameter. On iOS
   /// this parameter is ignored.
   /// When no position is available, null is returned.
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.
   Future<Position?> getLastKnownPosition({
-    bool forceAndroidLocationManager = false,
+    bool forceLocationManager = false,
   }) {
     throw UnimplementedError(
       'getLastKnownPosition() has not been implemented.',
@@ -93,9 +93,10 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// update it with the result of the `getCurrentPosition` method.
   ///
   /// On Android you can force the use of the Android LocationManager instead of
-  /// the FusedLocationProvider by setting the [forceAndroidLocationManager]
-  /// parameter to true. The [timeLimit] parameter allows you to specify a
-  /// timeout interval (by default no time limit is configured).
+  /// the FusedLocationProvider by setting the [forceLocationManager]
+  /// parameter of [LocationSettings] to true. The [timeLimit] parameter of
+  /// [LocationSettings] allows you to specify a timeout interval (by default no
+  /// time limit is configured).
   ///
   /// Throws a [TimeoutException] when no location is received within the
   /// supplied [timeLimit] duration.
@@ -142,9 +143,10 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// parameter controls the minimum distance the device needs to move before
   /// the update is emitted (default value is 0 indicator no filter is used).
   /// On Android you can force the use of the Android LocationManager instead
-  /// of the FusedLocationProvider by setting the [forceAndroidLocationManager]
-  /// parameter to true. Using the [timeInterval] you can control the amount of
-  /// time that needs to pass before the next position update is send.
+  /// of the FusedLocationProvider by setting the [forceLocationManager]
+  /// parameter of [LocationSettings] to true. Using the [timeInterval]
+  /// of [LocationSettings] you can control the amount of time that needs to
+  /// pass before the next position update is send.
   ///
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.

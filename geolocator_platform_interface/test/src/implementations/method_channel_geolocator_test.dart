@@ -464,12 +464,12 @@ void main() {
         );
 
         final expectedArguments = <String, dynamic>{
-          "forceAndroidLocationManager": false,
+          "forceLocationManager": false,
         };
 
         // Act
         final position = await MethodChannelGeolocator().getLastKnownPosition(
-          forceAndroidLocationManager: false,
+          forceLocationManager: false,
         );
 
         // Arrange
@@ -496,7 +496,7 @@ void main() {
 
         // Act
         final future = MethodChannelGeolocator().getLastKnownPosition(
-          forceAndroidLocationManager: false,
+          forceLocationManager: false,
         );
 
         // Assert
