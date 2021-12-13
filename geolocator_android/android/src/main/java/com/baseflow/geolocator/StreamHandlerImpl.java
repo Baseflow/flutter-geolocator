@@ -86,8 +86,8 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
     @SuppressWarnings("unchecked")
     Map<String, Object> map = (Map<String, Object>) arguments;
     boolean forceLocationManager = false;
-    if (map != null && map.get("forceLocationManager") != null) {
-      forceLocationManager = (boolean) map.get("forceLocationManager");
+    if (map != null && map.get("forceAndroidLocationManager") != null) {
+      forceLocationManager = (boolean) map.get("forceAndroidLocationManager");
     }
     LocationOptions locationOptions = LocationOptions.parseArguments(map);
 

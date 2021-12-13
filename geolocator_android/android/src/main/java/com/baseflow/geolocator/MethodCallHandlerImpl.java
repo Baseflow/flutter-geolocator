@@ -175,7 +175,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         return;
     }
 
-    Boolean forceLocationManager = call.argument("forceLocationManager");
+    Boolean forceLocationManager = call.argument("forceAndroidLocationManager");
 
     this.geolocationManager.getLastKnownPosition(
         this.context,
@@ -199,8 +199,8 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     @SuppressWarnings("unchecked")
     Map<String, Object> map = (Map<String, Object>) call.arguments;
     boolean forceLocationManager = false;
-    if (map != null && map.get("forceLocationManager") != null) {
-      forceLocationManager = (boolean) map.get("forceLocationManager");
+    if (map != null && map.get("forceAndroidLocationManager") != null) {
+      forceLocationManager = (boolean) map.get("forceAndroidLocationManager");
     }
     LocationOptions locationOptions = LocationOptions.parseArguments(map);
     final boolean[] replySubmitted = {false};
