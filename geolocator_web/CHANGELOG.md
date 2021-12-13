@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Use "forceLocationManager" instead of "forceAndroidLocationManager"
+
 ## 2.1.0
 
 - Made changes to the implementation of the `getCurrentPosition` and `getPositionStream` method to match new platform interface. 
