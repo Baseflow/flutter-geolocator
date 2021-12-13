@@ -130,7 +130,7 @@ class MockGeolocatorPlatform extends Mock
 
   @override
   Future<Position> getLastKnownPosition({
-    bool forceAndroidLocationManager = false,
+    bool forceLocationManager = false,
   }) =>
       Future.value(mockPosition);
 
