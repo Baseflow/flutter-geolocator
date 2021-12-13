@@ -469,7 +469,7 @@ void main() {
 
         // Act
         final position = await MethodChannelGeolocator().getLastKnownPosition(
-          forceAndroidLocationManager: false,
+          forceLocationManager: false,
         );
 
         // Arrange
@@ -496,7 +496,7 @@ void main() {
 
         // Act
         final future = MethodChannelGeolocator().getLastKnownPosition(
-          forceAndroidLocationManager: false,
+          forceLocationManager: false,
         );
 
         // Assert

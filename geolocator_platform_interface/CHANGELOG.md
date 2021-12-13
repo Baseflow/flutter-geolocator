@@ -2,6 +2,10 @@
 
 - Remove unnexessary import statements from several source files.
 
+## 3.1.0
+
+- Fix "forceAndroidLocationManager" for getLastKnownPosition
+
 ## 3.0.0+1
 
 - Removed Android specific `LocationSettings.intervalDuration` field.

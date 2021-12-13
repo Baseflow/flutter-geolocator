@@ -71,11 +71,11 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   @override
   Future<Position?> getLastKnownPosition({
-    bool forceAndroidLocationManager = false,
+    bool forceLocationManager = false,
   }) async {
     try {
       final parameters = <String, dynamic>{
-        'forceAndroidLocationManager': forceAndroidLocationManager,
+        'forceLocationManager': forceLocationManager,
       };
 
       final positionMap =

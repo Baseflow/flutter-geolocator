@@ -76,7 +76,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Throws a [PermissionDeniedException] when trying to request the device's
   /// location when the user denied access.
   Future<Position?> getLastKnownPosition({
-    bool forceAndroidLocationManager = false,
+    bool forceLocationManager = false,
   }) {
     throw UnimplementedError(
       'getLastKnownPosition() has not been implemented.',
