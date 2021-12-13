@@ -1,3 +1,8 @@
+## 8.0.1
+
+- Fix "forceAndroidLocationManager" for getLastKnownPosition 
+- Upgrade geolocator_platform_interface to 3.1.0
+
 ## 8.0.0
 
 - Removed implicit request for permissions when getting a position.

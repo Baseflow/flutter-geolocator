@@ -51,7 +51,7 @@ class Geolocator {
   static Future<Position?> getLastKnownPosition(
           {bool forceAndroidLocationManager = false}) =>
       GeolocatorPlatform.instance.getLastKnownPosition(
-          forceAndroidLocationManager: forceAndroidLocationManager);
+          forceLocationManager: forceAndroidLocationManager);
 
   /// Returns the current position taking the supplied [desiredAccuracy] into
   /// account.
