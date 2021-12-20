@@ -1,3 +1,7 @@
+## 8.0.2
+
+- Updated README.md to clarify the use of platform specific packages.
+
 ## 8.0.1
 
 - Fix "forceAndroidLocationManager" for getLastKnownPosition 
