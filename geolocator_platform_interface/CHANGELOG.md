@@ -1,3 +1,6 @@
+## 3.0.1+1
+- Remove `timeInterval` from `LocationSettings` documentation
+
 ## 3.0.1
 
 - Remove unnexessary import statements from several source files.
