@@ -6,8 +6,9 @@ import '../enums/enums.dart';
 import '../errors/errors.dart';
 import '../extensions/extensions.dart';
 import '../geolocator_platform_interface.dart';
-import '../models/position.dart';
 import '../models/location_settings.dart';
+import '../models/nmea_message.dart';
+import '../models/position.dart';
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class MethodChannelGeolocator extends GeolocatorPlatform {
@@ -28,7 +29,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   /// The event channel used to receive [NmeaMessage] updates from the native
   /// platform.
   static const _nmeaEventChannel =
-  EventChannel('flutter.baseflow.com/nmea_updates');
+      EventChannel('flutter.baseflow.com/nmea_updates');
 
   /// On Android devices you can set [forcedLocationManager]
   /// to true to force the plugin to use the [LocationManager] to determine the
@@ -207,9 +208,9 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
     _nmeaMessageStream = nmeaStream
         .map<NmeaMessage>((dynamic element) =>
-        NmeaMessage.fromMap(element.cast<String, dynamic>()))
+            NmeaMessage.fromMap(element.cast<String, dynamic>()))
         .handleError(
-          (error) {
+      (error) {
         _nmeaMessageStream = null;
         if (error is PlatformException) {
           _handlePlatformException(error);
