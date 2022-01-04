@@ -91,6 +91,35 @@ class Geolocator {
     );
   }
 
+  /// Returns a stream emitting NMEA-0183 sentences Android only, no-op on iOS.
+  ///
+  /// With devices running an Android API level lower than 24 NMEA-0183
+  /// sentences are received from the GPS engine. From API level 24 and up the
+  /// GNSS engine is used.
+  ///
+  /// This event starts all location sensors on the device and will keep them
+  /// active until you cancel listening to the stream or when the application
+  /// is killed.
+  ///
+  /// ```
+  /// StreamSubscription<NmeaMessage> nmeaStream =
+  ///     Geolocator.getNmeaMessageStream().listen((NmeaMessage nmea) {
+  ///       // Handle NMEA changes
+  ///     });
+  /// ```
+  ///
+  /// When no longer needed cancel the subscription
+  /// nmeaStream.cancel();
+  ///
+  /// Throws a [PermissionDeniedException] when trying to request the device's
+  /// location when the user denied access.
+  /// Throws a [LocationServiceDisabledException] when the user allowed access,
+  /// but the location services of the device are disabled.
+  ///
+  /// for more info about NMEA 0183 see https://en.wikipedia.org/wiki/NMEA_0183
+  static Stream<NmeaMessage> getNmeaMessageStream() =>
+      GeolocatorPlatform.instance.getNmeaMessageStream();
+
   /// Fires whenever the location changes inside the bounds of the
   /// supplied [LocationSettings.accuracy].
   ///

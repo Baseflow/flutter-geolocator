@@ -1,3 +1,7 @@
+## 3.1.0
+
+- Added functionality to receive NMEA messages.
+
 ## 3.0.1
 
 - Replace usage of unofficial GMS library

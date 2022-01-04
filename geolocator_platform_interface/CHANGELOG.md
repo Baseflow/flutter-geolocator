@@ -1,6 +1,10 @@
+## 3.1.0
+
+- Added functionality to receive NMEA messages.
+
 ## 3.0.1
 
-- Remove unnexessary import statements from several source files.
+- Remove unnecessary import statements from several source files.
 - Fix "forceAndroidLocationManager" for getLastKnownPosition
 
 ## 3.0.0+1

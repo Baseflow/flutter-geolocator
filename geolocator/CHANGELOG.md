@@ -1,3 +1,7 @@
+## 8.1.0
+
+- Added functionality to receive NMEA messages.
+
 ## 8.0.1
 
 - Fix "forceAndroidLocationManager" for getLastKnownPosition 

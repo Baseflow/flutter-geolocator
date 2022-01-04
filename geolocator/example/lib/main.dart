@@ -40,6 +40,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
+  StreamSubscription<NmeaMessage>? _nmeaStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
   bool positionStreamStarted = false;
 
@@ -336,6 +337,10 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     if (_positionStreamSubscription != null) {
       _positionStreamSubscription!.cancel();
       _positionStreamSubscription = null;
+    }
+    if (_nmeaStreamSubscription != null) {
+      _nmeaStreamSubscription!.cancel();
+      _nmeaStreamSubscription = null;
     }
 
     super.dispose();
