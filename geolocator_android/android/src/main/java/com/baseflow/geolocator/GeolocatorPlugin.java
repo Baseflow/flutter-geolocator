@@ -18,6 +18,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
   private final LocationAccuracyManager locationAccuracyManager;
+  private final NmeaMessageManager nmeaMessageManager;
 
   @Nullable private MethodCallHandlerImpl methodCallHandler;
 
@@ -164,11 +165,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private void registerListeners() {
     if (this.pluginRegistrar != null) {
       this.pluginRegistrar.addActivityResultListener(this.geolocationManager);
-      this.pluginRegistrar.addActivityResultListener(this.NmeaMessageManager);
       this.pluginRegistrar.addRequestPermissionsResultListener(this.permissionManager);
     } else if (pluginBinding != null) {
       this.pluginBinding.addActivityResultListener(this.geolocationManager);
-      this.pluginBinding.addActivityResultListener(this.NmeaMessageManager);
       this.pluginBinding.addRequestPermissionsResultListener(this.permissionManager);
     }
   }
@@ -176,7 +175,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private void deregisterListeners() {
     if (this.pluginBinding != null) {
       this.pluginBinding.removeActivityResultListener(this.geolocationManager);
-      this.pluginBinding.removeActivityResultListener(this.NmeaMessageManager);
       this.pluginBinding.removeRequestPermissionsResultListener(this.permissionManager);
     }
   }

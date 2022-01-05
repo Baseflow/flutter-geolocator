@@ -16,9 +16,7 @@ public class NmeaMessageManager {
   private final PermissionManager permissionManager;
 
 
-  public NmeaMessageManager(@NonNull PermissionManager permissionManager) {
-    this.permissionManager = permissionManager;
-  }
+  public NmeaMessageManager();
 
 
   public void startNmeaUpdates(Context context, Activity activity, NmeaMessageaClient client,
