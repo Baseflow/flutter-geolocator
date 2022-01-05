@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.LocationManager;
 import com.baseflow.geolocator.errors.ErrorCallback;
+import com.baseflow.geolocator.location.LocationServiceListener;
 
 public interface NmeaMessageaClient {
   void isLocationServiceEnabled(LocationServiceListener listener);

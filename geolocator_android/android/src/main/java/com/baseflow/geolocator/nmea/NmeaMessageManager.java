@@ -1,18 +1,20 @@
 package com.baseflow.geolocator.nmea;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build.VERSION_CODES;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.baseflow.geolocator.errors.ErrorCallback;
+import com.baseflow.geolocator.errors.ErrorCodes;
+import com.baseflow.geolocator.location.LocationServiceListener;
 import com.baseflow.geolocator.permission.PermissionManager;
 
 public class NmeaMessageManager {
 
-  public NmeaMessageManager();
+  public NmeaMessageManager() {}
 
   public void isLocationServiceEnabled(
           @Nullable Context context, LocationServiceListener listener) {
@@ -20,7 +22,7 @@ public class NmeaMessageManager {
       listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
     }
 
-    NmeaMessageaClient nmeaMessageaClient = createNmeaClient(context, null);
+    NmeaMessageaClient nmeaMessageaClient = createNmeaClient(context);
     nmeaMessageaClient.isLocationServiceEnabled(listener);
   }
 

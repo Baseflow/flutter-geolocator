@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCodes;
+import com.baseflow.geolocator.errors.PermissionUndefinedException;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.baseflow.geolocator.nmea.NmeaMessageManager;
 import com.baseflow.geolocator.nmea.NmeaMessageaClient;

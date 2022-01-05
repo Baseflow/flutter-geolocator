@@ -1,6 +1,7 @@
 package com.baseflow.geolocator.nmea;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
+import com.baseflow.geolocator.location.LocationServiceListener;
 
 
 @SuppressLint("NewApi")
