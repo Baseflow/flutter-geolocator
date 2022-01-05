@@ -12,21 +12,25 @@ import com.baseflow.geolocator.permission.PermissionManager;
 
 public class NmeaMessageManager {
 
-  @NonNull
-  private final PermissionManager permissionManager;
-
-
   public NmeaMessageManager();
 
+  public void isLocationServiceEnabled(
+          @Nullable Context context, LocationServiceListener listener) {
+    if (context == null) {
+      listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+    }
 
-  public void startNmeaUpdates(Context context, Activity activity, NmeaMessageaClient client,
-                               NmeaChangedCallback nmeaChangedCallback, ErrorCallback errorCallback) {
+    NmeaMessageaClient nmeaMessageaClient = createNmeaClient(context, null);
+    nmeaMessageaClient.isLocationServiceEnabled(listener);
+  }
 
-    permissionManager.handlePermissions(
-            context,
-            activity,
-            () -> client.startNmeaUpdates(nmeaChangedCallback, errorCallback),
-            errorCallback);
+  public void startNmeaUpdates(
+      @NonNull NmeaMessageaClient client,
+      @Nullable Activity activity,
+      @NonNull NmeaChangedCallback nmeaChangedCallback,
+      @NonNull ErrorCallback errorCallback) {
+
+    client.startNmeaUpdates(activity, nmeaChangedCallback, errorCallback);
   }
 
   public void stopNmeaUpdates(NmeaMessageaClient client) {
@@ -34,7 +38,8 @@ public class NmeaMessageManager {
   }
 
   @RequiresApi(api = VERSION_CODES.N)
-  public NmeaMessageaClient createNmeaClient(Context context) {
+  public NmeaMessageaClient createNmeaClient(
+          Context context) {
     return new GnssNmeaMessageClient(context);
   }
 

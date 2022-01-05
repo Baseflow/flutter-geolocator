@@ -78,16 +78,22 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     methodCallHandler =
         new MethodCallHandlerImpl(
-            this.permissionManager, this.geolocationManager, this.locationAccuracyManager, this.nmeaStreamHandler);
+            this.permissionManager,
+            this.geolocationManager,
+            this.locationAccuracyManager,
+            this.nmeaMessageManager);
     methodCallHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
     streamHandler = new StreamHandlerImpl(this.geolocationManager, this.permissionManager);
     streamHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
-
     locationServiceHandler = new LocationServiceHandlerImpl();
     locationServiceHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
+    nmeaStreamHandler = new NmeaStreamHandlerImpl(nmeaMessageManager);
+    nmeaStreamHandler.startListening(
+        flutterPluginBinding.getApplicationContext(),
+        flutterPluginBinding.getBinaryMessenger());
   }
 
   @Override
@@ -127,7 +133,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     }
 
     if (nmeaStreamHandler != null) {
-        nmeaStreamHandler.setActivity(binding.getActivity());
+      nmeaStreamHandler.setActivity(binding.getActivity());
     }
 
     this.pluginBinding = binding;

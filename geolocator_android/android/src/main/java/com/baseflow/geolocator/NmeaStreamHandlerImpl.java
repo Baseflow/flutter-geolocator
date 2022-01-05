@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCodes;
-import com.baseflow.geolocator.location.GeolocationManager;
+import com.baseflow.geolocator.permission.PermissionManager;
 import com.baseflow.geolocator.nmea.NmeaMessageManager;
 import com.baseflow.geolocator.nmea.NmeaMessageaClient;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -14,18 +14,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
-
   private static final String TAG = "NmeaStreamHandlerImpl";
 
   private final NmeaMessageManager nmeaMessageManager;
+  private final PermissionManager permissionManager;
 
   @Nullable private EventChannel channel;
   @Nullable private Context context;
   @Nullable private Activity activity;
   @Nullable private NmeaMessageaClient nmeaMessageaClient;
 
-  public NmeaStreamHandlerImpl(NmeaMessageManager nmeaMessageManager) {
+  public NmeaStreamHandlerImpl(NmeaMessageManager nmeaMessageManager, PermissionManager permissionManager) {
     this.nmeaMessageManager = nmeaMessageManager;
+    this.permissionManager = permissionManager;
   }
 
   private static Map<String, Object> toMap(String message, Long timestamp) {
@@ -80,16 +81,24 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
 
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {
+    try {
+      if (!permissionManager.hasPermission(this.context)){
+        events.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
+        return;
+      }
+    } catch (PermissionUndefinedException e) {
+      events.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
+      return;
+    }
 
-    this.nmeaMessageaClient = nmeaMessageManager.createNmeaClient(context);
+    this.nmeaMessageaClient = nmeaMessageManager.createNmeaClient(this.context);
 
     nmeaMessageManager.startNmeaUpdates(
-            context,
-            activity,
-            this.nmeaMessageaClient,
-            (String message, long timestamp) -> events.success(toMap(message, timestamp)),
+        this.nmeaMessageaClient,
+        activity,
+        (String message, long timestamp) -> events.success(toMap(message, timestamp)),
             (ErrorCodes errorCodes) ->
-                    events.error(errorCodes.toString(), errorCodes.toDescription(), null));
+                events.error(errorCodes.toString(), errorCodes.toDescription(), null));
   }
 
   @Override
