@@ -7,7 +7,7 @@ import android.location.LocationManager;
 import com.baseflow.geolocator.errors.ErrorCallback;
 
 public interface NmeaMessageaClient {
-  void isLocationServiceEnabled(LocationServiceListener listener)
+  void isLocationServiceEnabled(LocationServiceListener listener);
 
   void startNmeaUpdates(Activity activity, NmeaChangedCallback nmeaChangedCallback,
                         ErrorCallback errorCallback);
