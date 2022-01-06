@@ -72,6 +72,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     LocationServiceHandlerImpl locationServiceHandler = new LocationServiceHandlerImpl();
     locationServiceHandler.startListening(registrar.context(), registrar.messenger());
     locationServiceHandler.setActivity(registrar.activity());
+
+    NmeaStreamHandlerImpl nmeaStreamHandler = new NmeaStreamHandlerImpl(geolocatorPlugin.nmeaMessageManager, geolocatorPlugin.permissionManager);
+    nmeaStreamHandler.startListening(registrar.context(), registrar.messenger());
+    nmeaStreamHandler.setActivity(registrar.activity());
   }
 
   @Override

@@ -213,13 +213,11 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       (error) {
         _nmeaMessageStream = null;
         if (error is PlatformException) {
-          _handlePlatformException(error);
+          error = _handlePlatformException(error);
         }
-
         throw error;
       },
     );
-
     return _nmeaMessageStream!;
   }
 

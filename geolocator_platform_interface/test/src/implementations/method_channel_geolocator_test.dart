@@ -1039,7 +1039,7 @@ void main() {
 
     group(
         // ignore: lines_longer_than_80_chars
-        'getServiceStream: When requesting a stream of location service status and NMEA updates',
+        'getNmeaMessageStream: When requesting a stream of location service status and NMEA updates',
         () {
       group(
           'And requesting for NMEA and location service status updates multiple times',

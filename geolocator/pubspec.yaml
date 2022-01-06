@@ -35,3 +35,10 @@ dev_dependencies:
   flutter_lints: ^1.0.4
   mockito: ^5.0.0-nullsafety.7
   plugin_platform_interface: ^2.0.0
+
+# TODO: REMOVE BEFORE MERGING
+dependency_overrides:
+  geolocator_platform_interface:
+    path: ../geolocator_platform_interface/
+  geolocator_android:
+    path: ../geolocator_android/

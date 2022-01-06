@@ -98,8 +98,8 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
         this.nmeaMessageaClient,
         activity,
         (String message, long timestamp) -> events.success(toMap(message, timestamp)),
-            (ErrorCodes errorCodes) ->
-                events.error(errorCodes.toString(), errorCodes.toDescription(), null));
+        (ErrorCodes errorCodes) ->
+            events.error(errorCodes.toString(), errorCodes.toDescription(), null));
   }
 
   @Override
