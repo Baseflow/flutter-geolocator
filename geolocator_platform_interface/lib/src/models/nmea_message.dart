@@ -30,8 +30,8 @@ class NmeaMessage {
 
     final timestamp = nmeaMessageMap['timestamp'] != null
         ? DateTime.fromMillisecondsSinceEpoch(
-        nmeaMessageMap['timestamp'].toInt(),
-        isUtc: true)
+            nmeaMessageMap['timestamp'].toInt(),
+            isUtc: true)
         : null;
 
     return NmeaMessage(
@@ -43,9 +43,9 @@ class NmeaMessage {
   /// Converts the [NmeaMessage] instance into a [Map] instance that can be
   /// serialized to JSON.
   Map<String, dynamic> toJson() => {
-    'message': message,
-    'timestamp': timestamp?.millisecondsSinceEpoch,
-  };
+        'message': message,
+        'timestamp': timestamp?.millisecondsSinceEpoch,
+      };
 
   @override
   bool operator ==(Object other) {
