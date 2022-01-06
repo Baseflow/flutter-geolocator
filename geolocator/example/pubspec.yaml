@@ -40,7 +40,7 @@ dev_dependencies:
 # TODO: REMOVE BEFORE MERGING
 dependency_overrides:
   geolocator_platform_interface:
-    path: ../geolocator_platform_interface/
+    path: ../../geolocator_platform_interface/
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
