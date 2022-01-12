@@ -1,7 +1,14 @@
+## 3.0.2
+
+- Made changes to the `GeolocatorPlatform` due to version locking issues.
+- Replaced soft-deprecated `PlatformInterface.verifyToken` method with `PlatformInterface.verify` method;
+- Updated `plugin_platform_interface` dependency;
+- 
+
 ## 3.0.1
 
-- Remove unnexessary import statements from several source files.
-- Fix "forceAndroidLocationManager" for getLastKnownPosition
+- Remove unnecessary import statements from several source files;
+- Fix "forceAndroidLocationManager" for getLastKnownPosition.
 
 ## 3.0.0+1
 
