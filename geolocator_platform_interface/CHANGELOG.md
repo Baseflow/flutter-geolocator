@@ -1,6 +1,6 @@
 ## 4.0.1
 
-- Adds the `LocationPermission.unknown` status used on the web platform when the permission API is not implemented by the browser.
+- Adds the `LocationPermission.unableToDetermine` status used on the web platform when the permission API is not implemented by the browser.
 
 ## 4.0.0
 

@@ -19,12 +19,11 @@ class HtmlPermissionsManager implements PermissionsManager {
 
   @override
   Future<LocationPermission> query(Map permission) async {
-    final permissions = _permissions;
-    if (permissions == null) {
-      return LocationPermission.denied;
+    if (!permissionsSupported) {
+      return LocationPermission.unableToDetermine;
     }
 
-    final status = await permissions.query(
+    final html.PermissionStatus status = await _permissions!.query(
       _permissionQuery,
     );
 
