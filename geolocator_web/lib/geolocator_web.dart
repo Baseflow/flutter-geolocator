@@ -82,7 +82,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   }) async {
     final result = await _geolocation.getCurrentPosition(
       enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
-      timeout: locationSettings?.timeLimit ?? const Duration(seconds: 0),
+      timeout: locationSettings?.timeLimit,
     );
 
     return result;
@@ -97,7 +97,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     return _geolocation
         .watchPosition(
       enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
-      timeout: locationSettings?.timeLimit ?? const Duration(seconds: 0),
+      timeout: locationSettings?.timeLimit,
     )
         .skipWhile((geoposition) {
       if (locationSettings?.distanceFilter == 0 ||
