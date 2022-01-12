@@ -1,3 +1,7 @@
+## 2.1.3
+
+- Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.
+
 ## 2.1.2
 
 - Fixes a bug where the `getCurrentPosition` and `getPositionStream` methods return a timeout exception when no timeout interval is specified.
