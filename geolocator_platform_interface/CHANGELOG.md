@@ -1,9 +1,8 @@
-## 3.0.2
+## 4.0.0
 
-- Made changes to the `GeolocatorPlatform` due to version locking issues;
+- **breaking** Updates the plugin platform interface to use a non`-const` token. This is marked as a breaking change because it can cause an assertion failure if implementations use `implements` rather than `extends`, but hopefully there aren't any of those;
 - Replaced soft-deprecated `PlatformInterface.verifyToken` method with `PlatformInterface.verify` method;
 - Updated `plugin_platform_interface` dependency.
-- 
 
 ## 3.0.1
 
