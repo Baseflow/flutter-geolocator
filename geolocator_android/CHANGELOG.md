@@ -1,6 +1,6 @@
 ## 3.0.2
 
-- Added a default `intervalDuration` value of 500ms to prevent the `getCurrentPosition` method to return a cached Location.
+- Added a default `intervalDuration` value of 5000ms to prevent the `getCurrentPosition` method to return a cached Location.
 
 ## 3.0.1
 
