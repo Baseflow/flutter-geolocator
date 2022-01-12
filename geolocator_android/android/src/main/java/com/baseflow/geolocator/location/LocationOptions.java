@@ -9,7 +9,7 @@ public class LocationOptions {
 
   public static LocationOptions parseArguments(Map<String, Object> arguments) {
     if (arguments == null) {
-      return new LocationOptions(LocationAccuracy.best, 0, 0);
+      return new LocationOptions(LocationAccuracy.best, 0, 500);
     }
 
     final Integer accuracy = (Integer) arguments.get("accuracy");
@@ -44,7 +44,7 @@ public class LocationOptions {
     return new LocationOptions(
         locationAccuracy,
         distanceFilter != null ? distanceFilter : 0,
-        timeInterval != null ? timeInterval : 0);
+        timeInterval != null ? timeInterval : 500);
   }
 
   private LocationOptions(LocationAccuracy accuracy, long distanceFilter, long timeInterval) {
