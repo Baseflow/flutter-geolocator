@@ -1,3 +1,7 @@
+## 4.0.1
+
+- Adds the `LocationPermission.unknown` status used on the web platform when the permission API is not implemented by the browser.
+
 ## 4.0.0
 
 - **breaking** Updates the plugin platform interface to use a non`-const` token. This is marked as a breaking change because it can cause an assertion failure if implementations use `implements` rather than `extends`, but hopefully there aren't any of those;
