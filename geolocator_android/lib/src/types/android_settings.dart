@@ -31,7 +31,7 @@ class AndroidSettings extends LocationSettings {
 
   /// The desired interval for active location updates.
   ///
-  /// If this value is `null` an interval duration of 500ms is applied.
+  /// If this value is `null` an interval duration of 5000ms is applied.
   final Duration? intervalDuration;
 
   @override
