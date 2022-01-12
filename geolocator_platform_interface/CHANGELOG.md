@@ -1,8 +1,8 @@
 ## 3.0.2
 
-- Made changes to the `GeolocatorPlatform` due to version locking issues.
+- Made changes to the `GeolocatorPlatform` due to version locking issues;
 - Replaced soft-deprecated `PlatformInterface.verifyToken` method with `PlatformInterface.verify` method;
-- Updated `plugin_platform_interface` dependency;
+- Updated `plugin_platform_interface` dependency.
 - 
 
 ## 3.0.1
