@@ -1,3 +1,7 @@
+## 8.0.3
+
+- Upgraded the geolocator_platform_interface, geolocator_web, geolocator_apple and geolocator_android packages to the latest versions.
+
 ## 8.0.2
 
 - Updated README.md to clarify the use of platform specific packages.
