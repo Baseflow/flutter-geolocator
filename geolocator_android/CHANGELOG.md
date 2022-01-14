@@ -8,7 +8,7 @@
 
 ## 3.0.1
 
-- Replace usage of unofficial GMS library.
+- Replace usage of unofficial GMS library
 
 ## 3.0.0+4
 

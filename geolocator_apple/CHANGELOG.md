@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.
+
 ## 2.0.0+2
 
 - Removes the Android specific `timeInterval` parameter from `AppleSettings`.

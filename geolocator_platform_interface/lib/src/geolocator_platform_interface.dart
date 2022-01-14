@@ -20,7 +20,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Constructs a GeolocatorPlatform.
   GeolocatorPlatform() : super(token: _token);
 
-  static const Object _token = Object();
+  static final Object _token = Object();
 
   static GeolocatorPlatform _instance = MethodChannelGeolocator();
 
@@ -33,7 +33,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// platform-specific class that extends [GeolocatorPlatform] when they
   /// register themselves.
   static set instance(GeolocatorPlatform instance) {
-    PlatformInterface.verifyToken(instance, _token);
+    PlatformInterface.verify(instance, _token);
     _instance = instance;
   }
 
