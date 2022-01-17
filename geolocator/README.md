@@ -245,12 +245,14 @@ StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locat
     });
 ```
 
-In certain situation it is necessary to specify some platform specific settings. This can be accomplished using the platform specific `AndroidSettings` or `AppleSettings` classes. For example:
+In certain situation it is necessary to specify some platform specific settings. This can be accomplished using the platform specific `AndroidSettings` or `AppleSettings` classes. When using a platform specific class, the platform specific package must be imported as well. For example:
 
 ```dart
 import 'package:geolocator/geolocator.dart';
+import 'package:geoloator_apple/geolocator_apple.dart';
+import 'package:geoloator_android/geolocator_android.dart';
 
-late LocationSettings locationSettings
+late LocationSettings locationSettings;
 
 if (defaultTargetPlatform == TargetPlatform.android) {
   locationSettings = AndroidSettings(

@@ -2,6 +2,10 @@
 
 - Added functionality to receive NMEA messages.
 
+## 3.0.2
+
+- Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.
+
 ## 3.0.1
 
 - Replace usage of unofficial GMS library
@@ -53,4 +57,3 @@
 ## 1.0.0
 
 - Initial open source release.
-

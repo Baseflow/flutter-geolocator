@@ -1,10 +1,19 @@
+
 ## 8.1.0
 
 - Added functionality to receive NMEA messages.
 
+## 8.0.3
+
+- Upgraded the geolocator_platform_interface, geolocator_web, geolocator_apple and geolocator_android packages to the latest versions.
+
+## 8.0.2
+
+- Updated README.md to clarify the use of platform specific packages.
+
 ## 8.0.1
 
-- Fix "forceAndroidLocationManager" for getLastKnownPosition 
+- Fix "forceAndroidLocationManager" for getLastKnownPosition
 - Upgrade geolocator_platform_interface to 3.0.1
 - Upgrade geolocator_web to 2.1.1
 
@@ -77,7 +86,7 @@
 ## 7.0.3
 
 - Android: Throw the `ActivityMissingException` when requesting permissions while the activity is not available (e.g. when the App is in the background);
-- iOS: Support the `NSLocationAlwaysAndWhenInUseUsageDescription` key on iOS 11+ (this key replaces the `NSLocationAlwaysDescription` key which has been marked [deprecated](https://developer.apple.com/documentation/bundleresources/information_property_list/nslocationalwaysusagedescription?language=objc)). 
+- iOS: Support the `NSLocationAlwaysAndWhenInUseUsageDescription` key on iOS 11+ (this key replaces the `NSLocationAlwaysDescription` key which has been marked [deprecated](https://developer.apple.com/documentation/bundleresources/information_property_list/nslocationalwaysusagedescription?language=objc)).
 
 ## 7.0.2
 
@@ -89,7 +98,7 @@
 
 ## 7.0.0
 
-This release contains the following **breaking changes**: 
+This release contains the following **breaking changes**:
 - Stable release of null safety migration;
 - Checking permissions on Android can no longer result in `LocationPermissions.deniedForever`. More details can be found in issue [#653](https://github.com/Baseflow/flutter-geolocator/issues/653) and the [wiki](https://github.com/Baseflow/flutter-geolocator/wiki/Breaking-changes-in-7.0.0#android-permission-update);
 - Removed deprecated `timeInterval` parameter from the `getPositionStream` method;
@@ -372,7 +381,7 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 ## 1.7.0
 
 - Added timestamp to instances of the `Position` class indicating when the GPS fix was acquired;
-- Updated the dependency on the `PermissionHandler` to version >=2.0.0 <3.0.0. 
+- Updated the dependency on the `PermissionHandler` to version >=2.0.0 <3.0.0.
 
 ## 1.6.5
 
@@ -412,14 +421,14 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 - Solved a bug on Android where requesting permissions twice would cause the App to crash [[ISSUE #61](https://github.com/BaseflowIT/flutter-geolocator/issues/61)]
 
 > **Important:**
-> 
+>
 > To be able to correctly fix [issue #58](https://github.com/BaseflowIT/flutter-geolocator/issues/58) we had to change the `getPositionStream` method into a `async` method. This means the signature of the method has been changed from:
 >
-> `Stream<Position> getPositionStream([LocationOptions locationOptions = const LocationOptions()])` 
+> `Stream<Position> getPositionStream([LocationOptions locationOptions = const LocationOptions()])`
 >
-> to 
+> to
 >
-> `Future<Stream<Position>> getPositionStream([LocationOptions locationOptions = const LocationOptions()])`. 
+> `Future<Stream<Position>> getPositionStream([LocationOptions locationOptions = const LocationOptions()])`.
 >
 > Meaning as a developer you'll now have to `await` the result of the method to get access to the actual stream.
 
@@ -468,9 +477,9 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 
 ## 1.1.0
 
-- Introduced the option to supply a desired accuracy. 
+- Introduced the option to supply a desired accuracy.
 
-> **Important:*- 
+> **Important:*-
 >
 >This introduces a breaking change, the `getPosition` and `onPositionChanged` properties have been replaced by methods (`getPosition([LocationAccuracy desiredAccuracy = LocationAccuracy.Best])` and `getPositionStream([LocationAccuracy desiredAccuracy = LocationAccuracy.Best])` respectively) accepting a parameter to indicate the desired accuracy.
 - Updated the Android part to make use of the [LocationManager](https://developer.android.com/reference/android/location/LocationManager) instead of the [FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient)
@@ -488,4 +497,3 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 ## 0.0.1
 
 - Initial release
-
