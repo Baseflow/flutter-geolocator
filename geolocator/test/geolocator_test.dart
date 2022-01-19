@@ -65,6 +65,7 @@ void main() {
       debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
       final position = await Geolocator.getCurrentPosition();
       expect(position, mockPosition);
+      debugDefaultTargetPlatformOverride = null;
     });
 
     test('getLocationAccuracy', () async {
