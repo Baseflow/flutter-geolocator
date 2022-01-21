@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
-import 'package:geolocator_platform_interface/src/method_channel_geolocator.dart';
+import 'package:geolocator_platform_interface/src/implementations/method_channel_geolocator.dart';
 
 import 'src/implementations/event_channel_mock.dart';
 import 'src/implementations/method_channel_mock.dart';
