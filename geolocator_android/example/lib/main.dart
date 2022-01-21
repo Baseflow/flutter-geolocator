@@ -186,11 +186,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return;
     }
 
-    final position = await geolocatorAndroid.getCurrentPosition(
-      locationSettings: AndroidSettings(
-        forceLocationManager: true
-      ));
-    
+    final position = await geolocatorAndroid.getCurrentPosition();
     _updatePositionList(
       _PositionItemType.position,
       position.toString(),
