@@ -196,7 +196,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
     required String purposeKey,
   }) async {
-    if(Platform.isIOS || Platform.isMacOS) {
       try {
         final int status = await _methodChannel.invokeMethod(
           'requestTemporaryFullAccuracy',
@@ -209,9 +208,6 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         final error = _handlePlatformException(e);
         throw error;
       }
-    } else {
-      throw UnsupportedError('Functionality only supported on iOS and MacOS');
-    }
   }
 
   @override
