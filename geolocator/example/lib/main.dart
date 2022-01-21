@@ -88,7 +88,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           child: Text("Open App Settings"),
           value: 3,
         ),
-        if (Platform.isAndroid)
+        if (Platform.isAndroid || Platform.isWindows)
           const PopupMenuItem(
             child: Text("Open Location Settings"),
             value: 4,
