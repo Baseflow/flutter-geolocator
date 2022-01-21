@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:geolocator_platform_interface/src/method_channel_geolocator.dart';
 
-import 'event_channel_mock.dart';
-import 'method_channel_mock.dart';
+import 'src/implementations/event_channel_mock.dart';
+import 'src/implementations/method_channel_mock.dart';
 
 Position get mockPosition => Position(
     latitude: 52.561270,
@@ -38,12 +39,12 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'checkPermission',
             result: LocationPermission.whileInUse.index);
 
         // Act
-        final permission = await MethodChannelGeolocator().checkPermission();
+        final permission = await GeolocatorAndroid().checkPermission();
 
         // Assert
         expect(
@@ -55,12 +56,12 @@ void main() {
       test('Should receive always if permission is granted always', () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'checkPermission',
             result: LocationPermission.always.index);
 
         // Act
-        final permission = await MethodChannelGeolocator().checkPermission();
+        final permission = await GeolocatorAndroid().checkPermission();
 
         // Assert
         expect(
@@ -72,12 +73,12 @@ void main() {
       test('Should receive denied if permission is denied', () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'checkPermission',
             result: LocationPermission.denied.index);
 
         // Act
-        final permission = await MethodChannelGeolocator().checkPermission();
+        final permission = await GeolocatorAndroid().checkPermission();
 
         // Assert
         expect(
@@ -90,12 +91,12 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'checkPermission',
             result: LocationPermission.deniedForever.index);
 
         // Act
-        final permission = await MethodChannelGeolocator().checkPermission();
+        final permission = await GeolocatorAndroid().checkPermission();
 
         // Assert
         expect(
@@ -108,7 +109,7 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'checkPermission',
           result: PlatformException(
             code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
@@ -118,7 +119,7 @@ void main() {
         );
 
         // Act
-        final permissionFuture = MethodChannelGeolocator().checkPermission();
+        final permissionFuture = GeolocatorAndroid().checkPermission();
 
         // Assert
         expect(
@@ -137,81 +138,18 @@ void main() {
     group(
         'requestTemporaryFullAccuracy: When requesting temporary full'
         'accuracy.', () {
-      test(
-          'Should receive reduced accuracy if Location Accuracy is pinned to'
-          ' reduced', () async {
-        // Arrange
-        final methodChannel = MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
-            method: 'requestTemporaryFullAccuracy',
-            result: 0);
-
-        final expectedArguments = <String, dynamic>{
-          'purposeKey': 'purposeKeyValue',
-        };
-
-        // Act
-        final accuracy =
-            await MethodChannelGeolocator().requestTemporaryFullAccuracy(
-          purposeKey: 'purposeKeyValue',
-        );
-
-        // Assert
-        expect(accuracy, LocationAccuracyStatus.reduced);
-
-        expect(methodChannel.log, <Matcher>[
-          isMethodCall(
-            'requestTemporaryFullAccuracy',
-            arguments: expectedArguments,
-          ),
-        ]);
-      });
-
-      test(
-          'Should receive reduced accuracy if Location Accuracy is already set'
-          ' to precise location accuracy', () async {
+      test('Should unsupported exception', () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
-            method: 'requestTemporaryFullAccuracy',
-            result: 1);
-
-        // Act
-        final accuracy = await MethodChannelGeolocator()
-            .requestTemporaryFullAccuracy(purposeKey: 'purposeKey');
-
-        // Assert
-        expect(accuracy, LocationAccuracyStatus.precise);
-      });
-
-      test('Should receive an exception when permission definitions not found',
-          () async {
-        // Arrange
-        MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'requestTemporaryFullAccuracy',
-          result: PlatformException(
-            code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
-            message: 'Permission definitions are not found.',
-            details: null,
-          ),
+          result:
+              UnsupportedError('Functionality only supported on iOS and MacOS'),
         );
 
-        // Act
-        final future = MethodChannelGeolocator()
-            .requestTemporaryFullAccuracy(purposeKey: 'purposeKey');
-
-        // Assert
-        expect(
-          future,
-          throwsA(
-            isA<PermissionDefinitionsNotFoundException>().having(
-              (e) => e.message,
-              'description',
-              'Permission definitions are not found.',
-            ),
-          ),
-        );
+        expect(() => GeolocatorAndroid().requestTemporaryFullAccuracy(
+          purposeKey: 'purposeKeyValue',
+        ), throwsUnsupportedError);
       });
     });
 
@@ -221,14 +159,14 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'getLocationAccuracy',
           result: 0,
         );
 
         // Act
         final locationAccuracy =
-            await MethodChannelGeolocator().getLocationAccuracy();
+            await GeolocatorAndroid().getLocationAccuracy();
 
         // Assert
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
@@ -238,14 +176,14 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'getLocationAccuracy',
           result: 1,
         );
 
         // Act
         final locationAccuracy =
-            await MethodChannelGeolocator().getLocationAccuracy();
+            await GeolocatorAndroid().getLocationAccuracy();
 
         // Assert
         expect(locationAccuracy, LocationAccuracyStatus.precise);
@@ -259,12 +197,12 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'requestPermission',
             result: LocationPermission.whileInUse.index);
 
         // Act
-        final permission = await MethodChannelGeolocator().requestPermission();
+        final permission = await GeolocatorAndroid().requestPermission();
 
         // Assert
         expect(
@@ -276,12 +214,12 @@ void main() {
       test('Should receive always if permission is granted always', () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'requestPermission',
             result: LocationPermission.always.index);
 
         // Act
-        final permission = await MethodChannelGeolocator().requestPermission();
+        final permission = await GeolocatorAndroid().requestPermission();
 
         // Assert
         expect(
@@ -293,12 +231,12 @@ void main() {
       test('Should receive denied if permission is denied', () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'requestPermission',
             result: LocationPermission.denied.index);
 
         // Act
-        final permission = await MethodChannelGeolocator().requestPermission();
+        final permission = await GeolocatorAndroid().requestPermission();
 
         // Assert
         expect(
@@ -311,12 +249,12 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'requestPermission',
             result: LocationPermission.deniedForever.index);
 
         // Act
-        final permission = await MethodChannelGeolocator().requestPermission();
+        final permission = await GeolocatorAndroid().requestPermission();
 
         // Assert
         expect(
@@ -329,7 +267,7 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'requestPermission',
           result: PlatformException(
             code: "PERMISSION_REQUEST_IN_PROGRESS",
@@ -339,7 +277,7 @@ void main() {
         );
 
         // Act
-        final permissionFuture = MethodChannelGeolocator().requestPermission();
+        final permissionFuture = GeolocatorAndroid().requestPermission();
 
         // Assert
         expect(
@@ -358,7 +296,7 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'requestPermission',
           result: PlatformException(
             code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
@@ -368,7 +306,7 @@ void main() {
         );
 
         // Act
-        final permissionFuture = MethodChannelGeolocator().requestPermission();
+        final permissionFuture = GeolocatorAndroid().requestPermission();
 
         // Assert
         expect(
@@ -387,7 +325,7 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'requestPermission',
           result: PlatformException(
             code: 'ACTIVITY_MISSING',
@@ -397,7 +335,7 @@ void main() {
         );
 
         // Act
-        final permissionFuture = MethodChannelGeolocator().requestPermission();
+        final permissionFuture = GeolocatorAndroid().requestPermission();
 
         // Assert
         expect(
@@ -418,14 +356,14 @@ void main() {
       test('Should receive true if location services are enabled', () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'isLocationServiceEnabled',
           result: true,
         );
 
         // Act
         final isLocationServiceEnabled =
-            await MethodChannelGeolocator().isLocationServiceEnabled();
+            await GeolocatorAndroid().isLocationServiceEnabled();
 
         // Assert
         expect(
@@ -437,14 +375,14 @@ void main() {
       test('Should receive false if location services are disabled', () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'isLocationServiceEnabled',
           result: false,
         );
 
         // Act
         final isLocationServiceEnabled =
-            await MethodChannelGeolocator().isLocationServiceEnabled();
+            await GeolocatorAndroid().isLocationServiceEnabled();
 
         // Assert
         expect(
@@ -458,7 +396,7 @@ void main() {
       test('Should receive a position if permissions are granted', () async {
         // Arrange
         final methodChannel = MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'getLastKnownPosition',
           result: mockPosition.toJson(),
         );
@@ -468,7 +406,7 @@ void main() {
         };
 
         // Act
-        final position = await MethodChannelGeolocator().getLastKnownPosition(
+        final position = await GeolocatorAndroid().getLastKnownPosition(
           forceLocationManager: false,
         );
 
@@ -485,7 +423,7 @@ void main() {
       test('Should receive an exception if permissions are denied', () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'getLastKnownPosition',
           result: PlatformException(
             code: "PERMISSION_DENIED",
@@ -495,7 +433,7 @@ void main() {
         );
 
         // Act
-        final future = MethodChannelGeolocator().getLastKnownPosition(
+        final future = GeolocatorAndroid().getLastKnownPosition(
           forceLocationManager: false,
         );
 
@@ -517,14 +455,14 @@ void main() {
       test('Should receive a position if permissions are granted', () async {
         // Arrange
         final channel = MethodChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator',
+            channelName: 'flutter.baseflow.com/geolocator_android',
             method: 'getCurrentPosition',
             result: mockPosition.toJson());
         const expectedArguments =
             LocationSettings(accuracy: LocationAccuracy.low);
 
         // Act
-        final position = await MethodChannelGeolocator().getCurrentPosition(
+        final position = await GeolocatorAndroid().getCurrentPosition(
             locationSettings:
                 const LocationSettings(accuracy: LocationAccuracy.low));
 
@@ -541,7 +479,7 @@ void main() {
       test('Should receive a position for each call', () async {
         // Arrange
         final channel = MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'getCurrentPosition',
           result: mockPosition.toJson(),
         );
@@ -553,12 +491,12 @@ void main() {
         );
 
         // Act
-        final methodChannelGeolocator = MethodChannelGeolocator();
-        final firstPosition = await methodChannelGeolocator.getCurrentPosition(
+        final geolocatorAndroid = GeolocatorAndroid();
+        final firstPosition = await geolocatorAndroid.getCurrentPosition(
             locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.low,
         ));
-        final secondPosition = await methodChannelGeolocator.getCurrentPosition(
+        final secondPosition = await geolocatorAndroid.getCurrentPosition(
             locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
         ));
@@ -582,7 +520,7 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'getCurrentPosition',
           result: PlatformException(
             code: 'PERMISSION_DENIED',
@@ -592,7 +530,7 @@ void main() {
         );
 
         // Act
-        final future = MethodChannelGeolocator().getCurrentPosition();
+        final future = GeolocatorAndroid().getCurrentPosition();
 
         // Assert
         expect(
@@ -613,7 +551,7 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'getCurrentPosition',
           result: PlatformException(
             code: 'LOCATION_SERVICES_DISABLED',
@@ -623,7 +561,7 @@ void main() {
         );
 
         // Act
-        final future = MethodChannelGeolocator().getCurrentPosition();
+        final future = GeolocatorAndroid().getCurrentPosition();
 
         // Assert
         expect(
@@ -636,14 +574,14 @@ void main() {
           () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           delay: const Duration(milliseconds: 10),
           method: 'getCurrentPosition',
           result: mockPosition.toJson(),
         );
 
         try {
-          await MethodChannelGeolocator().getCurrentPosition(
+          await GeolocatorAndroid().getCurrentPosition(
             locationSettings: const LocationSettings(
               timeLimit: Duration(milliseconds: 5),
             ),
@@ -660,9 +598,9 @@ void main() {
         () {
       group('And requesting for position update multiple times', () {
         test('Should return the same stream', () {
-          final methodChannelGeolocator = MethodChannelGeolocator();
-          final firstStream = methodChannelGeolocator.getPositionStream();
-          final secondStream = methodChannelGeolocator.getPositionStream();
+          final geolocatorAndroid = GeolocatorAndroid();
+          final firstStream = geolocatorAndroid.getPositionStream();
+          final secondStream = geolocatorAndroid.getPositionStream();
 
           expect(
             identical(firstStream, secondStream),
@@ -672,11 +610,11 @@ void main() {
 
         test('Should return a new stream when all subscriptions are cancelled',
             () {
-          final methodChannelGeolocator = MethodChannelGeolocator();
+          final geolocatorAndroid = GeolocatorAndroid();
 
           // Get two position streams
-          final firstStream = methodChannelGeolocator.getPositionStream();
-          final secondStream = methodChannelGeolocator.getPositionStream();
+          final firstStream = geolocatorAndroid.getPositionStream();
+          final secondStream = geolocatorAndroid.getPositionStream();
 
           // Streams are the same object
           expect(firstStream == secondStream, true);
@@ -692,7 +630,7 @@ void main() {
           firstSubscription = null;
 
           // Stream is still the same as the first one
-          final cachedStream = methodChannelGeolocator.getPositionStream();
+          final cachedStream = geolocatorAndroid.getPositionStream();
           expect(firstStream == cachedStream, true);
 
           // Cancel second subscription
@@ -701,7 +639,7 @@ void main() {
 
           // After all listeners have been removed, the next stream
           // retrieved is a new one.
-          final thirdStream = methodChannelGeolocator.getPositionStream();
+          final thirdStream = geolocatorAndroid.getPositionStream();
           expect(firstStream != thirdStream, true);
         });
       });
@@ -711,11 +649,11 @@ void main() {
         final streamController =
             StreamController<Map<String, dynamic>>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
-        var stream = MethodChannelGeolocator().getPositionStream();
+        var stream = GeolocatorAndroid().getPositionStream();
         StreamSubscription<Position>? streamSubscription =
             stream.listen((event) {});
 
@@ -738,12 +676,12 @@ void main() {
         final streamController =
             StreamController<Map<String, dynamic>>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        MethodChannelGeolocator().getPositionStream().listen(
+        GeolocatorAndroid().getPositionStream().listen(
               (event) {},
               onDone: completer.complete,
             );
@@ -762,12 +700,12 @@ void main() {
         final streamController =
             StreamController<Map<String, dynamic>>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream = MethodChannelGeolocator().getPositionStream();
+        final positionStream = GeolocatorAndroid().getPositionStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test events
@@ -793,12 +731,12 @@ void main() {
         final streamController =
             StreamController<Map<String, dynamic>>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream = MethodChannelGeolocator().getPositionStream();
+        final positionStream = GeolocatorAndroid().getPositionStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test events
@@ -835,12 +773,12 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream = MethodChannelGeolocator().getPositionStream();
+        final positionStream = GeolocatorAndroid().getPositionStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test error
@@ -873,12 +811,12 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream = MethodChannelGeolocator().getPositionStream();
+        final positionStream = GeolocatorAndroid().getPositionStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test error
@@ -906,12 +844,12 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream = MethodChannelGeolocator().getPositionStream();
+        final positionStream = GeolocatorAndroid().getPositionStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test error
@@ -939,12 +877,12 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream = MethodChannelGeolocator().getPositionStream();
+        final positionStream = GeolocatorAndroid().getPositionStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test error
@@ -972,12 +910,12 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream = MethodChannelGeolocator().getPositionStream();
+        final positionStream = GeolocatorAndroid().getPositionStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test error
@@ -1003,7 +941,7 @@ void main() {
         // Arrange
         final streamController = StreamController<Map<String, dynamic>>();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_updates',
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
           stream: streamController.stream,
         );
         const expectedArguments = LocationSettings(
@@ -1012,7 +950,7 @@ void main() {
         );
 
         // Act
-        final positionStream = MethodChannelGeolocator().getPositionStream(
+        final positionStream = GeolocatorAndroid().getPositionStream(
           locationSettings: LocationSettings(
             accuracy: expectedArguments.accuracy,
             timeLimit: const Duration(milliseconds: 5),
@@ -1037,9 +975,9 @@ void main() {
       group('And requesting for location service status updates multiple times',
           () {
         test('Should return the same stream', () {
-          final methodChannelGeolocator = MethodChannelGeolocator();
-          final firstStream = methodChannelGeolocator.getServiceStatusStream();
-          final secondstream = methodChannelGeolocator.getServiceStatusStream();
+          final geolocatorAndroid = GeolocatorAndroid();
+          final firstStream = geolocatorAndroid.getServiceStatusStream();
+          final secondstream = geolocatorAndroid.getServiceStatusStream();
 
           expect(
             identical(firstStream, secondstream),
@@ -1055,12 +993,13 @@ void main() {
         // Arrange
         final streamController = StreamController<int>.broadcast();
         EventChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator_service_updates',
+            channelName:
+                'flutter.baseflow.com/geolocator_service_updates_android',
             stream: streamController.stream);
 
         // Act
         final locationServiceStream =
-            MethodChannelGeolocator().getServiceStatusStream();
+            GeolocatorAndroid().getServiceStatusStream();
         final streamQueue = StreamQueue(locationServiceStream);
 
         // Emit test events
@@ -1084,13 +1023,13 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_service_updates',
+          channelName:
+              'flutter.baseflow.com/geolocator_service_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream =
-            MethodChannelGeolocator().getServiceStatusStream();
+        final positionStream = GeolocatorAndroid().getServiceStatusStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test error
@@ -1120,14 +1059,14 @@ void main() {
       test('Should receive true if the page can be opened', () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'openAppSettings',
           result: true,
         );
 
         // Act
         final hasOpenedAppSettings =
-            await MethodChannelGeolocator().openAppSettings();
+            await GeolocatorAndroid().openAppSettings();
 
         // Assert
         expect(
@@ -1139,14 +1078,14 @@ void main() {
       test('Should receive false if an error occurred', () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'openAppSettings',
           result: false,
         );
 
         // Act
         final hasOpenedAppSettings =
-            await MethodChannelGeolocator().openAppSettings();
+            await GeolocatorAndroid().openAppSettings();
 
         // Assert
         expect(
@@ -1160,14 +1099,14 @@ void main() {
       test('Should receive true if the page can be opened', () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'openLocationSettings',
           result: true,
         );
 
         // Act
         final hasOpenedLocationSettings =
-            await MethodChannelGeolocator().openLocationSettings();
+            await GeolocatorAndroid().openLocationSettings();
 
         // Assert
         expect(
@@ -1179,14 +1118,14 @@ void main() {
       test('Should receive false if an error occurred', () async {
         // Arrange
         MethodChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator',
+          channelName: 'flutter.baseflow.com/geolocator_android',
           method: 'openLocationSettings',
           result: false,
         );
 
         // Act
         final hasOpenedLocationSettings =
-            await MethodChannelGeolocator().openLocationSettings();
+            await GeolocatorAndroid().openLocationSettings();
 
         // Assert
         expect(
