@@ -1,3 +1,7 @@
+## 3.0.3
+
+- Added a default `intervalDuration` value of 5000ms to prevent the `getCurrentPosition` method to return a cached Location.
+
 ## 3.0.2
 
 - Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.
