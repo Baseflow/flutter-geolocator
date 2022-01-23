@@ -1,16 +1,12 @@
-enum NotificationImportance {
-  Default,
-  High,
-  Max,
-}
-
+/// Uniquely identifies an Android resource
 class AndroidResource {
-  // The name of the desired resource.
+  /// The name of the desired resource.
   final String name;
 
-  // Optional default resource type to find, if "type/" is not included in the name. Can be null to require an explicit type.
+  /// Optional default resource type to find, if "type/" is not included in the name. Can be null to require an explicit type.
   final String defType;
 
+  /// Uniquely identifies an Android resource
   const AndroidResource({required this.name, this.defType = 'drawable'});
 
   Map<String, dynamic> toJson() {
@@ -21,9 +17,8 @@ class AndroidResource {
   }
 }
 
+/// Configuration for the foreground notification. When this is provided the location service will run as a foreground service.
 class ForegroundNotificationConfig {
-  // The importance of the notification used for the foreground service.
-  final NotificationImportance notificationImportance;
 
   /// The title used for the foreground service notification.
   final String notificationTitle;
@@ -51,7 +46,6 @@ class ForegroundNotificationConfig {
   ///
   /// [notificationTitle] is the title used for the foreground service notification.
   /// [notificationText] is the body used for the foreground service notification.
-  /// [notificationImportance] is the importance of the foreground service notification.
   /// [notificationIcon] must be a drawable resource.
   /// E. g. if the icon with name "background_icon" is in the "drawable" resource folder,
   /// it should be of value `AndroidResource(name: 'background_icon', defType: 'drawable').
@@ -61,7 +55,6 @@ class ForegroundNotificationConfig {
   const ForegroundNotificationConfig(
       {required this.notificationTitle,
         required this.notificationText,
-        this.notificationImportance = NotificationImportance.Default,
         this.notificationIcon =
         const AndroidResource(name: 'ic_launcher', defType: 'mipmap'),
         this.enableWifiLock = false,
@@ -69,7 +62,6 @@ class ForegroundNotificationConfig {
 
   Map<String, dynamic> toJson() {
     return {
-        'notificationImportance': notificationImportance.index,
         'notificationTitle': notificationTitle,
          'notificationText': notificationText,
         'notificationIcon': notificationIcon.toJson(),
