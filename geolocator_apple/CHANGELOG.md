@@ -1,3 +1,7 @@
+## 2.1.0
+
+- Added additional settings to Apple settings to allow the user to configure the background settings of CLocationManager
+
 ## 2.0.1
 
 - Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.
@@ -36,4 +40,3 @@
 ## 1.0.0
 
 - Initial open source release.
-
