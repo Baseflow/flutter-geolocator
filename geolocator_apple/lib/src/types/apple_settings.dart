@@ -15,6 +15,8 @@ class AppleSettings extends LocationSettings {
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     Duration? timeLimit,
+    this.showBackgroundLocationIndicator = false,
+    this.allowBackgroundLocationUpdates = false,
   }) : super(
           accuracy: accuracy,
           distanceFilter: distanceFilter,
@@ -32,12 +34,19 @@ class AppleSettings extends LocationSettings {
   /// to determine when location updates may be automatically paused.
   final ActivityType activityType;
 
+  /// Flag to ask the Apple OS location managed to allow background locations updates (iOS only)
+  final bool allowBackgroundLocationUpdates;
+  /// Flag to ask the Apple OS to show the background location indicator (iOS only)
+  final bool showBackgroundLocationIndicator;
+
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
       ..addAll({
         'pauseLocationUpdatesAutomatically': pauseLocationUpdatesAutomatically,
         'this.activityType': activityType.index,
+        'allowBackgroundLocationUpdates': allowBackgroundLocationUpdates,
+        'showBackgroundLocationIndicator': showBackgroundLocationIndicator,
       });
   }
 }

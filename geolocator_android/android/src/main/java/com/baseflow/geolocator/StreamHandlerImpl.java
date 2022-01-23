@@ -7,10 +7,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
-import com.baseflow.geolocator.location.GeolocationManager;
-import com.baseflow.geolocator.location.LocationClient;
-import com.baseflow.geolocator.location.LocationMapper;
-import com.baseflow.geolocator.location.LocationOptions;
+import com.baseflow.geolocator.location.*;
 import com.baseflow.geolocator.permission.PermissionManager;
 
 import io.flutter.plugin.common.BinaryMessenger;
@@ -21,24 +18,21 @@ import java.util.Map;
 class StreamHandlerImpl implements EventChannel.StreamHandler {
   private static final String TAG = "StreamHandlerImpl";
 
-  private final GeolocationManager geolocationManager;
   private final PermissionManager permissionManager;
 
   @Nullable private EventChannel channel;
   @Nullable private Context context;
-  @Nullable private Activity activity;
-  @Nullable private LocationClient locationClient;
+    @Nullable private GeolocatorLocationService backgroundLocationService;
 
-  public StreamHandlerImpl(GeolocationManager geolocationManager, PermissionManager permissionManager) {
-    this.geolocationManager = geolocationManager;
+  public StreamHandlerImpl(PermissionManager permissionManager) {
     this.permissionManager = permissionManager;
   }
 
-  void setActivity(@Nullable Activity activity) {
-    this.activity = activity;
-  }
+    public void setBackgroundLocationService(@Nullable GeolocatorLocationService backgroundLocationService) {
+        this.backgroundLocationService = backgroundLocationService;
+    }
 
-  /**
+    /**
    * Registers this instance as event stream handler on the given {@code messenger}.
    *
    * <p>Stops any previously started and unstopped calls.
@@ -71,6 +65,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
     channel = null;
   }
 
+  @SuppressWarnings({"ConstantConditions", "unchecked"})
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {
     try {
@@ -82,7 +77,12 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
         events.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
         return; 
     }
-    
+
+    if(backgroundLocationService == null) {
+        Log.e(TAG, "Location background service has not started correctly");
+        return;
+    }
+
     @SuppressWarnings("unchecked")
     Map<String, Object> map = (Map<String, Object>) arguments;
     boolean forceLocationManager = false;
@@ -90,23 +90,22 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       forceLocationManager = (boolean) map.get("forceLocationManager");
     }
     LocationOptions locationOptions = LocationOptions.parseArguments(map);
+    ForegroundNotificationOptions foregroundNotificationOptions = null;
 
-    this.locationClient =
-        geolocationManager.createLocationClient(
-            this.context, Boolean.TRUE.equals(forceLocationManager), locationOptions);
-
-    geolocationManager.startPositionUpdates(
-        this.locationClient,
-        activity,
-        (Location location) -> events.success(LocationMapper.toHashMap(location)),
-        (ErrorCodes errorCodes) ->
-            events.error(errorCodes.toString(), errorCodes.toDescription(), null));
+    if(map != null) {
+        foregroundNotificationOptions = ForegroundNotificationOptions.parseArguments((Map<String, Object>) map.get("foregroundNotificationConfig"));
+    }
+    backgroundLocationService.startLocationService(forceLocationManager, locationOptions, events);
+    if(foregroundNotificationOptions != null) {
+        backgroundLocationService.enableBackgroundMode(foregroundNotificationOptions);
+    }
   }
 
   @Override
   public void onCancel(Object arguments) {
-    if (this.locationClient != null) {
-      geolocationManager.stopPositionUpdates(this.locationClient);
-    }
+      if(backgroundLocationService != null) {
+          backgroundLocationService.stopLocationService();
+          backgroundLocationService.disableBackgroundMode();
+      }
   }
 }
