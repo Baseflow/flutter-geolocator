@@ -1,3 +1,7 @@
+## 8.2.0
+
+- Added in background support for Android and iOS to keep the location stream alive if the app is minimized while the location stream is active.
+
 ## 8.1.1
 
 - Updated README.md to clarify the use of the geolocator_web package.
@@ -508,4 +512,3 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 ## 0.0.1
 
 - Initial release
-
