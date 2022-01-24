@@ -7,8 +7,8 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 
 export 'package:geolocator_android/geolocator_android.dart'
     show AndroidSettings;
-export 'package:geolocator_apple/geolocator_apple.dart' show AppleSettings;
-export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+export 'package:geolocator_apple/geolocator_apple.dart'
+    show AppleSettings, ActivityType;
 
 /// Wraps CLLocationManager (on iOS) and FusedLocationProviderClient or
 /// LocationManager

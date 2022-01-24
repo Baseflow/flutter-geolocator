@@ -1,7 +1,9 @@
-
 ## 8.1.0
 
 - Added functionality to receive NMEA messages.
+
+## 8.0.4
+- Export `ActivityType` at `geolocator.dart`
 
 ## 8.0.3
 
