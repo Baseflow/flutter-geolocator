@@ -1,3 +1,3 @@
-## 1.0.0
+## 0.1.0
 
-- Initial release.
+- Adds an initial implementation of Windows support for the geolocator plugin.
