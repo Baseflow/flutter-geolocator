@@ -221,7 +221,7 @@ To query the last known location retrieved stored on the device you can use the 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator.getLastKnownPosition();
+Position? position = await Geolocator.getLastKnownPosition();
 ```
 
 #### Listen to location updates
@@ -240,8 +240,8 @@ final LocationSettings locationSettings = LocationSettings(
   distanceFilter: 100,
 );
 StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-    (Position position) {
-        print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+    (Position? position) {
+        print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
     });
 ```
 
@@ -276,8 +276,8 @@ if (defaultTargetPlatform == TargetPlatform.android) {
 }
 
 StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-    (Position position) {
-        print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+    (Position? position) {
+        print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
     });
 ```
 
