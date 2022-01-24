@@ -36,7 +36,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       'Permission denied forever.';
   static const String _kPermissionGrantedMessage = 'Permission granted.';
 
-  final GeolocatorPlatform geolocatorApple = GeolocatorPlatform.instance;
+  final GeolocatorPlatform geolocatorWindows = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
@@ -49,51 +49,43 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   PopupMenuButton _createActions() {
     return PopupMenuButton(
-      elevation: 40,
-      onSelected: (value) async {
-        switch (value) {
-          case 1:
-            _getLocationAccuracy();
-            break;
-          case 2:
-            _requestTemporaryFullAccuracy();
-            break;
-          case 3:
-            _openAppSettings();
-            break;
-          case 4:
-            _openLocationSettings();
-            break;
-          case 5:
-            setState(_positionItems.clear);
-            break;
-          default:
-            break;
-        }
-      },
-      itemBuilder: (context) => [
-        const PopupMenuItem(
-          child: Text("Get Location Accuracy"),
-          value: 1,
-        ),
-        const PopupMenuItem(
-          child: Text("Request Temporary Full Accuracy"),
-          value: 2,
-        ),
-        const PopupMenuItem(
-          child: Text("Open App Settings"),
-          value: 3,
-        ),
-        const PopupMenuItem(
-          child: Text("Open Location Settings"),
-          value: 4,
-        ),
-        const PopupMenuItem(
-          child: Text("Clear"),
-          value: 5,
-        ),
-      ],
-    );
+        elevation: 40,
+        onSelected: (value) async {
+          switch (value) {
+            case 1:
+              _getLocationAccuracy();
+              break;
+            case 2:
+              _openAppSettings();
+              break;
+            case 3:
+              _openLocationSettings();
+              break;
+            case 4:
+              setState(_positionItems.clear);
+              break;
+            default:
+              break;
+          }
+        },
+        itemBuilder: (context) => [
+              const PopupMenuItem(
+                child: Text("Get Location Accuracy"),
+                value: 1,
+              ),
+              const PopupMenuItem(
+                child: Text("Open App Settings"),
+                value: 2,
+              ),
+              const PopupMenuItem(
+                child: Text("Open Location Settings"),
+                value: 3,
+              ),
+              const PopupMenuItem(
+                child: Text("Clear"),
+                value: 4,
+              )
+            ]);
   }
 
   @override
@@ -182,7 +174,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return;
     }
 
-    final position = await geolocatorApple.getCurrentPosition();
+    final position = await geolocatorWindows.getCurrentPosition();
     _updatePositionList(
       _PositionItemType.position,
       position.toString(),
@@ -194,7 +186,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     LocationPermission permission;
 
     // Test if location services are enabled.
-    serviceEnabled = await geolocatorApple.isLocationServiceEnabled();
+    serviceEnabled = await geolocatorWindows.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
@@ -207,9 +199,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return false;
     }
 
-    permission = await geolocatorApple.checkPermission();
+    permission = await geolocatorWindows.checkPermission();
     if (permission == LocationPermission.denied) {
-      permission = await geolocatorApple.requestPermission();
+      permission = await geolocatorWindows.requestPermission();
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
@@ -258,7 +250,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleServiceStatusStream() {
     if (_serviceStatusStreamSubscription == null) {
-      final serviceStatusStream = geolocatorApple.getServiceStatusStream();
+      final serviceStatusStream = geolocatorWindows.getServiceStatusStream();
       _serviceStatusStreamSubscription =
           serviceStatusStream.handleError((error) {
         _serviceStatusStreamSubscription?.cancel();
@@ -283,7 +275,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
     if (_positionStreamSubscription == null) {
       final Stream<Position> positionStream =
-          geolocatorApple.getPositionStream();
+          geolocatorWindows.getPositionStream();
       _positionStreamSubscription = positionStream.handleError((e) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
@@ -332,7 +324,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLastKnownPosition() async {
-    final position = await geolocatorApple.getLastKnownPosition();
+    final position = await geolocatorWindows.getLastKnownPosition();
     if (position != null) {
       _updatePositionList(
         _PositionItemType.position,
@@ -347,14 +339,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLocationAccuracy() async {
-    final status = await geolocatorApple.getLocationAccuracy();
-    _handleLocationAccuracyStatus(status);
-  }
-
-  void _requestTemporaryFullAccuracy() async {
-    final status = await geolocatorApple.requestTemporaryFullAccuracy(
-      purposeKey: "TemporaryPreciseAccuracy",
-    );
+    final status = await geolocatorWindows.getLocationAccuracy();
     _handleLocationAccuracyStatus(status);
   }
 
@@ -374,7 +359,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _openAppSettings() async {
-    final opened = await geolocatorApple.openAppSettings();
+    final opened = await geolocatorWindows.openAppSettings();
     String displayValue;
 
     if (opened) {
@@ -390,7 +375,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _openLocationSettings() async {
-    final opened = await geolocatorApple.openLocationSettings();
+    final opened = await geolocatorWindows.openLocationSettings();
     String displayValue;
 
     if (opened) {
