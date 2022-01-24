@@ -1,7 +1,3 @@
-## 8.1.0
-
-- Added Windows support.
-
 ## 8.0.3
 
 - Upgraded the geolocator_platform_interface, geolocator_web, geolocator_apple and geolocator_android packages to the latest versions.
