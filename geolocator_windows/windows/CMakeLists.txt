@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 set(PROJECT_NAME "geolocator_windows")
 set(CPPWINRT_VERSION "2.0.210806.1")
 project(${PROJECT_NAME} LANGUAGES CXX)
+include(FetchContent)
 
 set(PLUGIN_NAME "${PROJECT_NAME}_plugin")
 
@@ -11,9 +12,17 @@ list(APPEND PLUGIN_SOURCES
   "geolocator_enums.h"
 )
 
+FetchContent_Declare(nuget
+  URL "https://dist.nuget.org/win-x86-commandline/v6.0.0/nuget.exe"
+  URL_HASH SHA256=04eb6c4fe4213907e2773e1be1bbbd730e9a655a3c9c58387ce8d4a714a5b9e1
+  DOWNLOAD_NO_EXTRACT true
+)
+
 find_program(NUGET nuget)
 if (NOT NUGET)
-    message(FATAL_ERROR "Unable to find the nuget CLI tool. Please install it from https://www.nuget.org/downloads and ensure it has been added to the PATH")
+    message("Nuget.exe not found, trying to download or use cached version.")
+    FetchContent_MakeAvailable(nuget)
+    set(NUGET ${nuget_SOURCE_DIR}/nuget.exe)
 endif()
 
 execute_process(COMMAND
