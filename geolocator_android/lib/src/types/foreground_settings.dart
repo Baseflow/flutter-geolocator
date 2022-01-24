@@ -9,6 +9,7 @@ class AndroidResource {
   /// Uniquely identifies an Android resource
   const AndroidResource({required this.name, this.defType = 'drawable'});
 
+  /// Returns a json representation of this class
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -60,6 +61,7 @@ class ForegroundNotificationConfig {
         this.enableWifiLock = false,
       this.enableWakeLock = false,});
 
+  /// Returns a json representation of this class
   Map<String, dynamic> toJson() {
     return {
         'notificationTitle': notificationTitle,

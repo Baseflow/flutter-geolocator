@@ -41,7 +41,6 @@
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
         pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
-                             allowBackgroundLocationUpdates: (BOOL) allowBackgroundLocationUpdates
                              showBackgroundLocationIndicator: (BOOL) showBackgroundLocationIndicator
                              activityType:(CLActivityType)activityType
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
@@ -50,12 +49,11 @@
     self.errorHandler = errorHandler;
     self.resultHandler = resultHandler;
 
-    if (@available(iOS 9.0, *)) {
-        self.locationManager.allowsBackgroundLocationUpdates = allowBackgroundLocationUpdates;
-    }
+#if TARGET_OS_IOS
     if (@available(iOS 11.0, *)) {
         self.locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
     }
+#endif
     
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:distanceFilter

@@ -24,7 +24,6 @@ typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
                             pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
-                            allowBackgroundLocationUpdates:(BOOL)allowBackgroundLocationUpdates
                             showBackgroundLocationIndicator:(BOOL)showBackgroundLocationIndicator
                              activityType:(CLActivityType)activityType
                             resultHandler:(GeolocatorResult _Nonnull)resultHandler
