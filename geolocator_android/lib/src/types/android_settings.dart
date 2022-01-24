@@ -1,4 +1,5 @@
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+
 import 'foreground_settings.dart';
 
 /// Represents different Android specific settings with which you can set a value
@@ -46,7 +47,7 @@ class AndroidSettings extends LocationSettings {
       ..addAll({
         'forceLocationManager': forceLocationManager,
         'timeInterval': intervalDuration?.inMilliseconds,
-        'foregroundNotificationConfig' : foregroundNotificationConfig?.toJson(),
+        'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
       });
   }
 }

@@ -50,7 +50,7 @@
     self.resultHandler = resultHandler;
 
 #if TARGET_OS_IOS
-    if (@available(iOS 11.0, *)) {
+    if (@available(iOS 11.0, macOS 11.0, *)) {
         self.locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
     }
 #endif

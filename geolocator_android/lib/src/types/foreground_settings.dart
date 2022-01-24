@@ -20,7 +20,6 @@ class AndroidResource {
 
 /// Configuration for the foreground notification. When this is provided the location service will run as a foreground service.
 class ForegroundNotificationConfig {
-
   /// The title used for the foreground service notification.
   final String notificationTitle;
 
@@ -53,22 +52,23 @@ class ForegroundNotificationConfig {
   /// [enableWifiLock] indicates wether or not a WifiLock is acquired, when the
   /// background execution is started. This allows the application to keep the
   /// Wi-Fi radio awake, even when the user has not used the device in a while.
-  const ForegroundNotificationConfig(
-      {required this.notificationTitle,
-        required this.notificationText,
-        this.notificationIcon =
+  const ForegroundNotificationConfig({
+    required this.notificationTitle,
+    required this.notificationText,
+    this.notificationIcon =
         const AndroidResource(name: 'ic_launcher', defType: 'mipmap'),
-        this.enableWifiLock = false,
-      this.enableWakeLock = false,});
+    this.enableWifiLock = false,
+    this.enableWakeLock = false,
+  });
 
   /// Returns a json representation of this class
   Map<String, dynamic> toJson() {
     return {
-        'notificationTitle': notificationTitle,
-         'notificationText': notificationText,
-        'notificationIcon': notificationIcon.toJson(),
-        'enableWifiLock': enableWifiLock,
-        'enableWakeLock': enableWakeLock,
-      };
+      'notificationTitle': notificationTitle,
+      'notificationText': notificationText,
+      'notificationIcon': notificationIcon.toJson(),
+      'enableWifiLock': enableWifiLock,
+      'enableWakeLock': enableWakeLock,
+    };
   }
 }
