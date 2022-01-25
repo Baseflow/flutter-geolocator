@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mockito/mockito.dart';
@@ -51,6 +52,13 @@ void main() {
       final position = await Geolocator.getCurrentPosition();
 
       expect(position, mockPosition);
+    });
+
+    test('getCurrentPosition iOS', () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      final position = await Geolocator.getCurrentPosition();
+      expect(position, mockPosition);
+      debugDefaultTargetPlatformOverride = null;
     });
 
     test('getLocationAccuracy', () async {
