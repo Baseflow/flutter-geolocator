@@ -140,11 +140,12 @@ The following methods of the geolocator API are not supported on the web and wil
 - `openAppSettings()`
 - `openLocationSettings()`
 
-> NOTE: due to a [bug](https://github.com/dart-lang/sdk/issues/45562) in the dart:html library the web version of the Geolocator plugin does not work with sound null safety enabled and compiled in release mode. Running the App in release mode with sound null safety enabled results in a `Uncaught TypeError` (see issue #693). The current workaround would be to build your App with sound null safety disabled in release mode:
->```shell
->flutter build web --no-sound-null-safety --release
->```
-> The Dart team already implemented a [fix](https://github.com/dart-lang/sdk/commit/7abaa9549223d62602f18aa7abc3ca9aa5884939) (currently available in Dart version 2.15.0-63.0.dev), however it has yet to be released and integrated in Flutter.
+</details>
+
+<details>
+<summary>Windows</summary>
+
+To use the Geolocator plugin on Windows you need to be using Flutter 2.10 or higher. Flutter will automatically add the endorsed [geolocator_windows]() package to your application when you add the `geolocator: ^8.1.0` dependency to your `pubspec.yaml`.
 
 </details>
 
