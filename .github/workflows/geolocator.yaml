@@ -6,11 +6,11 @@ name: geolocator
 # events but only for the develop branch
 on:
   push:
-    branches: [ master, next ]
+    branches: [ master ]
     paths:
     - 'geolocator/**'
   pull_request:
-    branches: [ master, next ]
+    branches: [ master ]
     paths:
     - 'geolocator/**'
 
@@ -201,6 +201,40 @@ jobs:
       # Build Web version of the example App
       - name: Run Web build
         run: flutter build web --release
+        working-directory: ${{env.example-directory}}
+
+  build_windows:
+    name: Build Windows App
+
+    # The type of runner that the job will run on
+    runs-on: windows-2019
+
+    env:
+      source-directory: ./geolocator 
+      example-directory: ./geolocator/example
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Make sure the stable version of Flutter is available
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+
+      # Enable Windows Desktop support
+      - name: Enable Windows Desktop support
+        run: flutter config --enable-windows-desktop
+
+      # Download all Flutter packages
+      - name: Download dependencies
+        run: flutter pub get
+        working-directory: ${{env.source-directory}}
+
+      # Build Windows version of the example App
+      - name: Run Windows build
+        run: flutter build windows --release
         working-directory: ${{env.example-directory}}
 
   tests:

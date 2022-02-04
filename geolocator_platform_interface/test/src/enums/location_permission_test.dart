@@ -5,7 +5,7 @@ void main() {
   test('LocationPermission should contain 4 options', () {
     const values = LocationPermission.values;
 
-    expect(values.length, 4);
+    expect(values.length, 5);
   });
 
   test('LocationPermission enum should have items in correct index', () {
@@ -15,5 +15,6 @@ void main() {
     expect(values[1], LocationPermission.deniedForever);
     expect(values[2], LocationPermission.whileInUse);
     expect(values[3], LocationPermission.always);
+    expect(values[4], LocationPermission.unableToDetermine);
   });
 }
