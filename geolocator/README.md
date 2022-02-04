@@ -140,6 +140,10 @@ The following methods of the geolocator API are not supported on the web and wil
 - `openAppSettings()`
 - `openLocationSettings()`
 
+**NOTE**
+
+Geolocator Web is available only in [secure_contexts](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) (HTTPS). More info about the Geolocator API can be found [here](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API).
+
 </details>
 
 <details>

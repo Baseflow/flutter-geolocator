@@ -1,3 +1,7 @@
+## 8.1.1
+
+- Updated README.md to clarify the use of the geolocator_web package.
+
 ## 8.1.0
 
 - Endorses the geolocator_windows package.
