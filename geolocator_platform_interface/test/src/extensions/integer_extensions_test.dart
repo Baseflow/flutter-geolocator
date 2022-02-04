@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
-import 'package:geolocator_platform_interface/src/extensions/extensions.dart';
 
 void main() {
   test('toLocationPermission: Should return denied when 0 is supplied', () {
