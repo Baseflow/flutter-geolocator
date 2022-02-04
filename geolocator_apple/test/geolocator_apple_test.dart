@@ -137,10 +137,10 @@ void main() {
 
     group(
         'requestTemporaryFullAccuracy: When requesting temporary full'
-            'accuracy.', () {
+        'accuracy.', () {
       test(
           'Should receive reduced accuracy if Location Accuracy is pinned to'
-              ' reduced', () async {
+          ' reduced', () async {
         // Arrange
         final methodChannel = MethodChannelMock(
             channelName: 'flutter.baseflow.com/geolocator_apple',
@@ -152,8 +152,7 @@ void main() {
         };
 
         // Act
-        final accuracy =
-        await GeolocatorApple().requestTemporaryFullAccuracy(
+        final accuracy = await GeolocatorApple().requestTemporaryFullAccuracy(
           purposeKey: 'purposeKeyValue',
         );
 
@@ -170,7 +169,7 @@ void main() {
 
       test(
           'Should receive reduced accuracy if Location Accuracy is already set'
-              ' to precise location accuracy', () async {
+          ' to precise location accuracy', () async {
         // Arrange
         MethodChannelMock(
             channelName: 'flutter.baseflow.com/geolocator_apple',
@@ -186,34 +185,34 @@ void main() {
       });
 
       test('Should receive an exception when permission definitions not found',
-              () async {
-            // Arrange
-            MethodChannelMock(
-              channelName: 'flutter.baseflow.com/geolocator_apple',
-              method: 'requestTemporaryFullAccuracy',
-              result: PlatformException(
-                code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
-                message: 'Permission definitions are not found.',
-                details: null,
-              ),
-            );
+          () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_apple',
+          method: 'requestTemporaryFullAccuracy',
+          result: PlatformException(
+            code: 'PERMISSION_DEFINITIONS_NOT_FOUND',
+            message: 'Permission definitions are not found.',
+            details: null,
+          ),
+        );
 
-            // Act
-            final future = GeolocatorApple()
-                .requestTemporaryFullAccuracy(purposeKey: 'purposeKey');
+        // Act
+        final future = GeolocatorApple()
+            .requestTemporaryFullAccuracy(purposeKey: 'purposeKey');
 
-            // Assert
-            expect(
-              future,
-              throwsA(
-                isA<PermissionDefinitionsNotFoundException>().having(
-                      (e) => e.message,
-                  'description',
-                  'Permission definitions are not found.',
-                ),
-              ),
-            );
-          });
+        // Assert
+        expect(
+          future,
+          throwsA(
+            isA<PermissionDefinitionsNotFoundException>().having(
+              (e) => e.message,
+              'description',
+              'Permission definitions are not found.',
+            ),
+          ),
+        );
+      });
     });
 
     group('getLocationAccuracy: When requesting the Location Accuracy Status',
@@ -228,8 +227,7 @@ void main() {
         );
 
         // Act
-        final locationAccuracy =
-            await GeolocatorApple().getLocationAccuracy();
+        final locationAccuracy = await GeolocatorApple().getLocationAccuracy();
 
         // Assert
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
@@ -245,8 +243,7 @@ void main() {
         );
 
         // Act
-        final locationAccuracy =
-            await GeolocatorApple().getLocationAccuracy();
+        final locationAccuracy = await GeolocatorApple().getLocationAccuracy();
 
         // Assert
         expect(locationAccuracy, LocationAccuracyStatus.precise);
@@ -1086,8 +1083,7 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName:
-              'flutter.baseflow.com/geolocator_service_updates_apple',
+          channelName: 'flutter.baseflow.com/geolocator_service_updates_apple',
           stream: streamController.stream,
         );
 
@@ -1128,8 +1124,7 @@ void main() {
         );
 
         // Act
-        final hasOpenedAppSettings =
-            await GeolocatorApple().openAppSettings();
+        final hasOpenedAppSettings = await GeolocatorApple().openAppSettings();
 
         // Assert
         expect(
@@ -1147,8 +1142,7 @@ void main() {
         );
 
         // Act
-        final hasOpenedAppSettings =
-            await GeolocatorApple().openAppSettings();
+        final hasOpenedAppSettings = await GeolocatorApple().openAppSettings();
 
         // Assert
         expect(

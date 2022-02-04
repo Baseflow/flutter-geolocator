@@ -84,7 +84,7 @@ class EventChannelMock {
         .handlePlatformMessage(
       _methodChannel.name,
       envelope,
-          (_) {},
+      (_) {},
     );
   }
 }

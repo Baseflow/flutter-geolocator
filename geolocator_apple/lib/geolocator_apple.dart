@@ -4,22 +4,21 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
-
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class GeolocatorApple extends GeolocatorPlatform {
   /// The method channel used to interact with the native platform.
   static const _methodChannel =
-  MethodChannel('flutter.baseflow.com/geolocator_apple');
+      MethodChannel('flutter.baseflow.com/geolocator_apple');
 
   /// The event channel used to receive [Position] updates from the native
   /// platform.
   static const _eventChannel =
-  EventChannel('flutter.baseflow.com/geolocator_updates_apple');
+      EventChannel('flutter.baseflow.com/geolocator_updates_apple');
 
   /// The event channel used to receive [LocationServiceStatus] updates from the
   /// native platform.
   static const _serviceStatusEventChannel =
-  EventChannel('flutter.baseflow.com/geolocator_service_updates_apple');
+      EventChannel('flutter.baseflow.com/geolocator_service_updates_apple');
 
   /// Registers tis class as the default instance of [GeolocatorPlatform]
   static void registerWith() {
@@ -40,7 +39,7 @@ class GeolocatorApple extends GeolocatorPlatform {
     try {
       // ignore: omit_local_variable_types
       final int permission =
-      await _methodChannel.invokeMethod('checkPermission');
+          await _methodChannel.invokeMethod('checkPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -55,7 +54,7 @@ class GeolocatorApple extends GeolocatorPlatform {
     try {
       // ignore: omit_local_variable_types
       final int permission =
-      await _methodChannel.invokeMethod('requestPermission');
+          await _methodChannel.invokeMethod('requestPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -80,7 +79,7 @@ class GeolocatorApple extends GeolocatorPlatform {
       };
 
       final positionMap =
-      await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
+          await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
 
       return positionMap != null ? Position.fromMap(positionMap) : null;
     } on PlatformException catch (e) {
@@ -93,7 +92,7 @@ class GeolocatorApple extends GeolocatorPlatform {
   @override
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
     final int accuracy =
-    await _methodChannel.invokeMethod('getLocationAccuracy');
+        await _methodChannel.invokeMethod('getLocationAccuracy');
     return LocationAccuracyStatus.values[accuracy];
   }
 
@@ -109,9 +108,9 @@ class GeolocatorApple extends GeolocatorPlatform {
       if (timeLimit != null) {
         positionFuture = _methodChannel
             .invokeMethod(
-          'getCurrentPosition',
-          locationSettings?.toJson(),
-        )
+              'getCurrentPosition',
+              locationSettings?.toJson(),
+            )
             .timeout(timeLimit);
       } else {
         positionFuture = _methodChannel.invokeMethod(
@@ -135,7 +134,7 @@ class GeolocatorApple extends GeolocatorPlatform {
       return _serviceStatusStream!;
     }
     var serviceStatusStream =
-    _serviceStatusEventChannel.receiveBroadcastStream();
+        _serviceStatusEventChannel.receiveBroadcastStream();
 
     _serviceStatusStream = serviceStatusStream
         .map((dynamic element) => ServiceStatus.values[element as int])
@@ -180,9 +179,9 @@ class GeolocatorApple extends GeolocatorPlatform {
 
     _positionStream = positionStream
         .map<Position>((dynamic element) =>
-        Position.fromMap(element.cast<String, dynamic>()))
+            Position.fromMap(element.cast<String, dynamic>()))
         .handleError(
-          (error) {
+      (error) {
         if (error is PlatformException) {
           error = _handlePlatformException(error);
         }

@@ -147,9 +147,11 @@ void main() {
               UnsupportedError('Functionality only supported on iOS and MacOS'),
         );
 
-        expect(() => GeolocatorAndroid().requestTemporaryFullAccuracy(
-          purposeKey: 'purposeKeyValue',
-        ), throwsUnsupportedError);
+        expect(
+            () => GeolocatorAndroid().requestTemporaryFullAccuracy(
+                  purposeKey: 'purposeKeyValue',
+                ),
+            throwsUnsupportedError);
       });
     });
 
