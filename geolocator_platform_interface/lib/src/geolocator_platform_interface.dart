@@ -39,6 +39,10 @@ abstract class GeolocatorPlatform extends PlatformInterface {
 
   /// Returns a [Future] indicating if the user allows the App to access
   /// the device's location.
+  ///
+  /// Note: on the web platform not all browsers implement the [Permission API](https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API)
+  /// if this is the case the `LocationPermission.unableToDetermine` is returned
+  /// as the plugin cannot determine the if permissions are granted or denied.
   Future<LocationPermission> checkPermission() {
     throw UnimplementedError(
       'checkPermission() has not been implemented.',
