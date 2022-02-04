@@ -137,7 +137,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       streamHandler.setActivity(null);
     }
     if (locationServiceHandler != null) {
-      streamHandler.setActivity(null);
+      locationServiceHandler.setActivity(null);
     }
 
     deregisterListeners();

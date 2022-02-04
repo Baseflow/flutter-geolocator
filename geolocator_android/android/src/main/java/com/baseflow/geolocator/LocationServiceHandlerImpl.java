@@ -42,7 +42,14 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler{
         channel = null;
     }
 
-    void setActivity(@Nullable Activity activity) { this.activity = activity;}
+    void setActivity(@Nullable Activity activity) {
+        if (this.activity == activity) return;
+
+        if (this.activity != null) {
+            this.activity.unregisterReceiver(this.receiver);
+        }
+        this.activity = activity;
+    }
 
     @Override
     public void onListen(Object arguments, EventChannel.EventSink events) {
@@ -59,6 +66,7 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler{
 
     @Override
     public void onCancel(Object arguments) {
+        if(activity == null) return;
         activity.unregisterReceiver(this.receiver);
     }
 
