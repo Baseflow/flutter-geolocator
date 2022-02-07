@@ -105,14 +105,17 @@
                                        details:nil]);
             return;
         }
+  
+    CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
     GeolocationHandler *geolocationHandler = [[GeolocationHandler alloc] init];
     
-    [geolocationHandler requestPosition:^(CLLocation *location) {
-      [geolocationHandler stopListening];
+  [geolocationHandler requestPositionWithDesiredAccuracy:accuracy
+                                           resultHandler:^(CLLocation *location) {
+        [geolocationHandler stopListening];
       
       result([LocationMapper toDictionary:location]);
     }
-                                             errorHandler:^(NSString *errorCode, NSString *errorDescription){
+                                            errorHandler:^(NSString *errorCode, NSString *errorDescription){
       [geolocationHandler stopListening];
       
       result([FlutterError errorWithCode: errorCode

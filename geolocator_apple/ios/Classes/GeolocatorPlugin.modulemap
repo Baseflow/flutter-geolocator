@@ -1,0 +1,10 @@
+framework module geolocator_apple {
+  umbrella header "geolocator-umbrella.h"
+
+  export *
+  module * { export * }
+
+  explicit module Test {
+    header "GeolocationHandler_Test.h"
+  }
+}

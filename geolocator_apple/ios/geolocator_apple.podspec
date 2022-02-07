@@ -13,8 +13,9 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'MIT', :file => '../LICENSE' }
   s.author           = { 'Baseflow' => 'hello@baseflow.com' }
   s.source           = { :http => 'https://github.com/baseflow/flutter-geolocator/tree/master/' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'Classes/**/*.{h,m}'
   s.public_header_files = 'Classes/**/*.h'
+  s.module_map = 'Classes/GeolocatorPlugin.modulemap'
   s.dependency 'Flutter'
   s.platform = :ios, '8.0'
 
