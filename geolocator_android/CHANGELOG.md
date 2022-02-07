@@ -1,3 +1,7 @@
+## 3.0.4
+
+- Fixes Android embedding v2 warning when compiling the example App.
+
 ## 3.0.3
 
 - Added a default `intervalDuration` value of 5000ms to prevent the `getCurrentPosition` method to return a cached Location.
