@@ -8,6 +8,8 @@
 #import "GeolocationHandler.h"
 #import "../Constants/ErrorCodes.h"
 
+int const DefaultSkipCount = 2;
+
 @interface GeolocationHandler() <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -16,7 +18,22 @@
 
 @end
 
-@implementation GeolocationHandler
+@implementation GeolocationHandler {
+  int _skipCount;
+  bool _requestingCurrentLocation;
+}
+
+- (id) init {
+  self = [super init];
+  
+  if (!self) {
+    return nil;
+  }
+  
+  _skipCount = DefaultSkipCount;
+  _requestingCurrentLocation = NO;
+  return self;
+}
 
 - (CLLocation *)getLastKnownPosition {
     return [self.locationManager location];
@@ -26,16 +43,13 @@
            errorHandler:(GeolocatorError _Nonnull)errorHandler {
   self.errorHandler = errorHandler;
   self.resultHandler = resultHandler;
-  
-  if (@available(iOS 9.0, macOS 10.14, *)) {
-    [self.locationManager requestLocation];
-    return;
-  }
+  _skipCount = DefaultSkipCount;
   
   [self startUpdatingLocationWithDesiredAccuracy:kCLLocationAccuracyBest
                                   distanceFilter:kCLDistanceFilterNone
                pauseLocationUpdatesAutomatically:NO
-                                    activityType:CLActivityTypeOther];
+                                    activityType:CLActivityTypeOther
+                       requestingCurrentLocation:YES];
 }
 
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
@@ -51,13 +65,16 @@
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:distanceFilter
                pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically
-                                    activityType:activityType];
+                                    activityType:activityType
+                       requestingCurrentLocation:NO];
 }
 
 - (void)startUpdatingLocationWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                                   distanceFilter:(CLLocationDistance)distanceFilter
                pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
-                                    activityType:(CLActivityType)activityType {
+                                    activityType:(CLActivityType)activityType
+                       requestingCurrentLocation:(BOOL)requestingCurrentLocation {
+  _requestingCurrentLocation = requestingCurrentLocation;
   CLLocationManager *locationManager = self.locationManager;
   locationManager.desiredAccuracy = desiredAccuracy;
   locationManager.distanceFilter = distanceFilter;
@@ -94,6 +111,11 @@
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
     if (!self.resultHandler) return;
     
+  if (_requestingCurrentLocation && _skipCount > 0) {
+    _skipCount -= 1;
+    return;
+  }
+  
     if ([locations lastObject]) {
         self.resultHandler([locations lastObject]);
     }
