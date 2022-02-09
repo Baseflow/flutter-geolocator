@@ -164,7 +164,8 @@ jobs:
         working-directory: ${{env.source-directory}}
 
       # Build iOS version of the example App
-      - uses: mxcl/xcodebuild@v1
+      - name: Run xCode Build Test action
+        uses: mxcl/xcodebuild@v1
         with:
           action: test
           scheme: Runner
