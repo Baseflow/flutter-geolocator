@@ -137,3 +137,35 @@ jobs:
       - name: Run macOS build
         run: flutter build macos --release
         working-directory: ${{env.example-directory}}
+
+  build_ios:
+    name: Test iOS code base
+    
+    # The type of runner that the job will run on
+    runs-on: macos-latest
+
+    env:
+      source-directory: ./geolocator_apple 
+      ios-example-directory: ./geolocator_apple/example/ios
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      # Make sure the stable version of Flutter is available
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+
+      # Download all Flutter packages
+      - name: Download dependencies
+        run: flutter pub get
+        working-directory: ${{env.source-directory}}
+
+      # Build iOS version of the example App
+      - use: mxcl/xcodebuild@v1
+        with:
+          action: test
+          scheme: Runner
+        working-directory: ${{env.ios-example-directory}}
