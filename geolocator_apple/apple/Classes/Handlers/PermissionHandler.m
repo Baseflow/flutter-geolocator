@@ -26,7 +26,7 @@
 }
 
 - (CLAuthorizationStatus) checkPermission {
-  if (@available(iOS 14, *)) {
+  if (@available(iOS 14, macOS 11, *)) {
     return [self.locationManager authorizationStatus];
   } else {
     return [CLLocationManager authorizationStatus];
