@@ -138,7 +138,7 @@ jobs:
         run: flutter build macos --release
         working-directory: ${{env.example-directory}}
 
-  build_ios:
+  test_ios_native:
     name: Test iOS code base
     
     # The type of runner that the job will run on
