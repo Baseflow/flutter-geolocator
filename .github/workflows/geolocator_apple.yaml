@@ -168,5 +168,6 @@ jobs:
         uses: mxcl/xcodebuild@v1
         with:
           action: test
+          platform: iOS
           scheme: Runner
           working-directory: ${{env.ios-example-directory}}
