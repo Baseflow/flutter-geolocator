@@ -14,11 +14,17 @@
 #import "Handlers/LocationAccuracyHandler.h"
 #import "Handlers/LocationServiceStreamHandler.h"
 
-@implementation GeolocatorPlugin {
-  GeolocationHandler *_geolocationHandler;
-  LocationAccuracyHandler *_locationAccuracyHandler;
-  PermissionHandler *_permissionHandler;
-}
+@interface GeolocatorPlugin ()
+
+@property(strong, nonatomic, nonnull) GeolocationHandler *geolocationHandler;
+
+@property(strong, nonatomic, nonnull) LocationAccuracyHandler *locationAccuracyHandler;
+
+@property(strong, nonatomic, nonnull) PermissionHandler *permissionHandler;
+  
+@end
+
+@implementation GeolocatorPlugin
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel *methodChannel = [FlutterMethodChannel
@@ -33,7 +39,7 @@
   GeolocatorPlugin *instance = [[GeolocatorPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:methodChannel];
   
-  PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.getGeolocationHandler];
+  PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.createGeolocationHandler];
   [positionUpdatesEventChannel setStreamHandler:positionStreamHandler];
   
   LocationServiceStreamHandler *locationServiceStreamHandler = [[LocationServiceStreamHandler alloc] init];
@@ -41,37 +47,37 @@
   
 }
 
-- (GeolocationHandler *) getGeolocationHandler {
-  if (!_geolocationHandler) {
-    _geolocationHandler = [[GeolocationHandler alloc] init];
+- (GeolocationHandler *) createGeolocationHandler {
+  if (!self.geolocationHandler) {
+    self.geolocationHandler = [[GeolocationHandler alloc] init];
   }
-  return _geolocationHandler;
+  return self.geolocationHandler;
 }
 
 - (void) setGeolocationHandlerOverride:(GeolocationHandler *)geolocationHandler {
-  _geolocationHandler = geolocationHandler;
+  self.geolocationHandler = geolocationHandler;
 }
 
-- (LocationAccuracyHandler *) getLocationAccuracyHandler {
-  if (!_locationAccuracyHandler) {
-    _locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
+- (LocationAccuracyHandler *) createLocationAccuracyHandler {
+  if (!self.locationAccuracyHandler) {
+    self.locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
   }
-  return _locationAccuracyHandler;
+  return self.locationAccuracyHandler;
 }
 
 - (void) setLocationAccuracyHandlerOverride:(LocationAccuracyHandler *)locationAccuracyHandler {
-  _locationAccuracyHandler = locationAccuracyHandler;
+  self.locationAccuracyHandler = locationAccuracyHandler;
 }
 
-- (PermissionHandler *) getPermissionHandler {
-  if (!_permissionHandler) {
-    _permissionHandler = [[PermissionHandler alloc] init];
+- (PermissionHandler *) createPermissionHandler {
+  if (!self.permissionHandler) {
+    self.permissionHandler = [[PermissionHandler alloc] init];
   }
-  return _permissionHandler;
+  return self.permissionHandler;
 }
 
 - (void) setPermissionHandlerOverride:(PermissionHandler *)permissionHandler {
-  _permissionHandler = permissionHandler;
+  self.permissionHandler = permissionHandler;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
@@ -88,10 +94,10 @@
     [self onGetCurrentPositionWithArguments:call.arguments
                                      result:result];
   } else if([@"getLocationAccuracy" isEqualToString:call.method]) {
-    [[self getLocationAccuracyHandler] getLocationAccuracyWithResult:result];
+    [[self createLocationAccuracyHandler] getLocationAccuracyWithResult:result];
   } else if([@"requestTemporaryFullAccuracy" isEqualToString:call.method]) {
     NSString* purposeKey = (NSString *)call.arguments[@"purposeKey"];
-    [[self getLocationAccuracyHandler] requestTemporaryFullAccuracyWithResult:result
+    [[self createLocationAccuracyHandler] requestTemporaryFullAccuracyWithResult:result
                                                                    purposeKey:purposeKey];
   } else if ([@"openAppSettings" isEqualToString:call.method]) {
     [self openSettings:result];
@@ -103,12 +109,12 @@
 }
 
 - (void)onCheckPermission:(FlutterResult) result {
-  CLAuthorizationStatus status = [[self getPermissionHandler] checkPermission];
+  CLAuthorizationStatus status = [[self createPermissionHandler] checkPermission];
   result([AuthorizationStatusMapper toDartIndex:status]);
 }
 
 - (void)onRequestPermission:(FlutterResult)result {
-  [[self getPermissionHandler]
+  [[self createPermissionHandler]
    requestPermission:^(CLAuthorizationStatus status) {
     result([AuthorizationStatusMapper toDartIndex:status]);
   }
@@ -120,20 +126,20 @@
 }
 
 - (void)onGetLastKnownPosition:(FlutterResult)result {
-  if (![[self getPermissionHandler] hasPermission]) {
+  if (![[self createPermissionHandler] hasPermission]) {
     result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
                                message:@"User denied permissions to access the device's location."
                                details:nil]);
     return;
   }
   
-  CLLocation *location = [self.getGeolocationHandler getLastKnownPosition];
+  CLLocation *location = [self.createGeolocationHandler getLastKnownPosition];
   result([LocationMapper toDictionary:location]);
 }
 
 - (void)onGetCurrentPositionWithArguments:(id _Nullable)arguments
                                    result:(FlutterResult)result {
-  if (![[self getPermissionHandler] hasPermission]) {
+  if (![[self createPermissionHandler] hasPermission]) {
     result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
                                message:@"User denied permissions to access the device's location."
                                details:nil]);
@@ -141,7 +147,7 @@
   }
   
   CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
-  GeolocationHandler *geolocationHandler = [self getGeolocationHandler];
+  GeolocationHandler *geolocationHandler = [self createGeolocationHandler];
   
   [geolocationHandler requestPositionWithDesiredAccuracy:accuracy
                                            resultHandler:^(CLLocation *location) {

@@ -13,15 +13,19 @@ int const DefaultSkipCount = 2;
 
 @interface GeolocationHandler() <CLLocationManagerDelegate>
 
+@property(assign, nonatomic) int skipCount;
+
+@property(assign, nonatomic) bool requestingCurrentLocation;
+
+@property(strong, nonatomic, nonnull) CLLocationManager *locationManager;
+
+@property(assign, nonatomic) GeolocatorError errorHandler;
+
+@property(assign, nonatomic) GeolocatorResult resultHandler;
+
 @end
 
-@implementation GeolocationHandler {
-  int _skipCount;
-  bool _requestingCurrentLocation;
-  CLLocationManager *_locationManager;
-  GeolocatorError _errorHandler;
-  GeolocatorResult _resultHandler;
-}
+@implementation GeolocationHandler
 
 - (id) init {
   self = [super init];
@@ -30,21 +34,21 @@ int const DefaultSkipCount = 2;
     return nil;
   }
   
-  _skipCount = DefaultSkipCount;
-  _requestingCurrentLocation = NO;
+  self.skipCount = DefaultSkipCount;
+  self.requestingCurrentLocation = NO;
   return self;
 }
 
 - (CLLocationManager *) getLocationManager {
-  if (!_locationManager) {
-    _locationManager = [[CLLocationManager alloc] init];
-    _locationManager.delegate = self;
+  if (!self.locationManager) {
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
   }
-  return _locationManager;
+  return self.locationManager;
 }
 
 - (void)setLocationManagerOverride:(CLLocationManager *)locationManager {
-  _locationManager = locationManager;
+  self.locationManager = locationManager;
 }
 
 - (CLLocation *)getLastKnownPosition {
@@ -55,9 +59,9 @@ int const DefaultSkipCount = 2;
 - (void)requestPositionWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                              resultHandler:(GeolocatorResult _Nonnull)resultHandler
                               errorHandler:(GeolocatorError _Nonnull)errorHandler {
-  _errorHandler = errorHandler;
-  _resultHandler = resultHandler;
-  _skipCount = DefaultSkipCount;
+  self.errorHandler = errorHandler;
+  self.resultHandler = resultHandler;
+  self.skipCount = DefaultSkipCount;
   
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:kCLDistanceFilterNone
@@ -72,8 +76,8 @@ int const DefaultSkipCount = 2;
                              activityType:(CLActivityType)activityType
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
-  _errorHandler = errorHandler;
-  _resultHandler = resultHandler;
+  self.errorHandler = errorHandler;
+  self.resultHandler = resultHandler;
   
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:distanceFilter
@@ -87,7 +91,7 @@ int const DefaultSkipCount = 2;
                pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
                                     activityType:(CLActivityType)activityType
                        requestingCurrentLocation:(BOOL)requestingCurrentLocation {
-  _requestingCurrentLocation = requestingCurrentLocation;
+  self.requestingCurrentLocation = requestingCurrentLocation;
   CLLocationManager *locationManager = [self getLocationManager];
   locationManager.desiredAccuracy = desiredAccuracy;
   locationManager.distanceFilter = distanceFilter;
@@ -108,24 +112,24 @@ int const DefaultSkipCount = 2;
 - (void)stopListening {
   [[self getLocationManager] stopUpdatingLocation];
   
-  _errorHandler = nil;
-  _resultHandler = nil;
+  self.errorHandler = nil;
+  self.resultHandler = nil;
 }
 
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
-  if (!_resultHandler) return;
+  if (!self.resultHandler) return;
   
-  if (_requestingCurrentLocation && _skipCount > 0) {
-    _skipCount -= 1;
+  if (self.requestingCurrentLocation && self.skipCount > 0) {
+    self.skipCount -= 1;
     return;
   }
   
   if ([locations lastObject]) {
-    _resultHandler([locations lastObject]);
+    self.resultHandler([locations lastObject]);
   }
   
-  if (_requestingCurrentLocation) {
+  if (self.requestingCurrentLocation) {
     [self stopListening];
   }
 }
@@ -140,11 +144,11 @@ int const DefaultSkipCount = 2;
     return;
   }
   
-  if (_errorHandler) {
-    _errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
+  if (self.errorHandler) {
+    self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
   }
   
-  if (_requestingCurrentLocation) {
+  if (self.requestingCurrentLocation) {
     [self stopListening];
   }
 }
