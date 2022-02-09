@@ -6,6 +6,7 @@
 //
 
 @import geolocator_apple;
+@import geolocator_apple.Private;
 @import geolocator_apple.Test;
 @import XCTest;
 
@@ -32,13 +33,9 @@
 
 - (void)testGetCurrentPositionShouldCallStartUpdatingLocation {
   [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
-                                            resultHandler:^(CLLocation * _Nullable location) {
-    
-  }
-                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
-    
-  }];
-    
+                                            resultHandler:^(CLLocation * _Nullable location) {}
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+  
   OCMVerify(times(1), [self->_mockLocationManager setDesiredAccuracy:kCLLocationAccuracyBest]);
   OCMVerify(times(1), [self->_mockLocationManager startUpdatingLocation]);
 }
@@ -54,14 +51,12 @@
     XCTAssertEqual(location, thirdLocation);
     [expectation fulfill];
   }
-                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
-    
-  }];
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
   
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[firstLocation]];
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[secondLocation]];
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[thirdLocation]];
-    
+  
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
   OCMVerify(times(1), [self->_mockLocationManager stopUpdatingLocation]);
@@ -77,14 +72,14 @@
                                             resultHandler:^(CLLocation * _Nullable location) {
     [expectation fulfill];
   }
-                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
     
   }];
   
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[firstLocation]];
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[secondLocation]];
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[thirdLocation]];
-    
+  
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
   OCMVerify(times(1), [self->_mockLocationManager stopUpdatingLocation]);
@@ -97,13 +92,13 @@
   [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
                                             resultHandler:^(CLLocation * _Nullable location) {
   }
-                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
     [expectation fulfill];
     
   }];
   
   [_geolocationHandler locationManager:_mockLocationManager didFailWithError: error];
-    
+  
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
   OCMVerify(times(1), [self->_mockLocationManager stopUpdatingLocation]);
@@ -115,7 +110,7 @@
   [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
                                             resultHandler:^(CLLocation * _Nullable location) {
   }
-                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
     XCTFail();
   }];
   
@@ -140,9 +135,9 @@
                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
     
   }];
-    
+  
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[mockLocation]];
-    
+  
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
   OCMVerify(never(), [self->_mockLocationManager stopUpdatingLocation]);
@@ -161,9 +156,9 @@
     XCTAssertEqualObjects(errorCode, @"LOCATION_UPDATE_FAILURE");
     [expectation fulfill];
   }];
-    
+  
   [_geolocationHandler locationManager:_mockLocationManager didFailWithError:error];
-    
+  
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
   OCMVerify(never(), [self->_mockLocationManager stopUpdatingLocation]);
@@ -183,10 +178,10 @@
                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
     XCTFail();
   }];
-    
+  
   [_geolocationHandler locationManager:_mockLocationManager didFailWithError:error];
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[mockLocation]];
-    
+  
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
   OCMVerify(never(), [self->_mockLocationManager stopUpdatingLocation]);

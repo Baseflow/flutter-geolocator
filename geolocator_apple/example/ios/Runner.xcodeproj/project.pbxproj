@@ -17,6 +17,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		F694587D27B1673A00EE1C9B /* GeolocationHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F694587C27B1673A00EE1C9B /* GeolocationHandlerTests.m */; };
+		F6BD360127B26CA200B25458 /* GeolocatorPluginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BD360027B26CA200B25458 /* GeolocatorPluginTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		E4C3DF784ED17014DDE2FDCF /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		F694587A27B1673A00EE1C9B /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F694587C27B1673A00EE1C9B /* GeolocationHandlerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeolocationHandlerTests.m; sourceTree = "<group>"; };
+		F6BD360027B26CA200B25458 /* GeolocatorPluginTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeolocatorPluginTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				F694587C27B1673A00EE1C9B /* GeolocationHandlerTests.m */,
+				F6BD360027B26CA200B25458 /* GeolocatorPluginTests.m */,
 			);
 			path = RunnerTests;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F694587D27B1673A00EE1C9B /* GeolocationHandlerTests.m in Sources */,
+				F6BD360127B26CA200B25458 /* GeolocatorPluginTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

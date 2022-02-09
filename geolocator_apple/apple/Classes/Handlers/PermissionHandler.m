@@ -19,10 +19,18 @@
 
 @implementation PermissionHandler
 
-+ (BOOL) hasPermission {
-  CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+- (BOOL) hasPermission {
+  CLAuthorizationStatus status = [self checkPermission];
   
   return [PermissionUtils isStatusGranted:status];
+}
+
+- (CLAuthorizationStatus) checkPermission {
+  if (@available(iOS 14, *)) {
+    return [self.locationManager authorizationStatus];
+  } else {
+    return [CLLocationManager authorizationStatus];
+  }
 }
 
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler

@@ -1,3 +1,9 @@
+## 2.1.0
+
+- Ensures that the `getCurrentPosition` takes the supplied accuracy into account.
+- Improves the speed of acquiring the current position.
+- Adds a native test bed.
+
 ## 2.0.1
 
 - Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.

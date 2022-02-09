@@ -3,8 +3,17 @@ framework module geolocator_apple {
 
   export *
   module * { export * }
+  
+  explicit module Private {
+    header "GeolocationHandler.h"
+    header "LocationAccuracyHandler.h"
+    header "LocationServiceStreamHandler.h"
+    header "PermissionHandler.h"
+    header "PositionStreamHandler.h"
+  }
 
   explicit module Test {
     header "GeolocationHandler_Test.h"
+    header "GeolocatorPlugin_Test.h"
   }
 }
