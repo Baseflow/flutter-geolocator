@@ -1,3 +1,15 @@
+## 2.1.4
+
+- Adds support for the `LocationPermission.unableToDetermine` status which is reported by the `Geolocator.checkPermission()` method when a browser (like Safari) doesn't support the [permission API](https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API).
+
+## 2.1.3
+
+- Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.
+
+## 2.1.2
+
+- Fixes a bug where the `getCurrentPosition` and `getPositionStream` methods return a timeout exception when no timeout interval is specified.
+
 ## 2.1.1
 
 - Upgrade the `geolocator_platform_interface` dependency to version 3.0.1.

@@ -28,6 +28,9 @@ coverage/
 # Visual Studio Code related
 .vscode/
 
+# Visual Studio related
+.vs/
+
 # Flutter repo-specific
 /bin/cache/
 /bin/mingit/

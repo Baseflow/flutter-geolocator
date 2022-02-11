@@ -5,10 +5,11 @@ import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
-export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 export 'package:geolocator_android/geolocator_android.dart'
     show AndroidSettings;
-export 'package:geolocator_apple/geolocator_apple.dart' show AppleSettings;
+export 'package:geolocator_apple/geolocator_apple.dart'
+    show AppleSettings, ActivityType;
+export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Wraps CLLocationManager (on iOS) and FusedLocationProviderClient or
 /// LocationManager
@@ -86,9 +87,8 @@ class Geolocator {
       );
     }
 
-    return GeolocatorPlatform.instance.getCurrentPosition(
-      locationSettings: locationSettings,
-    );
+    return GeolocatorPlatform.instance
+        .getCurrentPosition(locationSettings: locationSettings);
   }
 
   /// Fires whenever the location changes inside the bounds of the

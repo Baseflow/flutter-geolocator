@@ -48,13 +48,6 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
   @override
   Future<LocationPermission> checkPermission() async {
-    if (!_permissions.permissionsSupported) {
-      throw PlatformException(
-        code: 'LOCATION_SERVICES_NOT_SUPPORTED',
-        message: 'Location services are not supported on this browser.',
-      );
-    }
-
     return await _permissions.query(
       _permissionQuery,
     );
@@ -82,7 +75,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   }) async {
     final result = await _geolocation.getCurrentPosition(
       enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
-      timeout: locationSettings?.timeLimit ?? const Duration(seconds: 0),
+      timeout: locationSettings?.timeLimit,
     );
 
     return result;
@@ -97,7 +90,7 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     return _geolocation
         .watchPosition(
       enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
-      timeout: locationSettings?.timeLimit ?? const Duration(seconds: 0),
+      timeout: locationSettings?.timeLimit,
     )
         .skipWhile((geoposition) {
       if (locationSettings?.distanceFilter == 0 ||

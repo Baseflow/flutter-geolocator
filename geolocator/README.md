@@ -140,11 +140,16 @@ The following methods of the geolocator API are not supported on the web and wil
 - `openAppSettings()`
 - `openLocationSettings()`
 
-> NOTE: due to a [bug](https://github.com/dart-lang/sdk/issues/45562) in the dart:html library the web version of the Geolocator plugin does not work with sound null safety enabled and compiled in release mode. Running the App in release mode with sound null safety enabled results in a `Uncaught TypeError` (see issue #693). The current workaround would be to build your App with sound null safety disabled in release mode:
->```shell
->flutter build web --no-sound-null-safety --release
->```
-> The Dart team already implemented a [fix](https://github.com/dart-lang/sdk/commit/7abaa9549223d62602f18aa7abc3ca9aa5884939) (currently available in Dart version 2.15.0-63.0.dev), however it has yet to be released and integrated in Flutter.
+**NOTE**
+
+Geolocator Web is available only in [secure_contexts](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) (HTTPS). More info about the Geolocator API can be found [here](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API).
+
+</details>
+
+<details>
+<summary>Windows</summary>
+
+To use the Geolocator plugin on Windows you need to be using Flutter 2.10 or higher. Flutter will automatically add the endorsed [geolocator_windows]() package to your application when you add the `geolocator: ^8.1.0` dependency to your `pubspec.yaml`.
 
 </details>
 
@@ -221,7 +226,7 @@ To query the last known location retrieved stored on the device you can use the 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator.getLastKnownPosition();
+Position? position = await Geolocator.getLastKnownPosition();
 ```
 
 #### Listen to location updates
@@ -240,17 +245,19 @@ final LocationSettings locationSettings = LocationSettings(
   distanceFilter: 100,
 );
 StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-    (Position position) {
-        print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+    (Position? position) {
+        print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
     });
 ```
 
-In certain situation it is necessary to specify some platform specific settings. This can be accomplished using the platform specific `AndroidSettings` or `AppleSettings` classes. For example:
+In certain situation it is necessary to specify some platform specific settings. This can be accomplished using the platform specific `AndroidSettings` or `AppleSettings` classes. When using a platform specific class, the platform specific package must be imported as well. For example:
 
 ```dart
 import 'package:geolocator/geolocator.dart';
+import 'package:geoloator_apple/geolocator_apple.dart';
+import 'package:geoloator_android/geolocator_android.dart';
 
-late LocationSettings locationSettings
+late LocationSettings locationSettings;
 
 if (defaultTargetPlatform == TargetPlatform.android) {
   locationSettings = AndroidSettings(
@@ -274,8 +281,8 @@ if (defaultTargetPlatform == TargetPlatform.android) {
 }
 
 StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-    (Position position) {
-        print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+    (Position? position) {
+        print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
     });
 ```
 
@@ -313,10 +320,6 @@ StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceSta
 ```
 
 ### Permissions
-
-The geolocator will automatically try to request permissions when you try to acquire a location through the `getCurrentPosition` or `getPositionStream` methods. We do however provide methods that will allow you to manually handle requesting permissions.
-
-**NOTE**
 
 When using the web platform, the `checkPermission` method will return the `LocationPermission.denied` status, when the browser doesn't support the JavaScript Permissions API. Nevertheless, the `getCurrentPosition` and `getPositionStream` methods can still be used on the web platform.
 

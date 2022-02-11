@@ -31,7 +31,7 @@ class AndroidSettings extends LocationSettings {
 
   /// The desired interval for active location updates.
   ///
-  /// If this value is `null` no interval duration is applied.
+  /// If this value is `null` an interval duration of 5000ms is applied.
   final Duration? intervalDuration;
 
   @override
@@ -39,7 +39,7 @@ class AndroidSettings extends LocationSettings {
     return super.toJson()
       ..addAll({
         'forceLocationManager': forceLocationManager,
-        'timeInterval': intervalDuration?.inMilliseconds ?? 0,
+        'timeInterval': intervalDuration?.inMilliseconds,
       });
   }
 }

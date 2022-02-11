@@ -1,10 +1,27 @@
-## 3.0.1+1
-- Remove `timeInterval` from `LocationSettings` documentation
+
+## 4.0.3
+
+- Removes `timeInterval` from `LocationSettings` documentation.
+
+## 4.0.2
+
+- Added `extensions.dart` to the `exports` list.
+
+## 4.0.1
+
+- Adds the `LocationPermission.unableToDetermine` status used on the web platform when the permission API is not implemented by the browser.
+
+## 4.0.0
+
+- **breaking** Updates the plugin platform interface to use a non`-const` token. This is marked as a breaking change because it can cause an assertion failure if implementations use `implements` rather than `extends`, but hopefully there aren't any of those;
+- Replaced soft-deprecated `PlatformInterface.verifyToken` method with `PlatformInterface.verify` method;
+- Updated `plugin_platform_interface` dependency.
+
 
 ## 3.0.1
 
-- Remove unnexessary import statements from several source files.
-- Fix "forceAndroidLocationManager" for getLastKnownPosition
+- Remove unnecessary import statements from several source files;
+- Fix "forceAndroidLocationManager" for getLastKnownPosition.
 
 ## 3.0.0+1
 
