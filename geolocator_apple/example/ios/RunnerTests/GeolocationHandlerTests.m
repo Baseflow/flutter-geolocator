@@ -40,34 +40,46 @@
   OCMVerify(times(1), [self->_mockLocationManager startUpdatingLocation]);
 }
 
-- (void)testRequestPositionShouldReturnThirdLocation {
-  CLLocation *firstLocation = [[CLLocation alloc] initWithLatitude:54.0 longitude:6.4];
-  CLLocation *secondLocation = [[CLLocation alloc] initWithLatitude:54.1 longitude:6.4];
-  CLLocation *thirdLocation = [[CLLocation alloc] initWithLatitude:54.2 longitude:6.4];
+- (void)testRequestPositionShouldReturnLocationWithinTimeConstraints {
+  NSDate *now = [NSDate date];
+  NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+  CLLocation *firstLocation = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.0, 6.4)
+                                                            altitude:0.0
+                                                  horizontalAccuracy:0
+                                                    verticalAccuracy:0
+                                                           timestamp:[calendar dateByAddingUnit:NSCalendarUnitSecond value:-6 toDate:now options:0]];
+  CLLocation *secondLocation = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.1, 6.4)
+                                                            altitude:0.0
+                                                  horizontalAccuracy:0
+                                                    verticalAccuracy:0
+                                                           timestamp:now];
+
   
   XCTestExpectation *expectation = [self expectationWithDescription:@"expect result return third location"];
   [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
                                             resultHandler:^(CLLocation * _Nullable location) {
-    XCTAssertEqual(location, thirdLocation);
+    XCTAssertEqual(location, secondLocation);
     [expectation fulfill];
   }
                                              errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
   
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[firstLocation]];
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[secondLocation]];
-  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[thirdLocation]];
-  
+    
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
   OCMVerify(times(1), [self->_mockLocationManager stopUpdatingLocation]);
 }
 
 - (void)testRequestPositionShouldStopListeningOnResult {
-  CLLocation *firstLocation = [[CLLocation alloc] initWithLatitude:54.0 longitude:6.4];
-  CLLocation *secondLocation = [[CLLocation alloc] initWithLatitude:54.1 longitude:6.4];
-  CLLocation *thirdLocation = [[CLLocation alloc] initWithLatitude:54.2 longitude:6.4];
+  CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.1, 6.4)
+                                                            altitude:0.0
+                                                  horizontalAccuracy:0
+                                                    verticalAccuracy:0
+                                                           timestamp:[NSDate date]];
   
-  XCTestExpectation *expectation = [self expectationWithDescription:@"expect result return third location"];
+  XCTestExpectation *expectation = [self expectationWithDescription:@"expect first result return third location"];
   [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
                                             resultHandler:^(CLLocation * _Nullable location) {
     [expectation fulfill];
@@ -76,9 +88,7 @@
     
   }];
   
-  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[firstLocation]];
-  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[secondLocation]];
-  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[thirdLocation]];
+  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[location]];
   
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   

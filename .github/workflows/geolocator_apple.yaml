@@ -145,7 +145,9 @@ jobs:
     runs-on: macos-latest
 
     env:
+      xcodebuild-destination: "platform=iOS Simulator,OS=15.2,name=iPhone 13"
       source-directory: ./geolocator_apple 
+      example-directory: ./geolocator_apple/example
       ios-example-directory: ./geolocator_apple/example/ios
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -164,10 +166,14 @@ jobs:
         working-directory: ${{env.source-directory}}
 
       # Build iOS version of the example App
-      - name: Run xCode Build Test action
-        uses: mxcl/xcodebuild@v1
-        with:
-          action: test
-          platform: iOS
-          scheme: Runner
-          working-directory: ${{env.ios-example-directory}}
+      - name: Build iOS Example App
+        run: flutter build ios --no-codesign
+        working-directory: ${{env.example-directory}}
+      
+      # Run iOS native tests
+      - name: Testing iOS package
+        run: | 
+          xcodebuild -workspace ./geolocator_apple/example/ios/Runner.xcworkspace \
+            -scheme Runner \
+            -destination '${{env.xcodebuild-destination}}' \
+            clean test 

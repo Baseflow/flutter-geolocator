@@ -9,11 +9,9 @@
 #import "GeolocationHandler_Test.h"
 #import "../Constants/ErrorCodes.h"
 
-int const DefaultSkipCount = 2;
+double const kMaxLocationLifeTimeInSeconds = 5.0;
 
 @interface GeolocationHandler() <CLLocationManagerDelegate>
-
-@property(assign, nonatomic) int skipCount;
 
 @property(assign, nonatomic) bool requestingCurrentLocation;
 
@@ -34,7 +32,6 @@ int const DefaultSkipCount = 2;
     return nil;
   }
   
-  self.skipCount = DefaultSkipCount;
   self.requestingCurrentLocation = NO;
   return self;
 }
@@ -61,7 +58,6 @@ int const DefaultSkipCount = 2;
                               errorHandler:(GeolocatorError _Nonnull)errorHandler {
   self.errorHandler = errorHandler;
   self.resultHandler = resultHandler;
-  self.skipCount = DefaultSkipCount;
   
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:kCLDistanceFilterNone
@@ -120,15 +116,16 @@ int const DefaultSkipCount = 2;
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
   if (!self.resultHandler) return;
 
-#if TARGET_OS_IOS
-  if (self.requestingCurrentLocation && self.skipCount > 0) {
-    self.skipCount -= 1;
+  CLLocation *mostRecentLocation = [locations lastObject];
+  NSTimeInterval ageInSeconds = -[mostRecentLocation.timestamp timeIntervalSinceNow];
+  // If location is older then 5.0 seconds it is likely a cached location which
+  // will be skipped.
+  if (self.requestingCurrentLocation && ageInSeconds > kMaxLocationLifeTimeInSeconds) {
     return;
   }
-#endif
-  
+    
   if ([locations lastObject]) {
-    self.resultHandler([locations lastObject]);
+    self.resultHandler(mostRecentLocation);
   }
   
   if (self.requestingCurrentLocation) {
