@@ -1,5 +1,7 @@
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
+import 'foreground_settings.dart';
+
 /// Represents different Android specific settings with which you can set a value
 /// other then the default value of the setting.
 class AndroidSettings extends LocationSettings {
@@ -13,6 +15,7 @@ class AndroidSettings extends LocationSettings {
     int distanceFilter = 0,
     this.intervalDuration,
     Duration? timeLimit,
+    this.foregroundNotificationConfig,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
@@ -34,12 +37,17 @@ class AndroidSettings extends LocationSettings {
   /// If this value is `null` an interval duration of 5000ms is applied.
   final Duration? intervalDuration;
 
+  /// If this is set then the services is started as a Foreground service with a persistent notification
+  /// showing the user that the service will continue running in the background
+  final ForegroundNotificationConfig? foregroundNotificationConfig;
+
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
       ..addAll({
         'forceLocationManager': forceLocationManager,
         'timeInterval': intervalDuration?.inMilliseconds,
+        'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
       });
   }
 }
