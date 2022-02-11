@@ -19,9 +19,9 @@ int const DefaultSkipCount = 2;
 
 @property(strong, nonatomic, nonnull) CLLocationManager *locationManager;
 
-@property(assign, nonatomic) GeolocatorError errorHandler;
+@property(strong, nonatomic) GeolocatorError errorHandler;
 
-@property(assign, nonatomic) GeolocatorResult resultHandler;
+@property(strong, nonatomic) GeolocatorResult resultHandler;
 
 @end
 
@@ -119,11 +119,13 @@ int const DefaultSkipCount = 2;
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
   if (!self.resultHandler) return;
-  
+
+#if TARGET_OS_IOS
   if (self.requestingCurrentLocation && self.skipCount > 0) {
     self.skipCount -= 1;
     return;
   }
+#endif
   
   if ([locations lastObject]) {
     self.resultHandler([locations lastObject]);

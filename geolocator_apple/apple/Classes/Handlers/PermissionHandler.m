@@ -12,12 +12,20 @@
 @interface PermissionHandler() <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
-@property (copy, nonatomic) PermissionConfirmation confirmationHandler;
-@property (copy, nonatomic) PermissionError errorHandler;
+@property (strong, nonatomic) PermissionConfirmation confirmationHandler;
+@property (strong, nonatomic) PermissionError errorHandler;
 
 @end
 
 @implementation PermissionHandler
+
+- (CLLocationManager *) getLocationManager {
+  if (!self.locationManager) {
+    self.locationManager = [[CLLocationManager alloc] init];
+  }
+  
+  return self.locationManager;
+}
 
 - (BOOL) hasPermission {
   CLAuthorizationStatus status = [self checkPermission];
@@ -27,7 +35,7 @@
 
 - (CLAuthorizationStatus) checkPermission {
   if (@available(iOS 14, macOS 11, *)) {
-    return [self.locationManager authorizationStatus];
+    return [self.getLocationManager authorizationStatus];
   } else {
     return [CLLocationManager authorizationStatus];
   }
@@ -51,21 +59,21 @@
   
   self.confirmationHandler = confirmationHandler;
   self.errorHandler = errorHandler;
-  self.locationManager = [[CLLocationManager alloc] init];
-  self.locationManager.delegate = self;
+  CLLocationManager *locationManager = [self getLocationManager];
+  locationManager.delegate = self;
   
 #if TARGET_OS_OSX
   if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationUsageDescription"] != nil) {
     if (@available(macOS 10.15, *)) {
-      [self.locationManager requestAlwaysAuthorization];
+      [locationManager requestAlwaysAuthorization];
     }
   }
 #else
   if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil) {
-    [self.locationManager requestWhenInUseAuthorization];
+    [locationManager requestWhenInUseAuthorization];
   }
   else if ([self containsLocationAlwaysDescription]) {
-    [self.locationManager requestAlwaysAuthorization];
+    [locationManager requestAlwaysAuthorization];
   }
 #endif
   else {
