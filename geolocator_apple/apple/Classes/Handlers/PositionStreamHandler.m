@@ -49,10 +49,13 @@
   CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
   NSNumber* pauseLocationUpdatesAutomatically = arguments[@"pauseLocationUpdatesAutomatically"];
   CLActivityType activityType = [ActivityTypeMapper toCLActivityType:(NSNumber *)arguments[@"activityType"]];
+
+  NSNumber* showBackgroundLocationIndicator = arguments[@"showBackgroundLocationIndicator"];
 	      
   [[weakSelf geolocationHandler] startListeningWithDesiredAccuracy:accuracy
                                                     distanceFilter:distanceFilter
                                  pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically && [pauseLocationUpdatesAutomatically boolValue]
+                                 showBackgroundLocationIndicator:showBackgroundLocationIndicator && [showBackgroundLocationIndicator boolValue]
                                                       activityType:activityType
                                                      resultHandler:^(CLLocation *location) {
     [weakSelf onLocationDidChange: location];
