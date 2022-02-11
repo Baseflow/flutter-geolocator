@@ -1,5 +1,6 @@
 #import <CoreLocation/CoreLocation.h>
 #import "GeolocatorPlugin.h"
+#import "GeolocatorPlugin_Test.h"
 #import "Constants/ErrorCodes.h"
 #import "Handlers/GeolocationHandler.h"
 #import "Handlers/PermissionHandler.h"
@@ -13,10 +14,14 @@
 #import "Handlers/LocationAccuracyHandler.h"
 #import "Handlers/LocationServiceStreamHandler.h"
 
-@interface GeolocatorPlugin()
-@property (strong, nonatomic) GeolocationHandler *geolocationHandler;
-@property (strong, nonatomic) PermissionHandler *permissionHandler;
-@property (strong, nonatomic) LocationAccuracyHandler *locationAccuracyHandler;
+@interface GeolocatorPlugin ()
+
+@property(strong, nonatomic, nonnull) GeolocationHandler *geolocationHandler;
+
+@property(strong, nonatomic, nonnull) LocationAccuracyHandler *locationAccuracyHandler;
+
+@property(strong, nonatomic, nonnull) PermissionHandler *permissionHandler;
+  
 @end
 
 @implementation GeolocatorPlugin
@@ -34,20 +39,50 @@
   GeolocatorPlugin *instance = [[GeolocatorPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:methodChannel];
   
-  PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.geolocationHandler];
+  PositionStreamHandler *positionStreamHandler = [[PositionStreamHandler alloc] initWithGeolocationHandler:instance.createGeolocationHandler];
+  [positionUpdatesEventChannel setStreamHandler:positionStreamHandler];
   
   LocationServiceStreamHandler *locationServiceStreamHandler = [[LocationServiceStreamHandler alloc] init];
-  
-  instance.locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
-  
   [locationServiceUpdatesEventChannel setStreamHandler:locationServiceStreamHandler];
-  [positionUpdatesEventChannel setStreamHandler:positionStreamHandler];
+  
+}
+
+- (GeolocationHandler *) createGeolocationHandler {
+  if (!self.geolocationHandler) {
+    self.geolocationHandler = [[GeolocationHandler alloc] init];
+  }
+  return self.geolocationHandler;
+}
+
+- (void) setGeolocationHandlerOverride:(GeolocationHandler *)geolocationHandler {
+  self.geolocationHandler = geolocationHandler;
+}
+
+- (LocationAccuracyHandler *) createLocationAccuracyHandler {
+  if (!self.locationAccuracyHandler) {
+    self.locationAccuracyHandler = [[LocationAccuracyHandler alloc] init];
+  }
+  return self.locationAccuracyHandler;
+}
+
+- (void) setLocationAccuracyHandlerOverride:(LocationAccuracyHandler *)locationAccuracyHandler {
+  self.locationAccuracyHandler = locationAccuracyHandler;
+}
+
+- (PermissionHandler *) createPermissionHandler {
+  if (!self.permissionHandler) {
+    self.permissionHandler = [[PermissionHandler alloc] init];
+  }
+  return self.permissionHandler;
+}
+
+- (void) setPermissionHandlerOverride:(PermissionHandler *)permissionHandler {
+  self.permissionHandler = permissionHandler;
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"checkPermission" isEqualToString:call.method]) {
-    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
-    result([AuthorizationStatusMapper toDartIndex:(status)]);
+    [self onCheckPermission:result];
   } else if ([@"requestPermission" isEqualToString:call.method]) {
     [self onRequestPermission:result];
   } else if ([@"isLocationServiceEnabled" isEqualToString:call.method]) {
@@ -59,11 +94,11 @@
     [self onGetCurrentPositionWithArguments:call.arguments
                                      result:result];
   } else if([@"getLocationAccuracy" isEqualToString:call.method]) {
-    [self.locationAccuracyHandler getLocationAccuracyWithResult:result];
+    [[self createLocationAccuracyHandler] getLocationAccuracyWithResult:result];
   } else if([@"requestTemporaryFullAccuracy" isEqualToString:call.method]) {
     NSString* purposeKey = (NSString *)call.arguments[@"purposeKey"];
-    [self.locationAccuracyHandler requestTemporaryFullAccuracyWithResult:result
-                                                               purposeKey:purposeKey];
+    [[self createLocationAccuracyHandler] requestTemporaryFullAccuracyWithResult:result
+                                                                   purposeKey:purposeKey];
   } else if ([@"openAppSettings" isEqualToString:call.method]) {
     [self openSettings:result];
   } else if ([@"openLocationSettings" isEqualToString:call.method]) {
@@ -73,8 +108,13 @@
   }
 }
 
+- (void)onCheckPermission:(FlutterResult) result {
+  CLAuthorizationStatus status = [[self createPermissionHandler] checkPermission];
+  result([AuthorizationStatusMapper toDartIndex:status]);
+}
+
 - (void)onRequestPermission:(FlutterResult)result {
-  [self.permissionHandler
+  [[self createPermissionHandler]
    requestPermission:^(CLAuthorizationStatus status) {
     result([AuthorizationStatusMapper toDartIndex:status]);
   }
@@ -86,41 +126,40 @@
 }
 
 - (void)onGetLastKnownPosition:(FlutterResult)result {
-    if (![PermissionHandler hasPermission]) {
-            result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
-                                  message:@"User denied permissions to access the device's location."
-                                       details:nil]);
-            return;
-        }
-    
-    CLLocation *location = [self.geolocationHandler getLastKnownPosition];
-    result([LocationMapper toDictionary:location]);
+  if (![[self createPermissionHandler] hasPermission]) {
+    result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
+                               message:@"User denied permissions to access the device's location."
+                               details:nil]);
+    return;
+  }
+  
+  CLLocation *location = [self.createGeolocationHandler getLastKnownPosition];
+  result([LocationMapper toDictionary:location]);
 }
 
 - (void)onGetCurrentPositionWithArguments:(id _Nullable)arguments
                                    result:(FlutterResult)result {
-    if (![PermissionHandler hasPermission]) {
-            result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
-                                  message:@"User denied permissions to access the device's location."
-                                       details:nil]);
-            return;
-        }
-    GeolocationHandler *geolocationHandler = [[GeolocationHandler alloc] init];
-    
-    [geolocationHandler requestPosition:^(CLLocation *location) {
-      [geolocationHandler stopListening];
-      
-      result([LocationMapper toDictionary:location]);
-    }
-                                             errorHandler:^(NSString *errorCode, NSString *errorDescription){
-      [geolocationHandler stopListening];
-      
-      result([FlutterError errorWithCode: errorCode
-                                 message: errorDescription
-                                 details: nil]);
-    }];
+  if (![[self createPermissionHandler] hasPermission]) {
+    result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
+                               message:@"User denied permissions to access the device's location."
+                               details:nil]);
+    return;
+  }
+  
+  CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
+  GeolocationHandler *geolocationHandler = [self createGeolocationHandler];
+  
+  [geolocationHandler requestPositionWithDesiredAccuracy:accuracy
+                                           resultHandler:^(CLLocation *location) {
+    result([LocationMapper toDictionary:location]);
+  }
+                                            errorHandler:^(NSString *errorCode, NSString *errorDescription){
+    result([FlutterError errorWithCode: errorCode
+                               message: errorDescription
+                               details: nil]);
+  }];
 }
-   
+
 
 - (void)openSettings:(FlutterResult)result {
 #if TARGET_OS_OSX
@@ -143,19 +182,5 @@
     result([[NSNumber alloc] initWithBool:NO]);
   }
 #endif
-}
-
-- (GeolocationHandler *) geolocationHandler {
-  if (!_geolocationHandler) {
-    _geolocationHandler = [[GeolocationHandler alloc] init];
-  }
-  return _geolocationHandler;
-}
-
-- (PermissionHandler *) permissionHandler {
-  if (!_permissionHandler) {
-    _permissionHandler = [[PermissionHandler alloc] init];
-  }
-  return _permissionHandler;
 }
 @end
