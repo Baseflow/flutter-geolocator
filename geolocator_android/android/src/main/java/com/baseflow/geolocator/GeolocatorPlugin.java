@@ -121,7 +121,12 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     }
 
     this.pluginBinding = binding;
-    pluginBinding.getActivity().bindService(new Intent(binding.getActivity(), GeolocatorLocationService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+    pluginBinding
+        .getActivity()
+        .bindService(
+            new Intent(binding.getActivity(), GeolocatorLocationService.class),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE);
     registerListeners();
   }
 
@@ -137,8 +142,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onDetachedFromActivity() {
-      dispose();
-      deregisterListeners();
+    dispose();
+    deregisterListeners();
   }
 
   private void registerListeners() {
@@ -158,45 +163,46 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     }
   }
 
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
+  private final ServiceConnection serviceConnection =
+      new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Log.d(TAG, "Service connected: " + name);
-            initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
+          Log.d(TAG, "Service connected: " + name);
+          initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.d(TAG, "Service disconnected:" + name);
+          Log.d(TAG, "Service disconnected:" + name);
         }
-    };
+      };
 
-    private void initialize(GeolocatorLocationService service) {
-        Log.d(TAG, "Initializing Geolocator foreground service");
-        backgroundLocationService = service;
+  private void initialize(GeolocatorLocationService service) {
+    Log.d(TAG, "Initializing Geolocator foreground service");
+    backgroundLocationService = service;
 
-        if (pluginBinding != null) {
-            backgroundLocationService.setActivity(pluginBinding.getActivity());
-        }
-        if(methodCallHandler != null){
-            methodCallHandler.setBackgroundLocationService(service);
-        }
-        if(streamHandler != null){
-            streamHandler.setBackgroundLocationService(service);
-        }
+    if (pluginBinding != null) {
+      backgroundLocationService.setActivity(pluginBinding.getActivity());
     }
-
-    private void dispose() {
-        if (methodCallHandler != null) {
-            methodCallHandler.setActivity(null);
-        }
-        if(streamHandler != null){
-            streamHandler.setBackgroundLocationService(null);
-        }
-        if(backgroundLocationService != null){
-            backgroundLocationService.setActivity(null);
-            backgroundLocationService = null;
-        }
+    if (methodCallHandler != null) {
+      methodCallHandler.setBackgroundLocationService(service);
     }
+    if (streamHandler != null) {
+      streamHandler.setBackgroundLocationService(service);
+    }
+  }
+
+  private void dispose() {
+    if (methodCallHandler != null) {
+      methodCallHandler.setActivity(null);
+    }
+    if (streamHandler != null) {
+      streamHandler.setBackgroundLocationService(null);
+    }
+    if (backgroundLocationService != null) {
+      backgroundLocationService.setActivity(null);
+      backgroundLocationService = null;
+    }
+  }
 }

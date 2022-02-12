@@ -126,14 +126,13 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     this.activity = activity;
   }
 
-    void setBackgroundLocationService(@Nullable GeolocatorLocationService backgroundLocationService) {
-        this.backgroundLocationService = backgroundLocationService;
-    }
+  void setBackgroundLocationService(@Nullable GeolocatorLocationService backgroundLocationService) {
+    this.backgroundLocationService = backgroundLocationService;
+  }
 
-    private void onCheckPermission(MethodChannel.Result result) {
+  private void onCheckPermission(MethodChannel.Result result) {
     try {
-      LocationPermission permission =
-          permissionManager.checkPermissionStatus(context);
+      LocationPermission permission = permissionManager.checkPermissionStatus(context);
       result.success(permission.toInt());
     } catch (PermissionUndefinedException e) {
       ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
@@ -171,14 +170,20 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   }
 
   private void onGetLastKnownPosition(MethodCall call, MethodChannel.Result result) {
-    try{
-        if (!permissionManager.hasPermission(context)){
-            result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
-            return;
-        }
-    } catch (PermissionUndefinedException e) {
-        result.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
+    try {
+      if (!permissionManager.hasPermission(context)) {
+        result.error(
+            ErrorCodes.permissionDenied.toString(),
+            ErrorCodes.permissionDenied.toDescription(),
+            null);
         return;
+      }
+    } catch (PermissionUndefinedException e) {
+      result.error(
+          ErrorCodes.permissionDefinitionsNotFound.toString(),
+          ErrorCodes.permissionDefinitionsNotFound.toDescription(),
+          null);
+      return;
     }
 
     Boolean forceLocationManager = call.argument("forceLocationManager");
@@ -192,14 +197,20 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   }
 
   private void onGetCurrentPosition(MethodCall call, MethodChannel.Result result) {
-    try{
-      if (!permissionManager.hasPermission(context)){
-        result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
+    try {
+      if (!permissionManager.hasPermission(context)) {
+        result.error(
+            ErrorCodes.permissionDenied.toString(),
+            ErrorCodes.permissionDenied.toDescription(),
+            null);
         return;
       }
     } catch (PermissionUndefinedException e) {
-       result.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
-       return;
+      result.error(
+          ErrorCodes.permissionDefinitionsNotFound.toString(),
+          ErrorCodes.permissionDefinitionsNotFound.toDescription(),
+          null);
+      return;
     }
 
     @SuppressWarnings("unchecked")
@@ -212,8 +223,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     final boolean[] replySubmitted = {false};
 
     LocationClient locationClient =
-        geolocationManager.createLocationClient(
-            context, forceLocationManager, locationOptions);
+        geolocationManager.createLocationClient(context, forceLocationManager, locationOptions);
 
     geolocationManager.startPositionUpdates(
         locationClient,
