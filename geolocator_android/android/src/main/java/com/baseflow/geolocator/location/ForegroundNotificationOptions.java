@@ -1,5 +1,6 @@
 package com.baseflow.geolocator.location;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Map;
@@ -7,10 +8,15 @@ import java.util.Map;
 @SuppressWarnings({"ConstantConditions", "unchecked"})
 public class ForegroundNotificationOptions {
 
+    @NonNull
     private final String notificationTitle;
+    @NonNull
     private final String notificationText;
+    @NonNull
     private final AndroidIconResource notificationIcon;
+    @NonNull
     private final boolean enableWifiLock;
+    @NonNull
     private final boolean enableWakeLock;
 
 

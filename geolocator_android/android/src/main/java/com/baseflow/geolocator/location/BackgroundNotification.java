@@ -9,15 +9,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class BackgroundNotification {
-    private Context context;
-    private Integer notificationId;
-    private String channelId;
-    private ForegroundNotificationOptions options;
+    @NonNull
+    private final Context context;
+    @NonNull
+    private final Integer notificationId;
+    @NonNull
+    private final String channelId;
+    @NonNull
     private NotificationCompat.Builder builder;
 
     public BackgroundNotification(
@@ -47,7 +50,7 @@ public class BackgroundNotification {
             intent.setPackage(null);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
-            if (Build.VERSION.SDK_INT > 23) {
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
                 flags = flags | PendingIntent.FLAG_IMMUTABLE;
             }
             return PendingIntent.getActivity(context, 0, intent, flags);
@@ -93,7 +96,6 @@ public class BackgroundNotification {
 
     public void updateOptions(ForegroundNotificationOptions options, boolean isVisible) {
         updateNotification(options, isVisible);
-        this.options = options;
     }
 
     public Notification build() {

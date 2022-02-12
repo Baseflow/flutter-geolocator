@@ -38,7 +38,7 @@ class AndroidSettings extends LocationSettings {
   final Duration? intervalDuration;
 
   /// If this is set then the services is started as a Foreground service with a persistent notification
-  /// showing the user that the service will continue running in the background
+  /// showing the user that the service will continue running in the background.
   final ForegroundNotificationConfig? foregroundNotificationConfig;
 
   @override

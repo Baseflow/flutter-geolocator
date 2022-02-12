@@ -6,7 +6,7 @@ class AndroidResource {
   /// Optional default resource type to find, if "type/" is not included in the name. Can be null to require an explicit type.
   final String defType;
 
-  /// Uniquely identifies an Android resource
+  /// Uniquely identifies an Android resource.
   const AndroidResource({required this.name, this.defType = 'drawable'});
 
   /// Returns a JSON representation of this class.
