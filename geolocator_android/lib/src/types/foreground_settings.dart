@@ -9,7 +9,7 @@ class AndroidResource {
   /// Uniquely identifies an Android resource
   const AndroidResource({required this.name, this.defType = 'drawable'});
 
-  /// Returns a json representation of this class
+  /// Returns a JSON representation of this class.
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -34,12 +34,12 @@ class ForegroundNotificationConfig {
   /// user has not used the device in a while (e.g. for background network
   /// communications).
   ///
-  /// Wifilock permissions should be obtained first by using a permissions library
+  /// Wifi lock permissions should be obtained first by using a permissions library.
   final bool enableWifiLock;
 
   /// When enabled, a Wakelock is acquired when background execution is started.
   ///
-  /// Wakelock permissions should be obtained first by using a permissions library
+  /// Wake lock permissions should be obtained first by using a permissions library.
   final bool enableWakeLock;
 
   /// Creates an Android specific configuration for the [FlutterBackground] plugin.
@@ -61,7 +61,7 @@ class ForegroundNotificationConfig {
     this.enableWakeLock = false,
   });
 
-  /// Returns a json representation of this class
+  /// Returns a JSON representation of this class.
   Map<String, dynamic> toJson() {
     return {
       'notificationTitle': notificationTitle,

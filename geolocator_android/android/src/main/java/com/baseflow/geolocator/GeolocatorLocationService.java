@@ -78,12 +78,12 @@ public class GeolocatorLocationService extends Service {
     public void startLocationService(boolean forceLocationManager, LocationOptions locationOptions, EventChannel.EventSink events) {
 
         if (geolocationManager != null) {
-            this.locationClient =
+            locationClient =
                     geolocationManager.createLocationClient(
                             this.getApplicationContext(), Boolean.TRUE.equals(forceLocationManager), locationOptions);
 
             geolocationManager.startPositionUpdates(
-                    this.locationClient,
+                    locationClient,
                     activity,
                     (Location location) -> events.success(LocationMapper.toHashMap(location)),
                     (ErrorCodes errorCodes) ->
@@ -92,8 +92,8 @@ public class GeolocatorLocationService extends Service {
     }
 
     public void stopLocationService() {
-        if (this.locationClient != null && geolocationManager != null) {
-            geolocationManager.stopPositionUpdates(this.locationClient);
+        if (locationClient != null && geolocationManager != null) {
+            geolocationManager.stopPositionUpdates(locationClient);
         }
     }
 
@@ -181,5 +181,3 @@ public class GeolocatorLocationService extends Service {
         }
     }
 }
-
-

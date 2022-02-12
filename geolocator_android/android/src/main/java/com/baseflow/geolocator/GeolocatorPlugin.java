@@ -40,9 +40,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   @Nullable private ActivityPluginBinding pluginBinding;
 
   public GeolocatorPlugin() {
-    this.permissionManager = new PermissionManager();
-    this.geolocationManager = new GeolocationManager();
-    this.locationAccuracyManager = new LocationAccuracyManager();
+    permissionManager = new PermissionManager();
+    geolocationManager = new GeolocationManager();
+    locationAccuracyManager = new LocationAccuracyManager();
   }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -142,19 +142,19 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   }
 
   private void registerListeners() {
-    if (this.pluginRegistrar != null) {
-      this.pluginRegistrar.addActivityResultListener(this.geolocationManager);
-      this.pluginRegistrar.addRequestPermissionsResultListener(this.permissionManager);
+    if (pluginRegistrar != null) {
+      pluginRegistrar.addActivityResultListener(this.geolocationManager);
+      pluginRegistrar.addRequestPermissionsResultListener(this.permissionManager);
     } else if (pluginBinding != null) {
-      this.pluginBinding.addActivityResultListener(this.geolocationManager);
-      this.pluginBinding.addRequestPermissionsResultListener(this.permissionManager);
+      pluginBinding.addActivityResultListener(this.geolocationManager);
+      pluginBinding.addRequestPermissionsResultListener(this.permissionManager);
     }
   }
 
   private void deregisterListeners() {
-    if (this.pluginBinding != null) {
-      this.pluginBinding.removeActivityResultListener(this.geolocationManager);
-      this.pluginBinding.removeRequestPermissionsResultListener(this.permissionManager);
+    if (pluginBinding != null) {
+      pluginBinding.removeActivityResultListener(this.geolocationManager);
+      pluginBinding.removeRequestPermissionsResultListener(this.permissionManager);
     }
   }
 

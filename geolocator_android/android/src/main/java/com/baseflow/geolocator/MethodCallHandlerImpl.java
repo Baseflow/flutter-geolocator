@@ -133,7 +133,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     private void onCheckPermission(MethodChannel.Result result) {
     try {
       LocationPermission permission =
-          this.permissionManager.checkPermissionStatus(context);
+          permissionManager.checkPermissionStatus(context);
       result.success(permission.toInt());
     } catch (PermissionUndefinedException e) {
       ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
@@ -148,8 +148,8 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void onRequestPermission(MethodChannel.Result result) {
     try {
-      this.permissionManager.requestPermission(
-          this.activity,
+      permissionManager.requestPermission(
+          activity,
           (LocationPermission permission) -> result.success(permission.toInt()),
           (ErrorCodes errorCode) ->
               result.error(errorCode.toString(), errorCode.toDescription(), null));
@@ -161,7 +161,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void getLocationAccuracy(MethodChannel.Result result, Context context) {
     final LocationAccuracyStatus status =
-        this.locationAccuracyManager.getLocationAccuracy(
+        locationAccuracyManager.getLocationAccuracy(
             context,
             (ErrorCodes errorCode) ->
                 result.error(errorCode.toString(), errorCode.toDescription(), null));
@@ -172,7 +172,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void onGetLastKnownPosition(MethodCall call, MethodChannel.Result result) {
     try{
-        if (!permissionManager.hasPermission(this.context)){
+        if (!permissionManager.hasPermission(context)){
             result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
             return;
         }
@@ -183,8 +183,8 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
     Boolean forceLocationManager = call.argument("forceLocationManager");
 
-    this.geolocationManager.getLastKnownPosition(
-        this.context,
+    geolocationManager.getLastKnownPosition(
+        context,
         forceLocationManager != null && forceLocationManager,
         (Location location) -> result.success(LocationMapper.toHashMap(location)),
         (ErrorCodes errorCode) ->
@@ -193,7 +193,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void onGetCurrentPosition(MethodCall call, MethodChannel.Result result) {
     try{
-      if (!permissionManager.hasPermission(this.context)){
+      if (!permissionManager.hasPermission(context)){
         result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
         return;
       }
@@ -213,11 +213,11 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
     LocationClient locationClient =
         geolocationManager.createLocationClient(
-            this.context, forceLocationManager, locationOptions);
+            context, forceLocationManager, locationOptions);
 
     geolocationManager.startPositionUpdates(
         locationClient,
-        this.activity,
+        activity,
         (Location location) -> {
           if (replySubmitted[0]) {
             return;

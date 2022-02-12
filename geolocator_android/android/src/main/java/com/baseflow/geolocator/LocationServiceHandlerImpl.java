@@ -52,14 +52,14 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler{
 
         IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
         filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
-        this.receiver = new LocationServiceStatusReceiver(events);
+        receiver = new LocationServiceStatusReceiver(events);
         if(activity == null) return;
-        activity.registerReceiver(this.receiver, filter);
+        activity.registerReceiver(receiver, filter);
     }
 
     @Override
     public void onCancel(Object arguments) {
-        activity.unregisterReceiver(this.receiver);
+        activity.unregisterReceiver(receiver);
     }
 
 }
