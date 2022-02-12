@@ -1,8 +1,6 @@
 package com.baseflow.geolocator;
 
-import android.app.Activity;
 import android.content.Context;
-import android.location.Location;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCodes;
@@ -22,15 +20,15 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
 
   @Nullable private EventChannel channel;
   @Nullable private Context context;
-  @Nullable private GeolocatorLocationService backgroundLocationService;
+  @Nullable private GeolocatorLocationService foregroundLocationService;
 
   public StreamHandlerImpl(PermissionManager permissionManager) {
     this.permissionManager = permissionManager;
   }
 
-  public void setBackgroundLocationService(
-      @Nullable GeolocatorLocationService backgroundLocationService) {
-    this.backgroundLocationService = backgroundLocationService;
+  public void setForegroundLocationService(
+      @Nullable GeolocatorLocationService foregroundLocationService) {
+    this.foregroundLocationService = foregroundLocationService;
   }
 
   /**
@@ -85,7 +83,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       return;
     }
 
-    if (backgroundLocationService == null) {
+    if (foregroundLocationService == null) {
       Log.e(TAG, "Location background service has not started correctly");
       return;
     }
@@ -104,17 +102,17 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
           ForegroundNotificationOptions.parseArguments(
               (Map<String, Object>) map.get("foregroundNotificationConfig"));
     }
-    backgroundLocationService.startLocationService(forceLocationManager, locationOptions, events);
+    foregroundLocationService.startLocationService(forceLocationManager, locationOptions, events);
     if (foregroundNotificationOptions != null) {
-      backgroundLocationService.enableBackgroundMode(foregroundNotificationOptions);
+      foregroundLocationService.enableBackgroundMode(foregroundNotificationOptions);
     }
   }
 
   @Override
   public void onCancel(Object arguments) {
-    if (backgroundLocationService != null) {
-      backgroundLocationService.stopLocationService();
-      backgroundLocationService.disableBackgroundMode();
+    if (foregroundLocationService != null) {
+      foregroundLocationService.stopLocationService();
+      foregroundLocationService.disableBackgroundMode();
     }
   }
 }

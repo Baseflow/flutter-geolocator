@@ -25,7 +25,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private final GeolocationManager geolocationManager;
   private final LocationAccuracyManager locationAccuracyManager;
 
-  @Nullable private GeolocatorLocationService backgroundLocationService;
+  @Nullable private GeolocatorLocationService foregroundLocationService;
 
   @Nullable private MethodCallHandlerImpl methodCallHandler;
 
@@ -180,16 +180,16 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   private void initialize(GeolocatorLocationService service) {
     Log.d(TAG, "Initializing Geolocator foreground service");
-    backgroundLocationService = service;
+    foregroundLocationService = service;
 
     if (pluginBinding != null) {
-      backgroundLocationService.setActivity(pluginBinding.getActivity());
+      foregroundLocationService.setActivity(pluginBinding.getActivity());
     }
     if (methodCallHandler != null) {
-      methodCallHandler.setBackgroundLocationService(service);
+      methodCallHandler.setForegroundLocationService(service);
     }
     if (streamHandler != null) {
-      streamHandler.setBackgroundLocationService(service);
+      streamHandler.setForegroundLocationService(service);
     }
   }
 
@@ -198,11 +198,11 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       methodCallHandler.setActivity(null);
     }
     if (streamHandler != null) {
-      streamHandler.setBackgroundLocationService(null);
+      streamHandler.setForegroundLocationService(null);
     }
-    if (backgroundLocationService != null) {
-      backgroundLocationService.setActivity(null);
-      backgroundLocationService = null;
+    if (foregroundLocationService != null) {
+      foregroundLocationService.setActivity(null);
+      foregroundLocationService = null;
     }
   }
 }

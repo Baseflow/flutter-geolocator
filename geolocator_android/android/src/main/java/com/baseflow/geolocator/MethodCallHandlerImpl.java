@@ -41,7 +41,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   @Nullable private Activity activity;
 
-  @Nullable private GeolocatorLocationService backgroundLocationService;
+  @Nullable private GeolocatorLocationService foregroundLocationService;
 
   MethodCallHandlerImpl(
       PermissionManager permissionManager,
@@ -126,8 +126,8 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     this.activity = activity;
   }
 
-  void setBackgroundLocationService(@Nullable GeolocatorLocationService backgroundLocationService) {
-    this.backgroundLocationService = backgroundLocationService;
+  void setForegroundLocationService(@Nullable GeolocatorLocationService foregroundLocationService) {
+    this.foregroundLocationService = foregroundLocationService;
   }
 
   private void onCheckPermission(MethodChannel.Result result) {
