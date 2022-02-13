@@ -285,15 +285,18 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
       final androidSettings = AndroidSettings(
-        accuracy: LocationAccuracy.best,
-        distanceFilter: 10,
-        forceLocationManager: false,
-        foregroundNotificationConfig: const ForegroundNotificationConfig(
-          notificationText: "Example app will continue to receive your location even when you aren't using it", //Explain to the user why we are showing this notification
-          notificationTitle: "Running in Background", //Tell the user what we are doing
-          enableWakeLock: true, //Keep the system awake to receive background location information.
-        )
-      );
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 10,
+          forceLocationManager: false,
+          foregroundNotificationConfig: const ForegroundNotificationConfig(
+            notificationText:
+                "Example app will continue to receive your location even when you aren't using it",
+            //Explain to the user why we are showing this notification
+            notificationTitle: "Running in Background",
+            //Tell the user what we are doing
+            enableWakeLock:
+                true, //Keep the system awake to receive background location information.
+          ));
       final positionStream = geolocatorAndroid.getPositionStream(
           locationSettings: androidSettings);
       _positionStreamSubscription = positionStream.handleError((error) {
