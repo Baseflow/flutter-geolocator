@@ -55,7 +55,7 @@
   [[weakSelf geolocationHandler] startListeningWithDesiredAccuracy:accuracy
                                                     distanceFilter:distanceFilter
                                  pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically && [pauseLocationUpdatesAutomatically boolValue]
-                                 showBackgroundLocationIndicator:showBackgroundLocationIndicator && [showBackgroundLocationIndicator boolValue]
+                                   showBackgroundLocationIndicator:showBackgroundLocationIndicator && [showBackgroundLocationIndicator boolValue]
                                                       activityType:activityType
                                                      resultHandler:^(CLLocation *location) {
     [weakSelf onLocationDidChange: location];
