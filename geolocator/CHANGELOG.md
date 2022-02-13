@@ -1,3 +1,7 @@
+## 8.2.0
+
+- Adds support to make a foreground service on Android and continue processing location updates when the application is moved into the background.
+
 ## 8.1.1
 
 - Updated README.md to clarify the use of the geolocator_web package.
