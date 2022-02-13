@@ -74,13 +74,13 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
     
-    self.errorHandler = errorHandler;
-    self.resultHandler = resultHandler;
+  self.errorHandler = errorHandler;
+  self.resultHandler = resultHandler;
 
 #if TARGET_OS_IOS
-    if (@available(iOS 11.0, macOS 11.0, *)) {
-        self.locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
-    }
+  if (@available(iOS 11.0, macOS 11.0, *)) {
+      self.locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
+  }
 #endif
     
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
