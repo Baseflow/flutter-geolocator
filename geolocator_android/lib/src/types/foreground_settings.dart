@@ -38,6 +38,7 @@ class ForegroundNotificationConfig {
   final bool enableWifiLock;
 
   /// When enabled, a Wakelock is acquired when background execution is started.
+  /// If this is false then the system can still sleep and all location events will be received at once when the system wakes up again.
   ///
   /// Wake lock permissions should be obtained first by using a permissions library.
   final bool enableWakeLock;
