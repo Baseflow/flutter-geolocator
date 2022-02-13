@@ -1,6 +1,19 @@
+## 8.1.1
+
+- Updated README.md to clarify the use of the geolocator_web package.
+
+## 8.1.0
+
+- Endorses the geolocator_windows package.
+
+## 8.0.5
+
+- Fix code coverage issues by adding iOS specific test for getCurrentPosition
+
 ## 8.0.4
+
 - Export `ActivityType` at `geolocator.dart`
-- 
+
 ## 8.0.3
 
 - Upgraded the geolocator_platform_interface, geolocator_web, geolocator_apple and geolocator_android packages to the latest versions.
