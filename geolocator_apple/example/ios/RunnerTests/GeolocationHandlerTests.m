@@ -136,8 +136,8 @@
   XCTestExpectation *expectation = [self expectationWithDescription:@"expect result return third location"];
   [_geolocationHandler startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
                                           distanceFilter:0
-                                        pauseLocationUpdatesAutomatically:NO
-                                        showBackgroundLocationIndicator:NO
+                       pauseLocationUpdatesAutomatically:NO
+                         showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
                                            resultHandler:^(CLLocation * _Nullable location) {
     XCTAssertEqual(location, mockLocation);
