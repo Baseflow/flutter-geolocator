@@ -287,14 +287,14 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     Exception? error;
 
     if (_positionStreamSubscription == null) {
-      final Stream<Position> positionStream =
-          geolocatorApple.getPositionStream(locationSettings: AppleSettings(
-            accuracy: LocationAccuracy.best,
-            distanceFilter: 10,
-            activityType: ActivityType.other,
-            // Only set to true if our app will be started up in the background.
-            showBackgroundLocationIndicator: false,
-          ));
+      final Stream<Position> positionStream = geolocatorApple.getPositionStream(
+          locationSettings: AppleSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 10,
+        activityType: ActivityType.other,
+        // Only set to true if our app will be started up in the background.
+        showBackgroundLocationIndicator: false,
+      ));
       _positionStreamSubscription = positionStream.handleError((e) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
