@@ -36,6 +36,9 @@ class AppleSettings extends LocationSettings {
 
   /// Flag to ask the Apple OS to show the background location indicator (iOS only)
   /// if app starts up and background and requests the users location.
+  ///
+  /// For this setting to work and for the location to be retrieved the user must
+  /// have granted "always" permissions for location retrieval.
   final bool showBackgroundLocationIndicator;
 
   /// Returns a JSON representation of this class.
