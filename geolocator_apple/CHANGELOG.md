@@ -1,6 +1,6 @@
 ## 2.1.1
 
-- Added additional settings to Apple settings to allow the user to configure the background settings of CLocationManager
+- Added additional option to Apple settings to allow the user to configure the background location indicator of CLocationManager
 
 ## 2.1.0
 

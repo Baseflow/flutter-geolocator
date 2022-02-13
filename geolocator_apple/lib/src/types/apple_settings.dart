@@ -1,4 +1,5 @@
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+
 import 'activity_type.dart';
 
 /// Represents different iOS specific settings with which you can set a value
@@ -34,8 +35,10 @@ class AppleSettings extends LocationSettings {
   final ActivityType activityType;
 
   /// Flag to ask the Apple OS to show the background location indicator (iOS only)
+  /// if app starts up and background and requests the users location.
   final bool showBackgroundLocationIndicator;
 
+  /// Returns a JSON representation of this class.
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
