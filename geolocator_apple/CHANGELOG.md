@@ -1,3 +1,7 @@
+## 2.1.1
+
+- Added additional option to Apple settings to allow the user to configure the background location indicator of CLocationManager.
+
 ## 2.1.0
 
 - Ensures that the `getCurrentPosition` takes the supplied accuracy into account.
@@ -42,4 +46,3 @@
 ## 1.0.0
 
 - Initial open source release.
-

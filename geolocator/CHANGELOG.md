@@ -508,4 +508,3 @@ Complete rebuild of the geolocator plugin. Please note the this version contains
 ## 0.0.1
 
 - Initial release
-

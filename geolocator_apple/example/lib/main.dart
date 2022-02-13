@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 
 import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Defines the main theme color.
@@ -286,8 +287,14 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     Exception? error;
 
     if (_positionStreamSubscription == null) {
-      final Stream<Position> positionStream =
-          geolocatorApple.getPositionStream();
+      final Stream<Position> positionStream = geolocatorApple.getPositionStream(
+          locationSettings: AppleSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 10,
+        activityType: ActivityType.other,
+        // Only set to true if our app will be started up in the background.
+        showBackgroundLocationIndicator: false,
+      ));
       _positionStreamSubscription = positionStream.handleError((e) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
