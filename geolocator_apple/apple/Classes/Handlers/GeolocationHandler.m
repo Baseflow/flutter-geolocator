@@ -69,7 +69,7 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
         pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
-                             showBackgroundLocationIndicator: (BOOL) showBackgroundLocationIndicator
+          showBackgroundLocationIndicator: (BOOL) showBackgroundLocationIndicator
                              activityType:(CLActivityType)activityType
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
