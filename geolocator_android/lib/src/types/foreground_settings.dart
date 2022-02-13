@@ -1,4 +1,4 @@
-/// Uniquely identifies an Android resource
+/// Uniquely identifies an Android resource.
 class AndroidResource {
   /// The name of the desired resource.
   final String name;
