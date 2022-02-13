@@ -160,7 +160,7 @@
   [_geolocationHandler startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
                                           distanceFilter:0
                        pauseLocationUpdatesAutomatically:NO
-                       showBackgroundLocationIndicator:NO
+                         showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
                                            resultHandler:^(CLLocation * _Nullable location) {
   }
