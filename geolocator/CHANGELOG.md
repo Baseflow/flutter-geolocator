@@ -1,6 +1,7 @@
 ## 8.2.0
 
 - Adds support to make a foreground service on Android and continue processing location updates when the application is moved into the background.
+- Added additional option to Apple settings to allow the user to configure the background location indicator of CLocationManager.
 
 ## 8.1.1
 

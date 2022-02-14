@@ -280,6 +280,8 @@ if (defaultTargetPlatform == TargetPlatform.android) {
     activityType: ActivityType.fitness,
     distanceFilter: 100,
     pauseLocationUpdatesAutomatically: true,
+    // Only set to true if our app will be started up in the background.
+    showBackgroundLocationIndicator: false,
   );
 } else {
     locationSettings = LocationSettings(
