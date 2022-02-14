@@ -1,1 +1,1 @@
-../../../apple/Classes/Utils/LocationAccuracyMapper.h
+../../../ios/Classes/Utils/LocationAccuracyMapper.h

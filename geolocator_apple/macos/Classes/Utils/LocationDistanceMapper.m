@@ -1,1 +1,1 @@
-../../../apple/Classes/Utils/LocationDistanceMapper.m
+../../../ios/Classes/Utils/LocationDistanceMapper.m

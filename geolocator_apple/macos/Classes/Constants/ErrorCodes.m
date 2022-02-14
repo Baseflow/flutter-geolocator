@@ -1,1 +1,1 @@
-../../../apple/Classes/Constants/ErrorCodes.m
+../../../ios/Classes/Constants/ErrorCodes.m

@@ -1,3 +1,7 @@
+## 2.1.1+1
+
+- Resolves issue with symbolic links in 2.1.1 version.
+
 ## 2.1.1
 
 - Added additional option to Apple settings to allow the user to configure the background location indicator of CLocationManager.

@@ -1,1 +1,1 @@
-../../../apple/Classes/Utils/AuthorizationStatusMapper.m
+../../../ios/Classes/Utils/AuthorizationStatusMapper.m

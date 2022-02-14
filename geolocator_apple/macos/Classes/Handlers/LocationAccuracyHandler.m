@@ -1,1 +1,1 @@
-../../../apple/Classes/Handlers/LocationAccuracyHandler.m
+../../../ios/Classes/Handlers/LocationAccuracyHandler.m
