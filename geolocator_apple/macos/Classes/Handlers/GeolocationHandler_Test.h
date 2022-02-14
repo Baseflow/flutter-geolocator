@@ -1,1 +1,1 @@
-../../../apple/Classes/Handlers/GeolocationHandler_Test.h
+../../../ios/Classes/Handlers/GeolocationHandler_Test.h

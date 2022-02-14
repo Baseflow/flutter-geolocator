@@ -1,1 +1,1 @@
-../../../apple/Classes/Handlers/LocationServiceStreamHandler.m
+../../../ios/Classes/Handlers/LocationServiceStreamHandler.m

@@ -1,1 +1,1 @@
-../../../apple/Classes/Utils/LocationMapper.m
+../../../ios/Classes/Utils/LocationMapper.m
