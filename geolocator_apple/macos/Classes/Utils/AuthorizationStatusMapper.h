@@ -1,1 +1,1 @@
-../../../apple/Classes/Utils/AuthorizationStatusMapper.h
+../../../ios/Classes/Utils/AuthorizationStatusMapper.h

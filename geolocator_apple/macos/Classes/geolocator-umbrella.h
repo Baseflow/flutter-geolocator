@@ -1,1 +1,1 @@
-../../apple/Classes/geolocator-umbrella.h
+../../ios/Classes/geolocator-umbrella.h

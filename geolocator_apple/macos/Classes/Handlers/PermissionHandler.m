@@ -1,1 +1,1 @@
-../../../apple/Classes/Handlers/PermissionHandler.m
+../../../ios/Classes/Handlers/PermissionHandler.m
