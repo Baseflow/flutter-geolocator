@@ -1,6 +1,14 @@
-## 3.1.0
+## 3.2.0
 
 - Added functionality to receive NMEA messages.
+
+## 3.1.0
+
+- Adds support to make a foreground service and continue processing location updates when the application is moved into the background.
+
+## 3.0.4
+
+- Fixes Android embedding v2 warning when compiling the example App.
 
 ## 3.0.3
 

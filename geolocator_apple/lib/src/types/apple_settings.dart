@@ -1,4 +1,5 @@
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+
 import 'activity_type.dart';
 
 /// Represents different iOS specific settings with which you can set a value
@@ -15,6 +16,7 @@ class AppleSettings extends LocationSettings {
     LocationAccuracy accuracy = LocationAccuracy.best,
     int distanceFilter = 0,
     Duration? timeLimit,
+    this.showBackgroundLocationIndicator = false,
   }) : super(
           accuracy: accuracy,
           distanceFilter: distanceFilter,
@@ -32,12 +34,21 @@ class AppleSettings extends LocationSettings {
   /// to determine when location updates may be automatically paused.
   final ActivityType activityType;
 
+  /// Flag to ask the Apple OS to show the background location indicator (iOS only)
+  /// if app starts up and background and requests the users location.
+  ///
+  /// For this setting to work and for the location to be retrieved the user must
+  /// have granted "always" permissions for location retrieval.
+  final bool showBackgroundLocationIndicator;
+
+  /// Returns a JSON representation of this class.
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
       ..addAll({
         'pauseLocationUpdatesAutomatically': pauseLocationUpdatesAutomatically,
         'this.activityType': activityType.index,
+        'showBackgroundLocationIndicator': showBackgroundLocationIndicator,
       });
   }
 }

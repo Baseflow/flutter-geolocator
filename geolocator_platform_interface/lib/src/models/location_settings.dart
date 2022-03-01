@@ -8,7 +8,6 @@ class LocationSettings {
   /// The following default values are used:
   /// - accuracy: best
   /// - distanceFilter: 0
-  /// - timeInterval: 0
   /// - timeLimit: 0
   const LocationSettings({
     this.accuracy = LocationAccuracy.best,

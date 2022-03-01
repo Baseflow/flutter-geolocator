@@ -1,1 +1,1 @@
-../../../apple/Classes/Utils/PermissionUtils.m
+../../../ios/Classes/Utils/PermissionUtils.m

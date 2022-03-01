@@ -8,13 +8,14 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
   Geolocation macOS plugin for Flutter. This plugin provides the Apple implementation for the geolocator plugin.
                        DESC
-                       s.homepage         = 'http://github.com/baseflow/flutter-geolocator'
+  s.homepage         = 'http://github.com/baseflow/flutter-geolocator'
   s.license          = { :type => 'MIT', :file => '../LICENSE' }
   s.author           = { 'Baseflow' => 'hello@baseflow.com' }
   s.source           = { :http => 'https://github.com/baseflow/flutter-geolocator/tree/master/' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'Classes/**/*.{h,m}'
   s.public_header_files = 'Classes/**/*.h'
+  s.module_map = 'Classes/GeolocatorPlugin.modulemap'
   s.dependency 'FlutterMacOS'
-  s.platform = :osx, '10.11'
+  s.platform = :osx, '10.11' 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
 end

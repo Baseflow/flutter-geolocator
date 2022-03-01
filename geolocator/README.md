@@ -140,11 +140,16 @@ The following methods of the geolocator API are not supported on the web and wil
 - `openAppSettings()`
 - `openLocationSettings()`
 
-> NOTE: due to a [bug](https://github.com/dart-lang/sdk/issues/45562) in the dart:html library the web version of the Geolocator plugin does not work with sound null safety enabled and compiled in release mode. Running the App in release mode with sound null safety enabled results in a `Uncaught TypeError` (see issue #693). The current workaround would be to build your App with sound null safety disabled in release mode:
->```shell
->flutter build web --no-sound-null-safety --release
->```
-> The Dart team already implemented a [fix](https://github.com/dart-lang/sdk/commit/7abaa9549223d62602f18aa7abc3ca9aa5884939) (currently available in Dart version 2.15.0-63.0.dev), however it has yet to be released and integrated in Flutter.
+**NOTE**
+
+Geolocator Web is available only in [secure_contexts](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) (HTTPS). More info about the Geolocator API can be found [here](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API).
+
+</details>
+
+<details>
+<summary>Windows</summary>
+
+To use the Geolocator plugin on Windows you need to be using Flutter 2.10 or higher. Flutter will automatically add the endorsed [geolocator_windows]() package to your application when you add the `geolocator: ^8.1.0` dependency to your `pubspec.yaml`.
 
 </details>
 
@@ -260,6 +265,14 @@ if (defaultTargetPlatform == TargetPlatform.android) {
     distanceFilter: 100,
     forceLocationManager: true,
     intervalDuration: const Duration(seconds: 10),
+    //(Optional) Set foreground notification config to keep the app alive 
+    //when going to the background
+    foregroundNotificationConfig: const ForegroundNotificationConfig(
+        notificationText:
+        "Example app will continue to receive your location even when you aren't using it",
+        notificationTitle: "Running in Background",
+        enableWakeLock: true,
+    )
   );
 } else if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
   locationSettings = AppleSettings(
@@ -267,6 +280,8 @@ if (defaultTargetPlatform == TargetPlatform.android) {
     activityType: ActivityType.fitness,
     distanceFilter: 100,
     pauseLocationUpdatesAutomatically: true,
+    // Only set to true if our app will be started up in the background.
+    showBackgroundLocationIndicator: false,
   );
 } else {
     locationSettings = LocationSettings(
@@ -315,10 +330,6 @@ StreamSubscription<ServiceStatus> serviceStatusStream = Geolocator.getServiceSta
 ```
 
 ### Permissions
-
-The geolocator will automatically try to request permissions when you try to acquire a location through the `getCurrentPosition` or `getPositionStream` methods. We do however provide methods that will allow you to manually handle requesting permissions.
-
-**NOTE**
 
 When using the web platform, the `checkPermission` method will return the `LocationPermission.denied` status, when the browser doesn't support the JavaScript Permissions API. Nevertheless, the `getCurrentPosition` and `getPositionStream` methods can still be used on the web platform.
 

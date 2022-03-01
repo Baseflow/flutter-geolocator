@@ -1,1 +1,1 @@
-../../../apple/Classes/Utils/ActivityTypeMapper.m
+../../../ios/Classes/Utils/ActivityTypeMapper.m

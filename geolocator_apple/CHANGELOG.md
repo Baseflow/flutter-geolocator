@@ -1,3 +1,17 @@
+## 2.1.1+1
+
+- Resolves issue with symbolic links in 2.1.1 version.
+
+## 2.1.1
+
+- Added additional option to Apple settings to allow the user to configure the background location indicator of CLocationManager.
+
+## 2.1.0
+
+- Ensures that the `getCurrentPosition` takes the supplied accuracy into account.
+- Improves the speed of acquiring the current position.
+- Adds a native test bed.
+
 ## 2.0.1
 
 - Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.
@@ -36,4 +50,3 @@
 ## 1.0.0
 
 - Initial open source release.
-

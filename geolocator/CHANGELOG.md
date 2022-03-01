@@ -1,6 +1,23 @@
-## 8.1.0
+
+## 8.3.0
 
 - Added functionality to receive NMEA messages.
+
+## 8.2.0
+
+- Adds support to make a foreground service on Android and continue processing location updates when the application is moved into the background.
+- Ensures that the `getCurrentPosition` takes the supplied accuracy into account.
+- Improves the speed of acquiring the current position on iOS.
+- Added additional option to `AppleSettings` class to allow the user to configure the background location indicator of `CLocationManager`.
+
+## 8.1.1
+
+- Updated README.md to clarify the use of the geolocator_web package.
+
+## 8.1.0
+
+- Endorses the geolocator_windows package.
+
 
 ## 8.0.5
 

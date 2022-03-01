@@ -1,1 +1,1 @@
-../../../apple/Classes/Handlers/GeolocationHandler.m
+../../../ios/Classes/Handlers/GeolocationHandler.m
