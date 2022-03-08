@@ -37,6 +37,8 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
     if (channel == null) {
       return;
     }
+
+    disposeListeners();
     channel.setStreamHandler(null);
     channel = null;
   }
@@ -60,6 +62,11 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
 
   @Override
   public void onCancel(Object arguments) {
+
+    disposeListeners();
+  }
+
+  private void disposeListeners() {
     activity.unregisterReceiver(receiver);
   }
 }

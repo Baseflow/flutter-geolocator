@@ -60,6 +60,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       return;
     }
 
+    disposeListeners();
     channel.setStreamHandler(null);
     channel = null;
   }
@@ -110,6 +111,10 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
 
   @Override
   public void onCancel(Object arguments) {
+    disposeListeners();
+  }
+
+  private void disposeListeners() {
     if (foregroundLocationService != null) {
       foregroundLocationService.stopLocationService();
       foregroundLocationService.disableBackgroundMode();

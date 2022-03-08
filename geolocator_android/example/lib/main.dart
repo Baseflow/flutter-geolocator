@@ -295,8 +295,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             notificationTitle: "Running in Background",
             //Tell the user what we are doing
             enableWakeLock:
-                true, //Keep the system awake to receive background location information.
-          ));
+                false, //Keep the system awake to receive background location information.
+          ),
+      );
       final positionStream = geolocatorAndroid.getPositionStream(
           locationSettings: androidSettings);
       _positionStreamSubscription = positionStream.handleError((error) {
