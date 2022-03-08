@@ -144,6 +144,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   public void onDetachedFromActivity() {
     dispose();
     deregisterListeners();
+
+    pluginBinding.getActivity().unbindService(serviceConnection);
+    pluginBinding = null;
   }
 
   private void registerListeners() {
