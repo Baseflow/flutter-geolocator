@@ -1,3 +1,7 @@
+## 3.1.1
+
+- Fixes an issue with the foreground service connection not getting unbound correctly.
+
 ## 3.1.0
 
 - Adds support to make a foreground service and continue processing location updates when the application is moved into the background.
