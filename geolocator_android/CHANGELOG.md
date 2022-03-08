@@ -1,6 +1,6 @@
 ## 3.1.1
 
-- Fixes and issue with the foreground service connection not getting unbound correctly.
+- Fixes an issue with the foreground service connection not getting unbound correctly.
 
 ## 3.1.0
 
