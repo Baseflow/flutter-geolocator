@@ -37,6 +37,8 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
     if (channel == null) {
       return;
     }
+
+    disposeListeners();
     channel.setStreamHandler(null);
     channel = null;
   }
@@ -54,12 +56,18 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
     IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
     filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
     receiver = new LocationServiceStatusReceiver(events);
-    if (activity == null) return;
     activity.registerReceiver(receiver, filter);
   }
 
   @Override
   public void onCancel(Object arguments) {
-    activity.unregisterReceiver(receiver);
+
+    disposeListeners();
+  }
+
+  private void disposeListeners() {
+    if (activity != null) {
+      activity.unregisterReceiver(receiver);
+    }
   }
 }
