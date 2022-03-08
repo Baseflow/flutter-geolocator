@@ -1,3 +1,7 @@
+## 3.1.2
+
+- Fixes an issue with the location status service not unregistering the status receiver.
+
 ## 3.1.1
 
 - Fixes an issue with the foreground service connection not getting unbound correctly.

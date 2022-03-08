@@ -69,6 +69,7 @@ public class GeolocatorLocationService extends Service {
   public void onDestroy() {
     Log.d(TAG, "Destroying location service.");
 
+    stopLocationService();
     disableBackgroundMode();
     geolocationManager = null;
     backgroundNotification = null;
@@ -98,6 +99,7 @@ public class GeolocatorLocationService extends Service {
   }
 
   public void stopLocationService() {
+    Log.d(TAG, "Stopping location service.");
     if (locationClient != null && geolocationManager != null) {
       geolocationManager.stopPositionUpdates(locationClient);
     }
