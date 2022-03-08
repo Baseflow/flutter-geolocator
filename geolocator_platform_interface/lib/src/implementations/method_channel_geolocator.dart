@@ -167,12 +167,12 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       positionStream = positionStream.timeout(
         timeLimit,
         onTimeout: (s) {
+          _positionStream = null;
           s.addError(TimeoutException(
             'Time limit reached while waiting for position update.',
             timeLimit,
           ));
           s.close();
-          _positionStream = null;
         },
       );
     }
