@@ -124,11 +124,13 @@ public class GeolocatorLocationService extends Service {
   }
 
   public void disableBackgroundMode() {
-    Log.d(TAG, "Stop service in foreground.");
-    stopForeground(true);
-    releaseWakeLocks();
-    isForeground = false;
-    backgroundNotification = null;
+    if (isForeground) {
+      Log.d(TAG, "Stop service in foreground.");
+      stopForeground(true);
+      releaseWakeLocks();
+      isForeground = false;
+      backgroundNotification = null;
+    }
   }
 
   public void changeNotificationOptions(ForegroundNotificationOptions options) {

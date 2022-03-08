@@ -1,3 +1,7 @@
+## 3.1.3
+
+- Fixes a bug introduced in 3.1.2 where unregistering the status location receiver throws an IllegalArgumentException.
+
 ## 3.1.2
 
 - Fixes an issue with the location status service not unregistering the status receiver.
