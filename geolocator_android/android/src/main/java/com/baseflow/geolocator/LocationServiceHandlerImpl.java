@@ -66,7 +66,7 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
   }
 
   private void disposeListeners() {
-    if (activity != null) {
+    if (activity != null && receiver != null) {
       activity.unregisterReceiver(receiver);
     }
   }
