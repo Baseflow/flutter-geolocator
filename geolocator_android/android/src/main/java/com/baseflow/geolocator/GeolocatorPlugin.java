@@ -36,13 +36,13 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-          Log.d(TAG, "Service connected: " + name);
+          Log.d(TAG, "Geolocator foreground service connected");
           initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-          Log.d(TAG, "Service disconnected:" + name);
+          Log.d(TAG, "Geolocator foreground service disconnected");
           if (foregroundLocationService != null) {
             foregroundLocationService.setActivity(null);
             foregroundLocationService = null;
@@ -91,7 +91,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
     LocationServiceHandlerImpl locationServiceHandler = new LocationServiceHandlerImpl();
     locationServiceHandler.startListening(registrar.context(), registrar.messenger());
-    locationServiceHandler.setActivity(registrar.activity());
+    locationServiceHandler.setContext(registrar.activity());
     geolocatorPlugin.bindForegroundService(registrar.activity());
   }
 
@@ -107,6 +107,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
 
     locationServiceHandler = new LocationServiceHandlerImpl();
+    locationServiceHandler.setContext(flutterPluginBinding.getApplicationContext());
     locationServiceHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
 
@@ -122,14 +123,14 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
 
+    Log.d(TAG, "Attaching Geolocator to activity");
     this.pluginBinding = binding;
     registerListeners();
     if (methodCallHandler != null) {
       methodCallHandler.setActivity(binding.getActivity());
     }
-
-    if (locationServiceHandler != null) {
-      locationServiceHandler.setActivity(binding.getActivity());
+    if (streamHandler != null) {
+      streamHandler.setActivity(binding.getActivity());
     }
     if (foregroundLocationService != null) {
       foregroundLocationService.setActivity(pluginBinding.getActivity());
@@ -148,7 +149,17 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onDetachedFromActivity() {
+    Log.d(TAG, "Detaching Geolocator from activity");
     deregisterListeners();
+    if (methodCallHandler != null) {
+      methodCallHandler.setActivity(null);
+    }
+    if (streamHandler != null) {
+      streamHandler.setActivity(null);
+    }
+    if (foregroundLocationService != null) {
+      foregroundLocationService.setActivity(null);
+    }
     if (pluginBinding != null) {
       pluginBinding = null;
     }
@@ -186,9 +197,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     Log.d(TAG, "Initializing Geolocator services");
     foregroundLocationService = service;
 
-    if (methodCallHandler != null) {
-      methodCallHandler.setForegroundLocationService(service);
-    }
     if (streamHandler != null) {
       streamHandler.setForegroundLocationService(service);
     }
@@ -207,6 +215,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       streamHandler = null;
     }
     if (locationServiceHandler != null) {
+      locationServiceHandler.setContext(null);
       locationServiceHandler.stopListening();
       locationServiceHandler = null;
     }

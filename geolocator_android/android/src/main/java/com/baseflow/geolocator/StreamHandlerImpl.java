@@ -1,34 +1,55 @@
 package com.baseflow.geolocator;
 
+import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
+
 import androidx.annotation.Nullable;
+
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
-import com.baseflow.geolocator.location.*;
+import com.baseflow.geolocator.location.ForegroundNotificationOptions;
+import com.baseflow.geolocator.location.GeolocationManager;
+import com.baseflow.geolocator.location.LocationClient;
+import com.baseflow.geolocator.location.LocationMapper;
+import com.baseflow.geolocator.location.LocationOptions;
 import com.baseflow.geolocator.permission.PermissionManager;
+
+import java.util.Map;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 
-import java.util.Map;
-
 class StreamHandlerImpl implements EventChannel.StreamHandler {
-  private static final String TAG = "StreamHandlerImpl";
+  private static final String TAG = "FlutterGeolocator";
 
   private final PermissionManager permissionManager;
 
   @Nullable private EventChannel channel;
   @Nullable private Context context;
+  @Nullable private Activity activity;
   @Nullable private GeolocatorLocationService foregroundLocationService;
+  @Nullable private GeolocationManager geolocationManager;
+  @Nullable private LocationClient locationClient;
 
   public StreamHandlerImpl(PermissionManager permissionManager) {
     this.permissionManager = permissionManager;
+    geolocationManager = new GeolocationManager();
   }
 
   public void setForegroundLocationService(
       @Nullable GeolocatorLocationService foregroundLocationService) {
     this.foregroundLocationService = foregroundLocationService;
+  }
+
+  public void setActivity(@Nullable Activity activity) {
+
+    if (activity == null && locationClient != null && channel != null) {
+      stopListening();
+    }
+
+    this.activity = activity;
   }
 
   /**
@@ -103,9 +124,22 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
           ForegroundNotificationOptions.parseArguments(
               (Map<String, Object>) map.get("foregroundNotificationConfig"));
     }
-    foregroundLocationService.startLocationService(forceLocationManager, locationOptions, events);
     if (foregroundNotificationOptions != null) {
+      Log.e(TAG, "Geolocator position updates started using Android foreground service");
+      foregroundLocationService.startLocationService(forceLocationManager, locationOptions, events);
       foregroundLocationService.enableBackgroundMode(foregroundNotificationOptions);
+    } else {
+      Log.e(TAG, "Geolocator position updates started");
+      locationClient =
+          geolocationManager.createLocationClient(
+              context, Boolean.TRUE.equals(forceLocationManager), locationOptions);
+
+      geolocationManager.startPositionUpdates(
+          locationClient,
+          activity,
+          (Location location) -> events.success(LocationMapper.toHashMap(location)),
+          (ErrorCodes errorCodes) ->
+              events.error(errorCodes.toString(), errorCodes.toDescription(), null));
     }
   }
 
@@ -115,9 +149,14 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   }
 
   private void disposeListeners() {
+    Log.e(TAG, "Geolocator position updates stopped");
     if (foregroundLocationService != null) {
       foregroundLocationService.stopLocationService();
       foregroundLocationService.disableBackgroundMode();
+    }
+    if (locationClient != null && geolocationManager != null) {
+      geolocationManager.stopPositionUpdates(locationClient);
+      locationClient = null;
     }
   }
 }

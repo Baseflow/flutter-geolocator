@@ -17,13 +17,14 @@ import com.google.android.gms.location.*;
 import java.util.Random;
 
 class FusedLocationClient implements LocationClient {
+    private static final String TAG = "FlutterGeolocator";
+
   private final Context context;
   private final LocationCallback locationCallback;
   private final FusedLocationProviderClient fusedLocationProviderClient;
   private final int activityRequestCode;
   @Nullable private final LocationOptions locationOptions;
 
-  @Nullable private Activity activity;
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PositionChangedCallback positionChangedCallback;
 
@@ -39,7 +40,7 @@ class FusedLocationClient implements LocationClient {
           public synchronized void onLocationResult(LocationResult locationResult) {
             if (locationResult == null || positionChangedCallback == null) {
               Log.e(
-                  "Geolocator",
+                      TAG,
                   "LocationCallback was called with empty locationResult or no positionChangedCallback was registered.");
               fusedLocationProviderClient.removeLocationUpdates(locationCallback);
               if (errorCallback != null) {
@@ -140,7 +141,6 @@ class FusedLocationClient implements LocationClient {
       @NonNull PositionChangedCallback positionChangedCallback,
       @NonNull ErrorCallback errorCallback) {
 
-    this.activity = activity;
     this.positionChangedCallback = positionChangedCallback;
     this.errorCallback = errorCallback;
 
