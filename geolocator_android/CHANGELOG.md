@@ -1,3 +1,7 @@
+## 3.1.4
+
+- Fixes support for retrieving the position stream in the absence of an Android activity.
+
 ## 3.1.3
 
 - Fixes a bug introduced in 3.1.2 where unregistering the status location receiver throws an IllegalArgumentException.
