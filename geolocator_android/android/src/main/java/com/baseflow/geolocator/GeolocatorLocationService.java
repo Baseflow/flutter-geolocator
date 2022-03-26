@@ -12,6 +12,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.errors.ErrorCodes;
@@ -30,11 +31,9 @@ public class GeolocatorLocationService extends Service {
   private static final String CHANNEL_ID = "geolocator_channel_01";
   private final String WAKELOCK_TAG = "GeolocatorLocationService:Wakelock";
   private final String WIFILOCK_TAG = "GeolocatorLocationService:WifiLock";
-
+  @Nullable private final LocalBinder binder = new LocalBinder(this);
   // Service is foreground
   private boolean isForeground = false;
-
-  @Nullable private final LocalBinder binder = new LocalBinder(this);
   @Nullable private Activity activity = null;
   @Nullable private GeolocationManager geolocationManager = null;
   @Nullable private LocationClient locationClient;
@@ -51,6 +50,11 @@ public class GeolocatorLocationService extends Service {
     geolocationManager = new GeolocationManager();
   }
 
+  @Override
+  public int onStartCommand(Intent intent, int flags, int startId) {
+    return START_STICKY;
+  }
+
   @Nullable
   @Override
   public IBinder onBind(Intent intent) {
@@ -61,7 +65,7 @@ public class GeolocatorLocationService extends Service {
 
   @Override
   public boolean onUnbind(Intent intent) {
-    Log.d(TAG, "Binding to location service.");
+    Log.d(TAG, "Unbinding from location service.");
     return super.onUnbind(intent);
   }
 
@@ -74,6 +78,7 @@ public class GeolocatorLocationService extends Service {
     geolocationManager = null;
     backgroundNotification = null;
 
+    Log.d(TAG, "Destroyed location service.");
     super.onDestroy();
   }
 
