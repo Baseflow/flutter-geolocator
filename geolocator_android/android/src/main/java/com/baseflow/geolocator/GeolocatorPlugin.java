@@ -91,8 +91,8 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
     LocationServiceHandlerImpl locationServiceHandler = new LocationServiceHandlerImpl();
     locationServiceHandler.startListening(registrar.context(), registrar.messenger());
-    locationServiceHandler.setContext(registrar.activity());
-    geolocatorPlugin.bindForegroundService(registrar.activity());
+    locationServiceHandler.setContext(registrar.activeContext());
+    geolocatorPlugin.bindForegroundService(registrar.activeContext());
   }
 
   @Override
