@@ -19,7 +19,6 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
   private static final String TAG = "LocationServiceHandler";
 
   @Nullable private EventChannel channel;
-  @Nullable private Activity activity;
   @Nullable private Context context;
   @Nullable private LocationServiceStatusReceiver receiver;
 
@@ -43,20 +42,20 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
     channel = null;
   }
 
-  void setActivity(@Nullable Activity activity) {
-    this.activity = activity;
+  void setContext(@Nullable Context context) {
+    this.context = context;
   }
 
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {
-    if (activity == null) {
+    if (context == null) {
       return;
     }
 
     IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
     filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
     receiver = new LocationServiceStatusReceiver(events);
-    activity.registerReceiver(receiver, filter);
+    context.registerReceiver(receiver, filter);
   }
 
   @Override
@@ -66,8 +65,8 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
   }
 
   private void disposeListeners() {
-    if (activity != null && receiver != null) {
-      activity.unregisterReceiver(receiver);
+    if (context != null && receiver != null) {
+      context.unregisterReceiver(receiver);
     }
   }
 }
