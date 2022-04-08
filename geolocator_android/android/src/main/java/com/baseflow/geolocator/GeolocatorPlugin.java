@@ -37,7 +37,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
           Log.d(TAG, "Geolocator foreground service connected");
-          initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
+          if (service instanceof GeolocatorLocationService.LocalBinder) {
+              initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
+          }
         }
 
         @Override
