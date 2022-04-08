@@ -1,3 +1,7 @@
+## 3.1.5
+
+- Fixes potential cast exceptions when connecting to the location service.
+
 ## 3.1.4
 
 - Fixes support for retrieving the position stream in the absence of an Android activity.
