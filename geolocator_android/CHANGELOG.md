@@ -1,3 +1,8 @@
+## 3.2.0
+
+- Adds support for receiving NMEA messages in position stream updates.
+- Adds support for getting altitude reported as height above MSL.
+
 ## 3.1.6
 
 * Switches to a package-internal implementation of the platform interface.
