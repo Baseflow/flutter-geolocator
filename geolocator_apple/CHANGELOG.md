@@ -1,3 +1,7 @@
+## 2.1.2
+
+- Switches to a package-internal implementation of the platform interface.
+
 ## 2.1.1+1
 
 - Resolves issue with symbolic links in 2.1.1 version.

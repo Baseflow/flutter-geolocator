@@ -1,6 +1,6 @@
 ## 3.1.6
 
-* Switches to a package-internal implementation of the platform interface.
+- Switches to a package-internal implementation of the platform interface.
 
 ## 3.1.5
 
