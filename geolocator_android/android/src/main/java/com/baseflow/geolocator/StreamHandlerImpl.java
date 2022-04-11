@@ -65,7 +65,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       stopListening();
     }
 
-    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_updates");
+    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_updates_android");
     channel.setStreamHandler(this);
     this.context = context;
   }
