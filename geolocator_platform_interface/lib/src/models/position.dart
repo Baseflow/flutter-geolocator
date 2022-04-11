@@ -17,7 +17,6 @@ class Position {
     required this.speedAccuracy,
     this.floor,
     this.isMocked = false,
-    this.nmeaMessage,
   });
 
   /// The latitude of this position in degrees normalized to the interval -90.0
@@ -75,10 +74,6 @@ class Position {
   /// On iOS this value will always be false.
   final bool isMocked;
 
-  /// Provides the latest nmeaMessage received from the platform if requested
-  /// and the platform is capable of providing nmeaMessages.
-  final String? nmeaMessage;
-
   @override
   bool operator ==(Object other) {
     var areEqual = other is Position &&
@@ -91,8 +86,7 @@ class Position {
         other.speed == speed &&
         other.speedAccuracy == speedAccuracy &&
         other.timestamp == timestamp &&
-        other.isMocked == isMocked &&
-        other.nmeaMessage == nmeaMessage;
+        other.isMocked == isMocked;
 
     return areEqual;
   }
@@ -108,8 +102,7 @@ class Position {
       speed.hashCode ^
       speedAccuracy.hashCode ^
       timestamp.hashCode ^
-      isMocked.hashCode ^
-      nmeaMessage.hashCode;
+      isMocked.hashCode;
 
   @override
   String toString() {
@@ -146,7 +139,6 @@ class Position {
       speed: positionMap['speed'] ?? 0.0,
       speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
       isMocked: positionMap['is_mocked'] ?? false,
-      nmeaMessage: positionMap['nmeaMessage'],
     );
   }
 
@@ -163,6 +155,5 @@ class Position {
         'speed': speed,
         'speed_accuracy': speedAccuracy,
         'is_mocked': isMocked,
-        'nmeaMessage': nmeaMessage,
       };
 }
