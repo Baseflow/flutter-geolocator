@@ -1,12 +1,12 @@
 name: geolocator_android
 description: Geolocation plugin for Flutter. This plugin provides the Android implementation for the geolocator.
-version: 3.1.5
+version: 3.1.6
 repository: https://github.com/Baseflow/flutter-geolocator/tree/master/geolocator_android
 issue_tracker: https://github.com/Baseflow/flutter-geolocator/issues?q=is%3Aissue+is%3Aopen
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.20.0"
+  flutter: ">=2.0.8"
 
 flutter:
   plugin:
@@ -14,13 +14,15 @@ flutter:
       android:
         package: com.baseflow.geolocator
         pluginClass: GeolocatorPlugin
+        dartPluginClass: GeolocatorAndroid
 
 dependencies:
   flutter:
     sdk: flutter
-  geolocator_platform_interface: ^4.0.3
+  geolocator_platform_interface: ^4.0.4
   
 dev_dependencies:
+  async: ^2.9.0
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.4

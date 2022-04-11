@@ -100,7 +100,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       stopListening();
     }
 
-    channel = new MethodChannel(messenger, "flutter.baseflow.com/geolocator");
+    channel = new MethodChannel(messenger, "flutter.baseflow.com/geolocator_android");
     channel.setMethodCallHandler(this);
     this.context = context;
   }

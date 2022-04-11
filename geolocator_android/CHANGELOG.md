@@ -1,3 +1,7 @@
+## 3.1.6
+
+* Switches to a package-internal implementation of the platform interface.
+
 ## 3.1.5
 
 - Fixes potential cast exceptions when connecting to the location service.
