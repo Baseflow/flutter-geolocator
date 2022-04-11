@@ -28,13 +28,13 @@
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel *methodChannel = [FlutterMethodChannel
-                                         methodChannelWithName:@"flutter.baseflow.com/geolocator"
+                                         methodChannelWithName:@"flutter.baseflow.com/geolocator_apple"
                                          binaryMessenger:registrar.messenger];
   FlutterEventChannel *positionUpdatesEventChannel = [FlutterEventChannel
-                                                      eventChannelWithName:@"flutter.baseflow.com/geolocator_updates"
+                                                      eventChannelWithName:@"flutter.baseflow.com/geolocator_updates_apple"
                                                       binaryMessenger:registrar.messenger];
   
-  FlutterEventChannel *locationServiceUpdatesEventChannel = [FlutterEventChannel eventChannelWithName:@"flutter.baseflow.com/geolocator_service_updates" binaryMessenger:registrar.messenger];
+  FlutterEventChannel *locationServiceUpdatesEventChannel = [FlutterEventChannel eventChannelWithName:@"flutter.baseflow.com/geolocator_service_updates_apple" binaryMessenger:registrar.messenger];
   
   GeolocatorPlugin *instance = [[GeolocatorPlugin alloc] init];
   [registrar addMethodCallDelegate:instance channel:methodChannel];
