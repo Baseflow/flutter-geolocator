@@ -150,8 +150,7 @@ void main() {
         };
 
         // Act
-        final accuracy =
-            await GeolocatorAndroid().requestTemporaryFullAccuracy(
+        final accuracy = await GeolocatorAndroid().requestTemporaryFullAccuracy(
           purposeKey: 'purposeKeyValue',
         );
 
@@ -1100,7 +1099,8 @@ void main() {
         // Arrange
         final streamController = StreamController<int>.broadcast();
         EventChannelMock(
-            channelName: 'flutter.baseflow.com/geolocator_service_updates_android',
+            channelName:
+                'flutter.baseflow.com/geolocator_service_updates_android',
             stream: streamController.stream);
 
         // Act
@@ -1129,13 +1129,13 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/geolocator_service_updates_android',
+          channelName:
+              'flutter.baseflow.com/geolocator_service_updates_android',
           stream: streamController.stream,
         );
 
         // Act
-        final positionStream =
-            GeolocatorAndroid().getServiceStatusStream();
+        final positionStream = GeolocatorAndroid().getServiceStatusStream();
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test error
