@@ -286,8 +286,10 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     if (_positionStreamSubscription == null) {
       final androidSettings = AndroidSettings(
         accuracy: LocationAccuracy.best,
-        distanceFilter: 10,
         forceLocationManager: false,
+        includeNmeaMessages: true,
+        useMSLAltitude: false,
+        intervalDuration: const Duration(seconds: 1),
         foregroundNotificationConfig: const ForegroundNotificationConfig(
           notificationText:
               "Example app will continue to receive your location even when you aren't using it",
@@ -303,10 +305,13 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
-      }).listen((position) => _updatePositionList(
-            _PositionItemType.position,
-            position.toString(),
-          ));
+      }).listen((position) {
+        _updatePositionList(
+          _PositionItemType.position,
+          position.toString(),
+        );
+        print('NMEA Message: ${position.nmeaMessage}');
+      });
       _positionStreamSubscription?.pause();
     }
 

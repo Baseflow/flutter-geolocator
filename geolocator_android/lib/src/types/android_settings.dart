@@ -16,6 +16,8 @@ class AndroidSettings extends LocationSettings {
     this.intervalDuration,
     Duration? timeLimit,
     this.foregroundNotificationConfig,
+    this.includeNmeaMessages = false,
+    this.useMSLAltitude = false,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
@@ -32,6 +34,23 @@ class AndroidSettings extends LocationSettings {
   /// set this property to true.
   final bool forceLocationManager;
 
+  /// Set to true to include NMEA messages with position updates.
+  ///
+  /// NMEA messages are only available starting from Android N
+  final bool includeNmeaMessages;
+
+  /// Set to true if altitude should be calculated as MSL (EGM2008) from NMEA message
+  /// and reported as the altitude instead of using the geoidal height (WSG84). Setting
+  /// this property true will help to align Android altitude to that of iOS which uses MSL.
+  ///
+  /// Setting this option to true will also set includeNmeaMessages to true. To determine
+  /// if NMEA was used to calculate the altitude you should check for the presence of the
+  /// NMEA message in the position update. If the NMEA message is empty then the altitude reported
+  /// will be the standard WSG84 altitude from the GPS receiver.
+  ///
+  /// MSL Altitude is only available starting from Android N.
+  final bool useMSLAltitude;
+
   /// The desired interval for active location updates.
   ///
   /// If this value is `null` an interval duration of 5000ms is applied.
@@ -47,6 +66,8 @@ class AndroidSettings extends LocationSettings {
       ..addAll({
         'forceLocationManager': forceLocationManager,
         'timeInterval': intervalDuration?.inMilliseconds,
+        'includeNmeaMessages': includeNmeaMessages,
+        'useMSLAltitude': useMSLAltitude,
         'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
       });
   }

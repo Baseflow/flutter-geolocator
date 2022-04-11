@@ -34,6 +34,18 @@ public class LocationMapper {
       position.put("is_mocked", false);
     }
 
+    if(location.getExtras() != null) {
+        String nmeaMessage = location.getExtras().getString(NmeaClient.NMEA_MESSAGE_EXTRA);
+
+        if(nmeaMessage != null) {
+            position.put("nmeaMessage", nmeaMessage);
+        }
+        if(location.getExtras().containsKey(NmeaClient.NMEA_ALTITUDE_EXTRA)) {
+            Double mslAltitude = location.getExtras().getDouble(NmeaClient.NMEA_ALTITUDE_EXTRA);
+            position.put("altitude", mslAltitude);
+        }
+    }
+
     return position;
   }
 }
