@@ -27,7 +27,7 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
       Log.w(TAG, "Setting a event call handler before the last was disposed.");
       stopListening();
     }
-    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_service_updates");
+    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_service_updates_android");
     channel.setStreamHandler(this);
     this.context = context;
   }
