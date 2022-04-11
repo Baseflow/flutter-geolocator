@@ -38,7 +38,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         public void onServiceConnected(ComponentName name, IBinder service) {
           Log.d(TAG, "Geolocator foreground service connected");
           if (service instanceof GeolocatorLocationService.LocalBinder) {
-              initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
+            initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
           }
         }
 
@@ -51,6 +51,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
           }
         }
       };
+  @Nullable private NmeaStreamHandlerImpl nmeaStreamHandlerImpl;
   @Nullable private LocationServiceHandlerImpl locationServiceHandler;
 
   @SuppressWarnings("deprecation")
@@ -106,6 +107,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
     streamHandler = new StreamHandlerImpl(this.permissionManager);
     streamHandler.startListening(
+        flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
+
+    nmeaStreamHandlerImpl = new NmeaStreamHandlerImpl();
+    nmeaStreamHandlerImpl.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
 
     locationServiceHandler = new LocationServiceHandlerImpl();
@@ -215,6 +220,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       streamHandler.stopListening();
       streamHandler.setForegroundLocationService(null);
       streamHandler = null;
+    }
+
+    if (nmeaStreamHandlerImpl != null) {
+      nmeaStreamHandlerImpl.stopListening();
     }
     if (locationServiceHandler != null) {
       locationServiceHandler.setContext(null);

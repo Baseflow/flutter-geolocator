@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:geolocator_android/src/types/NMEAMessage.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
@@ -19,6 +20,11 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   static const _serviceStatusEventChannel =
       EventChannel('flutter.baseflow.com/geolocator_service_updates_android');
 
+  /// The event channel used to receive [LocationServiceStatus] updates from the
+  /// native platform.
+  static const _nmeaEventChannel =
+  EventChannel('flutter.baseflow.com/geolocator_nmea_updates_android');
+
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith() {
     GeolocatorPlatform.instance = GeolocatorAndroid();
@@ -32,6 +38,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
 
   Stream<Position>? _positionStream;
   Stream<ServiceStatus>? _serviceStatusStream;
+  Stream<NMEAMessage>? _nmeaMessagesStream;
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -146,6 +153,26 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     });
 
     return _serviceStatusStream!;
+  }
+
+  Stream<NMEAMessage> getNmeaMessagesStream() {
+    if (_nmeaMessagesStream != null) {
+      return _nmeaMessagesStream!;
+    }
+    var nmeaMessagesStream =
+    _nmeaEventChannel.receiveBroadcastStream();
+
+    _nmeaMessagesStream = nmeaMessagesStream
+        .map((dynamic element) => NMEAMessage.fromMap(element.cast<String, dynamic>()))
+        .handleError((error) {
+      _nmeaMessagesStream = null;
+      if (error is PlatformException) {
+        error = _handlePlatformException(error);
+      }
+      throw error;
+    });
+
+    return _nmeaMessagesStream!;
   }
 
   @override

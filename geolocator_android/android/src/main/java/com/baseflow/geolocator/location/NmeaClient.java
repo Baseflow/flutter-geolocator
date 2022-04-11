@@ -16,13 +16,14 @@ public class NmeaClient {
   public static final String NMEA_MESSAGE_EXTRA = "geolocator_nmeaMessage";
   public static final String NMEA_ALTITUDE_EXTRA = "geolocator_mslAltitude";
 
-  private final Context context;
-  private final LocationManager locationManager;
+  @NonNull private final Context context;
+  @Nullable private final LocationManager locationManager;
 
   @TargetApi(Build.VERSION_CODES.N)
-  private OnNmeaMessageListener nmeaMessageListener;
+  @NonNull private OnNmeaMessageListener nmeaMessageListener;
 
-  private String lastNmeaMessage;
+  @Nullable private NMEACallback callback;
+  @Nullable private String lastNmeaMessage;
   private boolean listenerAdded = false;
 
   public NmeaClient(@NonNull Context context) {
@@ -34,6 +35,9 @@ public class NmeaClient {
           (message, timestamp) -> {
             if (message.startsWith("$")) {
               lastNmeaMessage = message;
+            }
+            if(callback != null) {
+                callback.onMessage(message);
             }
           };
     }
@@ -48,6 +52,13 @@ public class NmeaClient {
       locationManager.addNmeaListener(nmeaMessageListener, null);
       listenerAdded = true;
     }
+  }
+
+  public void setCallback(NMEACallback callback) {
+      if(this.callback != null) {
+          throw new IllegalArgumentException("A callback has already been registered");
+      }
+      this.callback = callback;
   }
 
   public void stop() {

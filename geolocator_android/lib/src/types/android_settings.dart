@@ -9,6 +9,8 @@ class AndroidSettings extends LocationSettings {
   ///
   /// The following default values are used:
   /// - forceLocationManager: false
+  /// - accuracy: best
+  /// - useMSLAltitude: false
   AndroidSettings({
     this.forceLocationManager = false,
     LocationAccuracy accuracy = LocationAccuracy.best,
