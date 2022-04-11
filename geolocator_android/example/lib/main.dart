@@ -287,7 +287,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       final androidSettings = AndroidSettings(
         accuracy: LocationAccuracy.best,
         forceLocationManager: false,
-        includeNmeaMessages: true,
         useMSLAltitude: false,
         intervalDuration: const Duration(seconds: 1),
         foregroundNotificationConfig: const ForegroundNotificationConfig(
@@ -310,7 +309,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           _PositionItemType.position,
           position.toString(),
         );
-        print('NMEA Message: ${position.nmeaMessage}');
       });
       _positionStreamSubscription?.pause();
     }

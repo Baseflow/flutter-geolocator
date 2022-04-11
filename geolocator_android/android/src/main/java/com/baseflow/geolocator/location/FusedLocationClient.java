@@ -47,7 +47,7 @@ class FusedLocationClient implements LocationClient {
     this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     this.locationOptions = locationOptions;
     this.activityRequestCode = generateActivityRequestCode();
-    this.nmeaClient = new NmeaClient(context, locationOptions);
+    this.nmeaClient = new NmeaClient(context);
 
     locationCallback =
         new LocationCallback() {
@@ -122,7 +122,9 @@ class FusedLocationClient implements LocationClient {
 
   @SuppressLint("MissingPermission")
   private void requestPositionUpdates(LocationOptions locationOptions) {
-    this.nmeaClient.start();
+    if (locationOptions != null && locationOptions.getUseMSLAltitude()) {
+      this.nmeaClient.start();
+    }
     LocationRequest locationRequest = buildLocationRequest(locationOptions);
     fusedLocationProviderClient.requestLocationUpdates(
         locationRequest, locationCallback, Looper.getMainLooper());

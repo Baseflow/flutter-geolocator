@@ -38,7 +38,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     this.locationOptions = locationOptions;
     this.context = context;
-    this.nmeaClient = new NmeaClient(context, locationOptions);
+    this.nmeaClient = new NmeaClient(context);
   }
 
   static boolean isBetterLocation(Location location, Location bestLocation) {
@@ -195,7 +195,9 @@ class LocationManagerClient implements LocationClient, LocationListener {
 
     this.isListening = true;
 
-    this.nmeaClient.start();
+    if (locationOptions != null && locationOptions.getUseMSLAltitude()) {
+      this.nmeaClient.start();
+    }
     this.locationManager.requestLocationUpdates(
         this.currentLocationProvider, timeInterval, distanceFilter, this, Looper.getMainLooper());
   }

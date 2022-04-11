@@ -6,7 +6,6 @@ public class LocationOptions {
   private final LocationAccuracy accuracy;
   private final long distanceFilter;
   private final long timeInterval;
-  private final boolean includeNmeaMessages;
   private final boolean useMSLAltitude;
 
   private LocationOptions(
@@ -18,7 +17,6 @@ public class LocationOptions {
     this.accuracy = accuracy;
     this.distanceFilter = distanceFilter;
     this.timeInterval = timeInterval;
-    this.includeNmeaMessages = includeNmeaMessages;
     this.useMSLAltitude = useMSLAltitude;
   }
 
@@ -83,10 +81,6 @@ public class LocationOptions {
 
   public long getTimeInterval() {
     return timeInterval;
-  }
-
-  public boolean getIncludeNmeaMessages() {
-    return includeNmeaMessages;
   }
 
   public boolean getUseMSLAltitude() {
