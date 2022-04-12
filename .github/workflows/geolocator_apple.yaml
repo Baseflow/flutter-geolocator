@@ -6,11 +6,11 @@ name: geolocator_apple
 # events but only for the develop branch
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
     - 'geolocator_apple/**'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths:
     - 'geolocator_apple/**'
 
