@@ -6,11 +6,11 @@ name: geolocator_android
 # events but only for the develop branch
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
     - 'geolocator_android/**'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths:
     - 'geolocator_android/**'
 
@@ -108,3 +108,38 @@ jobs:
       - name: Run Android build
         run: flutter build apk --release
         working-directory: ${{env.example-directory}}
+
+  tests:
+    name: Unit-tests
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    env:
+      source-directory: ./geolocator_android
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      # Make sure the stable version of Flutter is available
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+
+      # Download all Flutter packages
+      - name: Download dependencies
+        run: flutter pub get
+        working-directory: ${{env.source-directory}}
+      
+      # Run all unit-tests with code coverage
+      - name: Run unit tests
+        run: flutter test --coverage
+        working-directory: ${{env.source-directory}}
+
+      # Upload code coverage information
+      - uses: codecov/codecov-action@v1
+        with:
+          file: ${{env.source-directory}}/coverage/lcov.info # optional
+          name: Geolocator (App Facing Package) # optional
+          fail_ci_if_error: true
