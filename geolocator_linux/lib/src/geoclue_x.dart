@@ -27,3 +27,24 @@ extension GeoCluePosition on GeoClueLocation {
     );
   }
 }
+
+extension GeoClueLocationAccuracy on LocationAccuracy {
+  GeoClueAccuracyLevel toGeoClueAccuracyLevel() {
+    switch (this) {
+      case LocationAccuracy.reduced:
+      case LocationAccuracy.lowest:
+        return GeoClueAccuracyLevel.country;
+      case LocationAccuracy.low:
+        return GeoClueAccuracyLevel.city;
+      case LocationAccuracy.medium:
+        return GeoClueAccuracyLevel.neighborhood;
+      case LocationAccuracy.high:
+        return GeoClueAccuracyLevel.street;
+      case LocationAccuracy.best:
+      case LocationAccuracy.bestForNavigation:
+        return GeoClueAccuracyLevel.exact;
+      default:
+        return GeoClueAccuracyLevel.none;
+    }
+  }
+}

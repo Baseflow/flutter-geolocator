@@ -22,6 +22,20 @@ class GeolocatorLinux extends GeolocatorPlatform {
   }
 
   @override
+  Future<bool> isLocationServiceEnabled() async {
+    //TODO: Check if GeoClue D-Bus service is running.
+    return Future.value(true);
+  }
+
+  @override
+  Future<Position?> getLastKnownPosition({
+    bool forceLocationManager = false,
+  }) async {
+    var client = await _manager.getClient();
+    return client.location?.toPosition();
+  }
+
+  @override
   Future<Position> getCurrentPosition({
     LocationSettings? locationSettings,
   }) async {
@@ -29,6 +43,9 @@ class GeolocatorLinux extends GeolocatorPlatform {
     return GeoClue.getLocation(
       manager: _manager,
       desktopId: _packageInfo!.appName,
+      accuracyLevel: locationSettings?.accuracy.toGeoClueAccuracyLevel(),
+      distanceThreshold: locationSettings?.distanceFilter,
+      timeThreshold: locationSettings?.timeLimit?.inSeconds,
     ).then((location) => location.toPosition());
   }
 
@@ -47,6 +64,9 @@ class GeolocatorLinux extends GeolocatorPlatform {
     yield* GeoClue.getLocationUpdates(
       manager: _manager,
       desktopId: _packageInfo!.appName,
+      accuracyLevel: locationSettings?.accuracy.toGeoClueAccuracyLevel(),
+      distanceThreshold: locationSettings?.distanceFilter,
+      timeThreshold: locationSettings?.timeLimit?.inSeconds,
     ).map((location) => location.toPosition());
   }
 }
