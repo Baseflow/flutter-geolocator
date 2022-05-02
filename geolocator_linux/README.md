@@ -6,9 +6,16 @@ The official Linux implementation of the [geolocator](https://pub.dev/packages/g
 
 ## Usage
 
-Since version M.N.0 of the [geolocator](https://pub.dev/packages/geolocator) plugin this is the endorsed Linux implementation. This means it will automatically be added to your dependencies when you depend on `geolocator: ^M.N.0` in your applications pubspec.yaml.
+The [geolocator_linux](https://pub.dev/packages/geolocator_linux) package is currently available as beta version and therefore not yet fully endorsed by the [geolocator](https://pub.dev/packages/geolocator) package.
 
-More detailed instructions on using the API can be found in the [README.md](../geolocator/README.md) of the [geolocator](https://pub.dev/packages/geolocator) package.
+To add Linux support to the [geolocator](https://pub.dev/packages/geolocator) simply add the [geolocator_linux](https://pub.dev/packages/geolocator_linux) package as an additional dependency to the `pubspec.yaml` file of your app:
+
+```yaml
+dependencies:
+  ...
+  geolocator: ^8.2.0
+  geolocator_linux: ^0.1.0
+```
 
 ## Issues
 
