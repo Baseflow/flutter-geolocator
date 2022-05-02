@@ -34,6 +34,11 @@ jobs:
         with:
           channel: 'stable'
 
+      # Enable Flutter Linux Desktop support (not on by default in stable yet)
+      - name: Enable Flutter Linux Desktop support
+        run: flutter config --enable-linux-desktop
+        working-directory: ${{env.source-directory}}
+
       # Download all Flutter packages
       - name: Download dependencies
         run: flutter pub get
