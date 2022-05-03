@@ -1,3 +1,7 @@
+## 3.1.7
+
+- Ensures that when Google mobile services are globally excluded as a dependency to automatically fallback to the Android LocationManager.
+
 ## 3.1.6
 
 - Switches to a package-internal implementation of the platform interface.
