@@ -74,9 +74,17 @@ public class GeolocationManager
   }
 
   private boolean isGooglePlayServicesAvailable(Context context) {
-    GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-    int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
-    return resultCode == ConnectionResult.SUCCESS;
+    try {
+      GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+      int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
+      return resultCode == ConnectionResult.SUCCESS;
+    }
+    // If the Google API class is not available conclude that the play services
+    // are unavailable. This might happen when the GMS package has been excluded by
+    // the app developer due to its proprietary license.
+    catch(NoClassDefFoundError e) {
+      return false;
+    }
   }
 
   @Override
