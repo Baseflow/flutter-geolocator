@@ -1,3 +1,7 @@
+## 8.2.1
+
+- Fixes repository URL of the package.
+
 ## 8.2.0
 
 - Adds support to make a foreground service on Android and continue processing location updates when the application is moved into the background.
