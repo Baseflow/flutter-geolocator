@@ -1,6 +1,9 @@
-## 3.1.7
+## 3.1.8
 
 - Ensures that when Google mobile services are globally excluded as a dependency to automatically fallback to the Android LocationManager.
+
+## 3.1.7
+
 - Fixes repository URL of the package.
 
 ## 3.1.6
