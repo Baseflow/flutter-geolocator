@@ -1,3 +1,7 @@
+## 4.0.5
+
+- Fixes repository URL of the package.
+
 ## 4.0.4
 
 - Fixes a bug where listening to the position stream immediately after an error, results in listening to a dead stream. 

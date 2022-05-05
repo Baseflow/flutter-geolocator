@@ -1,3 +1,7 @@
+## 3.1.7
+
+- Fixes repository URL of the package.
+
 ## 3.1.6
 
 - Switches to a package-internal implementation of the platform interface.

@@ -1,3 +1,7 @@
+## 2.1.3
+
+- Fixes repository URL of the package.
+
 ## 2.1.2
 
 - Switches to a package-internal implementation of the platform interface.
