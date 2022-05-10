@@ -294,6 +294,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         accuracy: LocationAccuracy.best,
         distanceFilter: 10,
         forceLocationManager: false,
+        useMSLAltitude: true,
         foregroundNotificationConfig: const ForegroundNotificationConfig(
           notificationText:
               "Example app will continue to receive your location even when you aren't using it",
