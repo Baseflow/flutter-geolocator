@@ -714,7 +714,8 @@ void main() {
           stream: streamController.stream,
         );
 
-        var stream = GeolocatorAndroid().getPositionStream(locationSettings: AndroidSettings(useMSLAltitude: false));
+        var stream = GeolocatorAndroid().getPositionStream(
+            locationSettings: AndroidSettings(useMSLAltitude: false));
         StreamSubscription<Position>? streamSubscription =
             stream.listen((event) {});
 
@@ -766,7 +767,8 @@ void main() {
         );
 
         // Act
-        final positionStream = GeolocatorAndroid().getPositionStream(locationSettings: AndroidSettings(useMSLAltitude: false));
+        final positionStream = GeolocatorAndroid().getPositionStream(
+            locationSettings: AndroidSettings(useMSLAltitude: false));
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test events
@@ -1243,26 +1245,23 @@ void main() {
     });
 
     group('jsonSerialization: When serializing to json', () {
-      test('Should produce valid map with all the settings when calling toJson', () async {
+      test('Should produce valid map with all the settings when calling toJson',
+          () async {
         // Arrange
         final settings = AndroidSettings(
-          accuracy: LocationAccuracy.best,
-          distanceFilter: 5,
-          forceLocationManager: false,
-          intervalDuration: const Duration(seconds: 1),
-          timeLimit: const Duration(seconds: 1),
-          useMSLAltitude: false,
-          foregroundNotificationConfig: const ForegroundNotificationConfig(
-            notificationText: 'text',
-            notificationTitle: 'title',
-            enableWakeLock: false,
-            enableWifiLock: false,
-            notificationIcon: AndroidResource(
-              name: 'name',
-              defType: 'defType'
-            )
-          )
-        );
+            accuracy: LocationAccuracy.best,
+            distanceFilter: 5,
+            forceLocationManager: false,
+            intervalDuration: const Duration(seconds: 1),
+            timeLimit: const Duration(seconds: 1),
+            useMSLAltitude: false,
+            foregroundNotificationConfig: const ForegroundNotificationConfig(
+                notificationText: 'text',
+                notificationTitle: 'title',
+                enableWakeLock: false,
+                enableWifiLock: false,
+                notificationIcon:
+                    AndroidResource(name: 'name', defType: 'defType')));
 
         // Act
         final jsonMap = settings.toJson();
@@ -1300,7 +1299,7 @@ void main() {
 
         // Act
         final hasOpenedLocationSettings =
-        await GeolocatorAndroid().openLocationSettings();
+            await GeolocatorAndroid().openLocationSettings();
 
         // Assert
         expect(
