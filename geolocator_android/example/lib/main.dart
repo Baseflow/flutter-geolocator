@@ -293,6 +293,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       final androidSettings = AndroidSettings(
         accuracy: LocationAccuracy.best,
         distanceFilter: 10,
+        intervalDuration: const Duration(seconds: 1),
         forceLocationManager: false,
         useMSLAltitude: true,
         foregroundNotificationConfig: const ForegroundNotificationConfig(
@@ -310,10 +311,13 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
-      }).listen((position) => _updatePositionList(
-            _PositionItemType.position,
-            position.toString(),
-          ));
+      }).listen((position) {
+        debugPrint(position.altitude.toString());
+        _updatePositionList(
+          _PositionItemType.position,
+          position.toString(),
+        );
+      });
       _positionStreamSubscription?.pause();
     }
 

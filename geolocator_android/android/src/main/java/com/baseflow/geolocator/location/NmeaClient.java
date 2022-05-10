@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class NmeaClient {
 
@@ -38,7 +37,7 @@ public class NmeaClient {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       nmeaMessageListener =
           (message, timestamp) -> {
-            if (message.startsWith("$")) {
+            if (message.startsWith("$GPGGA")) {
               lastNmeaMessage = message;
               lastNmeaMessageTime = Calendar.getInstance();
             }
@@ -77,11 +76,11 @@ public class NmeaClient {
 
     if (lastNmeaMessage != null && locationOptions != null && listenerAdded) {
 
-        Calendar expiryDate = Calendar.getInstance();
-        expiryDate.add(Calendar.SECOND, -5);
+      Calendar expiryDate = Calendar.getInstance();
+      expiryDate.add(Calendar.SECOND, -5);
       if (lastNmeaMessageTime != null && lastNmeaMessageTime.before(expiryDate)) {
-          // do not use MSL for old altitude values
-          return;
+        // do not use MSL for old altitude values
+        return;
       }
 
       if (locationOptions.isUseMSLAltitude()) {

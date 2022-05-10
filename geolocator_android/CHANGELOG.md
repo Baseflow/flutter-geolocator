@@ -25,6 +25,10 @@
 - Removes deprecated `android.enableR8` property from gradle properties.
 - Updates the example application to request permissions when start listening to the position stream.
 
+## 3.1.9
+
+- Adds the ability to report altitude as MSL obtained from NMEA messages when available.
+
 ## 3.1.8
 
 - Ensures that when Google mobile services are globally excluded as a dependency to automatically fallback to the Android LocationManager.
