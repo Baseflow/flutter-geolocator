@@ -2,6 +2,38 @@
 
 - Added functionality to receive NMEA messages.
 
+## 3.1.8
+
+- Ensures that when Google mobile services are globally excluded as a dependency to automatically fallback to the Android LocationManager.
+
+## 3.1.7
+
+- Fixes repository URL of the package.
+
+## 3.1.6
+
+- Switches to a package-internal implementation of the platform interface.
+
+## 3.1.5
+
+- Fixes potential cast exceptions when connecting to the location service.
+
+## 3.1.4
+
+- Fixes support for retrieving the position stream in the absence of an Android activity.
+
+## 3.1.3
+
+- Fixes a bug introduced in 3.1.2 where unregistering the status location receiver throws an IllegalArgumentException.
+
+## 3.1.2
+
+- Fixes an issue with the location status service not unregistering the status receiver.
+
+## 3.1.1
+
+- Fixes an issue with the foreground service connection not getting unbound correctly.
+
 ## 3.1.0
 
 - Adds support to make a foreground service and continue processing location updates when the application is moved into the background.

@@ -1,7 +1,10 @@
-
 ## 8.3.0
 
 - Added functionality to receive NMEA messages.
+
+## 8.2.1
+
+- Fixes repository URL of the package.
 
 ## 8.2.0
 

@@ -25,11 +25,21 @@ class AndroidSettings extends LocationSettings {
   /// the FusedLocationProviderClient (Android only).
   ///
   /// Internally the Geolocator will check if Google Play Services are installed
-  /// on the device. If they are not installed the Geolocator plugin will
-  /// automatically switch to the LocationManager implementation. However if you
-  /// want to force the Geolocator plugin to use the LocationManager
-  /// implementation even when the Google Play Services are installed you could
-  /// set this property to true.
+  /// on the device and not excluded as a dependency. If they are not installed
+  /// or excluded as a dependency the Geolocator plugin will automatically
+  /// switch to the LocationManager implementation. However if you want to force
+  /// the Geolocator plugin to use the LocationManager implementation even when
+  /// the Google Play Services are installed you could set this property to
+  /// true.
+  ///
+  /// To exclude Google mobile services from your app (for example because you
+  /// want to publish your app to the F-Droid app store) you can add the
+  /// following code to your `android/app/build.gradle` file:
+  /// ```gradle
+  /// configurations.implementation {
+  ///   exclude group: 'com.google.android.gms'
+  /// }
+  /// ```
   final bool forceLocationManager;
 
   /// The desired interval for active location updates.
