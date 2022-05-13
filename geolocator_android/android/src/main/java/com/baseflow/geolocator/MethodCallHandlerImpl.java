@@ -100,7 +100,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       stopListening();
     }
 
-    channel = new MethodChannel(messenger, "flutter.baseflow.com/geolocator");
+    channel = new MethodChannel(messenger, "flutter.baseflow.com/geolocator_android");
     channel.setMethodCallHandler(this);
     this.context = context;
   }
@@ -126,8 +126,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void onCheckPermission(MethodChannel.Result result) {
     try {
-      LocationPermission permission =
-          this.permissionManager.checkPermissionStatus(context);
+      LocationPermission permission = permissionManager.checkPermissionStatus(context);
       result.success(permission.toInt());
     } catch (PermissionUndefinedException e) {
       ErrorCodes errorCode = ErrorCodes.permissionDefinitionsNotFound;
@@ -142,8 +141,8 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void onRequestPermission(MethodChannel.Result result) {
     try {
-      this.permissionManager.requestPermission(
-          this.activity,
+      permissionManager.requestPermission(
+          activity,
           (LocationPermission permission) -> result.success(permission.toInt()),
           (ErrorCodes errorCode) ->
               result.error(errorCode.toString(), errorCode.toDescription(), null));
@@ -155,7 +154,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   private void getLocationAccuracy(MethodChannel.Result result, Context context) {
     final LocationAccuracyStatus status =
-        this.locationAccuracyManager.getLocationAccuracy(
+        locationAccuracyManager.getLocationAccuracy(
             context,
             (ErrorCodes errorCode) ->
                 result.error(errorCode.toString(), errorCode.toDescription(), null));
@@ -165,20 +164,26 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   }
 
   private void onGetLastKnownPosition(MethodCall call, MethodChannel.Result result) {
-    try{
-        if (!permissionManager.hasPermission(this.context)){
-            result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
-            return;
-        }
-    } catch (PermissionUndefinedException e) {
-        result.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
+    try {
+      if (!permissionManager.hasPermission(context)) {
+        result.error(
+            ErrorCodes.permissionDenied.toString(),
+            ErrorCodes.permissionDenied.toDescription(),
+            null);
         return;
+      }
+    } catch (PermissionUndefinedException e) {
+      result.error(
+          ErrorCodes.permissionDefinitionsNotFound.toString(),
+          ErrorCodes.permissionDefinitionsNotFound.toDescription(),
+          null);
+      return;
     }
 
     Boolean forceLocationManager = call.argument("forceLocationManager");
 
-    this.geolocationManager.getLastKnownPosition(
-        this.context,
+    geolocationManager.getLastKnownPosition(
+        context,
         forceLocationManager != null && forceLocationManager,
         (Location location) -> result.success(LocationMapper.toHashMap(location)),
         (ErrorCodes errorCode) ->
@@ -186,14 +191,20 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   }
 
   private void onGetCurrentPosition(MethodCall call, MethodChannel.Result result) {
-    try{
-      if (!permissionManager.hasPermission(this.context)){
-        result.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
+    try {
+      if (!permissionManager.hasPermission(context)) {
+        result.error(
+            ErrorCodes.permissionDenied.toString(),
+            ErrorCodes.permissionDenied.toDescription(),
+            null);
         return;
       }
     } catch (PermissionUndefinedException e) {
-       result.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
-       return;
+      result.error(
+          ErrorCodes.permissionDefinitionsNotFound.toString(),
+          ErrorCodes.permissionDefinitionsNotFound.toDescription(),
+          null);
+      return;
     }
 
     @SuppressWarnings("unchecked")
@@ -206,12 +217,11 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     final boolean[] replySubmitted = {false};
 
     LocationClient locationClient =
-        geolocationManager.createLocationClient(
-            this.context, forceLocationManager, locationOptions);
+        geolocationManager.createLocationClient(context, forceLocationManager, locationOptions);
 
     geolocationManager.startPositionUpdates(
         locationClient,
-        this.activity,
+        activity,
         (Location location) -> {
           if (replySubmitted[0]) {
             return;

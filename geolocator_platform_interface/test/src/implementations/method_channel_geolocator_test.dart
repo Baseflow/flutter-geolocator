@@ -1028,6 +1028,52 @@ void main() {
         expect(await streamQueue.next, mockPosition);
         expect(streamQueue.next, throwsA(isA<TimeoutException>()));
       });
+
+      test('Should cleanup the previous stream on timeout exception', () async {
+        // Arrange
+        final streamController = StreamController<Map<String, dynamic>>();
+        final retryController = StreamController<Map<String, dynamic>>();
+        late Stream<Position> retryStream;
+
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_updates',
+          stream: streamController.stream,
+        );
+        const locationSettings = LocationSettings(
+          accuracy: LocationAccuracy.low,
+          timeLimit: Duration(milliseconds: 5),
+        );
+
+        final geolocator = MethodChannelGeolocator();
+
+        // Act
+        final positionStream = geolocator.getPositionStream(
+          locationSettings: locationSettings,
+        );
+
+        final subscription = positionStream.listen((event) {});
+
+        // Listen for position changes again on timeout
+        subscription.onError((err) {
+          EventChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator_updates',
+            stream: retryController.stream,
+          );
+          retryStream = geolocator.getPositionStream(
+            locationSettings: locationSettings,
+          );
+        });
+
+        await Future.delayed(const Duration(milliseconds: 5));
+
+        final streamQueue = StreamQueue(retryStream);
+        retryController.add(mockPosition.toJson());
+
+        // Assert
+
+        // If previous stream is not properly cleaned up this will have no elements
+        expect(await streamQueue.next, mockPosition);
+      });
     });
 
     group(

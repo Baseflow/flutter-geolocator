@@ -1,1 +1,1 @@
-../../../apple/Classes/Handlers/LocationAccuracyHandler.h
+../../../ios/Classes/Handlers/LocationAccuracyHandler.h

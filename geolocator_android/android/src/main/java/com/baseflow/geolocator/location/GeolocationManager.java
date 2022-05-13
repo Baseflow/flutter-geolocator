@@ -3,14 +3,12 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
-import com.baseflow.geolocator.errors.PermissionUndefinedException;
-import com.baseflow.geolocator.permission.LocationPermission;
-import com.baseflow.geolocator.permission.PermissionManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -33,8 +31,8 @@ public class GeolocationManager
       PositionChangedCallback positionChangedCallback,
       ErrorCallback errorCallback) {
 
-      LocationClient locationClient = createLocationClient(context, forceLocationManager, null);
-      locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
+    LocationClient locationClient = createLocationClient(context, forceLocationManager, null);
+    locationClient.getLastKnownPosition(positionChangedCallback, errorCallback);
   }
 
   public void isLocationServiceEnabled(
@@ -76,9 +74,17 @@ public class GeolocationManager
   }
 
   private boolean isGooglePlayServicesAvailable(Context context) {
-    GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-    int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
-    return resultCode == ConnectionResult.SUCCESS;
+    try {
+      GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+      int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(context);
+      return resultCode == ConnectionResult.SUCCESS;
+    }
+    // If the Google API class is not available conclude that the play services
+    // are unavailable. This might happen when the GMS package has been excluded by
+    // the app developer due to its proprietary license.
+    catch(NoClassDefFoundError e) {
+      return false;
+    }
   }
 
   @Override

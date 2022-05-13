@@ -1,1 +1,1 @@
-../../apple/Classes/GeolocatorPlugin.m
+../../ios/Classes/GeolocatorPlugin.m
