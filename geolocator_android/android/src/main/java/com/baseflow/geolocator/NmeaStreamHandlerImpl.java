@@ -1,5 +1,6 @@
 package com.baseflow.geolocator;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,6 +14,8 @@ import com.baseflow.geolocator.nmea.NmeaClient;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
   private static final String TAG = "FlutterGeolocator";

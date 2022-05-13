@@ -6,7 +6,7 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.OnNmeaListener;
+import android.location.OnNmeaMessageListener;
 import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,7 +16,7 @@ import com.baseflow.geolocator.location.LocationServiceListener;
 
 
 @SuppressLint("NewApi")
-public class GnssNmeaClient implements OnNmeaListener, LocationListener,
+public class GnssNmeaClient implements OnNmeaMessageListener, LocationListener,
         NmeaClient {
 
   public Context context;
