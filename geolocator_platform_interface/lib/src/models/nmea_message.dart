@@ -16,26 +16,25 @@ class NmeaMessage {
 
   /// Converts the supplied [Map] to an instance of the [NmeaMessage] class.
   static NmeaMessage fromMap(Map<dynamic, dynamic> message) {
-    final Map<dynamic, dynamic> nmeaMessageMap = message;
+    final Map<dynamic, dynamic> nmeaMap = message;
 
-    if (!nmeaMessageMap.containsKey('message')) {
-      throw ArgumentError.value(nmeaMessageMap, 'nmeaMessageMap',
+    if (!nmeaMap.containsKey('message')) {
+      throw ArgumentError.value(nmeaMap, 'nmeaMap',
           'The supplied map doesn\'t contain the mandatory key `message`.');
     }
 
-    if (!nmeaMessageMap.containsKey('timestamp')) {
-      throw ArgumentError.value(nmeaMessageMap, 'nmeaMessageMap',
+    if (!nmeaMap.containsKey('timestamp')) {
+      throw ArgumentError.value(nmeaMap, 'nmeaMap',
           'The supplied map doesn\'t contain the mandatory key `timestamp`.');
     }
 
-    final timestamp = nmeaMessageMap['timestamp'] != null
-        ? DateTime.fromMillisecondsSinceEpoch(
-            nmeaMessageMap['timestamp'].toInt(),
+    final timestamp = nmeaMap['timestamp'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(nmeaMap['timestamp'].toInt(),
             isUtc: true)
         : null;
 
     return NmeaMessage(
-      nmeaMessageMap['message'],
+      nmeaMap['message'],
       timestamp,
     );
   }

@@ -17,7 +17,6 @@ import com.baseflow.geolocator.location.LocationAccuracyManager;
 import com.baseflow.geolocator.location.LocationClient;
 import com.baseflow.geolocator.location.LocationMapper;
 import com.baseflow.geolocator.location.LocationOptions;
-import com.baseflow.geolocator.nmea.NmeaMessageManager;
 import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.baseflow.geolocator.utils.Utils;
@@ -37,7 +36,6 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
   private final LocationAccuracyManager locationAccuracyManager;
-  private final NmeaMessageManager nmeaMessageManager;
 
   @Nullable private Context context;
 
@@ -46,12 +44,10 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   MethodCallHandlerImpl(
       PermissionManager permissionManager,
       GeolocationManager geolocationManager,
-      LocationAccuracyManager locationAccuracyManager,
-      NmeaMessageManager nmeaMessageManager) {
+      LocationAccuracyManager locationAccuracyManager) {
     this.permissionManager = permissionManager;
     this.geolocationManager = geolocationManager;
     this.locationAccuracyManager = locationAccuracyManager;
-    this.nmeaMessageManager = nmeaMessageManager;
   }
 
   @Nullable private MethodChannel channel;

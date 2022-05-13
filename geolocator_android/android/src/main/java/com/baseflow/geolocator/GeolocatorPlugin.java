@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.location.GeolocationManager;
-import com.baseflow.geolocator.nmea.NmeaMessageManager;
 import com.baseflow.geolocator.location.LocationAccuracyManager;
 import com.baseflow.geolocator.permission.PermissionManager;
 
@@ -27,7 +26,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
   private final LocationAccuracyManager locationAccuracyManager;
-  private final NmeaMessageManager nmeaMessageManager;
 
   @Nullable private GeolocatorLocationService foregroundLocationService;
 
@@ -68,7 +66,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     permissionManager = new PermissionManager();
     geolocationManager = new GeolocationManager();
     locationAccuracyManager = new LocationAccuracyManager();
-    nmeaMessageManager = new NmeaMessageManager();
   }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -90,8 +87,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         new MethodCallHandlerImpl(
             geolocatorPlugin.permissionManager,
             geolocatorPlugin.geolocationManager,
-            geolocatorPlugin.locationAccuracyManager,
-            geolocatorPlugin.nmeaMessageManager);
+            geolocatorPlugin.locationAccuracyManager);
     methodCallHandler.startListening(registrar.context(), registrar.messenger());
     methodCallHandler.setActivity(registrar.activity());
 
@@ -102,7 +98,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     locationServiceHandler.startListening(registrar.context(), registrar.messenger());
     locationServiceHandler.setContext(registrar.activeContext());
 
-    NmeaStreamHandlerImpl nmeaStreamHandler = new NmeaStreamHandlerImpl(geolocatorPlugin.nmeaMessageManager, geolocatorPlugin.permissionManager);
+    NmeaStreamHandlerImpl nmeaStreamHandler = new NmeaStreamHandlerImpl(geolocatorPlugin.permissionManager);
     nmeaStreamHandler.startListening(registrar.context(), registrar.messenger());
     nmeaStreamHandler.setActivity(registrar.activity());
 
@@ -115,8 +111,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         new MethodCallHandlerImpl(
             this.permissionManager,
             this.geolocationManager,
-            this.locationAccuracyManager,
-            this.nmeaMessageManager);
+            this.locationAccuracyManager);
     methodCallHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
     streamHandler = new StreamHandlerImpl(this.permissionManager);
@@ -128,7 +123,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     locationServiceHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
 
-    nmeaStreamHandler = new NmeaStreamHandlerImpl(this.nmeaMessageManager, this.permissionManager);
+    nmeaStreamHandler = new NmeaStreamHandlerImpl(this.permissionManager);
     nmeaStreamHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
 
@@ -254,6 +249,5 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     if (foregroundLocationService != null) {
       foregroundLocationService.setActivity(null);
     }
-
   }
 }

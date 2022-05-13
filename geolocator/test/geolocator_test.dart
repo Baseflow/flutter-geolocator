@@ -104,8 +104,8 @@ void main() {
       expect(position, emitsInOrder([emits(mockPosition), emitsDone]));
     });
 
-    test('getNmeaMessageStream', () async {
-      final nmeaMessage = Geolocator.getNmeaMessageStream();
+    test('getNmeaStream', () async {
+      final nmeaMessage = Geolocator.getNmeaStream();
       expect(nmeaMessage, emitsInOrder([emits(mockNmeaMessage), emitsDone]));
     });
 
@@ -190,7 +190,7 @@ class MockGeolocatorPlatform extends Mock
   }
 
   @override
-  Stream<NmeaMessage> getNmeaMessageStream() => Stream.value(mockNmeaMessage);
+  Stream<NmeaMessage> getNmeaStream() => Stream.value(mockNmeaMessage);
 
   @override
   Future<bool> openAppSettings() => Future.value(true);

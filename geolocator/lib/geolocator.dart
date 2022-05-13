@@ -103,7 +103,7 @@ class Geolocator {
   ///
   /// ```
   /// StreamSubscription<NmeaMessage> nmeaStream =
-  ///     Geolocator.getNmeaMessageStream().listen((NmeaMessage nmea) {
+  ///     Geolocator.getNmeaStream().listen((NmeaMessage nmea) {
   ///       // Handle NMEA changes
   ///     });
   /// ```
@@ -117,8 +117,8 @@ class Geolocator {
   /// but the location services of the device are disabled.
   ///
   /// for more info about NMEA 0183 see https://en.wikipedia.org/wiki/NMEA_0183
-  static Stream<NmeaMessage> getNmeaMessageStream() =>
-      GeolocatorPlatform.instance.getNmeaMessageStream();
+  static Stream<NmeaMessage> getNmeaStream() =>
+      GeolocatorPlatform.instance.getNmeaStream();
 
   /// Fires whenever the location changes inside the bounds of the
   /// supplied [LocationSettings.accuracy].

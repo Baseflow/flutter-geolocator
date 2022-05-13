@@ -19,6 +19,11 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   static const _serviceStatusEventChannel =
       EventChannel('flutter.baseflow.com/geolocator_service_updates_android');
 
+  /// The event channel used to receive [NmeaMessage] updates from the
+  /// native platform.
+  static const _nmeaEventChannel =
+      EventChannel('flutter.baseflow.com/geolocator_nmea_updates_android');
+
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith() {
     GeolocatorPlatform.instance = GeolocatorAndroid();
@@ -31,6 +36,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   bool forcedLocationManager = false;
 
   Stream<Position>? _positionStream;
+  Stream<NmeaMessage>? _nmeaStream;
   Stream<ServiceStatus>? _serviceStatusStream;
 
   @override
@@ -146,6 +152,27 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     });
 
     return _serviceStatusStream!;
+  }
+
+  @override
+  Stream<NmeaMessage> getNmeaStream() {
+    if (_nmeaStream != null) {
+      return _nmeaStream!;
+    }
+    var nmeaMessagesStream = _nmeaEventChannel.receiveBroadcastStream();
+
+    _nmeaStream = nmeaMessagesStream
+        .map((dynamic element) =>
+            NmeaMessage.fromMap(element.cast<String, dynamic>()))
+        .handleError((error) {
+      _nmeaStream = null;
+      if (error is PlatformException) {
+        error = _handlePlatformException(error);
+      }
+      throw error;
+    });
+
+    return _nmeaStream!;
   }
 
   @override

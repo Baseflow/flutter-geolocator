@@ -1085,7 +1085,7 @@ void main() {
 
     group(
         // ignore: lines_longer_than_80_chars
-        'getNmeaMessageStream: When requesting a stream of location service status and NMEA updates',
+        'getNmeaStream: When requesting a stream of location service status and NMEA updates',
         () {
       group(
           'And requesting for NMEA and location service status updates multiple times',
@@ -1100,10 +1100,8 @@ void main() {
             true,
           );
 
-          final firstStreamNmea =
-              methodChannelGeolocator.getNmeaMessageStream();
-          final secondStreamNmea =
-              methodChannelGeolocator.getNmeaMessageStream();
+          final firstStreamNmea = methodChannelGeolocator.getNmeaStream();
+          final secondStreamNmea = methodChannelGeolocator.getNmeaStream();
 
           expect(
             identical(firstStreamNmea, secondStreamNmea),
@@ -1153,7 +1151,7 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test events
@@ -1223,7 +1221,7 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test error
@@ -1256,7 +1254,7 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test error
@@ -1289,7 +1287,7 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test error
@@ -1322,7 +1320,7 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test error

@@ -149,9 +149,8 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// but the location services of the device are disabled.
   ///
   /// for more info about NMEA 0183 see https://en.wikipedia.org/wiki/NMEA_0183
-  Stream<NmeaMessage> getNmeaMessageStream() {
-    throw UnimplementedError(
-        'getNmeaMessageStream() has not been implemented.');
+  Stream<NmeaMessage> getNmeaStream() {
+    throw UnimplementedError('getNmeaStream() has not been implemented.');
   }
 
   /// Fires whenever the location changes inside the bounds of the
