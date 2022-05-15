@@ -594,6 +594,60 @@ void main() {
         ]);
       });
 
+      test(
+          'Should receive a position for each call using AndroidSettings and ForegroundNotificationConfig',
+          () async {
+        // Arrange
+        final channel = MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_android',
+          method: 'getCurrentPosition',
+          result: mockPosition.toJson(),
+        );
+
+        ForegroundNotificationConfig foregroundNotificationConfig =
+            const ForegroundNotificationConfig(
+                notificationText:
+                    "App will continue to receive your location even when you aren't using it",
+                notificationTitle: "Running in Background",
+                enableWakeLock: false);
+
+        AndroidSettings expectedFirstArguments = AndroidSettings(
+            forceLocationManager: false,
+            accuracy: LocationAccuracy.low,
+            foregroundNotificationConfig: foregroundNotificationConfig);
+        AndroidSettings expectedSecondArguments = AndroidSettings(
+            forceLocationManager: false,
+            accuracy: LocationAccuracy.high,
+            foregroundNotificationConfig: foregroundNotificationConfig);
+
+        // Act
+        final plugin = GeolocatorAndroid();
+        final firstPosition = await plugin.getCurrentPosition(
+            locationSettings: AndroidSettings(
+                forceLocationManager: false,
+                accuracy: LocationAccuracy.low,
+                foregroundNotificationConfig: foregroundNotificationConfig));
+        final secondPosition = await plugin.getCurrentPosition(
+            locationSettings: AndroidSettings(
+                forceLocationManager: false,
+                accuracy: LocationAccuracy.high,
+                foregroundNotificationConfig: foregroundNotificationConfig));
+
+        // Assert
+        expect(firstPosition, mockPosition);
+        expect(secondPosition, mockPosition);
+        expect(channel.log, <Matcher>[
+          isMethodCall(
+            'getCurrentPosition',
+            arguments: expectedFirstArguments.toJson(),
+          ),
+          isMethodCall(
+            'getCurrentPosition',
+            arguments: expectedSecondArguments.toJson(),
+          ),
+        ]);
+      });
+
       test('Should throw a permission denied exception if permission is denied',
           () async {
         // Arrange
@@ -1600,5 +1654,9 @@ void main() {
         );
       });
     });
+
+    group('Android Settings Tests', () {});
+
+    group('Foreground Settings Tests', () {});
   });
 }
