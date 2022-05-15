@@ -1654,9 +1654,5 @@ void main() {
         );
       });
     });
-
-    group('Android Settings Tests', () {});
-
-    group('Foreground Settings Tests', () {});
   });
 }
