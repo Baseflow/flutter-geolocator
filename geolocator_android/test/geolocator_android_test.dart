@@ -22,6 +22,14 @@ Position get mockPosition => Position(
     speedAccuracy: 0.0,
     isMocked: false);
 
+NmeaMessage get mockNmeaMessage => NmeaMessage(
+    message:
+        "GPGGA,170834,4124.8963,N,08151.6838,W,1,05,1.5,280.2,M,-34.0,M,,,*75",
+    timestamp: DateTime.fromMillisecondsSinceEpoch(
+      500,
+      isUtc: true,
+    ));
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -1074,6 +1082,348 @@ void main() {
       });
     });
 
+    group('getNmeaStream: When requesting a stream of nmea updates', () {
+      group('And requesting for nmea update multiple times', () {
+        test('Should return the same stream', () {
+          final plugin = GeolocatorAndroid();
+          final firstStream = plugin.getNmeaStream();
+          final secondStream = plugin.getNmeaStream();
+
+          expect(
+            identical(firstStream, secondStream),
+            true,
+          );
+        });
+
+        test('Should return a new stream when all subscriptions are cancelled',
+            () {
+          final plugin = GeolocatorAndroid();
+
+          // Get two nmea streams
+          final firstStream = plugin.getNmeaStream();
+          final secondStream = plugin.getNmeaStream();
+
+          // Streams are the same object
+          expect(firstStream == secondStream, true);
+
+          // Add multiple subscriptions
+          StreamSubscription<NmeaMessage>? firstSubscription =
+              firstStream.listen((event) {});
+          StreamSubscription<NmeaMessage>? secondSubscription =
+              secondStream.listen((event) {});
+
+          // Cancel first subscription
+          firstSubscription.cancel();
+          firstSubscription = null;
+
+          // Stream is still the same as the first one
+          final cachedStream = plugin.getNmeaStream();
+          expect(firstStream == cachedStream, true);
+
+          // Cancel second subscription
+          secondSubscription.cancel();
+          secondSubscription = null;
+
+          // After all listeners have been removed, the next stream
+          // retrieved is a new one.
+          final thirdStream = plugin.getNmeaStream();
+          expect(firstStream != thirdStream, true);
+        });
+      });
+
+      test('NmeaStream can be listened to and can be canceled', () {
+        // Arrange
+        final streamController =
+            StreamController<Map<String, dynamic>>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        var stream = GeolocatorAndroid().getNmeaStream();
+        StreamSubscription<NmeaMessage>? streamSubscription =
+            stream.listen((event) {});
+
+        streamSubscription.pause();
+        expect(streamSubscription.isPaused, true);
+        streamSubscription.resume();
+        expect(streamSubscription.isPaused, false);
+        streamSubscription.cancel();
+        streamSubscription = null;
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should correctly handle done event', () async {
+        // Arrange
+        final completer = Completer();
+        completer.future.timeout(const Duration(milliseconds: 50),
+            onTimeout: () =>
+                fail('getNmeaStream should trigger done and not timeout.'));
+        final streamController =
+            StreamController<Map<String, dynamic>>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        GeolocatorAndroid().getNmeaStream().listen(
+              (event) {},
+              onDone: completer.complete,
+            );
+
+        await streamController.close();
+
+        //Assert
+        await completer.future;
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a stream with nmea updates if permissions are granted',
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<Map<String, dynamic>>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final nmeaStream = GeolocatorAndroid().getNmeaStream();
+        final streamQueue = StreamQueue(nmeaStream);
+
+        // Emit test events
+        streamController.add(mockNmeaMessage.toJson());
+        streamController.add(mockNmeaMessage.toJson());
+        streamController.add(mockNmeaMessage.toJson());
+
+        // Assert
+        expect(await streamQueue.next, mockNmeaMessage);
+        expect(await streamQueue.next, mockNmeaMessage);
+        expect(await streamQueue.next, mockNmeaMessage);
+
+        // Clean up
+        await streamQueue.cancel();
+        await streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should continue listening to the stream when exception is thrown ',
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<Map<String, dynamic>>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final nmeaStream = GeolocatorAndroid().getNmeaStream();
+        final streamQueue = StreamQueue(nmeaStream);
+
+        // Emit test events
+        streamController.add(mockNmeaMessage.toJson());
+        streamController.addError(PlatformException(
+            code: 'PERMISSION_DENIED',
+            message: 'Permission denied',
+            details: null));
+        streamController.add(mockNmeaMessage.toJson());
+
+        // Assert
+        expect(await streamQueue.next, mockNmeaMessage);
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<PermissionDeniedException>().having(
+                (e) => e.message,
+                'message',
+                'Permission denied',
+              ),
+            ));
+        expect(await streamQueue.next, mockNmeaMessage);
+
+        // Clean up
+        await streamQueue.cancel();
+        await streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a permission denied exception if permission is denied',
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final nmeaStream = GeolocatorAndroid().getNmeaStream();
+        final streamQueue = StreamQueue(nmeaStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'PERMISSION_DENIED',
+            message: 'Permission denied',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<PermissionDeniedException>().having(
+                (e) => e.message,
+                'message',
+                'Permission denied',
+              ),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a location service disabled exception if location service is disabled',
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final nmeaStream = GeolocatorAndroid().getNmeaStream();
+        final streamQueue = StreamQueue(nmeaStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'LOCATION_SERVICES_DISABLED',
+            message: 'Location services disabled',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<LocationServiceDisabledException>(),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a already subscribed exception', () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final nmeaStream = GeolocatorAndroid().getNmeaStream();
+        final streamQueue = StreamQueue(nmeaStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'PERMISSION_REQUEST_IN_PROGRESS',
+            message: 'A permission request is already in progress',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<PermissionRequestInProgressException>(),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a already subscribed exception', () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final nmeaStream = GeolocatorAndroid().getNmeaStream();
+        final streamQueue = StreamQueue(nmeaStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'LOCATION_SUBSCRIPTION_ACTIVE',
+            message: 'Already subscribed to receive a nmea stream',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<AlreadySubscribedException>(),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a nmea update exception', () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final nmeaStream = GeolocatorAndroid().getNmeaStream();
+        final streamQueue = StreamQueue(nmeaStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'NMEA_UPDATE_FAILURE',
+            message: 'A nmea request is already in progress',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<NmeaUpdateException>(),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
+      });
+    });
+
     group(
         // ignore: lines_longer_than_80_chars
         'getServiceStream: When requesting a stream of location service status updates',
@@ -1083,10 +1433,10 @@ void main() {
         test('Should return the same stream', () {
           final plugin = GeolocatorAndroid();
           final firstStream = plugin.getServiceStatusStream();
-          final secondstream = plugin.getServiceStatusStream();
+          final secondStream = plugin.getServiceStatusStream();
 
           expect(
-            identical(firstStream, secondstream),
+            identical(firstStream, secondStream),
             true,
           );
         });

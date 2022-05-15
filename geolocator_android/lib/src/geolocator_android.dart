@@ -159,9 +159,11 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     if (_nmeaStream != null) {
       return _nmeaStream!;
     }
-    var nmeaMessagesStream = _nmeaEventChannel.receiveBroadcastStream();
+    var originalStream = _nmeaEventChannel.receiveBroadcastStream();
 
-    _nmeaStream = nmeaMessagesStream
+    var nmeaStream = _wrapNmeaStream(originalStream);
+
+    _nmeaStream = nmeaStream
         .map((dynamic element) =>
             NmeaMessage.fromMap(element.cast<String, dynamic>()))
         .handleError((error) {
@@ -224,6 +226,13 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     });
   }
 
+  Stream<dynamic> _wrapNmeaStream(Stream<dynamic> incoming) {
+    return incoming.asBroadcastStream(onCancel: (subscription) {
+      subscription.cancel();
+      _nmeaStream = null;
+    });
+  }
+
   @override
   Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
     required String purposeKey,
@@ -268,6 +277,10 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         return PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         return PositionUpdateException(exception.message);
+      case 'NMEA_SUBSCRIPTION_ACTIVE':
+        return const NmeaAlreadySubscribedException();
+      case 'NMEA_UPDATE_FAILURE':
+        return NmeaUpdateException(exception.message);
       default:
         return exception;
     }

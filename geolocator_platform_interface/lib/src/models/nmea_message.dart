@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 /// Contains all the NMEA information.
 class NmeaMessage {
   /// Constructs a NMEA message instance with the given values.
-  const NmeaMessage(this.message, this.timestamp);
+  const NmeaMessage({required this.message, required this.timestamp});
 
   /// The full NMEA-0183 message, as reported by the GNSS chipset.
   final String message;
@@ -34,8 +34,8 @@ class NmeaMessage {
         : null;
 
     return NmeaMessage(
-      nmeaMap['message'],
-      timestamp,
+      message: nmeaMap['message'],
+      timestamp: timestamp,
     );
   }
 

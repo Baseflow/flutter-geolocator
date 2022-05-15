@@ -272,6 +272,10 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         return PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         return PositionUpdateException(exception.message);
+      case 'NMEA_SUBSCRIPTION_ACTIVE':
+        return const NmeaAlreadySubscribedException();
+      case 'NMEA_UPDATE_FAILURE':
+        return NmeaUpdateException(exception.message);
       default:
         return exception;
     }

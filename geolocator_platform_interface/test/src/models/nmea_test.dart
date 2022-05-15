@@ -6,10 +6,12 @@ void main() {
     test('hashCode should be the same for two instances with the same values',
         () {
       // Arrange
-      final firstNmeaMessage =
-          NmeaMessage("message", DateTime.fromMicrosecondsSinceEpoch(500));
-      final secondNmeaMessage =
-          NmeaMessage("message", DateTime.fromMicrosecondsSinceEpoch(500));
+      final firstNmeaMessage = NmeaMessage(
+          message: "message",
+          timestamp: DateTime.fromMicrosecondsSinceEpoch(500));
+      final secondNmeaMessage = NmeaMessage(
+          message: "message",
+          timestamp: DateTime.fromMicrosecondsSinceEpoch(500));
 
       // Act & Assert
       expect(
@@ -22,12 +24,12 @@ void main() {
         () {
       // Arrange
       final firstNmeaMessage = NmeaMessage(
-        "first",
-        DateTime.fromMillisecondsSinceEpoch(0),
+        message: "first",
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
       );
       final secondNmeaMessage = NmeaMessage(
-        "second",
-        DateTime.fromMillisecondsSinceEpoch(0),
+        message: "second",
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
       );
 
       // Act & Assert
@@ -41,12 +43,12 @@ void main() {
         () {
       // Arrange
       final firstNmeaMessage = NmeaMessage(
-        "message",
-        DateTime.fromMillisecondsSinceEpoch(0),
+        message: "message",
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
       );
       final secondNmeaMessage = NmeaMessage(
-        "message",
-        DateTime.fromMillisecondsSinceEpoch(1),
+        message: "message",
+        timestamp: DateTime.fromMillisecondsSinceEpoch(1),
       );
 
       // Act & Assert

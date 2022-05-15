@@ -18,8 +18,9 @@ Position get mockPosition => Position(
     speedAccuracy: 0.0);
 
 NmeaMessage get mockNmeaMessage => NmeaMessage(
-    "GPGGA,170834,4124.8963,N,08151.6838,W,1,05,1.5,280.2,M,-34.0,M,,,*75",
-    DateTime.fromMillisecondsSinceEpoch(
+    message:
+        "GPGGA,170834,4124.8963,N,08151.6838,W,1,05,1.5,280.2,M,-34.0,M,,,*75",
+    timestamp: DateTime.fromMillisecondsSinceEpoch(
       500,
       isUtc: true,
     ));

@@ -24,8 +24,9 @@ Position get mockPosition => Position(
     isMocked: false);
 
 NmeaMessage get mockNmeaMessage => NmeaMessage(
-    "GPGGA,170834,4124.8963,N,08151.6838,W,1,05,1.5,280.2,M,-34.0,M,,,*75",
-    DateTime.fromMillisecondsSinceEpoch(
+    message:
+        "GPGGA,170834,4124.8963,N,08151.6838,W,1,05,1.5,280.2,M,-34.0,M,,,*75",
+    timestamp: DateTime.fromMillisecondsSinceEpoch(
       500,
       isUtc: true,
     ));
@@ -908,7 +909,8 @@ void main() {
 
       test(
           // ignore: lines_longer_than_80_chars
-          'Should receive a already subscribed exception', () async {
+          'Should receive a permission request is already in progress exception',
+          () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -1244,7 +1246,8 @@ void main() {
 
       test(
           // ignore: lines_longer_than_80_chars
-          'Should receive a already subscribed exception', () async {
+          'Should receive a permission request is already in progress exception',
+          () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -1292,15 +1295,15 @@ void main() {
 
         // Emit test error
         streamController.addError(PlatformException(
-            code: 'LOCATION_SUBSCRIPTION_ACTIVE',
-            message: 'Already subscribed to receive a position stream',
+            code: 'NMEA_SUBSCRIPTION_ACTIVE',
+            message: 'Already subscribed to receive a nmea stream',
             details: null));
 
         // Assert
         expect(
             streamQueue.next,
             throwsA(
-              isA<AlreadySubscribedException>(),
+              isA<NmeaAlreadySubscribedException>(),
             ));
 
         // Clean up
@@ -1310,7 +1313,7 @@ void main() {
 
       test(
           // ignore: lines_longer_than_80_chars
-          'Should receive a position update exception', () async {
+          'Should receive a nmea update exception', () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -1325,15 +1328,15 @@ void main() {
 
         // Emit test error
         streamController.addError(PlatformException(
-            code: 'LOCATION_UPDATE_FAILURE',
-            message: 'A permission request is already in progress',
+            code: 'NMEA_UPDATE_FAILURE',
+            message: 'A nmea request is already in progress',
             details: null));
 
         // Assert
         expect(
             streamQueue.next,
             throwsA(
-              isA<PositionUpdateException>(),
+              isA<NmeaUpdateException>(),
             ));
 
         // Clean up
