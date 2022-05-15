@@ -1148,7 +1148,7 @@ void main() {
         final streamController =
             StreamController<Map<String, dynamic>>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/nmea_updates',
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates',
           stream: streamController.stream,
         );
 
@@ -1218,7 +1218,7 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/nmea_updates',
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates',
           stream: streamController.stream,
         );
 
@@ -1252,7 +1252,7 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/nmea_updates',
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates',
           stream: streamController.stream,
         );
 
@@ -1285,7 +1285,7 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/nmea_updates',
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates',
           stream: streamController.stream,
         );
 
@@ -1318,7 +1318,7 @@ void main() {
         final streamController =
             StreamController<PlatformException>.broadcast();
         EventChannelMock(
-          channelName: 'flutter.baseflow.com/nmea_updates',
+          channelName: 'flutter.baseflow.com/geolocator_nmea_updates',
           stream: streamController.stream,
         );
 

@@ -29,7 +29,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   /// The event channel used to receive [NmeaMessage] updates from the native
   /// platform.
   static const _nmeaEventChannel =
-      EventChannel('flutter.baseflow.com/nmea_updates');
+      EventChannel('flutter.baseflow.com/geolocator_nmea_updates');
 
   /// On Android devices you can set [forcedLocationManager]
   /// to true to force the plugin to use the [LocationManager] to determine the
