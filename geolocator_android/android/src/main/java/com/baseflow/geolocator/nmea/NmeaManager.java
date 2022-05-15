@@ -12,9 +12,9 @@ import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.location.LocationServiceListener;
 import com.baseflow.geolocator.permission.PermissionManager;
 
-public class NmeaMessageManager {
+public class NmeaManager {
 
-  public NmeaMessageManager() {}
+  public NmeaManager() {}
 
   public void isLocationServiceEnabled(
           @Nullable Context context, LocationServiceListener listener) {
@@ -22,12 +22,12 @@ public class NmeaMessageManager {
       listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
     }
 
-    NmeaMessageaClient nmeaMessageaClient = createNmeaClient(context);
-    nmeaMessageaClient.isLocationServiceEnabled(listener);
+    NmeaClient nmeaClient = createNmeaClient(context);
+    nmeaClient.isLocationServiceEnabled(listener);
   }
 
   public void startNmeaUpdates(
-      @NonNull NmeaMessageaClient client,
+      @NonNull NmeaClient client,
       @Nullable Activity activity,
       @NonNull NmeaChangedCallback nmeaChangedCallback,
       @NonNull ErrorCallback errorCallback) {
@@ -35,14 +35,14 @@ public class NmeaMessageManager {
     client.startNmeaUpdates(activity, nmeaChangedCallback, errorCallback);
   }
 
-  public void stopNmeaUpdates(NmeaMessageaClient client) {
+  public void stopNmeaUpdates(NmeaClient client) {
     client.stopNmeaUpdates();
   }
 
   @RequiresApi(api = VERSION_CODES.N)
-  public NmeaMessageaClient createNmeaClient(
+  public NmeaClient createNmeaClient(
           Context context) {
-    return new GnssNmeaMessageClient(context);
+    return new GnssNmeaClient(context);
   }
 
 }

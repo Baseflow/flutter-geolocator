@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 /// Contains all the NMEA information.
 class NmeaMessage {
   /// Constructs a NMEA message instance with the given values.
-  const NmeaMessage(this.message, this.timestamp);
+  const NmeaMessage({required this.message, required this.timestamp});
 
   /// The full NMEA-0183 message, as reported by the GNSS chipset.
   final String message;
@@ -16,27 +16,26 @@ class NmeaMessage {
 
   /// Converts the supplied [Map] to an instance of the [NmeaMessage] class.
   static NmeaMessage fromMap(Map<dynamic, dynamic> message) {
-    final Map<dynamic, dynamic> nmeaMessageMap = message;
+    final Map<dynamic, dynamic> nmeaMap = message;
 
-    if (!nmeaMessageMap.containsKey('message')) {
-      throw ArgumentError.value(nmeaMessageMap, 'nmeaMessageMap',
+    if (!nmeaMap.containsKey('message')) {
+      throw ArgumentError.value(nmeaMap, 'nmeaMap',
           'The supplied map doesn\'t contain the mandatory key `message`.');
     }
 
-    if (!nmeaMessageMap.containsKey('timestamp')) {
-      throw ArgumentError.value(nmeaMessageMap, 'nmeaMessageMap',
+    if (!nmeaMap.containsKey('timestamp')) {
+      throw ArgumentError.value(nmeaMap, 'nmeaMap',
           'The supplied map doesn\'t contain the mandatory key `timestamp`.');
     }
 
-    final timestamp = nmeaMessageMap['timestamp'] != null
-        ? DateTime.fromMillisecondsSinceEpoch(
-            nmeaMessageMap['timestamp'].toInt(),
+    final timestamp = nmeaMap['timestamp'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(nmeaMap['timestamp'].toInt(),
             isUtc: true)
         : null;
 
     return NmeaMessage(
-      nmeaMessageMap['message'],
-      timestamp,
+      message: nmeaMap['message'],
+      timestamp: timestamp,
     );
   }
 

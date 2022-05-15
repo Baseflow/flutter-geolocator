@@ -39,7 +39,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   Stream<Position>? _positionStream;
   Stream<ServiceStatus>? _serviceStatusStream;
-  Stream<NmeaMessage>? _nmeaMessageStream;
+  Stream<NmeaMessage>? _nmeaStream;
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -174,12 +174,12 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
       positionStream = positionStream.timeout(
         timeLimit,
         onTimeout: (s) {
+          _positionStream = null;
           s.addError(TimeoutException(
             'Time limit reached while waiting for position update.',
             timeLimit,
           ));
           s.close();
-          _positionStream = null;
         },
       );
     }
@@ -199,26 +199,26 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   }
 
   @override
-  Stream<NmeaMessage> getNmeaMessageStream() {
-    if (_nmeaMessageStream != null) {
-      return _nmeaMessageStream!;
+  Stream<NmeaMessage> getNmeaStream() {
+    if (_nmeaStream != null) {
+      return _nmeaStream!;
     }
 
     final nmeaStream = _nmeaEventChannel.receiveBroadcastStream();
 
-    _nmeaMessageStream = nmeaStream
+    _nmeaStream = nmeaStream
         .map<NmeaMessage>((dynamic element) =>
             NmeaMessage.fromMap(element.cast<String, dynamic>()))
         .handleError(
       (error) {
-        _nmeaMessageStream = null;
+        _nmeaStream = null;
         if (error is PlatformException) {
           error = _handlePlatformException(error);
         }
         throw error;
       },
     );
-    return _nmeaMessageStream!;
+    return _nmeaStream!;
   }
 
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
@@ -272,6 +272,10 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         return PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         return PositionUpdateException(exception.message);
+      case 'NMEA_SUBSCRIPTION_ACTIVE':
+        return const NmeaAlreadySubscribedException();
+      case 'NMEA_UPDATE_FAILURE':
+        return NmeaUpdateException(exception.message);
       default:
         return exception;
     }

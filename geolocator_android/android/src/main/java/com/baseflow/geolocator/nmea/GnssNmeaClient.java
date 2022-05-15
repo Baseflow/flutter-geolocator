@@ -16,8 +16,8 @@ import com.baseflow.geolocator.location.LocationServiceListener;
 
 
 @SuppressLint("NewApi")
-public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationListener,
-        NmeaMessageaClient {
+public class GnssNmeaClient implements OnNmeaMessageListener, LocationListener,
+        NmeaClient {
 
   public Context context;
   private final LocationManager locationManager;
@@ -30,7 +30,7 @@ public class GnssNmeaMessageClient implements OnNmeaMessageListener, LocationLis
   private boolean isListening = false;
 
 
-  public GnssNmeaMessageClient(
+  public GnssNmeaClient(
           @NonNull Context context) {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     this.context = context;

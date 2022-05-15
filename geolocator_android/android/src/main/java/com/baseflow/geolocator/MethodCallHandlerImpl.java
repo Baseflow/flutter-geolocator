@@ -17,7 +17,6 @@ import com.baseflow.geolocator.location.LocationAccuracyManager;
 import com.baseflow.geolocator.location.LocationClient;
 import com.baseflow.geolocator.location.LocationMapper;
 import com.baseflow.geolocator.location.LocationOptions;
-import com.baseflow.geolocator.nmea.NmeaMessageManager;
 import com.baseflow.geolocator.permission.LocationPermission;
 import com.baseflow.geolocator.permission.PermissionManager;
 import com.baseflow.geolocator.utils.Utils;
@@ -37,23 +36,18 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
   private final LocationAccuracyManager locationAccuracyManager;
-  private final NmeaMessageManager nmeaMessageManager;
 
   @Nullable private Context context;
 
   @Nullable private Activity activity;
 
-  @Nullable private GeolocatorLocationService foregroundLocationService;
-
   MethodCallHandlerImpl(
       PermissionManager permissionManager,
       GeolocationManager geolocationManager,
-      LocationAccuracyManager locationAccuracyManager,
-      NmeaMessageManager nmeaMessageManager) {
+      LocationAccuracyManager locationAccuracyManager) {
     this.permissionManager = permissionManager;
     this.geolocationManager = geolocationManager;
     this.locationAccuracyManager = locationAccuracyManager;
-    this.nmeaMessageManager = nmeaMessageManager;
   }
 
   @Nullable private MethodChannel channel;
@@ -106,7 +100,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       stopListening();
     }
 
-    channel = new MethodChannel(messenger, "flutter.baseflow.com/geolocator");
+    channel = new MethodChannel(messenger, "flutter.baseflow.com/geolocator_android");
     channel.setMethodCallHandler(this);
     this.context = context;
   }
@@ -128,10 +122,6 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
   void setActivity(@Nullable Activity activity) {
     this.activity = activity;
-  }
-
-  void setForegroundLocationService(@Nullable GeolocatorLocationService foregroundLocationService) {
-    this.foregroundLocationService = foregroundLocationService;
   }
 
   private void onCheckPermission(MethodChannel.Result result) {

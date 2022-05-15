@@ -8,8 +8,8 @@ import android.os.IBinder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.baseflow.geolocator.location.GeolocationManager;
-import com.baseflow.geolocator.nmea.NmeaMessageManager;
 import com.baseflow.geolocator.location.LocationAccuracyManager;
 import com.baseflow.geolocator.permission.PermissionManager;
 
@@ -22,18 +22,36 @@ import io.flutter.plugin.common.BinaryMessenger;
 /** GeolocatorPlugin */
 public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
-  private static final String TAG = "GeocodingPlugin";
+  private static final String TAG = "FlutterGeolocator";
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
   private final LocationAccuracyManager locationAccuracyManager;
-  private final NmeaMessageManager nmeaMessageManager;
 
   @Nullable private GeolocatorLocationService foregroundLocationService;
 
   @Nullable private MethodCallHandlerImpl methodCallHandler;
 
   @Nullable private StreamHandlerImpl streamHandler;
+  private final ServiceConnection serviceConnection =
+      new ServiceConnection() {
 
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+          Log.d(TAG, "Geolocator foreground service connected");
+          if (service instanceof GeolocatorLocationService.LocalBinder) {
+              initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
+          }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+          Log.d(TAG, "Geolocator foreground service disconnected");
+          if (foregroundLocationService != null) {
+            foregroundLocationService.setActivity(null);
+            foregroundLocationService = null;
+          }
+        }
+      };
   @Nullable private LocationServiceHandlerImpl locationServiceHandler;
 
   @Nullable private NmeaStreamHandlerImpl nmeaStreamHandler;
@@ -48,7 +66,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     permissionManager = new PermissionManager();
     geolocationManager = new GeolocationManager();
     locationAccuracyManager = new LocationAccuracyManager();
-    nmeaMessageManager = new NmeaMessageManager();
   }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -70,8 +87,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         new MethodCallHandlerImpl(
             geolocatorPlugin.permissionManager,
             geolocatorPlugin.geolocationManager,
-            geolocatorPlugin.locationAccuracyManager,
-            geolocatorPlugin.nmeaMessageManager);
+            geolocatorPlugin.locationAccuracyManager);
     methodCallHandler.startListening(registrar.context(), registrar.messenger());
     methodCallHandler.setActivity(registrar.activity());
 
@@ -80,11 +96,13 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
     LocationServiceHandlerImpl locationServiceHandler = new LocationServiceHandlerImpl();
     locationServiceHandler.startListening(registrar.context(), registrar.messenger());
-    locationServiceHandler.setActivity(registrar.activity());
+    locationServiceHandler.setContext(registrar.activeContext());
 
-    NmeaStreamHandlerImpl nmeaStreamHandler = new NmeaStreamHandlerImpl(geolocatorPlugin.nmeaMessageManager, geolocatorPlugin.permissionManager);
+    NmeaStreamHandlerImpl nmeaStreamHandler = new NmeaStreamHandlerImpl(geolocatorPlugin.permissionManager);
     nmeaStreamHandler.startListening(registrar.context(), registrar.messenger());
     nmeaStreamHandler.setActivity(registrar.activity());
+
+    geolocatorPlugin.bindForegroundService(registrar.activeContext());
   }
 
   @Override
@@ -93,67 +111,49 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         new MethodCallHandlerImpl(
             this.permissionManager,
             this.geolocationManager,
-            this.locationAccuracyManager,
-            this.nmeaMessageManager);
+            this.locationAccuracyManager);
     methodCallHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
     streamHandler = new StreamHandlerImpl(this.permissionManager);
     streamHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
+
     locationServiceHandler = new LocationServiceHandlerImpl();
+    locationServiceHandler.setContext(flutterPluginBinding.getApplicationContext());
     locationServiceHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
-    nmeaStreamHandler = new NmeaStreamHandlerImpl(this.nmeaMessageManager, this.permissionManager);
+
+    nmeaStreamHandler = new NmeaStreamHandlerImpl(this.permissionManager);
     nmeaStreamHandler.startListening(
-        flutterPluginBinding.getApplicationContext(),
-        flutterPluginBinding.getBinaryMessenger());
+        flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
+
+    bindForegroundService(flutterPluginBinding.getApplicationContext());
   }
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-    if (methodCallHandler != null) {
-      methodCallHandler.stopListening();
-      methodCallHandler = null;
-    }
-
-    if (streamHandler != null) {
-      streamHandler.stopListening();
-      streamHandler = null;
-    }
-
-    if (locationServiceHandler != null) {
-      locationServiceHandler.stopListening();
-      locationServiceHandler = null;
-    }
-
-    if (nmeaStreamHandler != null) {
-      nmeaStreamHandler.stopListening();
-      nmeaStreamHandler = null;
-    }
+    unbindForegroundService(binding.getApplicationContext());
+    dispose();
   }
 
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+
+    Log.d(TAG, "Attaching Geolocator to activity");
+    this.pluginBinding = binding;
+    registerListeners();
     if (methodCallHandler != null) {
       methodCallHandler.setActivity(binding.getActivity());
     }
-
-    if (locationServiceHandler != null) {
-      locationServiceHandler.setActivity(binding.getActivity());
+    if (streamHandler != null) {
+      streamHandler.setActivity(binding.getActivity());
     }
-
     if (nmeaStreamHandler != null) {
       nmeaStreamHandler.setActivity(binding.getActivity());
     }
-
-    this.pluginBinding = binding;
-    pluginBinding
-        .getActivity()
-        .bindService(
-            new Intent(binding.getActivity(), GeolocatorLocationService.class),
-            serviceConnection,
-            Context.BIND_AUTO_CREATE);
-    registerListeners();
+    if (foregroundLocationService != null) {
+      foregroundLocationService.setActivity(pluginBinding.getActivity());
+    }
   }
 
   @Override
@@ -168,8 +168,23 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onDetachedFromActivity() {
-    dispose();
+    Log.d(TAG, "Detaching Geolocator from activity");
     deregisterListeners();
+    if (methodCallHandler != null) {
+      methodCallHandler.setActivity(null);
+    }
+    if (streamHandler != null) {
+      streamHandler.setActivity(null);
+    }
+    if (foregroundLocationService != null) {
+      foregroundLocationService.setActivity(null);
+    }
+    if (nmeaStreamHandler != null) {
+     nmeaStreamHandler.setActivity(null);
+    }
+    if (pluginBinding != null) {
+      pluginBinding = null;
+    }
   }
 
   private void registerListeners() {
@@ -189,49 +204,50 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     }
   }
 
-  private final ServiceConnection serviceConnection =
-      new ServiceConnection() {
+  private void bindForegroundService(Context context) {
+    context.bindService(
+        new Intent(context, GeolocatorLocationService.class),
+        serviceConnection,
+        Context.BIND_AUTO_CREATE);
+  }
 
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-          Log.d(TAG, "Service connected: " + name);
-          initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-          Log.d(TAG, "Service disconnected:" + name);
-        }
-      };
+  private void unbindForegroundService(Context context) {
+    context.unbindService(serviceConnection);
+  }
 
   private void initialize(GeolocatorLocationService service) {
-    Log.d(TAG, "Initializing Geolocator foreground service");
+    Log.d(TAG, "Initializing Geolocator services");
     foregroundLocationService = service;
 
-    if (pluginBinding != null) {
-      foregroundLocationService.setActivity(pluginBinding.getActivity());
-    }
-    if (methodCallHandler != null) {
-      methodCallHandler.setForegroundLocationService(service);
-    }
     if (streamHandler != null) {
       streamHandler.setForegroundLocationService(service);
     }
   }
 
   private void dispose() {
+    Log.d(TAG, "Disposing Geolocator services");
     if (methodCallHandler != null) {
+      methodCallHandler.stopListening();
       methodCallHandler.setActivity(null);
+      methodCallHandler = null;
     }
     if (streamHandler != null) {
+      streamHandler.stopListening();
       streamHandler.setForegroundLocationService(null);
+      streamHandler = null;
+    }
+    if (locationServiceHandler != null) {
+      locationServiceHandler.setContext(null);
+      locationServiceHandler.stopListening();
+      locationServiceHandler = null;
+    }
+    if (nmeaStreamHandler != null) {
+      nmeaStreamHandler.stopListening();
+      nmeaStreamHandler.setActivity(null);
+      nmeaStreamHandler = null;
     }
     if (foregroundLocationService != null) {
       foregroundLocationService.setActivity(null);
-      foregroundLocationService = null;
-    }
-    if (nmeaStreamHandler != null) {
-      nmeaStreamHandler.setActivity(null);
     }
   }
 }

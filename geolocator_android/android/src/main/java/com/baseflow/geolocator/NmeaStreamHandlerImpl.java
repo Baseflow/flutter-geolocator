@@ -3,30 +3,33 @@ package com.baseflow.geolocator;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+
 import androidx.annotation.Nullable;
+
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
 import com.baseflow.geolocator.permission.PermissionManager;
-import com.baseflow.geolocator.nmea.NmeaMessageManager;
-import com.baseflow.geolocator.nmea.NmeaMessageaClient;
+import com.baseflow.geolocator.nmea.NmeaManager;
+import com.baseflow.geolocator.nmea.NmeaClient;
+
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 import java.util.HashMap;
 import java.util.Map;
 
-class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
-  private static final String TAG = "NmeaStreamHandlerImpl";
+public class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
+  private static final String TAG = "FlutterGeolocator";
 
-  private final NmeaMessageManager nmeaMessageManager;
+  private final NmeaManager nmeaManager;
   private final PermissionManager permissionManager;
 
   @Nullable private EventChannel channel;
   @Nullable private Context context;
   @Nullable private Activity activity;
-  @Nullable private NmeaMessageaClient nmeaMessageaClient;
+  @Nullable private NmeaClient nmeaClient;
 
-  public NmeaStreamHandlerImpl(NmeaMessageManager nmeaMessageManager, PermissionManager permissionManager) {
-    this.nmeaMessageManager = nmeaMessageManager;
+  public NmeaStreamHandlerImpl(PermissionManager permissionManager) {
+    this.nmeaManager = new NmeaManager();
     this.permissionManager = permissionManager;
   }
 
@@ -44,6 +47,11 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
   }
 
   void setActivity(@Nullable Activity activity) {
+
+    if (activity == null && nmeaClient != null && channel != null) {
+      stopListening();
+    }
+
     this.activity = activity;
   }
 
@@ -60,7 +68,7 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
       stopListening();
     }
 
-    channel = new EventChannel(messenger, "flutter.baseflow.com/nmea_updates");
+    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_nmea_updates_android");
     channel.setStreamHandler(this);
     this.context = context;
   }
@@ -76,6 +84,7 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
       return;
     }
 
+    disposeListeners();
     channel.setStreamHandler(null);
     channel = null;
   }
@@ -84,18 +93,24 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
   public void onListen(Object arguments, EventChannel.EventSink events) {
     try {
       if (!permissionManager.hasPermission(this.context)){
-        events.error(ErrorCodes.permissionDenied.toString(),ErrorCodes.permissionDenied.toDescription(),null);
+        events.error(
+            ErrorCodes.permissionDenied.toString(),
+            ErrorCodes.permissionDenied.toDescription(),
+            null);
         return;
       }
     } catch (PermissionUndefinedException e) {
-      events.error(ErrorCodes.permissionDefinitionsNotFound.toString(), ErrorCodes.permissionDefinitionsNotFound.toDescription(), null);
+      events.error(
+          ErrorCodes.permissionDefinitionsNotFound.toString(),
+          ErrorCodes.permissionDefinitionsNotFound.toDescription(),
+          null);
       return;
     }
 
-    this.nmeaMessageaClient = nmeaMessageManager.createNmeaClient(this.context);
+    this.nmeaClient = nmeaManager.createNmeaClient(this.context);
 
-    nmeaMessageManager.startNmeaUpdates(
-        this.nmeaMessageaClient,
+    nmeaManager.startNmeaUpdates(
+        this.nmeaClient,
         activity,
         (String message, long timestamp) -> events.success(toMap(message, timestamp)),
         (ErrorCodes errorCodes) ->
@@ -104,9 +119,16 @@ class NmeaStreamHandlerImpl implements EventChannel.StreamHandler {
 
   @Override
   public void onCancel(Object arguments) {
-    if (this.nmeaMessageaClient != null) {
-      nmeaMessageManager.stopNmeaUpdates(this.nmeaMessageaClient);
+    if (this.nmeaClient != null) {
+      disposeListeners();
     }
   }
 
+  private void disposeListeners() {
+    Log.e(TAG, "Geolocator nmea updates stopped");
+    if (nmeaClient != null && nmeaManager != null) {
+      nmeaManager.stopNmeaUpdates(nmeaClient);
+      nmeaClient = null;
+    }
+  }
 }

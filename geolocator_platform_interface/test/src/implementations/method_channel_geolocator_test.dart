@@ -24,8 +24,9 @@ Position get mockPosition => Position(
     isMocked: false);
 
 NmeaMessage get mockNmeaMessage => NmeaMessage(
-    "GPGGA,170834,4124.8963,N,08151.6838,W,1,05,1.5,280.2,M,-34.0,M,,,*75",
-    DateTime.fromMillisecondsSinceEpoch(
+    message:
+        "GPGGA,170834,4124.8963,N,08151.6838,W,1,05,1.5,280.2,M,-34.0,M,,,*75",
+    timestamp: DateTime.fromMillisecondsSinceEpoch(
       500,
       isUtc: true,
     ));
@@ -908,7 +909,8 @@ void main() {
 
       test(
           // ignore: lines_longer_than_80_chars
-          'Should receive a already subscribed exception', () async {
+          'Should receive a permission request is already in progress exception',
+          () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -1035,11 +1037,57 @@ void main() {
         expect(await streamQueue.next, mockPosition);
         expect(streamQueue.next, throwsA(isA<TimeoutException>()));
       });
+
+      test('Should cleanup the previous stream on timeout exception', () async {
+        // Arrange
+        final streamController = StreamController<Map<String, dynamic>>();
+        final retryController = StreamController<Map<String, dynamic>>();
+        late Stream<Position> retryStream;
+
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_updates',
+          stream: streamController.stream,
+        );
+        const locationSettings = LocationSettings(
+          accuracy: LocationAccuracy.low,
+          timeLimit: Duration(milliseconds: 5),
+        );
+
+        final geolocator = MethodChannelGeolocator();
+
+        // Act
+        final positionStream = geolocator.getPositionStream(
+          locationSettings: locationSettings,
+        );
+
+        final subscription = positionStream.listen((event) {});
+
+        // Listen for position changes again on timeout
+        subscription.onError((err) {
+          EventChannelMock(
+            channelName: 'flutter.baseflow.com/geolocator_updates',
+            stream: retryController.stream,
+          );
+          retryStream = geolocator.getPositionStream(
+            locationSettings: locationSettings,
+          );
+        });
+
+        await Future.delayed(const Duration(milliseconds: 5));
+
+        final streamQueue = StreamQueue(retryStream);
+        retryController.add(mockPosition.toJson());
+
+        // Assert
+
+        // If previous stream is not properly cleaned up this will have no elements
+        expect(await streamQueue.next, mockPosition);
+      });
     });
 
     group(
         // ignore: lines_longer_than_80_chars
-        'getNmeaMessageStream: When requesting a stream of location service status and NMEA updates',
+        'getNmeaStream: When requesting a stream of location service status and NMEA updates',
         () {
       group(
           'And requesting for NMEA and location service status updates multiple times',
@@ -1054,10 +1102,8 @@ void main() {
             true,
           );
 
-          final firstStreamNmea =
-              methodChannelGeolocator.getNmeaMessageStream();
-          final secondStreamNmea =
-              methodChannelGeolocator.getNmeaMessageStream();
+          final firstStreamNmea = methodChannelGeolocator.getNmeaStream();
+          final secondStreamNmea = methodChannelGeolocator.getNmeaStream();
 
           expect(
             identical(firstStreamNmea, secondStreamNmea),
@@ -1107,7 +1153,7 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test events
@@ -1177,7 +1223,7 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test error
@@ -1200,7 +1246,8 @@ void main() {
 
       test(
           // ignore: lines_longer_than_80_chars
-          'Should receive a already subscribed exception', () async {
+          'Should receive a permission request is already in progress exception',
+          () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -1210,7 +1257,7 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test error
@@ -1243,20 +1290,20 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test error
         streamController.addError(PlatformException(
-            code: 'LOCATION_SUBSCRIPTION_ACTIVE',
-            message: 'Already subscribed to receive a position stream',
+            code: 'NMEA_SUBSCRIPTION_ACTIVE',
+            message: 'Already subscribed to receive a nmea stream',
             details: null));
 
         // Assert
         expect(
             streamQueue.next,
             throwsA(
-              isA<AlreadySubscribedException>(),
+              isA<NmeaAlreadySubscribedException>(),
             ));
 
         // Clean up
@@ -1266,7 +1313,7 @@ void main() {
 
       test(
           // ignore: lines_longer_than_80_chars
-          'Should receive a position update exception', () async {
+          'Should receive a nmea update exception', () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -1276,20 +1323,20 @@ void main() {
         );
 
         // Act
-        final nmeaStream = MethodChannelGeolocator().getNmeaMessageStream();
+        final nmeaStream = MethodChannelGeolocator().getNmeaStream();
         final streamQueue = StreamQueue(nmeaStream);
 
         // Emit test error
         streamController.addError(PlatformException(
-            code: 'LOCATION_UPDATE_FAILURE',
-            message: 'A permission request is already in progress',
+            code: 'NMEA_UPDATE_FAILURE',
+            message: 'A nmea request is already in progress',
             details: null));
 
         // Assert
         expect(
             streamQueue.next,
             throwsA(
-              isA<PositionUpdateException>(),
+              isA<NmeaUpdateException>(),
             ));
 
         // Clean up

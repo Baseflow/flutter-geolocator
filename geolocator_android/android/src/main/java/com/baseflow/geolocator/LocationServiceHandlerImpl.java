@@ -19,7 +19,6 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
   private static final String TAG = "LocationServiceHandler";
 
   @Nullable private EventChannel channel;
-  @Nullable private Activity activity;
   @Nullable private Context context;
   @Nullable private LocationServiceStatusReceiver receiver;
 
@@ -28,7 +27,7 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
       Log.w(TAG, "Setting a event call handler before the last was disposed.");
       stopListening();
     }
-    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_service_updates");
+    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_service_updates_android");
     channel.setStreamHandler(this);
     this.context = context;
   }
@@ -37,29 +36,37 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
     if (channel == null) {
       return;
     }
+
+    disposeListeners();
     channel.setStreamHandler(null);
     channel = null;
   }
 
-  void setActivity(@Nullable Activity activity) {
-    this.activity = activity;
+  void setContext(@Nullable Context context) {
+    this.context = context;
   }
 
   @Override
   public void onListen(Object arguments, EventChannel.EventSink events) {
-    if (activity == null) {
+    if (context == null) {
       return;
     }
 
     IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
     filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
     receiver = new LocationServiceStatusReceiver(events);
-    if (activity == null) return;
-    activity.registerReceiver(receiver, filter);
+    context.registerReceiver(receiver, filter);
   }
 
   @Override
   public void onCancel(Object arguments) {
-    activity.unregisterReceiver(receiver);
+
+    disposeListeners();
+  }
+
+  private void disposeListeners() {
+    if (context != null && receiver != null) {
+      context.unregisterReceiver(receiver);
+    }
   }
 }

@@ -1,3 +1,7 @@
+## 2.1.5
+
+- Fixes repository URL of the package.
+
 ## 2.1.4
 
 - Adds support for the `LocationPermission.unableToDetermine` status which is reported by the `Geolocator.checkPermission()` method when a browser (like Safari) doesn't support the [permission API](https://developer.mozilla.org/en-US/docs/Web/API/Permissions_API).
