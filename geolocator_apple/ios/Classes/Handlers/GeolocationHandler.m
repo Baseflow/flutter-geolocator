@@ -79,7 +79,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 
 #if TARGET_OS_IOS
   if (@available(iOS 11.0, macOS 11.0, *)) {
-      self.locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
+      CLLocationManager *locationManager = [self getLocationManager];
+      locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
   }
 #endif
     
