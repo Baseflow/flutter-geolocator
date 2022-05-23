@@ -63,38 +63,35 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                                   distanceFilter:kCLDistanceFilterNone
                pauseLocationUpdatesAutomatically:NO
                                     activityType:CLActivityTypeOther
-                       requestingCurrentLocation:YES];
+                       requestingCurrentLocation:YES
+                 showBackgroundLocationIndicator:NO];
 }
 
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter
         pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
-          showBackgroundLocationIndicator: (BOOL) showBackgroundLocationIndicator
+          showBackgroundLocationIndicator:(BOOL)showBackgroundLocationIndicator
                              activityType:(CLActivityType)activityType
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
     
   self.errorHandler = errorHandler;
   self.resultHandler = resultHandler;
-
-#if TARGET_OS_IOS
-  if (@available(iOS 11.0, macOS 11.0, *)) {
-      self.locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
-  }
-#endif
     
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:distanceFilter
                pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically
                                     activityType:activityType
-                       requestingCurrentLocation:NO];
+                       requestingCurrentLocation:NO
+                 showBackgroundLocationIndicator:showBackgroundLocationIndicator];
 }
 
 - (void)startUpdatingLocationWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                                   distanceFilter:(CLLocationDistance)distanceFilter
                pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
                                     activityType:(CLActivityType)activityType
-                       requestingCurrentLocation:(BOOL)requestingCurrentLocation {
+                       requestingCurrentLocation:(BOOL)requestingCurrentLocation
+                 showBackgroundLocationIndicator:(BOOL)showBackgroundLocationIndicator{
   self.requestingCurrentLocation = requestingCurrentLocation;
   CLLocationManager *locationManager = [self getLocationManager];
   locationManager.desiredAccuracy = desiredAccuracy;
@@ -107,6 +104,9 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 #if TARGET_OS_IOS
   if (@available(iOS 9.0, macOS 11.0, *)) {
     locationManager.allowsBackgroundLocationUpdates = [GeolocationHandler shouldEnableBackgroundLocationUpdates];
+  }
+  if (@available(iOS 11.0, macOS 11.0, *)) {
+    locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
   }
 #endif
   
