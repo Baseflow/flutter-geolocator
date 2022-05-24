@@ -129,7 +129,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                       title: Text(positionItem.displayValue,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                           )),
                     );
