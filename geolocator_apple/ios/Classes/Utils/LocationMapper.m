@@ -32,6 +32,10 @@
     [locationMap setObject:@(speedAccuracy) forKey: @"speed_accuracy"];
     [locationMap setObject:@(location.course) forKey: @"heading"];
     
+    if(@available(iOS 15.0, *)) {
+        [locationMap setObject:@(location.isSimulatedBySoftware) forKey: @"is_mocked"];
+    }
+    
     if (@available(macOS 10.15, *)) {
       if(location.floor && location.floor.level) {
         [locationMap setObject:@(location.floor.level) forKey:@"floor"];
