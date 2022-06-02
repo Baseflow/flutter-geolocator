@@ -33,7 +33,7 @@
     [locationMap setObject:@(location.course) forKey: @"heading"];
     
     if(@available(iOS 15.0, *)) {
-        [locationMap setObject:@(location.isSimulatedBySoftware) forKey: @"is_mocked"];
+        [locationMap setObject:@(location.sourceInformation.isSimulatedBySoftware) forKey: @"is_mocked"];
     }
     
     if (@available(macOS 10.15, *)) {
