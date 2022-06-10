@@ -1,3 +1,7 @@
+## 2.1.5
+
+- Update isMocked flag on iOS 15 and higher.
+
 ## 2.1.4
 
 - Fix background location indicator not showing on first time using the service.
