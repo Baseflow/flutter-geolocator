@@ -282,7 +282,13 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     }
   }
 
-  void _toggleListening() {
+  Future<void> _toggleListening() async {
+    final hasPermission = await _handlePermission();
+
+    if (!hasPermission) {
+      return;
+    }
+
     if (_positionStreamSubscription == null) {
       final androidSettings = AndroidSettings(
         accuracy: LocationAccuracy.best,
