@@ -1,3 +1,8 @@
+## 3.2.0
+
+- Raises minimum Dart version to 2.17 and Flutter version to 3.0.0.
+- Removes deprecated `android.enableR8` property from gradle properties.
+
 ## 3.1.8
 
 - Ensures that when Google mobile services are globally excluded as a dependency to automatically fallback to the Android LocationManager.
