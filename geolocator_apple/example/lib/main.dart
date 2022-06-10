@@ -283,7 +283,13 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     }
   }
 
-  void _toggleListening() {
+  Future<void> _toggleListening() async {
+    final hasPermission = await _handlePermission();
+
+    if (!hasPermission) {
+      return;
+    }
+
     Exception? error;
 
     if (_positionStreamSubscription == null) {
