@@ -129,6 +129,7 @@ public class GeolocatorLocationService extends Service {
     obtainWakeLocks(options);
   }
 
+  @SuppressWarnings("deprecation")
   public void disableBackgroundMode() {
     if (isForeground) {
       Log.d(TAG, "Stop service in foreground.");
@@ -136,7 +137,6 @@ public class GeolocatorLocationService extends Service {
             stopForeground(ONGOING_NOTIFICATION_ID);
         }
         else {
-            //noinspection deprecation
             stopForeground(true);
         }
         releaseWakeLocks();
