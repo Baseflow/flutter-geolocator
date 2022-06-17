@@ -1,6 +1,6 @@
 group 'com.baseflow.geolocator'
 version '1.0'
-def args = ["-Xlint:deprecation","-Xlint:unchecked","-Werror"]
+def args = ["-Xlint:deprecation", "-Xlint:unchecked", "-Werror"]
 
 buildscript {
     repositories {
@@ -20,7 +20,7 @@ rootProject.allprojects {
     }
 }
 
-project.getTasks().withType(JavaCompile){
+project.getTasks().withType(JavaCompile) {
     options.compilerArgs.addAll(args)
 }
 
@@ -42,6 +42,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'androidx.core:core:1.2.0'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+    implementation 'androidx.core:core:1.8.0'
 }
