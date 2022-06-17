@@ -136,7 +136,7 @@ public class GeolocatorLocationService extends Service {
             stopForeground(ONGOING_NOTIFICATION_ID);
         }
         else {
-            //noinspection
+            //noinspection deprecation
             stopForeground(true);
         }
         releaseWakeLocks();
