@@ -1,3 +1,8 @@
+## 3.2.1
+
+- Use `java.security.SecureRandom` instead of `java.util.Random` to ensure the 
+`ActivityRequest` identifier is generated in a cryptographically strong fasion.
+
 ## 3.2.0
 
 - Raises minimum Dart version to 2.17 and Flutter version to 3.0.0.

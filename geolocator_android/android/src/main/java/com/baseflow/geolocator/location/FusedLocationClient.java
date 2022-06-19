@@ -14,7 +14,7 @@ import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.*;
-import java.util.Random;
+import java.security.SecureRandom;
 
 class FusedLocationClient implements LocationClient {
     private static final String TAG = "FlutterGeolocator";
@@ -66,7 +66,7 @@ class FusedLocationClient implements LocationClient {
   }
 
   private synchronized int generateActivityRequestCode() {
-    Random random = new Random();
+    SecureRandom random = new SecureRandom();
     return random.nextInt(1 << 16);
   }
 
