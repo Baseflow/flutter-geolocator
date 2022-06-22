@@ -254,8 +254,8 @@ In certain situation it is necessary to specify some platform specific settings.
 
 ```dart
 import 'package:geolocator/geolocator.dart';
-import 'package:geoloator_apple/geolocator_apple.dart';
-import 'package:geoloator_android/geolocator_android.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
+import 'package:geolocator_android/geolocator_android.dart';
 
 late LocationSettings locationSettings;
 
