@@ -131,7 +131,7 @@ public class GeolocatorLocationService extends Service {
   public void disableBackgroundMode() {
     if (isForeground) {
       Log.d(TAG, "Stop service in foreground.");
-      stopForeground(true);
+      stopForeground(ONGOING_NOTIFICATION_ID);
       releaseWakeLocks();
       isForeground = false;
       backgroundNotification = null;

@@ -1,3 +1,11 @@
+## 4.0.0
+
+> **IMPORTANT:** when updating to version 4.0.0 make sure to also set the `compileSdkVersion` in the `android/app/build.gradle` file to `33`.
+
+- Set android `compileSdkVersion` to `33` (Android 13);
+- Fixed the deprecation warnings/errors which caused the compilation to fail when using `compileSdkVersion 33`.
+- Make sure the example app compiles against Android SDK 33.
+
 ## 3.2.1
 
 - Use `java.security.SecureRandom` instead of `java.util.Random` to ensure the 
