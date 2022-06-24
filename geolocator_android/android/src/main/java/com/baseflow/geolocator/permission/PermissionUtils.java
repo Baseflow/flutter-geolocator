@@ -40,11 +40,11 @@ public class PermissionUtils {
     final PackageManager packageManager = context.getPackageManager();
     final String packageName = context.getPackageName();
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      return packageManager.getPackageInfo(packageName,
-          PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS));
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      return packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
     }
-
-    return packageManager.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS);
+    
+    return packageManager.getPackageInfo(packageName,
+        PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS));
   }
 }
