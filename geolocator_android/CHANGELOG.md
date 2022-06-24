@@ -1,3 +1,7 @@
+## 4.0.1
+
+- Fixes a bug introduced in `4.0.0` that throws an error if API level < 24.
+
 ## 4.0.0
 
 > **IMPORTANT:** when updating to version 4.0.0 make sure to also set the `compileSdkVersion` in the `android/app/build.gradle` file to `33`.
