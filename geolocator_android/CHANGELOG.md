@@ -1,3 +1,7 @@
+## 4.1.0
+
+- Adds the ability to report altitude as MSL obtained from NMEA messages when available.
+
 ## 4.0.2
 
 - Fix nullpointer in `MethodCallHandlerImpl.getLocationAccuracy`
@@ -8,7 +12,8 @@
 
 ## 4.0.0
 
-> **IMPORTANT:** when updating to version 4.0.0 make sure to also set the `compileSdkVersion` in the `android/app/build.gradle` file to `33`.
+> **IMPORTANT:** when updating to version 4.0.0 make sure to also set the `compileSdkVersion` in
+> the `android/app/build.gradle` file to `33`.
 
 - Set android `compileSdkVersion` to `33` (Android 13);
 - Fixed the deprecation warnings/errors which caused the compilation to fail when using `compileSdkVersion 33`.
@@ -16,12 +21,8 @@
 
 ## 3.2.1
 
-- Use `java.security.SecureRandom` instead of `java.util.Random` to ensure the 
-`ActivityRequest` identifier is generated in a cryptographically strong fasion.
-
-## 3.2.1
-
-- Adds the ability to report altitude as MSL obtained from NMEA messages when available.
+- Use `java.security.SecureRandom` instead of `java.util.Random` to ensure the
+  `ActivityRequest` identifier is generated in a cryptographically strong fasion.
 
 ## 3.2.0
 
