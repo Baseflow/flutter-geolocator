@@ -5,8 +5,8 @@ issue_tracker: https://github.com/baseflow/flutter-geolocator/issues?q=is%3Aissu
 version: 9.0.0
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.20.0"
+  sdk: ">=2.15.0 <3.0.0"
+  flutter: ">=2.8.0"
 
 flutter:
   plugin:

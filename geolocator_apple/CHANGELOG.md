@@ -1,3 +1,7 @@
+## 2.2.1
+
+- Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.
+
 ## 2.2.0
 
 - Raises minimum Dart version to 2.17 and Flutter version to 3.0.0.
