@@ -1,3 +1,7 @@
+## 9.0.1
+
+- Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.
+
 ## 9.0.0
 
 > **IMPORTANT:** when updating to version 9.0.0 make sure to also set the `compileSdkVersion` in the `android/app/build.gradle` file to `33`.
