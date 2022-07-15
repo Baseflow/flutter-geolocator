@@ -1,3 +1,7 @@
+## 4.0.2
+
+- Export `AndroidResource` class at `geolocator_android.at`.
+
 ## 4.0.1
 
 - Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.
