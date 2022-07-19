@@ -158,7 +158,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             context,
             (ErrorCodes errorCode) ->
                 result.error(errorCode.toString(), errorCode.toDescription(), null));
-    if (result != null) {
+    if (status != null) {
       result.success(status.ordinal());
     }
   }
