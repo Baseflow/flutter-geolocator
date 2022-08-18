@@ -22,10 +22,10 @@ import java.util.List;
 class LocationManagerClient implements LocationClient, LocationListener {
 
   private static final long TWO_MINUTES = 120000;
-  public Context context;
   private final LocationManager locationManager;
+  private final NmeaClient nmeaClient;
   @Nullable private final LocationOptions locationOptions;
-
+  public Context context;
   private boolean isListening = false;
 
   @Nullable private Location currentBestLocation;
@@ -38,127 +38,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     this.locationOptions = locationOptions;
     this.context = context;
-  }
-
-  @Override
-  public void isLocationServiceEnabled(LocationServiceListener listener) {
-    if (locationManager == null) {
-      listener.onLocationServiceResult(false);
-      return;
-    }
-
-    listener.onLocationServiceResult(checkLocationService(context));
-  }
-
-  @Override
-  public void getLastKnownPosition(
-      PositionChangedCallback positionChangedCallback, ErrorCallback errorCallback) {
-    Location bestLocation = null;
-
-    for (String provider : locationManager.getProviders(true)) {
-      @SuppressLint("MissingPermission")
-      Location location = locationManager.getLastKnownLocation(provider);
-
-      if (location != null && isBetterLocation(location, bestLocation)) {
-        bestLocation = location;
-      }
-    }
-
-    positionChangedCallback.onPositionChanged(bestLocation);
-  }
-
-  @Override
-  public boolean onActivityResult(int requestCode, int resultCode) {
-    return false;
-  }
-
-  @SuppressLint("MissingPermission")
-  @Override
-  public void startPositionUpdates(
-      Activity activity,
-      PositionChangedCallback positionChangedCallback,
-      ErrorCallback errorCallback) {
-
-    if (!checkLocationService(context)) {
-      errorCallback.onError(ErrorCodes.locationServicesDisabled);
-      return;
-    }
-
-    this.positionChangedCallback = positionChangedCallback;
-    this.errorCallback = errorCallback;
-
-    LocationAccuracy locationAccuracy =
-        this.locationOptions != null ? this.locationOptions.getAccuracy() : LocationAccuracy.best;
-
-    this.currentLocationProvider = getBestProvider(this.locationManager, locationAccuracy);
-
-    if (this.currentLocationProvider.trim().isEmpty()) {
-      errorCallback.onError(ErrorCodes.locationServicesDisabled);
-      return;
-    }
-
-    long timeInterval = 0;
-    float distanceFilter = 0;
-    if (this.locationOptions != null) {
-      timeInterval = locationOptions.getTimeInterval();
-      distanceFilter = locationOptions.getDistanceFilter();
-    }
-
-    this.isListening = true;
-    this.locationManager.requestLocationUpdates(
-        this.currentLocationProvider, timeInterval, distanceFilter, this, Looper.getMainLooper());
-  }
-
-  @SuppressLint("MissingPermission")
-  @Override
-  public void stopPositionUpdates() {
-    this.isListening = false;
-    this.locationManager.removeUpdates(this);
-  }
-
-  @Override
-  public synchronized void onLocationChanged(Location location) {
-    float desiredAccuracy =
-        locationOptions != null ? accuracyToFloat(locationOptions.getAccuracy()) : 50;
-
-    if (isBetterLocation(location, currentBestLocation)
-        && location.getAccuracy() <= desiredAccuracy) {
-      this.currentBestLocation = location;
-
-      if (this.positionChangedCallback != null) {
-        this.positionChangedCallback.onPositionChanged(currentBestLocation);
-      }
-    }
-  }
-
-  @TargetApi(28)
-  @SuppressWarnings("deprecation")
-  @Override
-  public void onStatusChanged(String provider, int status, Bundle extras) {
-    if (status == android.location.LocationProvider.AVAILABLE) {
-      onProviderEnabled(provider);
-    } else if (status == android.location.LocationProvider.OUT_OF_SERVICE) {
-      onProviderDisabled(provider);
-    }
-  }
-
-  @Override
-  public void onProviderEnabled(String provider) {}
-
-  @SuppressLint("MissingPermission")
-  @Override
-  public void onProviderDisabled(String provider) {
-    if (provider.equals(this.currentLocationProvider)) {
-      if (isListening) {
-        this.locationManager.removeUpdates(this);
-      }
-
-      if (this.errorCallback != null) {
-        errorCallback.onError(ErrorCodes.locationServicesDisabled);
-      }
-
-      this.currentLocationProvider = null;
-    }
+    this.nmeaClient = new NmeaClient(context, locationOptions);
   }
 
   static boolean isBetterLocation(Location location, Location bestLocation) {
@@ -246,6 +126,130 @@ class LocationManagerClient implements LocationClient, LocationListener {
         return 50;
       default:
         return 100;
+    }
+  }
+
+  @Override
+  public void isLocationServiceEnabled(LocationServiceListener listener) {
+    if (locationManager == null) {
+      listener.onLocationServiceResult(false);
+      return;
+    }
+
+    listener.onLocationServiceResult(checkLocationService(context));
+  }
+
+  @Override
+  public void getLastKnownPosition(
+      PositionChangedCallback positionChangedCallback, ErrorCallback errorCallback) {
+    Location bestLocation = null;
+
+    for (String provider : locationManager.getProviders(true)) {
+      @SuppressLint("MissingPermission")
+      Location location = locationManager.getLastKnownLocation(provider);
+
+      if (location != null && isBetterLocation(location, bestLocation)) {
+        bestLocation = location;
+      }
+    }
+
+    positionChangedCallback.onPositionChanged(bestLocation);
+  }
+
+  @Override
+  public boolean onActivityResult(int requestCode, int resultCode) {
+    return false;
+  }
+
+  @SuppressLint("MissingPermission")
+  @Override
+  public void startPositionUpdates(
+      Activity activity,
+      PositionChangedCallback positionChangedCallback,
+      ErrorCallback errorCallback) {
+
+    if (!checkLocationService(context)) {
+      errorCallback.onError(ErrorCodes.locationServicesDisabled);
+      return;
+    }
+
+    this.positionChangedCallback = positionChangedCallback;
+    this.errorCallback = errorCallback;
+
+    LocationAccuracy locationAccuracy =
+        this.locationOptions != null ? this.locationOptions.getAccuracy() : LocationAccuracy.best;
+
+    this.currentLocationProvider = getBestProvider(this.locationManager, locationAccuracy);
+
+    if (this.currentLocationProvider.trim().isEmpty()) {
+      errorCallback.onError(ErrorCodes.locationServicesDisabled);
+      return;
+    }
+
+    long timeInterval = 0;
+    float distanceFilter = 0;
+    if (this.locationOptions != null) {
+      timeInterval = locationOptions.getTimeInterval();
+      distanceFilter = locationOptions.getDistanceFilter();
+    }
+
+    this.isListening = true;
+    this.nmeaClient.start();
+    this.locationManager.requestLocationUpdates(
+        this.currentLocationProvider, timeInterval, distanceFilter, this, Looper.getMainLooper());
+  }
+
+  @SuppressLint("MissingPermission")
+  @Override
+  public void stopPositionUpdates() {
+    this.isListening = false;
+    this.nmeaClient.stop();
+    this.locationManager.removeUpdates(this);
+  }
+
+  @Override
+  public synchronized void onLocationChanged(Location location) {
+    float desiredAccuracy =
+        locationOptions != null ? accuracyToFloat(locationOptions.getAccuracy()) : 50;
+
+    if (isBetterLocation(location, currentBestLocation)
+        && location.getAccuracy() <= desiredAccuracy) {
+      this.currentBestLocation = location;
+
+      if (this.positionChangedCallback != null) {
+        nmeaClient.enrichExtrasWithNmea(location);
+        this.positionChangedCallback.onPositionChanged(currentBestLocation);
+      }
+    }
+  }
+
+  @TargetApi(28)
+  @SuppressWarnings("deprecation")
+  @Override
+  public void onStatusChanged(String provider, int status, Bundle extras) {
+    if (status == android.location.LocationProvider.AVAILABLE) {
+      onProviderEnabled(provider);
+    } else if (status == android.location.LocationProvider.OUT_OF_SERVICE) {
+      onProviderDisabled(provider);
+    }
+  }
+
+  @Override
+  public void onProviderEnabled(String provider) {}
+
+  @SuppressLint("MissingPermission")
+  @Override
+  public void onProviderDisabled(String provider) {
+    if (provider.equals(this.currentLocationProvider)) {
+      if (isListening) {
+        this.locationManager.removeUpdates(this);
+      }
+
+      if (this.errorCallback != null) {
+        errorCallback.onError(ErrorCodes.locationServicesDisabled);
+      }
+
+      this.currentLocationProvider = null;
     }
   }
 }

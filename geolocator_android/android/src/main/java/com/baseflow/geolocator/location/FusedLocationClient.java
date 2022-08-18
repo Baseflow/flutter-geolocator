@@ -7,8 +7,10 @@ import android.content.IntentSender;
 import android.location.Location;
 import android.os.Looper;
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.api.ApiException;
@@ -17,11 +19,12 @@ import com.google.android.gms.location.*;
 import java.security.SecureRandom;
 
 class FusedLocationClient implements LocationClient {
-    private static final String TAG = "FlutterGeolocator";
+  private static final String TAG = "FlutterGeolocator";
 
   private final Context context;
   private final LocationCallback locationCallback;
   private final FusedLocationProviderClient fusedLocationProviderClient;
+  private final NmeaClient nmeaClient;
   private final int activityRequestCode;
   @Nullable private final LocationOptions locationOptions;
 
@@ -32,15 +35,16 @@ class FusedLocationClient implements LocationClient {
     this.context = context;
     this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     this.locationOptions = locationOptions;
+    this.nmeaClient = new NmeaClient(context, locationOptions);
     this.activityRequestCode = generateActivityRequestCode();
 
     locationCallback =
         new LocationCallback() {
           @Override
-          public synchronized void onLocationResult(LocationResult locationResult) {
-            if (locationResult == null || positionChangedCallback == null) {
+          public synchronized void onLocationResult(@NonNull LocationResult locationResult) {
+            if (positionChangedCallback == null) {
               Log.e(
-                      TAG,
+                  TAG,
                   "LocationCallback was called with empty locationResult or no positionChangedCallback was registered.");
               fusedLocationProviderClient.removeLocationUpdates(locationCallback);
               if (errorCallback != null) {
@@ -50,12 +54,13 @@ class FusedLocationClient implements LocationClient {
             }
 
             Location location = locationResult.getLastLocation();
+            nmeaClient.enrichExtrasWithNmea(location);
             positionChangedCallback.onPositionChanged(location);
           }
 
           @Override
           public synchronized void onLocationAvailability(
-              LocationAvailability locationAvailability) {
+                  @NonNull LocationAvailability locationAvailability) {
             if (!locationAvailability.isLocationAvailable() && !checkLocationService(context)) {
               if (errorCallback != null) {
                 errorCallback.onError(ErrorCodes.locationServicesDisabled);
@@ -63,6 +68,40 @@ class FusedLocationClient implements LocationClient {
             }
           }
         };
+  }
+
+  private static LocationRequest buildLocationRequest(@Nullable LocationOptions options) {
+    LocationRequest locationRequest = LocationRequest.create();
+
+    if (options != null) {
+      locationRequest.setPriority(toPriority(options.getAccuracy()));
+      locationRequest.setInterval(options.getTimeInterval());
+      locationRequest.setFastestInterval(options.getTimeInterval() / 2);
+      locationRequest.setSmallestDisplacement(options.getDistanceFilter());
+    }
+
+    return locationRequest;
+  }
+
+  private static LocationSettingsRequest buildLocationSettingsRequest(
+      LocationRequest locationRequest) {
+    LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+    builder.addLocationRequest(locationRequest);
+
+    return builder.build();
+  }
+
+  private static int toPriority(LocationAccuracy locationAccuracy) {
+    switch (locationAccuracy) {
+      case lowest:
+        return Priority.PRIORITY_PASSIVE;
+      case low:
+        return Priority.PRIORITY_LOW_POWER;
+      case medium:
+        return Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+      default:
+        return Priority.PRIORITY_HIGH_ACCURACY;
+    }
   }
 
   private synchronized int generateActivityRequestCode() {
@@ -73,8 +112,9 @@ class FusedLocationClient implements LocationClient {
   @SuppressLint("MissingPermission")
   private void requestPositionUpdates(LocationOptions locationOptions) {
     LocationRequest locationRequest = buildLocationRequest(locationOptions);
+    this.nmeaClient.start();
     fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest, locationCallback, Looper.getMainLooper());
+        locationRequest, locationCallback, Looper.getMainLooper());
   }
 
   @Override
@@ -87,8 +127,10 @@ class FusedLocationClient implements LocationClient {
                 LocationSettingsResponse lsr = response.getResult();
                 if (lsr != null) {
                   LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
+                  boolean isGpsUsable = settingsStates != null && settingsStates.isGpsUsable();
+                  boolean isNetworkUsable = settingsStates != null && settingsStates.isNetworkLocationUsable();
                   listener.onLocationServiceResult(
-                      settingsStates.isGpsUsable() || settingsStates.isNetworkLocationUsable());
+                          isGpsUsable || isNetworkUsable);
                 } else {
                   listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
                 }
@@ -151,9 +193,7 @@ class FusedLocationClient implements LocationClient {
     settingsClient
         .checkLocationSettings(settingsRequest)
         .addOnSuccessListener(
-            locationSettingsResponse ->
-                requestPositionUpdates(this.locationOptions)
-        )
+            locationSettingsResponse -> requestPositionUpdates(this.locationOptions))
         .addOnFailureListener(
             e -> {
               if (e instanceof ResolvableApiException) {
@@ -192,40 +232,7 @@ class FusedLocationClient implements LocationClient {
   }
 
   public void stopPositionUpdates() {
+    this.nmeaClient.stop();
     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-  }
-
-  private static LocationRequest buildLocationRequest(@Nullable LocationOptions options) {
-    LocationRequest locationRequest = new LocationRequest();
-
-    if (options != null) {
-      locationRequest.setPriority(toPriority(options.getAccuracy()));
-      locationRequest.setInterval(options.getTimeInterval());
-      locationRequest.setFastestInterval(options.getTimeInterval() / 2);
-      locationRequest.setSmallestDisplacement(options.getDistanceFilter());
-    }
-
-    return locationRequest;
-  }
-
-  private static LocationSettingsRequest buildLocationSettingsRequest(
-      LocationRequest locationRequest) {
-    LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-    builder.addLocationRequest(locationRequest);
-
-    return builder.build();
-  }
-
-  private static int toPriority(LocationAccuracy locationAccuracy) {
-    switch (locationAccuracy) {
-      case lowest:
-        return LocationRequest.PRIORITY_NO_POWER;
-      case low:
-        return LocationRequest.PRIORITY_LOW_POWER;
-      case medium:
-        return LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
-      default:
-        return LocationRequest.PRIORITY_HIGH_ACCURACY;
-    }
   }
 }
