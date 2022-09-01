@@ -12,7 +12,7 @@ dependencies:
   baseflow_plugin_template:
     git:
       url: https://github.com/Baseflow/baseflow_plugin_template.git
-      ref: v2.1.0
+      ref: update-deprecated-button
   flutter:
     sdk: flutter
 
