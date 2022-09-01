@@ -34,6 +34,12 @@ public class LocationMapper {
       position.put("is_mocked", false);
     }
 
+    if (location.getExtras() != null) {
+      if (location.getExtras().containsKey(NmeaClient.NMEA_ALTITUDE_EXTRA)) {
+        Double mslAltitude = location.getExtras().getDouble(NmeaClient.NMEA_ALTITUDE_EXTRA);
+        position.put("altitude", mslAltitude);
+      }
+    }
     return position;
   }
 }

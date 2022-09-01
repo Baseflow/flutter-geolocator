@@ -51,6 +51,7 @@ version
 .pub-cache/
 .pub/
 build/
+captures/
 flutter_*.png
 linked_*.ds
 unlinked.ds
@@ -59,13 +60,14 @@ flutter_export_environment.sh
 **/.flutter-plugins-dependencies
 
 # Android related
-**/android/**/gradle-wrapper.jar
-**/android/.gradle
+gradle-wrapper.jar
+.gradle
 **/android/captures/
-**/android/gradlew
-**/android/gradlew.bat
-**/android/local.properties
-**/android/**/GeneratedPluginRegistrant.java
+gradlew
+gradlew.bat
+local.properties
+keystore.properties
+GeneratedPluginRegistrant.java
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
