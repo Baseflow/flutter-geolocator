@@ -2,6 +2,10 @@
 
 - Added functionality to receive NMEA messages.
 
+## 4.0.6
+
+- Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.
+
 ## 4.0.5
 
 - Fixes repository URL of the package.

@@ -1,3 +1,7 @@
+## 2.1.6
+
+- Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.
+
 ## 2.1.5
 
 - Fixes repository URL of the package.

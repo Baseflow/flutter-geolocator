@@ -282,12 +282,20 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     }
   }
 
-  void _toggleListening() {
+  Future<void> _toggleListening() async {
+    final hasPermission = await _handlePermission();
+
+    if (!hasPermission) {
+      return;
+    }
+
     if (_positionStreamSubscription == null) {
       final androidSettings = AndroidSettings(
         accuracy: LocationAccuracy.best,
         distanceFilter: 10,
+        intervalDuration: const Duration(seconds: 1),
         forceLocationManager: false,
+        useMSLAltitude: true,
         foregroundNotificationConfig: const ForegroundNotificationConfig(
           notificationText:
               "Example app will continue to receive your location even when you aren't using it",
@@ -303,10 +311,13 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
-      }).listen((position) => _updatePositionList(
-            _PositionItemType.position,
-            position.toString(),
-          ));
+      }).listen((position) {
+        debugPrint(position.altitude.toString());
+        _updatePositionList(
+          _PositionItemType.position,
+          position.toString(),
+        );
+      });
       _positionStreamSubscription?.pause();
     }
 
