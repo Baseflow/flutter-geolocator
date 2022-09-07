@@ -62,7 +62,7 @@ On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
 
-Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission) if you want to continue receiving updates even when your App is running in the background (note that the geolocator plugin doesn't support receiving an processing location updates while running in the background):
+Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission) if you want to continue receiving updates even when your App is running in the background (note that the geolocator plugin doesn't support receiving and processing location updates while running in the background):
 
 ``` xml
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -354,7 +354,7 @@ Possible results from the `checkPermission` and `requestPermission` methods are:
 Permission | Description
 -----------|------------
 denied | Permission to access the device's location is denied by the user. You are free to request permission again (this is also the initial permission state).
-deniedForever | Permission to access the device's location is permenantly denied. When requesting permissions the permission dialog will not been shown until the user updates the permission in the App settings.
+deniedForever | Permission to access the device's location is permanently denied. When requesting permissions the permission dialog will not be shown until the user updates the permission in the App settings.
 whileInUse | Permission to access the device's location is allowed only while the App is in use.
 always | Permission to access the device's location is allowed even when the App is running in the background.
 

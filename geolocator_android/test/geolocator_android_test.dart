@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_android/geolocator_android.dart';
+import 'package:geolocator_android/src/types/foreground_settings.dart';
 
 import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
@@ -713,7 +714,8 @@ void main() {
           stream: streamController.stream,
         );
 
-        var stream = GeolocatorAndroid().getPositionStream();
+        var stream = GeolocatorAndroid().getPositionStream(
+            locationSettings: AndroidSettings(useMSLAltitude: false));
         StreamSubscription<Position>? streamSubscription =
             stream.listen((event) {});
 
@@ -765,7 +767,8 @@ void main() {
         );
 
         // Act
-        final positionStream = GeolocatorAndroid().getPositionStream();
+        final positionStream = GeolocatorAndroid().getPositionStream(
+            locationSettings: AndroidSettings(useMSLAltitude: false));
         final streamQueue = StreamQueue(positionStream);
 
         // Emit test events
@@ -1218,6 +1221,71 @@ void main() {
         expect(
           hasOpenedLocationSettings,
           true,
+        );
+      });
+
+      test('Should receive false if an error occurred', () async {
+        // Arrange
+        MethodChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_android',
+          method: 'openLocationSettings',
+          result: false,
+        );
+
+        // Act
+        final hasOpenedLocationSettings =
+            await GeolocatorAndroid().openLocationSettings();
+
+        // Assert
+        expect(
+          hasOpenedLocationSettings,
+          false,
+        );
+      });
+    });
+
+    group('jsonSerialization: When serializing to json', () {
+      test('Should produce valid map with all the settings when calling toJson',
+          () async {
+        // Arrange
+        final settings = AndroidSettings(
+            accuracy: LocationAccuracy.best,
+            distanceFilter: 5,
+            forceLocationManager: false,
+            intervalDuration: const Duration(seconds: 1),
+            timeLimit: const Duration(seconds: 1),
+            useMSLAltitude: false,
+            foregroundNotificationConfig: const ForegroundNotificationConfig(
+                notificationText: 'text',
+                notificationTitle: 'title',
+                enableWakeLock: false,
+                enableWifiLock: false,
+                notificationIcon:
+                    AndroidResource(name: 'name', defType: 'defType')));
+
+        // Act
+        final jsonMap = settings.toJson();
+
+        // Assert
+        expect(
+          jsonMap['accuracy'],
+          settings.accuracy.index,
+        );
+        expect(
+          jsonMap['distanceFilter'],
+          settings.distanceFilter,
+        );
+        expect(
+          jsonMap['forceLocationManager'],
+          settings.forceLocationManager,
+        );
+        expect(
+          jsonMap['timeInterval'],
+          settings.intervalDuration!.inMilliseconds,
+        );
+        expect(
+          jsonMap['useMSLAltitude'],
+          settings.useMSLAltitude,
         );
       });
 

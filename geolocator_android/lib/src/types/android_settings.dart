@@ -16,6 +16,7 @@ class AndroidSettings extends LocationSettings {
     this.intervalDuration,
     Duration? timeLimit,
     this.foregroundNotificationConfig,
+    this.useMSLAltitude = false,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
@@ -51,6 +52,22 @@ class AndroidSettings extends LocationSettings {
   /// showing the user that the service will continue running in the background.
   final ForegroundNotificationConfig? foregroundNotificationConfig;
 
+  /// Set to true if altitude should be calculated as MSL (EGM2008) from NMEA messages
+  /// and reported as the altitude instead of using the geoidal height (WSG84). Setting
+  /// this property true will help to align Android altitude to that of iOS which uses MSL.
+  ///
+  /// If the NMEA message is empty then the altitude reported will still be the standard WSG84
+  /// altitude from the GPS receiver.
+  ///
+  /// MSL Altitude is only available starting from Android N and not all devices support
+  /// NMEA message returning $GPGGA sequences.
+  ///
+  /// This property only works with position stream updates and has no effect when getting the
+  /// current position or last known position.
+  ///
+  /// Defaults to false
+  final bool useMSLAltitude;
+
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
@@ -58,6 +75,7 @@ class AndroidSettings extends LocationSettings {
         'forceLocationManager': forceLocationManager,
         'timeInterval': intervalDuration?.inMilliseconds,
         'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
+        'useMSLAltitude': useMSLAltitude,
       });
   }
 }

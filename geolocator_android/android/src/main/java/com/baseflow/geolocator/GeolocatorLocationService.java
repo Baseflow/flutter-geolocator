@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -128,11 +129,17 @@ public class GeolocatorLocationService extends Service {
     obtainWakeLocks(options);
   }
 
+  @SuppressWarnings("deprecation")
   public void disableBackgroundMode() {
     if (isForeground) {
       Log.d(TAG, "Stop service in foreground.");
-      stopForeground(ONGOING_NOTIFICATION_ID);
-      releaseWakeLocks();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            stopForeground(ONGOING_NOTIFICATION_ID);
+        }
+        else {
+            stopForeground(true);
+        }
+        releaseWakeLocks();
       isForeground = false;
       backgroundNotification = null;
     }
