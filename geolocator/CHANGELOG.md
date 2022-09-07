@@ -1,7 +1,3 @@
-## 9.0.2
-
-- Export `AndroidResource` class from the `gelocator_android` package at `lib/geolocator.dart`.
-
 ## 9.0.1
 
 - Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.
