@@ -35,6 +35,7 @@ public class GeolocatorLocationService extends Service {
   private final LocalBinder binder = new LocalBinder(this);
   // Service is foreground
   private boolean isForeground = false;
+  private int connectedEngines = 0;
   @Nullable private Activity activity = null;
   @Nullable private GeolocationManager geolocationManager = null;
   @Nullable private LocationClient locationClient;
@@ -61,12 +62,14 @@ public class GeolocatorLocationService extends Service {
   public IBinder onBind(Intent intent) {
 
     Log.d(TAG, "Binding to location service.");
+    connectedEngines++;
     return binder;
   }
 
   @Override
   public boolean onUnbind(Intent intent) {
     Log.d(TAG, "Unbinding from location service.");
+    connectedEngines--;
     return super.onUnbind(intent);
   }
 
@@ -81,6 +84,10 @@ public class GeolocatorLocationService extends Service {
 
     Log.d(TAG, "Destroyed location service.");
     super.onDestroy();
+  }
+
+  public boolean isOnlyConnectedEngine() {
+      return connectedEngines == 1;
   }
 
   public void startLocationService(
