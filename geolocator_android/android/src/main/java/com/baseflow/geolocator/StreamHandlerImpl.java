@@ -150,7 +150,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
 
   private void disposeListeners() {
     Log.e(TAG, "Geolocator position updates stopped");
-    if (foregroundLocationService != null && foregroundLocationService.isOnlyConnectedEngine()) {
+    if (foregroundLocationService != null && foregroundLocationService.canStopLocationService()) {
       foregroundLocationService.stopLocationService();
       foregroundLocationService.disableBackgroundMode();
     }

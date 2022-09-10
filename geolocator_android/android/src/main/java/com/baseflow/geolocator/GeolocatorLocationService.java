@@ -83,8 +83,8 @@ public class GeolocatorLocationService extends Service {
     super.onDestroy();
   }
 
-  public boolean isOnlyConnectedEngine() {
-      return connectedEngines == 1;
+  public boolean canStopLocationService() {
+      return connectedEngines == 0;
   }
 
   public void flutterEngineConnected() {
