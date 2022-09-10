@@ -60,15 +60,13 @@ public class GeolocatorLocationService extends Service {
   @Nullable
   @Override
   public IBinder onBind(Intent intent) {
-      connectedEngines++;
-    Log.d(TAG, "Binding to location service. Connected engines " + connectedEngines);
+    Log.d(TAG, "Binding to location service.");
     return binder;
   }
 
   @Override
   public boolean onUnbind(Intent intent) {
-      connectedEngines--;
-    Log.d(TAG, "Unbinding from location service., Connected engines " + connectedEngines);
+    Log.d(TAG, "Unbinding from location service.");
     return super.onUnbind(intent);
   }
 
@@ -87,6 +85,18 @@ public class GeolocatorLocationService extends Service {
 
   public boolean isOnlyConnectedEngine() {
       return connectedEngines == 1;
+  }
+
+  public void flutterEngineConnected() {
+
+      connectedEngines++;
+      Log.d(TAG, "Flutter engine connected. Connected engine count " + connectedEngines);
+  }
+
+  public void flutterEngineDisconnected() {
+
+      connectedEngines--;
+      Log.d(TAG, "Flutter engine disconnected. Connected engine count " + connectedEngines);
   }
 
   public void startLocationService(
