@@ -15,7 +15,19 @@ import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.*;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.location.SettingsClient;
+
 import java.security.SecureRandom;
 
 class FusedLocationClient implements LocationClient {
@@ -60,7 +72,7 @@ class FusedLocationClient implements LocationClient {
 
           @Override
           public synchronized void onLocationAvailability(
-                  @NonNull LocationAvailability locationAvailability) {
+              @NonNull LocationAvailability locationAvailability) {
             if (!locationAvailability.isLocationAvailable() && !checkLocationService(context)) {
               if (errorCallback != null) {
                 errorCallback.onError(ErrorCodes.locationServicesDisabled);
@@ -128,9 +140,9 @@ class FusedLocationClient implements LocationClient {
                 if (lsr != null) {
                   LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
                   boolean isGpsUsable = settingsStates != null && settingsStates.isGpsUsable();
-                  boolean isNetworkUsable = settingsStates != null && settingsStates.isNetworkLocationUsable();
-                  listener.onLocationServiceResult(
-                          isGpsUsable || isNetworkUsable);
+                  boolean isNetworkUsable =
+                      settingsStates != null && settingsStates.isNetworkLocationUsable();
+                  listener.onLocationServiceResult(isGpsUsable || isNetworkUsable);
                 } else {
                   listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
                 }

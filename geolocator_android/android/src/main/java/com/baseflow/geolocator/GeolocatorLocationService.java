@@ -84,19 +84,19 @@ public class GeolocatorLocationService extends Service {
   }
 
   public boolean canStopLocationService() {
-      return connectedEngines == 0;
+    return connectedEngines == 0;
   }
 
   public void flutterEngineConnected() {
 
-      connectedEngines++;
-      Log.d(TAG, "Flutter engine connected. Connected engine count " + connectedEngines);
+    connectedEngines++;
+    Log.d(TAG, "Flutter engine connected. Connected engine count " + connectedEngines);
   }
 
   public void flutterEngineDisconnected() {
 
-      connectedEngines--;
-      Log.d(TAG, "Flutter engine disconnected. Connected engine count " + connectedEngines);
+    connectedEngines--;
+    Log.d(TAG, "Flutter engine disconnected. Connected engine count " + connectedEngines);
   }
 
   public void startLocationService(
@@ -149,13 +149,12 @@ public class GeolocatorLocationService extends Service {
   public void disableBackgroundMode() {
     if (isForeground) {
       Log.d(TAG, "Stop service in foreground.");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(ONGOING_NOTIFICATION_ID);
-        }
-        else {
-            stopForeground(true);
-        }
-        releaseWakeLocks();
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        stopForeground(ONGOING_NOTIFICATION_ID);
+      } else {
+        stopForeground(true);
+      }
+      releaseWakeLocks();
       isForeground = false;
       backgroundNotification = null;
     }
