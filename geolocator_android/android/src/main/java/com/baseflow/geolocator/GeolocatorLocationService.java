@@ -60,16 +60,15 @@ public class GeolocatorLocationService extends Service {
   @Nullable
   @Override
   public IBinder onBind(Intent intent) {
-
-    Log.d(TAG, "Binding to location service.");
-    connectedEngines++;
+      connectedEngines++;
+    Log.d(TAG, "Binding to location service. Connected engines " + connectedEngines);
     return binder;
   }
 
   @Override
   public boolean onUnbind(Intent intent) {
-    Log.d(TAG, "Unbinding from location service.");
-    connectedEngines--;
+      connectedEngines--;
+    Log.d(TAG, "Unbinding from location service., Connected engines " + connectedEngines);
     return super.onUnbind(intent);
   }
 
