@@ -1,10 +1,11 @@
-## 4.1.1
-
-- Moves the Android complile arguments to the example `build.gradle` so that is not forces the arguments on consumers of the package.
-
-## 4.1.1
+## 4.1.2
 
 - Fix a bug where the location service would stop if we have multiple flutter engines connected and one disconnects
+
+## 4.1.1
+
+- Moves the Android complile arguments to the example `build.gradle` so that is not forces the arguments on consumers of
+  the package.
 
 ## 4.1.0
 
