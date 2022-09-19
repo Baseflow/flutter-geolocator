@@ -9,10 +9,8 @@ environment:
   sdk: ">=2.15.0 <3.0.0"
 
 dependencies:
-  baseflow_plugin_template:
-    git:
-      url: https://github.com/Baseflow/baseflow_plugin_template.git
-      ref: baseflow_plugin_template_v2.1.1
+  baseflow_plugin_template: ^2.1.1
+  
   flutter:
     sdk: flutter
 

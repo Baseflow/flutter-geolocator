@@ -1,3 +1,7 @@
+## 2.2.2
+
+- Fix requesting location while listening to location stream stops the stream
+
 ## 2.2.1
 
 - Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.

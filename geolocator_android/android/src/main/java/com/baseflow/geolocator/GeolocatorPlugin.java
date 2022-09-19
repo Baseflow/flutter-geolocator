@@ -39,7 +39,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
         public void onServiceConnected(ComponentName name, IBinder service) {
           Log.d(TAG, "Geolocator foreground service connected");
           if (service instanceof GeolocatorLocationService.LocalBinder) {
-              initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
+            initialize(((GeolocatorLocationService.LocalBinder) service).getLocationService());
           }
         }
 
@@ -212,12 +212,16 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   }
 
   private void unbindForegroundService(Context context) {
+    if (foregroundLocationService != null) {
+      foregroundLocationService.flutterEngineDisconnected();
+    }
     context.unbindService(serviceConnection);
   }
 
   private void initialize(GeolocatorLocationService service) {
     Log.d(TAG, "Initializing Geolocator services");
     foregroundLocationService = service;
+    foregroundLocationService.flutterEngineConnected();
 
     if (streamHandler != null) {
       streamHandler.setForegroundLocationService(service);
