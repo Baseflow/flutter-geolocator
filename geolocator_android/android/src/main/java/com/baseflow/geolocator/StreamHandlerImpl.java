@@ -150,9 +150,11 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
 
   private void disposeListeners() {
     Log.e(TAG, "Geolocator position updates stopped");
-    if (foregroundLocationService != null) {
+    if (foregroundLocationService != null && foregroundLocationService.canStopLocationService()) {
       foregroundLocationService.stopLocationService();
       foregroundLocationService.disableBackgroundMode();
+    } else {
+      Log.e(TAG, "There is still another flutter engine connected, not stopping location service");
     }
     if (locationClient != null && geolocationManager != null) {
       geolocationManager.stopPositionUpdates(locationClient);
