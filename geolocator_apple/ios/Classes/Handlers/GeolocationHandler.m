@@ -13,14 +13,14 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 
 @interface GeolocationHandler() <CLLocationManagerDelegate>
 
-@property(assign, nonatomic) bool isBackgroundTracking;
+@property(assign, nonatomic) bool isListeningForPositionUpdates;
 
 @property(strong, nonatomic, nonnull) CLLocationManager *locationManager;
 
 @property(strong, nonatomic) GeolocatorError errorHandler;
 
-@property(strong, nonatomic) GeolocatorResult foregroundResultHandler;
-@property(strong, nonatomic) GeolocatorResult backgroundResultHandler;
+@property(strong, nonatomic) GeolocatorResult currentLocationResultHandler;
+@property(strong, nonatomic) GeolocatorResult listenerResultHandler;
 
 @end
 
@@ -33,7 +33,7 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
     return nil;
   }
     
-  self.isBackgroundTracking = NO;
+  self.isListeningForPositionUpdates = NO;
   return self;
 }
 
@@ -58,13 +58,13 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                              resultHandler:(GeolocatorResult _Nonnull)resultHandler
                               errorHandler:(GeolocatorError _Nonnull)errorHandler {
   self.errorHandler = errorHandler;
-  self.foregroundResultHandler = resultHandler;
+  self.currentLocationResultHandler = resultHandler;
   
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:kCLDistanceFilterNone
                pauseLocationUpdatesAutomatically:NO
                                     activityType:CLActivityTypeOther
-                            isBackgroundTracking:self.isBackgroundTracking
+                   isListeningForPositionUpdates:self.isListeningForPositionUpdates
                  showBackgroundLocationIndicator:NO];
 }
 
@@ -77,13 +77,13 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
     
   self.errorHandler = errorHandler;
-  self.backgroundResultHandler = resultHandler;
+  self.listenerResultHandler = resultHandler;
     
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:distanceFilter
                pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically
                                     activityType:activityType
-                            isBackgroundTracking:YES
+                   isListeningForPositionUpdates:YES
                  showBackgroundLocationIndicator:showBackgroundLocationIndicator];
 }
 
@@ -91,10 +91,10 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                                   distanceFilter:(CLLocationDistance)distanceFilter
                pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
                                     activityType:(CLActivityType)activityType
-                            isBackgroundTracking:(BOOL)isBackgroundTracking
+                   isListeningForPositionUpdates:(BOOL)isListeningForPositionUpdates
                  showBackgroundLocationIndicator:(BOOL)showBackgroundLocationIndicator
                             {
-  self.isBackgroundTracking = isBackgroundTracking;
+  self.isListeningForPositionUpdates = isListeningForPositionUpdates;
   CLLocationManager *locationManager = [self getLocationManager];
   locationManager.desiredAccuracy = desiredAccuracy;
   locationManager.distanceFilter = distanceFilter;
@@ -117,34 +117,34 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 
 - (void)stopListening {
   [[self getLocationManager] stopUpdatingLocation];
-  self.isBackgroundTracking = NO;
+  self.isListeningForPositionUpdates = NO;
   self.errorHandler = nil;
-  self.backgroundResultHandler = nil;
+  self.listenerResultHandler = nil;
 }
 
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
-  if (!self.backgroundResultHandler && !self.foregroundResultHandler) return;
+  if (!self.listenerResultHandler && !self.currentLocationResultHandler) return;
 
   CLLocation *mostRecentLocation = [locations lastObject];
   NSTimeInterval ageInSeconds = -[mostRecentLocation.timestamp timeIntervalSinceNow];
   // If location is older then 5.0 seconds it is likely a cached location which
   // will be skipped.
-  if (!self.isBackgroundTracking && ageInSeconds > kMaxLocationLifeTimeInSeconds) {
+  if (!self.isListeningForPositionUpdates && ageInSeconds > kMaxLocationLifeTimeInSeconds) {
     return;
   }
     
   if ([locations lastObject]) {
-      if (self.foregroundResultHandler != nil) {
-          self.foregroundResultHandler(mostRecentLocation);
+      if (self.currentLocationResultHandler != nil) {
+          self.currentLocationResultHandler(mostRecentLocation);
       }
-      if (self.backgroundResultHandler != nil) {
-          self.backgroundResultHandler(mostRecentLocation);
+      if (self.listenerResultHandler != nil) {
+          self.listenerResultHandler(mostRecentLocation);
       }
   }
 
-  self.foregroundResultHandler = nil;
-  if (!self.isBackgroundTracking) {
+  self.currentLocationResultHandler = nil;
+  if (!self.isListeningForPositionUpdates) {
     [self stopListening];
   }
 }
@@ -163,8 +163,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
     self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
   }
   
-  self.foregroundResultHandler = nil;
-  if (!self.isBackgroundTracking) {
+  self.currentLocationResultHandler = nil;
+  if (!self.isListeningForPositionUpdates) {
     [self stopListening];
   }
 }
