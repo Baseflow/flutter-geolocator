@@ -35,6 +35,7 @@ public class GeolocatorLocationService extends Service {
   private final LocalBinder binder = new LocalBinder(this);
   // Service is foreground
   private boolean isForeground = false;
+  private int connectedEngines = 0;
   @Nullable private Activity activity = null;
   @Nullable private GeolocationManager geolocationManager = null;
   @Nullable private LocationClient locationClient;
@@ -59,7 +60,6 @@ public class GeolocatorLocationService extends Service {
   @Nullable
   @Override
   public IBinder onBind(Intent intent) {
-
     Log.d(TAG, "Binding to location service.");
     return binder;
   }
@@ -81,6 +81,22 @@ public class GeolocatorLocationService extends Service {
 
     Log.d(TAG, "Destroyed location service.");
     super.onDestroy();
+  }
+
+  public boolean canStopLocationService() {
+    return connectedEngines == 0;
+  }
+
+  public void flutterEngineConnected() {
+
+    connectedEngines++;
+    Log.d(TAG, "Flutter engine connected. Connected engine count " + connectedEngines);
+  }
+
+  public void flutterEngineDisconnected() {
+
+    connectedEngines--;
+    Log.d(TAG, "Flutter engine disconnected. Connected engine count " + connectedEngines);
   }
 
   public void startLocationService(
@@ -133,13 +149,12 @@ public class GeolocatorLocationService extends Service {
   public void disableBackgroundMode() {
     if (isForeground) {
       Log.d(TAG, "Stop service in foreground.");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(ONGOING_NOTIFICATION_ID);
-        }
-        else {
-            stopForeground(true);
-        }
-        releaseWakeLocks();
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        stopForeground(ONGOING_NOTIFICATION_ID);
+      } else {
+        stopForeground(true);
+      }
+      releaseWakeLocks();
       isForeground = false;
       backgroundNotification = null;
     }

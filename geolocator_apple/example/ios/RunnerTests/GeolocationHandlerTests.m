@@ -154,6 +154,37 @@
   OCMVerify(never(), [self->_mockLocationManager stopUpdatingLocation]);
 }
 
+- (void)testRequestingPositionWhileListeningDoesntStopStream {
+  CLLocation *mockLocation = [[CLLocation alloc] initWithLatitude:54.0 longitude:6.4];
+  XCTestExpectation *expectationStream = [self expectationWithDescription:@"expect result return third location"];
+    XCTestExpectation *expectationForeground = [self expectationWithDescription:@"expect result return third location"];
+  [_geolocationHandler startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
+                                          distanceFilter:0
+                       pauseLocationUpdatesAutomatically:NO
+                         showBackgroundLocationIndicator:NO
+                                            activityType:CLActivityTypeOther
+                                           resultHandler:^(CLLocation * _Nullable location) {
+    XCTAssertEqual(location, mockLocation);
+    [expectationStream fulfill];
+  }
+                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    
+  }];
+    
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyHundredMeters
+                                            resultHandler:^(CLLocation * _Nullable location) {
+      XCTAssertEqual(location, mockLocation);
+      [expectationForeground fulfill];
+    } errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+        
+    }];
+  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[mockLocation]];
+  
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+  
+  OCMVerify(never(), [self->_mockLocationManager stopUpdatingLocation]);
+}
+
 - (void)testStartListeningShouldNotStopListeningOnError {
   NSError *error = [NSError errorWithDomain:kCLErrorDomain code:kCLErrorDenied userInfo:nil];
   XCTestExpectation *expectation = [self expectationWithDescription:@"expect result return third location"];
