@@ -1,3 +1,8 @@
+## 9.0.2
+
+- Updated dependency on geolocator_android to version 4.1.3
+- Export `AndroidResource` class at `geolocator/lib/geolocator.dart.at`.
+
 ## 9.0.1
 
 - Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.
