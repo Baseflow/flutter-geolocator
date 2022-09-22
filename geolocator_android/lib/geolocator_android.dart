@@ -17,4 +17,5 @@ export 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 
 export 'src/geolocator_android.dart';
 export 'src/types/android_settings.dart' show AndroidSettings;
-export 'src/types/foreground_settings.dart' show ForegroundNotificationConfig;
+export 'src/types/foreground_settings.dart'
+    show AndroidResource, ForegroundNotificationConfig;
