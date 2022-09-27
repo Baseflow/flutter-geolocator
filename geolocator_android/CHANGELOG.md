@@ -2,6 +2,10 @@
 
 - Additional functionality to receive NMEA messages.
 
+## 4.1.3
+
+- Export `AndroidResource` class at `geolocator_android.at`.
+
 ## 4.1.2
 
 - Fix a bug where the location service would stop if we have multiple flutter engines connected and one disconnects
