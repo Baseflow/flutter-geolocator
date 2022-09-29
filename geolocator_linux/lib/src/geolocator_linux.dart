@@ -6,18 +6,18 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'geoclue_x.dart';
 import 'geolocator_gnome.dart';
+import 'geolocator_linux_method_channel.dart';
+import 'geolocator_linux_native.dart';
 
 class GeolocatorLinux extends GeolocatorPlatform {
   static Future<void> registerWith() async {
-    final String? currentDesktop = Platform.environment['XDG_CURRENT_DESKTOP'];
     final GeoClueManager manager = GeoClueManager();
 
-    if (currentDesktop == null) {
-      GeolocatorPlatform.instance = GeolocatorLinux(manager);
-      return;
-    }
-
-    if (currentDesktop.toUpperCase().contains('GNOME')) {
+    final String? currentDesktop = Platform.environment['XDG_CURRENT_DESKTOP'];
+    if ((currentDesktop != null &&
+            currentDesktop.toUpperCase().contains('GNOME')) ||
+        (Platform.environment.containsKey('GNOME_SHELL_SESSION_MODE') &&
+            Platform.environment['GNOME_SHELL_SESSION_MODE']!.isNotEmpty)) {
       GeolocatorPlatform.instance = GeolocatorGnome(manager);
       return;
     }
@@ -82,5 +82,15 @@ class GeolocatorLinux extends GeolocatorPlatform {
       distanceThreshold: locationSettings?.distanceFilter,
       timeThreshold: locationSettings?.timeLimit?.inSeconds,
     ).map((location) => location.toPosition());
+  }
+
+  // static final Object _token = Object();
+
+  static GeolocatorLinuxNative _instanceNative = MethodChannelGeolocatorLinux();
+
+  static GeolocatorLinuxNative get instanceNative => _instanceNative;
+
+  static set instanceNative(GeolocatorLinuxNative instanceNative) {
+    _instanceNative = instanceNative;
   }
 }

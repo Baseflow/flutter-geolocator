@@ -21,7 +21,13 @@ class GeolocatorGnome extends GeolocatorLinux {
   }
 
   @override
-  Future<bool> isLocationServiceEnabled() {
+  Future<bool> isLocationServiceEnabled() async {
     return _settings.get('enabled').then((value) => value.toNative());
+  }
+
+  @override
+  Future<bool> openLocationSettings() async {
+    return (await GeolocatorLinux.instanceNative.openGnomeLocationSettings()) ??
+        false;
   }
 }

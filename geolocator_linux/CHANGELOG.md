@@ -1,3 +1,8 @@
+## 0.1.3
+
+- Improovement GNOME detection.
+- Open Location Settings implementation in GNOME SHELL
+
 ## 0.1.2
 
 - Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.
