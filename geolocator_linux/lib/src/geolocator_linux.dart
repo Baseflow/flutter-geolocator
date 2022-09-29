@@ -86,11 +86,5 @@ class GeolocatorLinux extends GeolocatorPlatform {
 
   // static final Object _token = Object();
 
-  static GeolocatorLinuxNative _instanceNative = MethodChannelGeolocatorLinux();
-
-  static GeolocatorLinuxNative get instanceNative => _instanceNative;
-
-  static set instanceNative(GeolocatorLinuxNative instanceNative) {
-    _instanceNative = instanceNative;
-  }
+  static GeolocatorLinuxNative instanceNative = MethodChannelGeolocatorLinux();
 }
