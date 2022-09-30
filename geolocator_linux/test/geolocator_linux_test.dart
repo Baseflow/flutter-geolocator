@@ -13,35 +13,33 @@ import 'geolocator_linux_test.mocks.dart';
 @GenerateMocks([GeoClueClient, GeoClueManager])
 void main() {
   test('registerWith', () async {
-    // final client = MockGeoClueClient();
-    // when(client.location).thenReturn(dummyLocation);
+    MockFactoryToGeolocatorLinuxRegister mockFactoryToGeolocatorLinuxRegister =
+        MockFactoryToGeolocatorLinuxRegister();
 
-    // final manager = MockGeoClueManager();
-    // when(manager.getClient()).thenAnswer((_) async => client);
+    when(mockFactoryToGeolocatorLinuxRegister.makeManager())
+        .thenReturn(MockGeoClueManager());
 
-    final manager = MockGeoClueManager();
-    final Map<String, String> environment = {};
-    // final locator = GeolocatorLinux(manager);
-    // environment['XDG_CURRENT_DESKTOP'] = 'ubuntu:GNOME';
-    // environment['XDG_CURRENT_DESKTOP'] = 'ubuntu:unity';
-    // environment['XDG_CURRENT_DESKTOP'] = 'ubuntu:KDE';
-
-    // environment['GNOME_SHELL_SESSION_MODE'] = 'ubuntu';
-    // environment['GNOME_SHELL_SESSION_MODE'] = '';
-    await GeolocatorLinux.registerWith(manager, environment);
+    when(mockFactoryToGeolocatorLinuxRegister.getPlatformEnvironment())
+        .thenReturn(<String, String>{});
+    await GeolocatorLinux.registerWith(mockFactoryToGeolocatorLinuxRegister);
     expect(GeolocatorPlatform.instance, isA<GeolocatorLinux>());
 
-    environment['XDG_CURRENT_DESKTOP'] = 'ubuntu:unity';
-    await GeolocatorLinux.registerWith(manager, environment);
+    when(mockFactoryToGeolocatorLinuxRegister.getPlatformEnvironment())
+        .thenReturn({'XDG_CURRENT_DESKTOP': 'ubuntu:unity'});
+    await GeolocatorLinux.registerWith(mockFactoryToGeolocatorLinuxRegister);
     expect(GeolocatorPlatform.instance, isA<GeolocatorLinux>());
 
-    environment['XDG_CURRENT_DESKTOP'] = 'ubuntu:GNOME';
-    await GeolocatorLinux.registerWith(manager, environment);
+    when(mockFactoryToGeolocatorLinuxRegister.getPlatformEnvironment())
+        .thenReturn({'XDG_CURRENT_DESKTOP': 'ubuntu:GNOME'});
+    await GeolocatorLinux.registerWith(mockFactoryToGeolocatorLinuxRegister);
     expect(GeolocatorPlatform.instance, isA<GeolocatorGnome>());
 
-    environment['XDG_CURRENT_DESKTOP'] = 'ubuntu:unity';
-    environment['GNOME_SHELL_SESSION_MODE'] = 'ubuntu';
-    await GeolocatorLinux.registerWith(manager, environment);
+    when(mockFactoryToGeolocatorLinuxRegister.getPlatformEnvironment())
+        .thenReturn({
+      'XDG_CURRENT_DESKTOP': 'ubuntu:KDE',
+      'GNOME_SHELL_SESSION_MODE': 'ubuntu'
+    });
+    await GeolocatorLinux.registerWith(mockFactoryToGeolocatorLinuxRegister);
     expect(GeolocatorPlatform.instance, isA<GeolocatorGnome>());
   });
 

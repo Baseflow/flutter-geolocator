@@ -9,11 +9,20 @@ import 'geolocator_gnome.dart';
 import 'geolocator_linux_method_channel.dart';
 import 'geolocator_linux_native.dart';
 
+class FactoryToGeolocatorLinuxRegister {
+  GeoClueManager makeManager() => GeoClueManager();
+  Map<String, String> getPlatformEnvironment() => Platform.environment;
+  const FactoryToGeolocatorLinuxRegister();
+}
+
 class GeolocatorLinux extends GeolocatorPlatform {
   static Future<void> registerWith(
-      [GeoClueManager? manager, Map<String, String>? environment]) async {
-    manager ??= GeoClueManager();
-    environment ??= Platform.environment;
+      [FactoryToGeolocatorLinuxRegister factoryToGeolocatorLinuxRegister =
+          const FactoryToGeolocatorLinuxRegister()]) async {
+    final GeoClueManager manager =
+        factoryToGeolocatorLinuxRegister.makeManager();
+    final Map<String, String> environment =
+        factoryToGeolocatorLinuxRegister.getPlatformEnvironment();
 
     final String? currentDesktop = environment['XDG_CURRENT_DESKTOP'];
     if ((currentDesktop != null &&
@@ -21,10 +30,9 @@ class GeolocatorLinux extends GeolocatorPlatform {
         (environment.containsKey('GNOME_SHELL_SESSION_MODE') &&
             environment['GNOME_SHELL_SESSION_MODE']!.isNotEmpty)) {
       GeolocatorPlatform.instance = GeolocatorGnome(manager);
-      return;
+    } else {
+      GeolocatorPlatform.instance = GeolocatorLinux(manager);
     }
-
-    GeolocatorPlatform.instance = GeolocatorLinux(manager);
   }
 
   GeolocatorLinux(this._manager);
