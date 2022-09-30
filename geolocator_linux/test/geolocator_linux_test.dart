@@ -53,6 +53,24 @@ void main() {
 
     final locator = GeolocatorLinux(manager);
     expect(await locator.getCurrentPosition(), equals(dummyPosition));
+
+    LocationSettings locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 0,
+        timeLimit: Duration(seconds: 10));
+    expect(await locator.getCurrentPosition(locationSettings: locationSettings),
+        equals(dummyPosition));
+  });
+
+  test('get last known position', () async {
+    final client = MockGeoClueClient();
+    when(client.location).thenReturn(dummyLocation);
+
+    final manager = MockGeoClueManager();
+    when(manager.getClient()).thenAnswer((_) async => client);
+
+    final locator = GeolocatorLinux(manager);
+    expect(await locator.getLastKnownPosition(), equals(dummyPosition));
   });
 
   test('location accuracy', () async {
@@ -84,6 +102,35 @@ void main() {
     final locator = GeolocatorLinux(manager);
     locationUpdated.add(dummyLocation);
     await expectLater(locator.getPositionStream(), emits(dummyPosition));
+  });
+
+  test('position stream with location settings', () async {
+    final locationUpdated = StreamController<GeoClueLocation>();
+
+    final client = MockGeoClueClient();
+    when(client.locationUpdated).thenAnswer((_) => locationUpdated.stream);
+
+    final manager = MockGeoClueManager();
+    when(manager.getClient()).thenAnswer((_) async => client);
+
+    final locator = GeolocatorLinux(manager);
+    locationUpdated.add(dummyLocation);
+
+    LocationSettings locationSettings = const LocationSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 0,
+        timeLimit: Duration(seconds: 10));
+
+    await expectLater(
+        locator.getPositionStream(locationSettings: locationSettings),
+        emits(dummyPosition));
+  });
+
+  test('is location service enabled', () async {
+    final manager = MockGeoClueManager();
+
+    final locator = GeolocatorLinux(manager);
+    await expectLater(await locator.isLocationServiceEnabled(), true);
   });
 }
 
