@@ -132,6 +132,14 @@ void main() {
     final locator = GeolocatorLinux(manager);
     await expectLater(await locator.isLocationServiceEnabled(), true);
   });
+
+  test('check permission', () async {
+    final manager = MockGeoClueManager();
+
+    final locator = GeolocatorLinux(manager);
+    await expectLater(
+        await locator.checkPermission(), LocationPermission.unableToDetermine);
+  });
 }
 
 final dummyLocation = GeoClueLocation(
