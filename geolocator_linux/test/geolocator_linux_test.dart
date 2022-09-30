@@ -10,7 +10,8 @@ import 'package:geoclue/geoclue.dart';
 
 import 'geolocator_linux_test.mocks.dart';
 
-@GenerateMocks([GeoClueClient, GeoClueManager])
+@GenerateMocks(
+    [GeoClueClient, GeoClueManager, FactoryToGeolocatorLinuxRegister])
 void main() {
   test('registerWith', () async {
     MockFactoryToGeolocatorLinuxRegister mockFactoryToGeolocatorLinuxRegister =
