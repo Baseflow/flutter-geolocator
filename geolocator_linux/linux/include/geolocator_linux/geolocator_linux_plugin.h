@@ -23,6 +23,4 @@ FLUTTER_PLUGIN_EXPORT void geolocator_linux_plugin_register_with_registrar(
 
 G_END_DECLS
 
-// gboolean openLocationPanel() {
-
 #endif  // FLUTTER_PLUGIN_GEOLOCATOR_LINUX_PLUGIN_H_

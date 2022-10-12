@@ -61,6 +61,5 @@ void main() {
 
     final locator = GeolocatorGnome(manager, settings: settings);
     expect(await locator.openLocationSettings(), isTrue);
-    // verify(settings.get('enabled')).called(1);
   });
 }

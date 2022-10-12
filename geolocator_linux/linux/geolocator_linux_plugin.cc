@@ -3,20 +3,9 @@
 #include <flutter_linux/flutter_linux.h>
 #include <gtk/gtk.h>
 #include <sys/utsname.h>
-
 #include <cstring>
-
-
-// #include <locale.h>
-
-// #include <glib.h>
-// #include <glib/gstdio.h>
 #include <gio/gio.h>
 #include <gio/gdesktopappinfo.h>
-// #include <gdk/gdk.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <unistd.h>
 
 #define GEOLOCATOR_LINUX_PLUGIN(obj) \
   (G_TYPE_CHECK_INSTANCE_CAST((obj), geolocator_linux_plugin_get_type(), \
@@ -38,7 +27,7 @@ static gboolean openLocationPanel() {
 
   if (g_getenv ("DISPLAY") == NULL || g_getenv ("DISPLAY")[0] == '\0')
     {
-      printf ("No DISPLAY.  Skipping test.");
+      printf ("No DISPLAY available.");
       return FALSE;
     }
 
@@ -46,7 +35,7 @@ static gboolean openLocationPanel() {
 
   if (appinfo == NULL)
     {
-      printf ("appinfo-test binary not installed");
+      printf ("Gnome Location Panel not available.");
       return FALSE;
     }
 
@@ -56,7 +45,6 @@ static gboolean openLocationPanel() {
   return g_app_info_launch((GAppInfo *)appinfo, NULL, (GAppLaunchContext *)context, &error);
 }
 
-// Called when a method call is received from Flutter.
 static void geolocator_linux_plugin_handle_method_call(
     GeolocatorLinuxPlugin* self,
     FlMethodCall* method_call) {
@@ -68,12 +56,6 @@ static void geolocator_linux_plugin_handle_method_call(
     gboolean openLocationPanelResult = openLocationPanel();
     g_autoptr(FlValue) result = fl_value_new_bool(openLocationPanelResult);
     response = FL_METHOD_RESPONSE(fl_method_success_response_new(result));
-
-    // struct utsname uname_data = {};
-    // uname(&uname_data);
-    // g_autofree gchar *version = g_strdup_printf("Linux %s", uname_data.version);
-    // g_autoptr(FlValue) result = fl_value_new_string(version);
-    // response = FL_METHOD_RESPONSE(fl_method_success_response_new(result));
   } else {
     response = FL_METHOD_RESPONSE(fl_method_not_implemented_response_new());
   }

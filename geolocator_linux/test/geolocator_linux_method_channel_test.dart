@@ -18,7 +18,7 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
+  test('Open Gnome Location Settings', () async {
     expect(await platform.openGnomeLocationSettings(), true);
   });
 }

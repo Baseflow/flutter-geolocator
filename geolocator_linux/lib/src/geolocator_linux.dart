@@ -94,7 +94,5 @@ class GeolocatorLinux extends GeolocatorPlatform {
     ).map((location) => location.toPosition());
   }
 
-  // static final Object _token = Object();
-
   static GeolocatorLinuxNative instanceNative = MethodChannelGeolocatorLinux();
 }
