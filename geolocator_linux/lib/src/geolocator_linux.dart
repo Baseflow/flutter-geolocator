@@ -6,8 +6,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'geoclue_x.dart';
 import 'geolocator_gnome.dart';
-import 'geolocator_linux_method_channel.dart';
-import 'geolocator_linux_native.dart';
 
 class FactoryToGeolocatorLinuxRegister {
   GeoClueManager makeManager() => GeoClueManager();
@@ -93,6 +91,4 @@ class GeolocatorLinux extends GeolocatorPlatform {
       timeThreshold: locationSettings?.timeLimit?.inSeconds,
     ).map((location) => location.toPosition());
   }
-
-  static GeolocatorLinuxNative instanceNative = MethodChannelGeolocatorLinux();
 }

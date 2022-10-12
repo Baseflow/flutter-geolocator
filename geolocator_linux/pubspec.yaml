@@ -15,7 +15,6 @@ flutter:
     platforms:
       linux:
         dartPluginClass: GeolocatorLinux
-        pluginClass: GeolocatorLinuxPlugin
 
 dependencies:
   dbus: ^0.7.3

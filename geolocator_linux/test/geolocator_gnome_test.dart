@@ -14,19 +14,11 @@ import 'geolocator_gnome_test.mocks.dart';
 
 @GenerateMocks([GeoClueManager, GSettings])
 void main() {
-  const MethodChannel channel = MethodChannel('geolocator_linux');
-
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return true;
-    });
-  });
+  setUp(() {});
 
-  tearDown(() {
-    channel.setMockMethodCallHandler(null);
-  });
+  tearDown(() {});
 
   test('service status stream', () async {
     final manager = MockGeoClueManager();
