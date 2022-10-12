@@ -134,6 +134,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     // Test if location services are enabled.
     serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      await _geolocatorPlatform.openLocationSettings();
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
