@@ -51,6 +51,8 @@ void main() {
         .thenAnswer((_) async => const DBusBoolean(false));
 
     final controlCenterInject = MockDBusRemoteObject();
+    final locator = GeolocatorGnome(manager, settings: settings);
+
     when(controlCenterInject.callMethod(
       'org.gtk.Actions',
       'Activate',
@@ -60,11 +62,23 @@ void main() {
       noAutoStart: anyNamed('noAutoStart'),
       allowInteractiveAuthorization: anyNamed('allowInteractiveAuthorization'),
     )).thenAnswer((_) async => DBusMethodSuccessResponse());
-
-    final locator = GeolocatorGnome(manager, settings: settings);
     expect(
         await locator.openLocationSettings(
             controlCenterInject: controlCenterInject),
         isTrue);
+
+    when(controlCenterInject.callMethod(
+      'org.gtk.Actions',
+      'Activate',
+      any,
+      replySignature: anyNamed('replySignature'),
+      noReplyExpected: anyNamed('noReplyExpected'),
+      noAutoStart: anyNamed('noAutoStart'),
+      allowInteractiveAuthorization: anyNamed('allowInteractiveAuthorization'),
+    )).thenAnswer((_) async => throw Exception());
+    expect(
+        await locator.openLocationSettings(
+            controlCenterInject: controlCenterInject),
+        isFalse);
   });
 }
