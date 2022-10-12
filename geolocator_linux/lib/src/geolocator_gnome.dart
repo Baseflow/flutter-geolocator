@@ -1,6 +1,7 @@
 import 'package:geoclue/geoclue.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:gsettings/gsettings.dart';
+import 'package:dbus/dbus.dart';
 
 import 'geolocator_linux.dart';
 
@@ -27,7 +28,32 @@ class GeolocatorGnome extends GeolocatorLinux {
 
   @override
   Future<bool> openLocationSettings() async {
-    return (await GeolocatorLinux.instanceNative.openGnomeLocationSettings()) ??
-        false;
+    try {
+      final session = DBusClient.session();
+
+      final settings = DBusRemoteObject(
+        session,
+        name: 'org.gnome.ControlCenter',
+        path: DBusObjectPath('/org/gnome/ControlCenter'),
+      );
+
+      await settings.callMethod(
+        'org.gtk.Actions',
+        'Activate',
+        [
+          const DBusString('launch-panel'),
+          DBusArray.variant([
+            DBusStruct([const DBusString('location'), DBusArray.variant([])]),
+          ]),
+          DBusDict.stringVariant({}),
+        ],
+        replySignature: DBusSignature.empty,
+      );
+
+      await session.close();
+      return true;
+    } on Exception {
+      return false;
+    }
   }
 }
