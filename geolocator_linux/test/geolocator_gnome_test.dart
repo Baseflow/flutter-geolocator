@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dbus/dbus.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_linux/src/geolocator_gnome.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
@@ -12,7 +11,7 @@ import 'package:geoclue/geoclue.dart';
 
 import 'geolocator_gnome_test.mocks.dart';
 
-@GenerateMocks([GeoClueManager, GSettings])
+@GenerateMocks([GeoClueManager, GSettings, DBusRemoteObject])
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -51,7 +50,21 @@ void main() {
     when(settings.get('enabled'))
         .thenAnswer((_) async => const DBusBoolean(false));
 
+    final controlCenterInject = MockDBusRemoteObject();
+    when(controlCenterInject.callMethod(
+      'org.gtk.Actions',
+      'Activate',
+      any,
+      replySignature: anyNamed('replySignature'),
+      noReplyExpected: anyNamed('noReplyExpected'),
+      noAutoStart: anyNamed('noAutoStart'),
+      allowInteractiveAuthorization: anyNamed('allowInteractiveAuthorization'),
+    )).thenAnswer((_) async => DBusMethodSuccessResponse());
+
     final locator = GeolocatorGnome(manager, settings: settings);
-    expect(await locator.openLocationSettings(), isTrue);
+    expect(
+        await locator.openLocationSettings(
+            controlCenterInject: controlCenterInject),
+        isTrue);
   });
 }

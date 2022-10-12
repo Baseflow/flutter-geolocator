@@ -27,17 +27,19 @@ class GeolocatorGnome extends GeolocatorLinux {
   }
 
   @override
-  Future<bool> openLocationSettings() async {
+  Future<bool> openLocationSettings(
+      {DBusRemoteObject? controlCenterInject}) async {
     try {
       final session = DBusClient.session();
 
-      final settings = DBusRemoteObject(
-        session,
-        name: 'org.gnome.ControlCenter',
-        path: DBusObjectPath('/org/gnome/ControlCenter'),
-      );
+      final controlCenter = controlCenterInject ??
+          DBusRemoteObject(
+            session,
+            name: 'org.gnome.ControlCenter',
+            path: DBusObjectPath('/org/gnome/ControlCenter'),
+          );
 
-      await settings.callMethod(
+      await controlCenter.callMethod(
         'org.gtk.Actions',
         'Activate',
         [
