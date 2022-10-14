@@ -1,7 +1,7 @@
 ## 0.1.3
 
-- Improovement GNOME detection.
-- Open Location Settings implementation in GNOME SHELL
+- Improves GNOME detection.
+- Adds the ability to open Location Settings in GNOME SHELL.
 
 ## 0.1.2
 
