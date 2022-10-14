@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dbus/dbus.dart';
-import 'package:dbus/src/dbus_method_response.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_linux/src/geolocator_gnome.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
