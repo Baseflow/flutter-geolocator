@@ -50,6 +50,12 @@ class AndroidSettings extends LocationSettings {
 
   /// If this is set then the services is started as a Foreground service with a persistent notification
   /// showing the user that the service will continue running in the background.
+  ///
+  /// Note: Using this foreground notification does not run your service in the background, it just
+  /// increases the priority of your activity making it less likely for Android to kill the activity
+  /// when switching between apps. It does not prevent Android from killing the activity. If you want to
+  /// receive background location updates even if the activity is destroyed you need to use a third party
+  /// background service package that will start a new Flutter Engine that is not tied to your main activity.
   final ForegroundNotificationConfig? foregroundNotificationConfig;
 
   /// Set to true if altitude should be calculated as MSL (EGM2008) from NMEA messages
