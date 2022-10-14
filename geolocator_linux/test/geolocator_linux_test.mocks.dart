@@ -8,7 +8,6 @@ import 'package:geoclue/src/accuracy_level.dart' as _i2;
 import 'package:geoclue/src/geoclue.dart' as _i3;
 import 'package:geoclue/src/location.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:geolocator_linux/geolocator_linux.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -19,18 +18,6 @@ import 'package:geolocator_linux/geolocator_linux.dart' as _i6;
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
-
-class MockFactoryToGeolocatorLinuxRegister extends _i1.Mock
-    implements _i6.FactoryToGeolocatorLinuxRegister {
-  @override
-  _i3.GeoClueManager makeManager() =>
-      (super.noSuchMethod(Invocation.method(#makeManager, []),
-          returnValue: MockGeoClueManager()) as _i3.GeoClueManager);
-  @override
-  Map<String, String> getPlatformEnvironment() =>
-      (super.noSuchMethod(Invocation.method(#getPlatformEnvironment, []),
-          returnValue: <String, String>{}) as Map<String, String>);
-}
 
 class _FakeGeoClueAccuracyLevel_0 extends _i1.Fake
     implements _i2.GeoClueAccuracyLevel {}

@@ -15,12 +15,11 @@ class FactoryToGeolocatorLinuxRegister {
 
 class GeolocatorLinux extends GeolocatorPlatform {
   static Future<void> registerWith(
-      [FactoryToGeolocatorLinuxRegister factoryToGeolocatorLinuxRegister =
-          const FactoryToGeolocatorLinuxRegister()]) async {
-    final GeoClueManager manager =
-        factoryToGeolocatorLinuxRegister.makeManager();
+      {GeoClueManager? geoClueManager,
+      Map<String, String>? platformEnvironment}) async {
+    final GeoClueManager manager = geoClueManager ?? GeoClueManager();
     final Map<String, String> environment =
-        factoryToGeolocatorLinuxRegister.getPlatformEnvironment();
+        platformEnvironment ?? Platform.environment;
 
     final String? currentDesktop = environment['XDG_CURRENT_DESKTOP'];
     if ((currentDesktop != null &&
