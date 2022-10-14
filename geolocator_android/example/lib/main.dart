@@ -331,8 +331,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         _positionStreamSubscription!.resume();
         statusDisplayValue = 'resumed';
       } else {
-        _positionStreamSubscription!.cancel();
-        _positionStreamSubscription = null;
+        _positionStreamSubscription!.pause();
         statusDisplayValue = 'paused';
       }
 
