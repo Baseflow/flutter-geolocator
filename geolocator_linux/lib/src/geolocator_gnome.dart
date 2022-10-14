@@ -28,18 +28,24 @@ class GeolocatorGnome extends GeolocatorLinux {
 
   @override
   Future<bool> openLocationSettings(
-      {DBusRemoteObject? controlCenterInject}) async {
+      {String dbusRemoteName = 'Settings',
+      DBusRemoteObject? dBusRemoteSettingsInject}) async {
+    final DBusClient session;
     try {
-      final session = DBusClient.session();
+      session = DBusClient.session();
+    } on Exception {
+      return false;
+    }
 
-      final controlCenter = controlCenterInject ??
+    try {
+      final DBusRemoteObject dBusRemoteSettings = dBusRemoteSettingsInject ??
           DBusRemoteObject(
             session,
-            name: 'org.gnome.ControlCenter',
-            path: DBusObjectPath('/org/gnome/ControlCenter'),
+            name: 'org.gnome.$dbusRemoteName',
+            path: DBusObjectPath('/org/gnome/$dbusRemoteName'),
           );
 
-      await controlCenter.callMethod(
+      await dBusRemoteSettings.callMethod(
         'org.gtk.Actions',
         'Activate',
         [
@@ -51,11 +57,16 @@ class GeolocatorGnome extends GeolocatorLinux {
         ],
         replySignature: DBusSignature.empty,
       );
-
-      await session.close();
       return true;
+    } on DBusServiceUnknownException {
+      if (dbusRemoteName == 'ControlCenter') return false;
+      return await openLocationSettings(
+          dbusRemoteName: 'ControlCenter',
+          dBusRemoteSettingsInject: dBusRemoteSettingsInject);
     } on Exception {
       return false;
+    } finally {
+      await session.close();
     }
   }
 }

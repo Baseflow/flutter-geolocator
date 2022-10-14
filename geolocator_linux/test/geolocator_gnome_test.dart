@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dbus/dbus.dart';
+import 'package:dbus/src/dbus_method_response.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_linux/src/geolocator_gnome.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
@@ -50,10 +51,10 @@ void main() {
     when(settings.get('enabled'))
         .thenAnswer((_) async => const DBusBoolean(false));
 
-    final controlCenterInject = MockDBusRemoteObject();
+    final dBusRemoteSettingsInject = MockDBusRemoteObject();
     final locator = GeolocatorGnome(manager, settings: settings);
 
-    when(controlCenterInject.callMethod(
+    when(dBusRemoteSettingsInject.callMethod(
       'org.gtk.Actions',
       'Activate',
       any,
@@ -64,10 +65,25 @@ void main() {
     )).thenAnswer((_) async => DBusMethodSuccessResponse());
     expect(
         await locator.openLocationSettings(
-            controlCenterInject: controlCenterInject),
+            dBusRemoteSettingsInject: dBusRemoteSettingsInject),
         isTrue);
 
-    when(controlCenterInject.callMethod(
+    when(dBusRemoteSettingsInject.callMethod(
+      'org.gtk.Actions',
+      'Activate',
+      any,
+      replySignature: anyNamed('replySignature'),
+      noReplyExpected: anyNamed('noReplyExpected'),
+      noAutoStart: anyNamed('noAutoStart'),
+      allowInteractiveAuthorization: anyNamed('allowInteractiveAuthorization'),
+    )).thenAnswer((_) async => throw DBusServiceUnknownException(
+        DBusMethodErrorResponse('org.freedesktop.DBus.Error.MockError')));
+    expect(
+        await locator.openLocationSettings(
+            dBusRemoteSettingsInject: dBusRemoteSettingsInject),
+        isFalse);
+
+    when(dBusRemoteSettingsInject.callMethod(
       'org.gtk.Actions',
       'Activate',
       any,
@@ -78,7 +94,7 @@ void main() {
     )).thenAnswer((_) async => throw Exception());
     expect(
         await locator.openLocationSettings(
-            controlCenterInject: controlCenterInject),
+            dBusRemoteSettingsInject: dBusRemoteSettingsInject),
         isFalse);
   });
 }
