@@ -2,6 +2,10 @@
 
 - Additional functionality to receive NMEA messages.
 
+## 4.1.4
+
+- Fix a bug where the location service would not stop correctly when the location stream is cancelled.
+
 ## 4.1.3
 
 - Export `AndroidResource` class at `geolocator_android.at`.

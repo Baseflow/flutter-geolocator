@@ -36,6 +36,7 @@ public class GeolocatorLocationService extends Service {
   // Service is foreground
   private boolean isForeground = false;
   private int connectedEngines = 0;
+  private int listenerCount = 0;
   @Nullable private Activity activity = null;
   @Nullable private GeolocationManager geolocationManager = null;
   @Nullable private LocationClient locationClient;
@@ -83,7 +84,10 @@ public class GeolocatorLocationService extends Service {
     super.onDestroy();
   }
 
-  public boolean canStopLocationService() {
+  public boolean canStopLocationService(boolean cancellationRequested) {
+    if(cancellationRequested) {
+       return listenerCount == 1;
+    }
     return connectedEngines == 0;
   }
 
@@ -104,6 +108,7 @@ public class GeolocatorLocationService extends Service {
       LocationOptions locationOptions,
       EventChannel.EventSink events) {
 
+    listenerCount++;
     if (geolocationManager != null) {
       locationClient =
           geolocationManager.createLocationClient(
@@ -121,6 +126,7 @@ public class GeolocatorLocationService extends Service {
   }
 
   public void stopLocationService() {
+    listenerCount--;
     Log.d(TAG, "Stopping location service.");
     if (locationClient != null && geolocationManager != null) {
       geolocationManager.stopPositionUpdates(locationClient);

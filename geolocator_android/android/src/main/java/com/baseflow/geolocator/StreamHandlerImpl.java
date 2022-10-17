@@ -81,7 +81,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       return;
     }
 
-    disposeListeners();
+    disposeListeners(false);
     channel.setStreamHandler(null);
     channel = null;
   }
@@ -145,12 +145,12 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
 
   @Override
   public void onCancel(Object arguments) {
-    disposeListeners();
+    disposeListeners(true);
   }
 
-  private void disposeListeners() {
+  private void disposeListeners(boolean cancelled) {
     Log.e(TAG, "Geolocator position updates stopped");
-    if (foregroundLocationService != null && foregroundLocationService.canStopLocationService()) {
+    if (foregroundLocationService != null && foregroundLocationService.canStopLocationService(cancelled)) {
       foregroundLocationService.stopLocationService();
       foregroundLocationService.disableBackgroundMode();
     } else {
