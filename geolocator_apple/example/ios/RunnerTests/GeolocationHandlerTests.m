@@ -139,6 +139,7 @@
                        pauseLocationUpdatesAutomatically:NO
                          showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:NO
                                            resultHandler:^(CLLocation * _Nullable location) {
     XCTAssertEqual(location, mockLocation);
     [expectation fulfill];
@@ -163,6 +164,7 @@
                        pauseLocationUpdatesAutomatically:NO
                          showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:NO
                                            resultHandler:^(CLLocation * _Nullable location) {
     XCTAssertEqual(location, mockLocation);
     [expectationStream fulfill];
@@ -193,6 +195,7 @@
                        pauseLocationUpdatesAutomatically:NO
                          showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:NO
                                            resultHandler:^(CLLocation * _Nullable location) {
   }
                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
@@ -216,6 +219,7 @@
                        pauseLocationUpdatesAutomatically:NO
                          showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:NO
                                            resultHandler:^(CLLocation * _Nullable location) {
     [expectation fulfill];
   }
