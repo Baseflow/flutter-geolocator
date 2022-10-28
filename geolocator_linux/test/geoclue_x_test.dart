@@ -33,8 +33,6 @@ void main() {
         equals(GeoClueAccuracyLevel.exact));
     expect(LocationAccuracy.bestForNavigation.toGeoClueAccuracyLevel(),
         equals(GeoClueAccuracyLevel.exact));
-    // expect(LocationAccuracy..toGeoClueAccuracyLevel(),
-    //     equals(GeoClueAccuracyLevel.none));
   });
 }
 

@@ -7,12 +7,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'geoclue_x.dart';
 import 'geolocator_gnome.dart';
 
-class FactoryToGeolocatorLinuxRegister {
-  GeoClueManager makeManager() => GeoClueManager();
-  Map<String, String> getPlatformEnvironment() => Platform.environment;
-  const FactoryToGeolocatorLinuxRegister();
-}
-
 class GeolocatorLinux extends GeolocatorPlatform {
   static Future<void> registerWith(
       {GeoClueManager? geoClueManager,
