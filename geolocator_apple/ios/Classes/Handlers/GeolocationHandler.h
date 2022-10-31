@@ -32,6 +32,7 @@ typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
                              errorHandler:(GeolocatorError _Nonnull)errorHandler;
 
 - (void)stopListening;
++ (BOOL) shouldEnableBackgroundLocationUpdates;
 @end
 
 #endif /* GeolocatorHandler_h */
