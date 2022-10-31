@@ -65,7 +65,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                pauseLocationUpdatesAutomatically:NO
                                     activityType:CLActivityTypeOther
                    isListeningForPositionUpdates:self.isListeningForPositionUpdates
-                 showBackgroundLocationIndicator:NO];
+                 showBackgroundLocationIndicator:NO
+                  allowBackgroundLocationUpdates:NO];
 }
 
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
@@ -73,6 +74,7 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
         pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
           showBackgroundLocationIndicator:(BOOL)showBackgroundLocationIndicator
                              activityType:(CLActivityType)activityType
+           allowBackgroundLocationUpdates:(BOOL)allowBackgroundLocationUpdates
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
     
@@ -84,7 +86,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically
                                     activityType:activityType
                    isListeningForPositionUpdates:YES
-                 showBackgroundLocationIndicator:showBackgroundLocationIndicator];
+                 showBackgroundLocationIndicator:showBackgroundLocationIndicator
+                  allowBackgroundLocationUpdates:allowBackgroundLocationUpdates];
 }
 
 - (void)startUpdatingLocationWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
@@ -93,6 +96,7 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                                     activityType:(CLActivityType)activityType
                    isListeningForPositionUpdates:(BOOL)isListeningForPositionUpdates
                  showBackgroundLocationIndicator:(BOOL)showBackgroundLocationIndicator
+                  allowBackgroundLocationUpdates:(BOOL)allowBackgroundLocationUpdates
                             {
   self.isListeningForPositionUpdates = isListeningForPositionUpdates;
   CLLocationManager *locationManager = [self getLocationManager];
@@ -105,7 +109,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
   
 #if TARGET_OS_IOS
   if (@available(iOS 9.0, macOS 11.0, *)) {
-    locationManager.allowsBackgroundLocationUpdates = [GeolocationHandler shouldEnableBackgroundLocationUpdates];
+    locationManager.allowsBackgroundLocationUpdates = allowBackgroundLocationUpdates
+      && [GeolocationHandler shouldEnableBackgroundLocationUpdates];
   }
   if (@available(iOS 11.0, macOS 11.0, *)) {
     locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;

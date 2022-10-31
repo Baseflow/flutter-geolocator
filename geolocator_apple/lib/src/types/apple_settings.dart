@@ -17,6 +17,7 @@ class AppleSettings extends LocationSettings {
     int distanceFilter = 0,
     Duration? timeLimit,
     this.showBackgroundLocationIndicator = false,
+    this.allowBackgroundLocationUpdates = true,
   }) : super(
           accuracy: accuracy,
           distanceFilter: distanceFilter,
@@ -41,6 +42,13 @@ class AppleSettings extends LocationSettings {
   /// have granted "always" permissions for location retrieval.
   final bool showBackgroundLocationIndicator;
 
+  /// Flag to allow the app to receive location updates in the background (iOS only)
+  ///
+  /// For this setting to work Info.plist should contain the following keys:
+  /// - UIBackgroundModes and the value should contain "location"
+  /// - NSLocationAlwaysUsageDescription
+  final bool allowBackgroundLocationUpdates;
+
   /// Returns a JSON representation of this class.
   @override
   Map<String, dynamic> toJson() {
@@ -49,6 +57,7 @@ class AppleSettings extends LocationSettings {
         'pauseLocationUpdatesAutomatically': pauseLocationUpdatesAutomatically,
         'this.activityType': activityType.index,
         'showBackgroundLocationIndicator': showBackgroundLocationIndicator,
+        'allowBackgroundLocationUpdates': allowBackgroundLocationUpdates,
       });
   }
 }
