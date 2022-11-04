@@ -1,3 +1,7 @@
+## 2.2.3
+
+- Implement allowBackgroundLocationUpdates iOS setting
+
 ## 2.2.2
 
 - Fix requesting location while listening to location stream stops the stream
