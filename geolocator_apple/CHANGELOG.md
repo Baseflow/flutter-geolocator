@@ -1,3 +1,7 @@
+## 2.2.4
+
+- Fixed iOS location manager background geolocation settings overridden by getCurrentPosition
+
 ## 2.2.3
 
 - Implement allowBackgroundLocationUpdates iOS setting
