@@ -139,6 +139,7 @@
                        pauseLocationUpdatesAutomatically:NO
                          showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:NO
                                            resultHandler:^(CLLocation * _Nullable location) {
     XCTAssertEqual(location, mockLocation);
     [expectation fulfill];
@@ -163,6 +164,7 @@
                        pauseLocationUpdatesAutomatically:NO
                          showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:NO
                                            resultHandler:^(CLLocation * _Nullable location) {
     XCTAssertEqual(location, mockLocation);
     [expectationStream fulfill];
@@ -193,6 +195,7 @@
                        pauseLocationUpdatesAutomatically:NO
                          showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:NO
                                            resultHandler:^(CLLocation * _Nullable location) {
   }
                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
@@ -216,6 +219,7 @@
                        pauseLocationUpdatesAutomatically:NO
                          showBackgroundLocationIndicator:NO
                                             activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:NO
                                            resultHandler:^(CLLocation * _Nullable location) {
     [expectation fulfill];
   }
@@ -229,6 +233,42 @@
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
   OCMVerify(never(), [self->_mockLocationManager stopUpdatingLocation]);
+}
+
+- (void)testListeningBackgroundGeolocationOnlyWhenAllowedAndEnabled {
+    id geolocationHandlerMock = OCMPartialMock(_geolocationHandler);
+    [geolocationHandlerMock setLocationManagerOverride:_mockLocationManager];
+    OCMStub(ClassMethod([geolocationHandlerMock shouldEnableBackgroundLocationUpdates]))._andReturn([NSNumber numberWithBool:YES]);
+    [geolocationHandlerMock startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
+                                            distanceFilter:0
+                         pauseLocationUpdatesAutomatically:NO
+                           showBackgroundLocationIndicator:NO
+                                              activityType:CLActivityTypeOther
+                            allowBackgroundLocationUpdates:YES
+                                             resultHandler:^(CLLocation * _Nullable location) {
+    }
+                                              errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+      
+    }];
+    OCMVerify([_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
+}
+
+- (void)testNotListeningBackgroundGeolocationWhenNotEnabled {
+    id geolocationHandlerMock = OCMPartialMock(_geolocationHandler);
+    [geolocationHandlerMock setLocationManagerOverride:_mockLocationManager];
+    OCMStub(ClassMethod([geolocationHandlerMock shouldEnableBackgroundLocationUpdates]))._andReturn([NSNumber numberWithBool:YES]);
+    [geolocationHandlerMock startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
+                                            distanceFilter:0
+                         pauseLocationUpdatesAutomatically:NO
+                           showBackgroundLocationIndicator:NO
+                                              activityType:CLActivityTypeOther
+                            allowBackgroundLocationUpdates:NO
+                                             resultHandler:^(CLLocation * _Nullable location) {
+    }
+                                              errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+      
+    }];
+    OCMVerify(never(), [_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
 }
 
 @end
