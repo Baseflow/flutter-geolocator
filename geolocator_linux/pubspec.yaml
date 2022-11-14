@@ -20,7 +20,7 @@ dependencies:
   dbus: ^0.7.3
   flutter:
     sdk: flutter
-  geoclue: ^0.1.0
+  geoclue: ^0.1.1
   geolocator_platform_interface: ^4.0.0
   gsettings: ^0.2.5
   package_info_plus: ^1.4.2
