@@ -6,6 +6,7 @@ version: 2.1.6
 
 flutter:
   plugin:
+  implements: geolocator
     platforms:
       web:
         pluginClass: GeolocatorPlugin
