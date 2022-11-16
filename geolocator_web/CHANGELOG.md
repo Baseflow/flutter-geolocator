@@ -1,3 +1,7 @@
+## 2.1.7
+
+- Mark `geolocator_web` as implementation of `geolocator` 
+
 ## 2.1.6
 
 - Migrates to Dart SDK 2.15.0 and Flutter 2.8.0.

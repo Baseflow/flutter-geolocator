@@ -1,3 +1,7 @@
+## 4.1.5
+
+- Mark `geolocator_android` as implementation of `geolocator` 
+
 ## 4.1.4
 
 - Fix a bug where the location service would not stop correctly when the location stream is cancelled.
