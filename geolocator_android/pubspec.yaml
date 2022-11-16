@@ -10,7 +10,7 @@ environment:
 
 flutter:
   plugin:
-  implements: geolocator
+    implements: geolocator
     platforms:
       android:
         package: com.baseflow.geolocator
