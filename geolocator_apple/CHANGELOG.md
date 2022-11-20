@@ -1,5 +1,6 @@
 ## 2.2.4
 
+- Fix plugin registration in `dart_plugin_registrant.dart`
 - Fixed iOS location manager background geolocation settings overridden by getCurrentPosition
 
 ## 2.2.3
