@@ -19,6 +19,11 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   static const _serviceStatusEventChannel =
       EventChannel('flutter.baseflow.com/geolocator_service_updates_android');
 
+  /// The event channel used to receive [NmeaMessage] updates from the
+  /// native platform.
+  static const _nmeaEventChannel =
+      EventChannel('flutter.baseflow.com/geolocator_nmea_updates_android');
+
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith() {
     GeolocatorPlatform.instance = GeolocatorAndroid();
@@ -31,6 +36,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   bool forcedLocationManager = false;
 
   Stream<Position>? _positionStream;
+  Stream<NmeaMessage>? _nmeaStream;
   Stream<ServiceStatus>? _serviceStatusStream;
 
   @override
@@ -149,6 +155,29 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   }
 
   @override
+  Stream<NmeaMessage> getNmeaStream() {
+    if (_nmeaStream != null) {
+      return _nmeaStream!;
+    }
+    var originalStream = _nmeaEventChannel.receiveBroadcastStream();
+
+    var nmeaStream = _wrapNmeaStream(originalStream);
+
+    _nmeaStream = nmeaStream
+        .map((dynamic element) =>
+            NmeaMessage.fromMap(element.cast<String, dynamic>()))
+        .handleError((error) {
+      _nmeaStream = null;
+      if (error is PlatformException) {
+        error = _handlePlatformException(error);
+      }
+      throw error;
+    });
+
+    return _nmeaStream!;
+  }
+
+  @override
   Stream<Position> getPositionStream({
     LocationSettings? locationSettings,
   }) {
@@ -197,6 +226,13 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     });
   }
 
+  Stream<dynamic> _wrapNmeaStream(Stream<dynamic> incoming) {
+    return incoming.asBroadcastStream(onCancel: (subscription) {
+      subscription.cancel();
+      _nmeaStream = null;
+    });
+  }
+
   @override
   Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
     required String purposeKey,
@@ -241,6 +277,10 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         return PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         return PositionUpdateException(exception.message);
+      case 'NMEA_SUBSCRIPTION_ACTIVE':
+        return const NmeaAlreadySubscribedException();
+      case 'NMEA_UPDATE_FAILURE':
+        return NmeaUpdateException(exception.message);
       default:
         return exception;
     }

@@ -1,3 +1,7 @@
+## 4.2.0
+
+- Additional functionality to receive NMEA messages.
+
 ## 4.1.5
 
 - Mark `geolocator_android` as implementation of `geolocator` 

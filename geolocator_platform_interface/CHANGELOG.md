@@ -1,3 +1,7 @@
+## 4.1.0
+
+- Added functionality to receive NMEA messages.
+
 ## 4.0.7
 
 - Fixed a spelling error in docs.
@@ -12,7 +16,7 @@
 
 ## 4.0.4
 
-- Fixes a bug where listening to the position stream immediately after an error, results in listening to a dead stream. 
+- Fixes a bug where listening to the position stream immediately after an error, results in listening to a dead stream.
 
 ## 4.0.3
 

@@ -6,8 +6,9 @@ import '../enums/enums.dart';
 import '../errors/errors.dart';
 import '../extensions/extensions.dart';
 import '../geolocator_platform_interface.dart';
-import '../models/position.dart';
 import '../models/location_settings.dart';
+import '../models/nmea_message.dart';
+import '../models/position.dart';
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class MethodChannelGeolocator extends GeolocatorPlatform {
@@ -25,6 +26,11 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
   static const _serviceStatusEventChannel =
       EventChannel('flutter.baseflow.com/geolocator_service_updates');
 
+  /// The event channel used to receive [NmeaMessage] updates from the native
+  /// platform.
+  static const _nmeaEventChannel =
+      EventChannel('flutter.baseflow.com/geolocator_nmea_updates');
+
   /// On Android devices you can set [forcedLocationManager]
   /// to true to force the plugin to use the [LocationManager] to determine the
   /// position instead of the [FusedLocationProviderClient]. On iOS this is
@@ -33,6 +39,7 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
 
   Stream<Position>? _positionStream;
   Stream<ServiceStatus>? _serviceStatusStream;
+  Stream<NmeaMessage>? _nmeaStream;
 
   @override
   Future<LocationPermission> checkPermission() async {
@@ -191,6 +198,29 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     return _positionStream!;
   }
 
+  @override
+  Stream<NmeaMessage> getNmeaStream() {
+    if (_nmeaStream != null) {
+      return _nmeaStream!;
+    }
+
+    final nmeaStream = _nmeaEventChannel.receiveBroadcastStream();
+
+    _nmeaStream = nmeaStream
+        .map<NmeaMessage>((dynamic element) =>
+            NmeaMessage.fromMap(element.cast<String, dynamic>()))
+        .handleError(
+      (error) {
+        _nmeaStream = null;
+        if (error is PlatformException) {
+          error = _handlePlatformException(error);
+        }
+        throw error;
+      },
+    );
+    return _nmeaStream!;
+  }
+
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
     return incoming.asBroadcastStream(onCancel: (subscription) {
       subscription.cancel();
@@ -242,6 +272,10 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         return PermissionRequestInProgressException(exception.message);
       case 'LOCATION_UPDATE_FAILURE':
         return PositionUpdateException(exception.message);
+      case 'NMEA_SUBSCRIPTION_ACTIVE':
+        return const NmeaAlreadySubscribedException();
+      case 'NMEA_UPDATE_FAILURE':
+        return NmeaUpdateException(exception.message);
       default:
         return exception;
     }
