@@ -14,7 +14,6 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 @interface GeolocationHandler() <CLLocationManagerDelegate>
 
 @property(assign, nonatomic) bool isListeningForPositionUpdates;
-@property(assign, nonatomic) bool isBackgroundGeolocationAllowed;
 
 @property(strong, nonatomic, nonnull) CLLocationManager *locationManager;
 
