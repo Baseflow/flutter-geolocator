@@ -49,6 +49,7 @@
   CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
   NSNumber* pauseLocationUpdatesAutomatically = arguments[@"pauseLocationUpdatesAutomatically"];
   CLActivityType activityType = [ActivityTypeMapper toCLActivityType:(NSNumber *)arguments[@"activityType"]];
+  NSNumber* allowBackgroundLocationUpdates = arguments[@"allowBackgroundLocationUpdates"];
 
   NSNumber* showBackgroundLocationIndicator = arguments[@"showBackgroundLocationIndicator"];
 	      
@@ -57,6 +58,7 @@
                                  pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically && [pauseLocationUpdatesAutomatically boolValue]
                                    showBackgroundLocationIndicator:showBackgroundLocationIndicator && [showBackgroundLocationIndicator boolValue]
                                                       activityType:activityType
+                                    allowBackgroundLocationUpdates:[allowBackgroundLocationUpdates boolValue]
                                                      resultHandler:^(CLLocation *location) {
     [weakSelf onLocationDidChange: location];
   }

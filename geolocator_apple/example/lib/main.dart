@@ -298,8 +298,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         accuracy: LocationAccuracy.best,
         distanceFilter: 10,
         activityType: ActivityType.other,
-        // Only set to true if our app will be started up in the background.
+        // Only set showBackgroundLocationIndicator and
+        // allowBackgroundLocationUpdates to true if our app will be started up
+        // in the background.
         showBackgroundLocationIndicator: false,
+        allowBackgroundLocationUpdates: false,
       ));
       _positionStreamSubscription = positionStream.handleError((e) {
         _positionStreamSubscription?.cancel();
