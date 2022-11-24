@@ -1,3 +1,7 @@
+## 2.2.4
+
+- Fix plugin registration in `dart_plugin_registrant.dart`
+
 ## 2.2.3
 
 - Implement allowBackgroundLocationUpdates iOS setting

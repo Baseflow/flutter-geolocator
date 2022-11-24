@@ -2,7 +2,7 @@ name: geolocator_windows
 description: Geolocation Windows plugin for Flutter. This plugin provides the Windows implementation for the geolocator.
 repository: https://github.com/baseflow/flutter-geolocator/tree/main/geolocator_windows
 issue_tracker: https://github.com/baseflow/flutter-geolocator/issues?q=is%3Aissue+is%3Aopen
-version: 0.1.1
+version: 0.1.2
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
@@ -10,6 +10,7 @@ environment:
 
 flutter:
   plugin:
+    implements: geolocator
     platforms:
       windows:
         pluginClass: GeolocatorWindows
