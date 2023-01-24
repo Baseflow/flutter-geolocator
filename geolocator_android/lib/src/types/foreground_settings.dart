@@ -47,6 +47,10 @@ class ForegroundNotificationConfig {
   /// library.
   final bool enableWakeLock;
 
+  /// The notificationId of an existing notification that can be shown during
+  /// the execution of the foreground service.
+  final int? existingNotificationId;
+
   /// Creates an Android specific configuration for the [FlutterBackground] plugin.
   ///
   /// [notificationTitle] is the title used for the foreground service notification.
@@ -64,6 +68,7 @@ class ForegroundNotificationConfig {
         const AndroidResource(name: 'ic_launcher', defType: 'mipmap'),
     this.enableWifiLock = false,
     this.enableWakeLock = false,
+    this.existingNotificationId,
   });
 
   /// Returns a JSON representation of this class.
@@ -74,6 +79,7 @@ class ForegroundNotificationConfig {
       'notificationIcon': notificationIcon.toJson(),
       'enableWifiLock': enableWifiLock,
       'enableWakeLock': enableWakeLock,
+      'existingNotificationId': existingNotificationId,
     };
   }
 }
