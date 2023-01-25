@@ -134,22 +134,26 @@ public class GeolocatorLocationService extends Service {
   }
 
   public void enableBackgroundMode(ForegroundNotificationOptions options) {
-    if (backgroundNotification != null) {
-      Log.d(TAG, "Service already in foreground mode.");
-      changeNotificationOptions(options);
-    } else {
-      Log.d(TAG, "Start service in foreground mode.");
+       foregroundNotificationOptions = options;
 
-      backgroundNotification =
-          new BackgroundNotification(
-              this.getApplicationContext(), CHANNEL_ID, ONGOING_NOTIFICATION_ID, options);
-      backgroundNotification.updateChannel("Background Location");
-      Notification notification = backgroundNotification.build();
-      startForeground(ONGOING_NOTIFICATION_ID, notification);
-      isForeground = true;
+        if (backgroundNotification != null) {
+            Log.d(TAG, "Service already in foreground mode.");
+            changeNotificationOptions(options);
+        } else {
+            Log.d(TAG, "Start service in foreground mode.");
+
+            int notificationId = getNotificationId();
+
+            backgroundNotification = new BackgroundNotification(this.getApplicationContext(), CHANNEL_ID, notificationId, options);
+            backgroundNotification.updateChannel("Background Location");
+
+            Notification notification = backgroundNotification.build();
+            startForeground(notificationId, notification);
+            Log.d("MyDebugLabel", "Geolocator: Started foreground service with notificationId: " + notificationId + " in channel: " + CHANNEL_ID);
+            isForeground = true;
+        }
+        obtainWakeLocks(options);
     }
-    obtainWakeLocks(options);
-  }
 
   @SuppressWarnings("deprecation")
   public void disableBackgroundMode() {
