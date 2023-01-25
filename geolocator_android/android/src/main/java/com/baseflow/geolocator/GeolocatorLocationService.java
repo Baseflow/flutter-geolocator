@@ -158,7 +158,7 @@ public class GeolocatorLocationService extends Service {
 
             Notification notification = backgroundNotification.build();
             startForeground(notificationId, notification);
-            Log.d("MyDebugLabel", "Geolocator: Started foreground service with notificationId: " + notificationId + " in channel: " + CHANNEL_ID);
+
             isForeground = true;
         }
         obtainWakeLocks(options);
