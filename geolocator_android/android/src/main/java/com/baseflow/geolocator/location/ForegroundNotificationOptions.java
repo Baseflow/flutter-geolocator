@@ -19,32 +19,39 @@ public class ForegroundNotificationOptions {
     @NonNull
     private final boolean enableWakeLock;
 
+    @Nullable
+    private final Integer existingNotificationId;
 
-    public static ForegroundNotificationOptions parseArguments(@Nullable  Map<String, Object> arguments) {
-    if (arguments == null) {
-      return null;
+
+    public static ForegroundNotificationOptions parseArguments(@Nullable Map<String, Object> arguments) {
+        if (arguments == null) {
+            return null;
+        }
+
+        final AndroidIconResource notificationIcon = AndroidIconResource.parseArguments((Map<String, Object>) arguments.get("notificationIcon"));
+        final String notificationTitle = (String) arguments.get("notificationTitle");
+        final String notificationText = (String) arguments.get("notificationText");
+        final Boolean enableWifiLock = (Boolean) arguments.get("enableWifiLock");
+        final Boolean enableWakeLock = (Boolean) arguments.get("enableWakeLock");
+        final Integer existingNotificationId = (Integer) arguments.get("existingNotificationId");
+
+        return new ForegroundNotificationOptions(
+                notificationTitle,
+                notificationText,
+                notificationIcon,
+                enableWifiLock,
+                enableWakeLock,
+                existingNotificationId
+        );
     }
 
-   final AndroidIconResource notificationIcon = AndroidIconResource.parseArguments((Map<String, Object>)arguments.get("notificationIcon"));
-    final String notificationTitle = (String) arguments.get("notificationTitle");
-    final String notificationText = (String) arguments.get("notificationText");
-    final Boolean enableWifiLock = (Boolean) arguments.get("enableWifiLock");
-    final Boolean enableWakeLock = (Boolean) arguments.get("enableWakeLock");
-
-    return new ForegroundNotificationOptions(
-            notificationTitle,
-            notificationText,
-            notificationIcon,
-            enableWifiLock,
-            enableWakeLock);
-  }
-
-    private ForegroundNotificationOptions(String notificationTitle, String notificationText, AndroidIconResource notificationIcon, boolean enableWifiLock, boolean enableWakeLock) {
+    private ForegroundNotificationOptions(String notificationTitle, String notificationText, AndroidIconResource notificationIcon, boolean enableWifiLock, boolean enableWakeLock, Integer existingNotificationId) {
         this.notificationTitle = notificationTitle;
         this.notificationText = notificationText;
         this.notificationIcon = notificationIcon;
         this.enableWifiLock = enableWifiLock;
         this.enableWakeLock = enableWakeLock;
+        this.existingNotificationId = existingNotificationId;
     }
 
     public String getNotificationTitle() {
@@ -67,4 +74,7 @@ public class ForegroundNotificationOptions {
         return enableWakeLock;
     }
 
+    public Integer getExistingNotificationId() {
+        return existingNotificationId;
+    }
 }

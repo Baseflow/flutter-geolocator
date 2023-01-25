@@ -30,6 +30,17 @@ dependencies:
   # the demo application to open the links in the web browser.
   url_launcher: ^6.0.0-nullsafety.1
 
+dependency_overrides:
+  # The following dependency override is required to use the current version of
+  # the plugin in the example app. This is only required when developing the
+  # plugin itself.
+  geolocator_apple:
+    path: ../../geolocator_apple
+  geolocator_android:
+    path: ../../geolocator_android
+  geolocator_platform_interface:
+    path: ../../geolocator_platform_interface
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
