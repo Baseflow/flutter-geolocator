@@ -1,3 +1,7 @@
+## 4.1.6
+
+- Updates Play Services Location library
+
 ## 4.1.5
 
 - Mark `geolocator_android` as implementation of `geolocator` 
