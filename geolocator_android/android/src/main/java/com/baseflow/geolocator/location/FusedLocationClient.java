@@ -146,6 +146,8 @@ class FusedLocationClient implements LocationClient {
                 } else {
                   listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
                 }
+              } else {
+                  listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
               }
             });
   }
