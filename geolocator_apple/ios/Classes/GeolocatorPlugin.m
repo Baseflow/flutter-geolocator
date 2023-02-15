@@ -86,8 +86,12 @@
   } else if ([@"requestPermission" isEqualToString:call.method]) {
     [self onRequestPermission:result];
   } else if ([@"isLocationServiceEnabled" isEqualToString:call.method]) {
-    BOOL isEnabled = [CLLocationManager locationServicesEnabled];
-    result([NSNumber numberWithBool:isEnabled]);
+      dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL isEnabled = [CLLocationManager locationServicesEnabled];
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            result([NSNumber numberWithBool:isEnabled]);
+        });
+      });
   } else if ([@"getLastKnownPosition" isEqualToString:call.method]) {
     [self onGetLastKnownPosition:result];
   } else if ([@"getCurrentPosition" isEqualToString:call.method]) {
