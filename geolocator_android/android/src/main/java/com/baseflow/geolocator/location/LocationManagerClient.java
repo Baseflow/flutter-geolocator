@@ -19,6 +19,9 @@ import com.baseflow.geolocator.errors.ErrorCodes;
 
 import java.util.List;
 
+/**
+ * This is the legacy location client that does not require Google Play Services
+ */
 class LocationManagerClient implements LocationClient, LocationListener {
 
   private static final long TWO_MINUTES = 120000;
@@ -106,9 +109,19 @@ class LocationManagerClient implements LocationClient, LocationListener {
 
     String provider = locationManager.getBestProvider(criteria, true);
 
-    if (provider.trim().isEmpty()) {
+    if (provider.trim().isEmpty() || provider.equals("fused")) {
+      // This class was chosen because either Google Play Services are not available, or because
+      // the library user explicitly chose the legacy client. Therefore we can't use the fused
+      // provider here, since it may not even work as it uses Google Play Services.
       List<String> providers = locationManager.getProviders(true);
-      if (providers.size() > 0) provider = providers.get(0);
+      for (final String otherProvider : providers) {
+        if (!otherProvider.equals("fused")) {
+          provider = otherProvider;
+          if (otherProvider.equals("gps")) {
+            break;
+          }
+        }
+      }
     }
 
     return provider;
