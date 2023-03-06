@@ -42,9 +42,6 @@ class ForegroundNotificationConfig {
   ///
   /// If this is false then the system can still sleep and all location
   /// events will be received at once when the system wakes up again.
-  ///
-  /// Wake lock permissions should be obtained first by using a permissions
-  /// library.
   final bool enableWakeLock;
 
   /// Creates an Android specific configuration for the [FlutterBackground] plugin.
