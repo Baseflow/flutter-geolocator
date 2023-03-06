@@ -1,3 +1,7 @@
+## 4.2.0
+
+* Introduced `setOngoing` flag in `ForegroundNotificationConfig` to make notification persistent 
+
 ## 4.1.7
 
 * Fixes an issue where checking location service availability hangs indefinately.
