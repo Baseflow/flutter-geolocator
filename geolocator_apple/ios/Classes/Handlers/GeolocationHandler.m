@@ -59,14 +59,24 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                               errorHandler:(GeolocatorError _Nonnull)errorHandler {
   self.errorHandler = errorHandler;
   self.currentLocationResultHandler = resultHandler;
+    
+  CLLocationManager *locationManager = [self getLocationManager];
+  BOOL showBackgroundLocationIndicator = NO;
+  BOOL allowBackgroundLocationUpdates = NO;
+  #if TARGET_OS_IOS
+    if (self.isListeningForPositionUpdates) {
+      showBackgroundLocationIndicator = locationManager.showsBackgroundLocationIndicator;
+      allowBackgroundLocationUpdates = locationManager.allowsBackgroundLocationUpdates;
+    }
+  #endif
   
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:kCLDistanceFilterNone
                pauseLocationUpdatesAutomatically:NO
                                     activityType:CLActivityTypeOther
                    isListeningForPositionUpdates:self.isListeningForPositionUpdates
-                 showBackgroundLocationIndicator:NO
-                  allowBackgroundLocationUpdates:NO];
+                 showBackgroundLocationIndicator:showBackgroundLocationIndicator
+                  allowBackgroundLocationUpdates:allowBackgroundLocationUpdates];
 }
 
 - (void)startListeningWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy

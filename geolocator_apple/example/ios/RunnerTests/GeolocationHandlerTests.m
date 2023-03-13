@@ -271,4 +271,39 @@
     OCMVerify(never(), [_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
 }
 
+- (void)testKeepLocationManagerSettingsWhenRequestingCurrentPosition {
+  id geolocationHandlerMock = OCMPartialMock(_geolocationHandler);
+  [geolocationHandlerMock setLocationManagerOverride:_mockLocationManager];
+  OCMStub(ClassMethod([geolocationHandlerMock shouldEnableBackgroundLocationUpdates]))
+    ._andReturn([NSNumber numberWithBool:YES]);
+  OCMStub([_mockLocationManager allowsBackgroundLocationUpdates])
+    ._andReturn([NSNumber numberWithBool:YES]);
+  if (@available(iOS 11.0, *)) {
+    OCMStub([_mockLocationManager showsBackgroundLocationIndicator])
+      ._andReturn([NSNumber numberWithBool:YES]);
+  }
+  [geolocationHandlerMock startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
+                                          distanceFilter:0
+                       pauseLocationUpdatesAutomatically:NO
+                         showBackgroundLocationIndicator:YES
+                                            activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:YES
+                                           resultHandler:^(CLLocation * _Nullable location) {
+  }
+                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    
+  }];
+  OCMVerify([_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
+  if (@available(iOS 11.0, *)) {
+    OCMVerify([_mockLocationManager setShowsBackgroundLocationIndicator:YES]);
+  }
+  [geolocationHandlerMock requestPositionWithDesiredAccuracy: kCLLocationAccuracyBest
+                                               resultHandler:^(CLLocation * _Nullable location) {}
+                                                errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+  OCMVerify(never(), [_mockLocationManager setAllowsBackgroundLocationUpdates:NO]);
+  if (@available(iOS 11.0, *)) {
+    OCMVerify(never(), [_mockLocationManager setShowsBackgroundLocationIndicator:NO]);
+  }
+}
+
 @end

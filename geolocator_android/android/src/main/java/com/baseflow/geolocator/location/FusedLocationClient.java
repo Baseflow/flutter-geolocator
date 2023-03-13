@@ -135,17 +135,19 @@ class FusedLocationClient implements LocationClient {
         .checkLocationSettings(new LocationSettingsRequest.Builder().build())
         .addOnCompleteListener(
             (response) -> {
-              if (response.isSuccessful()) {
-                LocationSettingsResponse lsr = response.getResult();
-                if (lsr != null) {
-                  LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
-                  boolean isGpsUsable = settingsStates != null && settingsStates.isGpsUsable();
-                  boolean isNetworkUsable =
-                      settingsStates != null && settingsStates.isNetworkLocationUsable();
-                  listener.onLocationServiceResult(isGpsUsable || isNetworkUsable);
-                } else {
-                  listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
-                }
+              if (!response.isSuccessful()) {
+                listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+              }
+
+              LocationSettingsResponse lsr = response.getResult();
+              if (lsr != null) {
+                LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
+                boolean isGpsUsable = settingsStates != null && settingsStates.isGpsUsable();
+                boolean isNetworkUsable =
+                    settingsStates != null && settingsStates.isNetworkLocationUsable();
+                listener.onLocationServiceResult(isGpsUsable || isNetworkUsable);
+              } else {
+                listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
               }
             });
   }
