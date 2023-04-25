@@ -75,43 +75,28 @@ class LocationManagerClient implements LocationClient, LocationListener {
 
   private static String getBestProvider(
       LocationManager locationManager, LocationAccuracy accuracy) {
-    Criteria criteria = new Criteria();
-
-    criteria.setBearingRequired(false);
-    criteria.setAltitudeRequired(false);
-    criteria.setSpeedRequired(false);
-
+    final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    final boolean networkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     switch (accuracy) {
       case lowest:
-        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-        criteria.setHorizontalAccuracy(Criteria.NO_REQUIREMENT);
-        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-        break;
       case low:
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_LOW);
-        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-        break;
       case medium:
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_MEDIUM);
-        criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
-        break;
+        if (networkEnabled) {
+          return LocationManager.NETWORK_PROVIDER;
+        }else if (gpsEnabled){
+          return LocationManager.GPS_PROVIDER;
+        }else{
+          return LocationManager.PASSIVE_PROVIDER;
+        }
       default:
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-        criteria.setPowerRequirement(Criteria.POWER_HIGH);
-        break;
+        if (gpsEnabled) {
+          return LocationManager.GPS_PROVIDER;
+        }else if (networkEnabled){
+          return LocationManager.NETWORK_PROVIDER;
+        }else{
+          return LocationManager.PASSIVE_PROVIDER;
+        }
     }
-
-    String provider = locationManager.getBestProvider(criteria, true);
-
-    if (provider.trim().isEmpty()) {
-      List<String> providers = locationManager.getProviders(true);
-      if (providers.size() > 0) provider = providers.get(0);
-    }
-
-    return provider;
   }
 
   private static float accuracyToFloat(LocationAccuracy accuracy) {
