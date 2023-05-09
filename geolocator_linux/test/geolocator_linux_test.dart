@@ -1,16 +1,26 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:geoclue/geoclue.dart';
 import 'package:geolocator_linux/geolocator_linux.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:geoclue/geoclue.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'geolocator_linux_test.mocks.dart';
 
 @GenerateMocks([GeoClueClient, GeoClueManager])
 void main() {
+  setUpAll(
+    () => PackageInfo.setMockInitialValues(
+      appName: 'mockAppName',
+      packageName: 'mockPackageName',
+      version: 'mockVersion',
+      buildNumber: 'mockBuildNumber',
+      buildSignature: 'mockBuildSignature',
+    ),
+  );
   test('current position', () async {
     final client = MockGeoClueClient();
     when(client.location).thenReturn(dummyLocation);
