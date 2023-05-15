@@ -117,7 +117,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           ExamplePage(
             Icons.location_on,
             (context) => Scaffold(
-              backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).colorScheme.background,
               body: ListView.builder(
                 itemCount: _positionItems.length,
                 itemBuilder: (context, index) {
