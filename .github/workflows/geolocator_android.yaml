@@ -3,7 +3,7 @@
 name: geolocator_android
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# events but only for the main branch
 on:
   push:
     branches: [ main ]
@@ -55,4 +55,3 @@ jobs:
       - name: Run Android build
         run: flutter build apk --release
         working-directory: ${{env.example-directory}}
-        
