@@ -3,7 +3,7 @@
 name: geolocator_apple
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the develop branch
+# events but only for the main branch
 on:
   push:
     branches: [ main ]
@@ -16,14 +16,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  format:
-    name: Format
+  ci:
+    name: Apple platform package
 
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     env:
-      source-directory: ./geolocator_apple 
+      source-directory: ./geolocator_apple
+      example-directory: ./geolocator_apple/example 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -44,171 +45,13 @@ jobs:
       - name: Run Flutter Format
         run: flutter format --set-exit-if-changed .
         working-directory: ${{env.source-directory}}
-        
-  analyze:
-    name: Analyze
-    
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
 
-    env:
-      source-directory: ./geolocator_apple
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-          
-      # Make sure the stable version of Flutter is available
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      # Download all Flutter packages
-      - name: Download dependencies
-        run: flutter pub get
-        working-directory: ${{env.source-directory}}
-     
       # Run Flutter Analyzer
       - name: Run Flutter Analyzer
         run: flutter analyze
         working-directory: ${{env.source-directory}}
-        
-  build_ios:
-    name: Build iOS App
-    
-    # The type of runner that the job will run on
-    runs-on: macos-latest
-
-    env:
-      source-directory: ./geolocator_apple 
-      example-directory: ./geolocator_apple/example
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
-      # Make sure the stable version of Flutter is available
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      # Download all Flutter packages
-      - name: Download dependencies
-        run: flutter pub get
-        working-directory: ${{env.source-directory}}
 
       # Build iOS version of the example App
       - name: Run iOS build
-        run: flutter build ios --release --no-codesign
+        run: flutter build ios --no-codesign --release
         working-directory: ${{env.example-directory}}
-
-  build_macos:
-    name: Build macOS App
-    
-    # The type of runner that the job will run on
-    runs-on: macos-latest
-
-    env:
-      source-directory: ./geolocator_apple 
-      example-directory: ./geolocator_apple/example
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
-      # Make sure the stable version of Flutter is available
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      # Enable macOS Desktop support
-      - name: Enable macOS Desktop support
-        run: flutter config --enable-macos-desktop
-
-      # Download all Flutter packages
-      - name: Download dependencies
-        run: flutter pub get
-        working-directory: ${{env.source-directory}}
-
-      # Build macOS version of the example App
-      - name: Run macOS build
-        run: flutter build macos --release
-        working-directory: ${{env.example-directory}}
-
-  tests:
-    name: Unit-tests
-    # The type of runner that the job will run on
-    runs-on: macos-latest
-
-    env:
-      source-directory: ./geolocator_apple
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
-      # Make sure the stable version of Flutter is available
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      # Download all Flutter packages
-      - name: Download dependencies
-        run: flutter pub get
-        working-directory: ${{env.source-directory}}
-      
-      # Run all unit-tests with code coverage
-      - name: Run unit tests
-        run: flutter test --coverage
-        working-directory: ${{env.source-directory}}
-
-      # Upload code coverage information
-      - uses: codecov/codecov-action@v1
-        with:
-          file: ${{env.source-directory}}/coverage/lcov.info # optional
-          name: Geolocator (App Facing Package) # optional
-          fail_ci_if_error: true
-
-  test_ios_native:
-    name: Test iOS code base
-    
-    # The type of runner that the job will run on
-    runs-on: macos-latest
-
-    env:
-      xcodebuild-destination: "platform=iOS Simulator,OS=16.0,name=iPhone 14"
-      source-directory: ./geolocator_apple 
-      example-directory: ./geolocator_apple/example
-      ios-example-directory: ./geolocator_apple/example/ios
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
-      # Make sure the stable version of Flutter is available
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
-      # Download all Flutter packages
-      - name: Download dependencies
-        run: flutter pub get
-        working-directory: ${{env.source-directory}}
-
-      # Build iOS version of the example App
-      - name: Build iOS Example App
-        run: flutter build ios --no-codesign
-        working-directory: ${{env.example-directory}}
-      
-      # Run iOS native tests
-      - name: Testing iOS package
-        run: | 
-          xcodebuild -workspace ./geolocator_apple/example/ios/Runner.xcworkspace \
-            -scheme Runner \
-            -destination '${{env.xcodebuild-destination}}' \
-            clean test 

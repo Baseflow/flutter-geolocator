@@ -1,7 +1,7 @@
 name: geolocator_linux
 
 # Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# events but only for the main branch
 on:
   push:
     branches: [ main ]
@@ -14,7 +14,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
+  ci:
     name: Linux platform package
 
     # The type of runner that the job will run on
