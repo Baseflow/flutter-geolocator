@@ -101,8 +101,9 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   @override
   Future<Position> getCurrentPosition({
     LocationSettings? locationSettings,
+    String? requestId,
   }) async {
-    final String requestId = _uuid.v4();
+    requestId = requestId ?? _uuid.v4();
 
     try {
       Future<dynamic> positionFuture;
