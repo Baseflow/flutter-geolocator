@@ -1,3 +1,7 @@
+## 4.1.9
+
+* Fixes a bug where the location service would not stop correctly when the location stream timed out.
+
 ## 4.1.8
 
 * Adds compatibility with Android Gradle Plugin 8.0.
