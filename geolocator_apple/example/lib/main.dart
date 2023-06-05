@@ -173,6 +173,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                     child: const Icon(Icons.bookmark),
                     onPressed: _getLastKnownPosition,
                   ),
+                  sizedBox,
+                  FloatingActionButton(
+                    child: const Icon(Icons.question_mark),
+                    onPressed: _isLocationServiceEnabled,
+                  ),
                 ],
               ),
             ),
@@ -364,6 +369,16 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         'No last known position available',
       );
     }
+  }
+
+  Future<void> _isLocationServiceEnabled() async {
+    final bool isLocationServiceEnabled =
+        await geolocatorApple.isLocationServiceEnabled();
+    final String displayValue = isLocationServiceEnabled
+        ? 'Location services are enabled.'
+        : 'Location services are disabled.';
+
+    _updatePositionList(_PositionItemType.log, displayValue);
   }
 
   void _getLocationAccuracy() async {
