@@ -14,7 +14,7 @@ class EventChannelMock {
     required String channelName,
     required this.stream,
   }) : _methodChannel = MethodChannel(channelName) {
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_methodChannel, _handler);
   }
 
@@ -76,11 +76,7 @@ class EventChannelMock {
   }
 
   void _sendEnvelope(ByteData? envelope) {
-    if (TestDefaultBinaryMessengerBinding.instance == null) {
-      return;
-    }
-
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .handlePlatformMessage(
       _methodChannel.name,
       envelope,
