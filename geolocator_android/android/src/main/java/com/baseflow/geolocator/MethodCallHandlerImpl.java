@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
@@ -39,7 +40,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private final GeolocationManager geolocationManager;
   private final LocationAccuracyManager locationAccuracyManager;
 
-  private final Map<String, LocationClient> pendingCurrentPositionLocationClients;
+  @VisibleForTesting final Map<String, LocationClient> pendingCurrentPositionLocationClients;
 
   @Nullable private Context context;
 
@@ -198,13 +199,13 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             result.error(errorCode.toString(), errorCode.toDescription(), null));
   }
 
-    /**
-     * Retrieves the current position.
-     *
-     * <p>Listens to location updates until it receives a location or encounters an error.
-     *
-     * <p>To manually cancel this request, call {@link #onCancelGetCurrentPosition}.
-     */
+  /**
+   * Retrieves the current position.
+   *
+   * <p>Listens to location updates until it receives a location or encounters an error.
+   *
+   * <p>To manually cancel this request, call {@link #onCancelGetCurrentPosition}.
+   */
   private void onGetCurrentPosition(MethodCall call, MethodChannel.Result result) {
     try {
       if (!permissionManager.hasPermission(context)) {
@@ -262,19 +263,20 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         });
   }
 
-    /**
-     * Cancels a request for the current position that was initiated with {@link #onGetCurrentPosition}.
-     */
-    private void onCancelGetCurrentPosition(MethodCall call, MethodChannel.Result result) {
-      @SuppressWarnings("unchecked")
-      Map<String, Object> arguments = (Map<String, Object>) call.arguments;
-      String requestId = (String) arguments.get("requestId");
+  /**
+   * Cancels a request for the current position that was initiated with {@link #onGetCurrentPosition}.
+   */
+  private void onCancelGetCurrentPosition(MethodCall call, MethodChannel.Result result) {
+    @SuppressWarnings("unchecked")
+    Map<String, Object> arguments = (Map<String, Object>) call.arguments;
+    String requestId = (String) arguments.get("requestId");
 
-      LocationClient locationClient = this.pendingCurrentPositionLocationClients.get(requestId);
-      if (locationClient != null) {
-        locationClient.stopPositionUpdates();
-      }
-
-      result.success(null);
+    LocationClient locationClient = this.pendingCurrentPositionLocationClients.get(requestId);
+    if (locationClient != null) {
+      locationClient.stopPositionUpdates();
     }
+    this.pendingCurrentPositionLocationClients.remove(requestId);
+
+    result.success(null);
+  }
 }
