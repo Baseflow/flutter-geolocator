@@ -22,7 +22,7 @@ class MethodChannelMock {
     required String channelName,
     required this.methods,
   }) : methodChannel = MethodChannel(channelName) {
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(methodChannel, _handler);
   }
 
