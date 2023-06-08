@@ -38,7 +38,7 @@ body:
   - type: textarea
     attributes:
       label: Expected results
-      description: Please tell us what is expected to happen.
+      description: Please provide a description of the expected behavior.
     validations:
       required: true
   - type: textarea
