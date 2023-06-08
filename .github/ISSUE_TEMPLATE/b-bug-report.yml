@@ -28,7 +28,7 @@ body:
   - type: textarea
     attributes:
       label: Steps to reproduce
-      description: Please tell us exactly how to reproduce the problem you are running into.
+      description: Please provide specific steps to reproduce the issue.
       placeholder: |
         1. ...
         2. ...
