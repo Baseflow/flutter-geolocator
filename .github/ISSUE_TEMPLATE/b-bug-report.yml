@@ -44,7 +44,7 @@ body:
   - type: textarea
     attributes:
       label: Actual results
-      description: Please tell us what is actually happening.
+      description: Please provide a description of the current behavior.
     validations:
       required: true
   - type: textarea
