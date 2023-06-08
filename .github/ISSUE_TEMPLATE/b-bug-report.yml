@@ -1,6 +1,6 @@
 name: Report a bug
 description: You encountered a bug in the geolocator plugin resulting in application crashes, compilation errors or invalid/ unexpected results.
-title: "Bug: "
+title: "[Bug]: "
 labels: ["needs-triage"]
 body:
   - type: markdown
