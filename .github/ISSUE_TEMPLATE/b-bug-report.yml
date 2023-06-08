@@ -7,7 +7,8 @@ body:
     attributes:
       value: |
         Thank you for taking the time to submit an issue!
-        To effectively tackle it, we require as much information as possible.
+        To effectively tackle it, we require as much information as possible. This might seem a lot of information but 
+        will allow us to quickly help you and resolve the issue you are facing.
   - type: checkboxes
     attributes:
       options:
