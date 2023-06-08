@@ -12,7 +12,8 @@ body:
   - type: checkboxes
     attributes:
       options:
-      - label: I have searched the [existing issues](https://github.com/baseflow/flutter-geolocator/issues)
+      - label: I have searched the [existing issues](https://github.com/baseflow/flutter-geolocator/issues).
+      - label: I have carefully [read the documentation](https://github.com/Baseflow/flutter-geolocator/blob/main/geolocator/README.md) and verified I have added the required platform specific configuration.
         required: true
   - type: checkboxes
     attributes:
