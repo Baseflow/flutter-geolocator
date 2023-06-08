@@ -1,3 +1,7 @@
+## 2.2.7
+
+* Fixes the propagation of the activity type setting.
+
 ## 2.2.6
 
 * Ensures the `isLocationServicesEnabled` method is executed in a background thread.

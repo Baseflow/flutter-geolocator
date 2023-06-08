@@ -55,7 +55,7 @@ class AppleSettings extends LocationSettings {
     return super.toJson()
       ..addAll({
         'pauseLocationUpdatesAutomatically': pauseLocationUpdatesAutomatically,
-        'this.activityType': activityType.index,
+        'activityType': activityType.index,
         'showBackgroundLocationIndicator': showBackgroundLocationIndicator,
         'allowBackgroundLocationUpdates': allowBackgroundLocationUpdates,
       });
