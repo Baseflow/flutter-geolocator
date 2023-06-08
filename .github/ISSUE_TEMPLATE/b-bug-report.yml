@@ -90,7 +90,7 @@ body:
     attributes:
       label: Flutter Doctor output
       description: |
-        Please provide the full output of running `flutter doctor -v`
+        Please provide the full output of running `flutter doctor -v`.
       value: |
         <details><summary>Doctor output</summary>
 
