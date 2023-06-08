@@ -1,6 +1,6 @@
 ## 2.2.7
 
-* Fix activity type setting propagation.
+* Fixes the propagation of the activity type setting.
 
 ## 2.2.6
 
