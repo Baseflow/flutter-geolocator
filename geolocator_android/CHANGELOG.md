@@ -1,6 +1,6 @@
 ## 4.1.9
 
-* Fixes a bug where the location service would not stop correctly when the location stream timed out.
+* Resolves an issue where the location service failed to stop properly upon timeout of the location stream.
 
 ## 4.1.8
 
