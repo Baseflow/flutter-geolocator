@@ -7,18 +7,17 @@ body:
     attributes:
       value: |
         Thank you for taking the time to submit a regression!
-        To effectively tackle it, we require as much information as possible. This might seem a lot of information but 
-        will allow us to quickly get to the root of the regression.
+        To effectively tackle it, we require as much information as possible. This will allow us to quickly get to the root of the regression.
   - type: checkboxes
     attributes:
       label: Is there an existing issue for this?
-      description: Please search to see if an issue already exists for this feature request or proposal.
+      description: Please search to see if an issue already exists for this regression.
       options:
         - label: I have searched the [existing issues](https://github.com/baseflow/flutter-geolocator/issues).
           required: true
   - type: checkboxes
     attributes:
-      label: Please select affected platforms
+      label: Please select affected platform(s)
       options:
       - label: Android
       - label: iOS
