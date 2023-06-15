@@ -1,0 +1,53 @@
+name: Submit a feature request
+description: Do you have ideas or suggestions for new features? Submit them here!
+title: "[Feature Request]: "
+labels: ["needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to submit a feature request!
+        Please take the time to fill out the information below so that we can better understand your request.
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for this feature request or proposal.
+      options:
+        - label: I have searched the [existing issues](https://github.com/baseflow/flutter-geolocator/issues).
+          required: true
+  - type: checkboxes
+    attributes:
+      label: Please select affected platforms
+      options:
+      - label: Android
+      - label: iOS
+      - label: Linux
+      - label: macOS
+      - label: Web
+      - label: Windows
+  - type: textarea
+    attributes:
+      label: Use case
+      description: |
+        Please tell us the problem you are running into that led to you wanting
+        a new feature.
+
+        Is your feature request related to a problem? Please give a clear and
+        concise description of what the problem is.
+
+        Describe the alternative solutions you've considered. Is there a package
+        on pub.dev that already solves this?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposal
+      description: |
+        Briefly but precisely describe what you would like the geolocator plugin to be able to do.
+
+        Consider attaching something showing what you are imagining:
+         * code samples
+         * images
+         * videos
+    validations:
+      required: true
