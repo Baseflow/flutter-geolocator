@@ -1,5 +1,5 @@
 name: Report a bug
-description: You encountered a bug in the geolocator plugin resulting in application crashes, compilation errors or invalid/ unexpected results.
+description: You encountered a bug in the geolocator plugin resulting in application crashes, compilation errors or invalid/unexpected results.
 title: "[Bug]: "
 labels: ["needs-triage"]
 body:
@@ -11,6 +11,7 @@ body:
         will allow us to quickly help you and resolve the issue you are facing.
   - type: checkboxes
     attributes:
+      label: Please check the following before submitting a new issue.
       options:
       - label: I have searched the [existing issues](https://github.com/baseflow/flutter-geolocator/issues).
       - label: I have carefully [read the documentation](https://github.com/Baseflow/flutter-geolocator/blob/main/geolocator/README.md) and verified I have added the required platform specific configuration.
@@ -84,8 +85,8 @@ body:
       label: Version
       description: In which version of the geolocator plugin does the bug occur?
       placeholder: ex. 1.2.3
-      validations:
-        required: true
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: Flutter Doctor output
