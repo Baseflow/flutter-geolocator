@@ -85,6 +85,8 @@ body:
       label: Version
       description: In which version of the geolocator plugin does the bug occur?
       placeholder: ex. 1.2.3
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: Flutter Doctor output
