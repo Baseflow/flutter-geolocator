@@ -31,14 +31,18 @@ body:
       label: Your question
       description: |
         Please describe your question as detailed as possible.
-        Consider adding code samples, screenshots or videos to help us understand your question.
+
+        Please attach something to help us understand your question:
+         * code samples
+         * images
+         * videos
     validations:
       required: true
   - type: input
     id: version
     attributes:
       label: Version
-      description: Which version of the geolocator plugin are you using?
+      description: Please specify which version of the plugin are you currently using.
       placeholder: ex. 1.2.3
     validations:
       required: true

@@ -18,7 +18,7 @@ body:
         required: true
   - type: checkboxes
     attributes:
-      label: Please select affected platforms
+      label: Please select affected platform(s)
       options:
       - label: Android
       - label: iOS
@@ -55,7 +55,7 @@ body:
         Please create a minimal reproducible sample that shows the problem
         and attach it below between the lines with the backticks.
         
-        Note: Please do not upload screenshots of text. Instead, use code blocks
+        IMPORTANT: Please do not upload screenshots of text. Instead, use code blocks
         or the above mentioned ways to upload your code sample.
       value: |
         <details><summary>Code sample</summary>
@@ -69,12 +69,13 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: Screenshots or Video
+      label: Screenshots or video
       description: |
-        Upload any screenshots or video of the bug if applicable.
+        Please consider uploading any relevant screenshots or videos showcasing the regression, if available.
+        These visual aids can greatly assist us in understanding and addressing the issue more effectively.
       value: |
         <details>
-        <summary>Screenshots / Video demonstration</summary>
+        <summary>Screenshots or video demonstration</summary>
 
         [Upload media here]
 
@@ -83,7 +84,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: In which version of the geolocator plugin does the bug occur?
+      description: Please specify in which version of the plugin the bug occurs.
       placeholder: ex. 1.2.3
     validations:
       required: true
