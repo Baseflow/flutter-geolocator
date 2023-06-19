@@ -1,6 +1,6 @@
 *Replace this paragraph with a short description of what issue this pull request (PR) solves and provide a description of the change.  Consider including before/after screenshots.*
 
-*List which issues are fixed by this PR. You must list at least one issue.*
+*List at least one fixed issue.*
 
 ## Pre-launch Checklist
 
