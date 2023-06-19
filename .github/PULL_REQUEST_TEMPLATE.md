@@ -1,4 +1,4 @@
-*Replace this paragraph with a description of what this PR is changing or adding, and why. Consider including before/after screenshots.*
+*Replace this paragraph with a short description of what issue this pull request (PR) solves and provide a description of the change.  Consider including before/after screenshots.*
 
 *List which issues are fixed by this PR. You must list at least one issue.*
 
