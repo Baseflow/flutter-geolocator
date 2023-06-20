@@ -66,4 +66,4 @@ body:
     attributes:
       label: Additional information or context
       description: |
-        Please provide any additional information or context that you have for this feature request.
+        Please provide any additional information or context that you have for this feature request. Also links pointing to existing (native) APIs or articles are extremely helpful.
