@@ -8,10 +8,10 @@ body:
       value: |
         Thank you for submitting a feature request! To help us better understand your request, kindly take a moment to provide the following information. Your input is greatly appreciated.
 
-        Description of the feature request:
-        Use case or problem it solves:
-        Any specific requirements or considerations:
-        Any additional information or context:
+        - Description of the feature request.
+        - Use case or problem it solves.
+        - Any specific requirements or considerations.
+        - Any additional information or context.
 
         Thank you for your cooperation!
   - type: checkboxes
