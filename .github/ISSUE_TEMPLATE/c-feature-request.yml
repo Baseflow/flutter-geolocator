@@ -16,7 +16,7 @@ body:
         Thank you for your cooperation!
   - type: checkboxes
     attributes:
-      label: Is there an existing issue for this?
+      label: Is there already an issue requesting this feature?
       description: Please search to see if an issue already exists for this feature request.
       options:
         - label: I have searched the [existing issues](https://github.com/baseflow/flutter-geolocator/issues).
