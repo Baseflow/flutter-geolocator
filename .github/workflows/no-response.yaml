@@ -26,7 +26,7 @@ jobs:
           closeComment: >
             Without additional information, we are unfortunately not able to resolve this issue. 
             Therefore, we reluctantly closed this issue for now. 
-            If you run into this issue later feel free to file a new issue with a reference to this issue. 
+            If you run into this issue later, feel free to file a new issue with a reference to this issue. 
             Add a description of detailed steps to reproduce, expected and current behaviour, logs and the output of 'flutter doctor -v'. 
             Thanks for your contribution.
           # Number of days of inactivity before an issue is closed for lack of response.
