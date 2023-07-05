@@ -19,6 +19,9 @@ public class ForegroundNotificationOptions {
     @NonNull
     private final boolean enableWakeLock;
 
+    @NonNull
+    private final boolean setOngoing;
+
 
     public static ForegroundNotificationOptions parseArguments(@Nullable  Map<String, Object> arguments) {
     if (arguments == null) {
@@ -30,21 +33,25 @@ public class ForegroundNotificationOptions {
     final String notificationText = (String) arguments.get("notificationText");
     final Boolean enableWifiLock = (Boolean) arguments.get("enableWifiLock");
     final Boolean enableWakeLock = (Boolean) arguments.get("enableWakeLock");
+    final Boolean setOngoing = (Boolean) arguments.get("setOngoing");
+
 
     return new ForegroundNotificationOptions(
             notificationTitle,
             notificationText,
             notificationIcon,
             enableWifiLock,
-            enableWakeLock);
+            enableWakeLock,
+            setOngoing);
   }
 
-    private ForegroundNotificationOptions(String notificationTitle, String notificationText, AndroidIconResource notificationIcon, boolean enableWifiLock, boolean enableWakeLock) {
+    private ForegroundNotificationOptions(String notificationTitle, String notificationText, AndroidIconResource notificationIcon, boolean enableWifiLock, boolean enableWakeLock, boolean setOngoing) {
         this.notificationTitle = notificationTitle;
         this.notificationText = notificationText;
         this.notificationIcon = notificationIcon;
         this.enableWifiLock = enableWifiLock;
         this.enableWakeLock = enableWakeLock;
+        this.setOngoing = setOngoing;
     }
 
     public String getNotificationTitle() {
@@ -65,6 +72,10 @@ public class ForegroundNotificationOptions {
 
     public boolean isEnableWakeLock() {
         return enableWakeLock;
+    }
+
+    public boolean isSetOngoing() {
+        return setOngoing;
     }
 
 }
