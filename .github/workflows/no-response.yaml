@@ -21,6 +21,7 @@ jobs:
       - uses: actions/stale@v8
         with:
           any-of-labels: 'status: needs more info'
+          stale-issue-label: 'status: stale'
           close-issue-message: >
             Without additional information, we are unfortunately not able to resolve this issue. 
             Therefore, we reluctantly closed this issue for now. 
