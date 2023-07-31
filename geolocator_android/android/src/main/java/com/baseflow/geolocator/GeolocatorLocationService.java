@@ -156,7 +156,7 @@ public class GeolocatorLocationService extends Service {
     if (isForeground) {
       Log.d(TAG, "Stop service in foreground.");
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        stopForeground(ONGOING_NOTIFICATION_ID);
+        stopForeground(Service.STOP_FOREGROUND_REMOVE);
       } else {
         stopForeground(true);
       }

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
+import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
 
@@ -83,6 +84,24 @@ class FusedLocationClient implements LocationClient {
   }
 
   private static LocationRequest buildLocationRequest(@Nullable LocationOptions options) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+      return buildLocationRequestDeprecated(options);
+    }
+
+    LocationRequest.Builder builder = new LocationRequest.Builder(0);
+
+    if (options != null) {
+      builder.setPriority(toPriority(options.getAccuracy()));
+      builder.setIntervalMillis(options.getTimeInterval());
+      builder.setMinUpdateIntervalMillis(options.getTimeInterval());
+      builder.setMinUpdateDistanceMeters(options.getDistanceFilter());
+    }
+
+    return builder.build();
+  }
+
+  @SuppressWarnings("deprecation")
+  private static LocationRequest buildLocationRequestDeprecated(@Nullable LocationOptions options) {
     LocationRequest locationRequest = LocationRequest.create();
 
     if (options != null) {

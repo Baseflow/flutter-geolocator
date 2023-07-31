@@ -30,6 +30,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+
+      # Ensures JAVA 11 is installed on the build agent.
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
