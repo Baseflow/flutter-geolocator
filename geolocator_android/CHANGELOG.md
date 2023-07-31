@@ -1,3 +1,8 @@
+## 4.2.1
+
+* Fixes a bug where the `stopForeground` method was called with the wrong constant, resulting in a build time error.
+* Fixes deprecation warnings on Android API 33.
+
 ## 4.2.0
 
 * Introduces the `setOngoing` flag in `ForegroundNotificationConfig` to make notification persistent.

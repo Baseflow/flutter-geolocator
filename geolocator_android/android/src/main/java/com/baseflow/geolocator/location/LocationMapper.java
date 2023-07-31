@@ -17,6 +17,7 @@ public class LocationMapper {
     position.put("latitude", location.getLatitude());
     position.put("longitude", location.getLongitude());
     position.put("timestamp", location.getTime());
+    position.put("is_mocked", isMocked(location));
 
     if (location.hasAltitude()) position.put("altitude", location.getAltitude());
     if (location.hasAccuracy()) position.put("accuracy", (double) location.getAccuracy());
@@ -25,14 +26,6 @@ public class LocationMapper {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasSpeedAccuracy())
       position.put("speed_accuracy", (double) location.getSpeedAccuracyMetersPerSecond());
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-      position.put("is_mocked", location.isMock());
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-      position.put("is_mocked", location.isFromMockProvider());
-    } else {
-      position.put("is_mocked", false);
-    }
-
     if (location.getExtras() != null) {
       if (location.getExtras().containsKey(NmeaClient.NMEA_ALTITUDE_EXTRA)) {
         Double mslAltitude = location.getExtras().getDouble(NmeaClient.NMEA_ALTITUDE_EXTRA);
@@ -40,5 +33,16 @@ public class LocationMapper {
       }
     }
     return position;
+  }
+
+  @SuppressWarnings("deprecation")
+  private static boolean isMocked(Location location) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      return location.isMock();
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+      return location.isFromMockProvider();
+    } else {
+      return false;
+    }
   }
 }
