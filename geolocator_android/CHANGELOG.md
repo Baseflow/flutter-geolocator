@@ -1,3 +1,7 @@
+## 4.2.2
+
+* Adds back the `applicationId` property of the AndroidManifest.xml file to keep backwardscompatibility with older applications that still rely on Gradle version <7.0.
+
 ## 4.2.1
 
 * Fixes a bug where the `stopForeground` method was called with the wrong constant, resulting in a build time error.
