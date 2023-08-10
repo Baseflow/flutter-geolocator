@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 set(PROJECT_NAME "geolocator_windows")
-set(CPPWINRT_VERSION "2.0.210806.1")
+cmake_policy(VERSION 3.15...3.24)
+set(CPPWINRT_VERSION "2.0.220418.1")
 project(${PROJECT_NAME} LANGUAGES CXX)
 include(FetchContent)
 
