@@ -22,9 +22,7 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    if (project.android.hasProperty("namespace")) {
-        namespace("com.baseflow.geolocator")
-    }
+    namespace 'com.baseflow.geolocator'
 
     compileSdkVersion 33
 
