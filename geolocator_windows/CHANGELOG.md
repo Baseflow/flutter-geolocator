@@ -3,6 +3,11 @@
 * **BREAKING CHANGE:** Synchronizes the default values of `Position.altitude`, `Position.heading` and `Position.speed` with the other platforms and return 0.0 if the value is not known.
 * Migrates the `target_compile_options` to use `/await:strict` to make the options compatible with C++ 20.
 
+## 0.1.3
+
+* Adds a `PositionStatus::Initializing` status consideration since it triggers the state change 
+if "Let apps access your location" toggle option is switched ON from OFF.
+
 ## 0.1.2
 
 * Adds improved Flutter analysis and resolved warnings.
