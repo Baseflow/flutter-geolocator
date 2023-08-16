@@ -1,3 +1,8 @@
+## 0.1.3
+
+* Added PositionStatus::Initializing status consideration since it triggers the state change 
+if "Let apps access your location" toggle option is switched ON from OFF
+
 ## 0.1.2
 
 * Adds improved Flutter analysis and resolved warnings.
