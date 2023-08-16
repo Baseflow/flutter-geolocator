@@ -1,3 +1,7 @@
+## 10.0.0
+
+- **BREAKING CHANGE:** Updates dependency on geolocator_windows to version 0.2.0. This will synchronize default values for `Position.altitude`, `Position.heading` and `Position.speed` with the other platforms. 
+
 ## 9.0.2
 
 - Updated dependency on geolocator_android to version 4.1.3
@@ -11,8 +15,8 @@
 
 > **IMPORTANT:** when updating to version 9.0.0 make sure to also set the `compileSdkVersion` in the `android/app/build.gradle` file to `33`.
 
-- Updated dependency on geolocator_android to version 4.0.0;
-- Make sure the Android example app compiles against Android SDK 33.
+- Updates dependency on geolocator_android to version 4.0.0;
+- Makes sure the Android example app compiles against Android SDK 33.
 
 ## 8.2.1
 
