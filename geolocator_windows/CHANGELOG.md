@@ -1,6 +1,6 @@
 ## 0.2.0
 
-* **BREAKING CHANGE:** Synchronizes the default values of `Position.altitude`, `Position.heading` and `Position.speed` with the other platforms and return 0.0 is the value is not known.
+* **BREAKING CHANGE:** Synchronizes the default values of `Position.altitude`, `Position.heading` and `Position.speed` with the other platforms and return 0.0 if the value is not known.
 * Migrates the `target_compile_options` to use `/await:strict` to make the options compatible with C++ 20.
 
 ## 0.1.2
