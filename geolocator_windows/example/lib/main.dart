@@ -177,7 +177,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     final position = await geolocatorWindows.getCurrentPosition();
     _updatePositionList(
       _PositionItemType.position,
-      position.toString(),
+      '$position (Heading: ${position.heading}, Speed: ${position.speed})',
     );
   }
 

@@ -252,18 +252,22 @@ EncodableMap GeolocatorPlugin::LocationToEncodableMap(Geoposition const& locatio
   position.insert(std::make_pair(EncodableValue("longitude"), EncodableValue(location.Coordinate().Longitude())));
   position.insert(std::make_pair(EncodableValue("timestamp"), EncodableValue(clock::to_time_t(location.Coordinate().Timestamp()))));
 
-  if (location.Coordinate().Altitude() != nullptr) {
-    position.insert(std::make_pair(EncodableValue("altitude"), EncodableValue(location.Coordinate().Altitude().GetDouble())));
-  }
-
+  double altitude = location.Coordinate().Altitude() != nullptr && !std::isnan(location.Coordinate().Altitude().GetDouble())
+    ? location.Coordinate().Altitude().GetDouble()
+    : 0;
+  position.insert(std::make_pair(EncodableValue("altitude"), EncodableValue(altitude)));
+  
   position.insert(std::make_pair(EncodableValue("accuracy"), EncodableValue(location.Coordinate().Accuracy())));
   
-  if (location.Coordinate().Heading() != nullptr) {
-    position.insert(std::make_pair(EncodableValue("heading"), EncodableValue(location.Coordinate().Heading().GetDouble())));
-  }
-  if (location.Coordinate().Speed() != nullptr) {
-    position.insert(std::make_pair(EncodableValue("speed"), EncodableValue(location.Coordinate().Speed().GetDouble())));
-  }
+  double heading = location.Coordinate().Heading() != nullptr && !std::isnan(location.Coordinate().Heading().GetDouble())
+    ? location.Coordinate().Heading().GetDouble()
+    : 0;
+  position.insert(std::make_pair(EncodableValue("heading"), EncodableValue(heading)));
+  
+  double speed = location.Coordinate().Speed() != nullptr && !std::isnan(location.Coordinate().Speed().GetDouble())
+    ? location.Coordinate().Speed().GetDouble()
+    : 0;
+  position.insert(std::make_pair(EncodableValue("speed"), EncodableValue(speed)));
 
   position.insert(std::make_pair(EncodableValue("is_mocked"), EncodableValue(false)));
 
