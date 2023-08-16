@@ -223,7 +223,8 @@ std::unique_ptr<StreamHandlerError<EncodableValue>> GeolocatorPlugin::OnServiceL
     [events = std::move(events), this](Geolocator const& geolocator, StatusChangedEventArgs e)
     {
       if (m_currentStatus != PositionStatus::Disabled && e.Status() == PositionStatus::Disabled
-        || m_currentStatus != PositionStatus::Ready && e.Status() == PositionStatus::Ready) {
+        || m_currentStatus != PositionStatus::Ready && e.Status() == PositionStatus::Ready
+        || m_currentStatus != PositionStatus::Initializing && e.Status() == PositionStatus::Initializing ) {
         auto status = e.Status() == PositionStatus::NotAvailable
           ? ServiceStatus::Disabled
           : ServiceStatus::Enabled;
