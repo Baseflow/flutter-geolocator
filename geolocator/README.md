@@ -411,14 +411,25 @@ double bearing = Geolocator.bearingBetween(52.2165157, 6.9437819, 52.3546274, 4.
 
 The table below outlines the accuracy options per platform:
 
-|            | Android    | iOS   |
-|------------|-----------:|------:|
-| **lowest** | 500m       | 3000m |
-| **low**    | 500m       | 1000m |    
-| **medium** | 100 - 500m | 100m  |
-| **high**   | 0 - 100m   | 10m   |
-| **best**   | 0 - 100m   | ~0m   |
-| **bestForNavigation** | 0 - 100m | [Optimized for navigation](https://developer.apple.com/documentation/corelocation/kcllocationaccuracybestfornavigation) |
+| Location accuracy     | Android    | iOS   |
+|-----------------------|-----------:|------:|
+| **lowest**            | 500m       | 3000m |
+| **low**               | 500m       | 1000m |    
+| **medium**            | 100 - 500m | 100m  |
+| **high**              | 0 - 100m   | 10m   |
+| **best**              | 0 - 100m   | ~0m   |
+| **bestForNavigation** | 0 - 100m   | [Optimized for navigation](https://developer.apple.com/documentation/corelocation/kcllocationaccuracybestfornavigation) |
+
+#### Location priority (Android)
+On Android, the location accuracy also influences the
+[location priority](https://developers.google.com/android/reference/com/google/android/gms/location/Priority). This can be confusing, as a priority of **lowest** might not return any location. The table below outlines the priority and its meaning per accuracy option:
+
+| Location accuracy | Android priority | Description |
+|-------------------|------------------|-------------|
+| **lowest**        | [PRIORITY_PASSIVE](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#public-static-final-int-priority_passive) | Ensures that no extra power will be used to derive locations. This enforces that the request will act as a passive listener that will only receive "free" locations calculated on behalf of other clients, and no locations will be calculated on behalf of only this request. |
+| **low**           | [PRIORITY_LOW_POWER](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#public-static-final-int-priority_low_power) | Requests a tradeoff that favors low power usage at the possible expense of location accuracy. |
+| **medium**        | [PRIORITY_BALANCED_POWER_ACCURACY](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#public-static-final-int-priority_balanced_power_accuracy) | Requests a tradeoff that is balanced between location accuracy and power usage. |
+| **high**+         | [PRIORITY_HIGH_ACCURACY](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#public-static-final-int-priority_high_accuracy) | Requests a tradeoff that favors highly accurate locations at the possible expense of additional power usage. |
 
 ## Issues
 
