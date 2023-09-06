@@ -1,6 +1,7 @@
 ## 10.0.1
 
 - Updates documentation for `getCurrentPosition()`, to clarify the behavior of location accuracy on Android devices.
+- Updates README regarding the plugin interpretation of `LocationAccuracy`.
 
 ## 10.0.0
 
