@@ -1,3 +1,8 @@
+## 10.0.1
+
+- Updates documentation for `getCurrentPosition()`, to clarify the behavior of location accuracy on Android devices.
+- Updates README regarding the plugin interpretation of `LocationAccuracy`.
+
 ## 10.0.0
 
 - **BREAKING CHANGE:** Updates dependency on geolocator_windows to version 0.2.0. This will synchronize default values for `Position.altitude`, `Position.heading` and `Position.speed` with the other platforms. 
