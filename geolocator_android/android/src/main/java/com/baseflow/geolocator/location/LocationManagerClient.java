@@ -114,21 +114,6 @@ class LocationManagerClient implements LocationClient, LocationListener {
     return provider;
   }
 
-  private static float accuracyToFloat(LocationAccuracy accuracy) {
-    switch (accuracy) {
-      case lowest:
-      case low:
-        return 500;
-      case medium:
-        return 250;
-      case best:
-      case bestForNavigation:
-        return 50;
-      default:
-        return 100;
-    }
-  }
-
   @Override
   public void isLocationServiceEnabled(LocationServiceListener listener) {
     if (locationManager == null) {
@@ -209,11 +194,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
 
   @Override
   public synchronized void onLocationChanged(Location location) {
-    float desiredAccuracy =
-        locationOptions != null ? accuracyToFloat(locationOptions.getAccuracy()) : 50;
-
-    if (isBetterLocation(location, currentBestLocation)
-        && location.getAccuracy() <= desiredAccuracy) {
+    if (isBetterLocation(location, currentBestLocation)) {
       this.currentBestLocation = location;
 
       if (this.positionChangedCallback != null) {
@@ -224,7 +205,6 @@ class LocationManagerClient implements LocationClient, LocationListener {
   }
 
   @TargetApi(28)
-  @SuppressWarnings("deprecation")
   @Override
   public void onStatusChanged(String provider, int status, Bundle extras) {
     if (status == android.location.LocationProvider.AVAILABLE) {
