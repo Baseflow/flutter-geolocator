@@ -1,3 +1,7 @@
+## 4.2.3
+
+* Fixes a bug when requesting a position stream where positions are unnecessarily filtered based off their accuracy.
+
 ## 4.2.2
 
 * Adds back the `applicationId` property of the AndroidManifest.xml file to keep backwardscompatibility with older applications that still rely on Gradle version <7.0.
