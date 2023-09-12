@@ -15,7 +15,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-@SuppressWarnings("deprecation")
 public class GeolocationManager
     implements io.flutter.plugin.common.PluginRegistry.ActivityResultListener {
 
