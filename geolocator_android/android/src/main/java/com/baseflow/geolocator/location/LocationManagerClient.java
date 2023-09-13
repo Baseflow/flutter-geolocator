@@ -153,20 +153,24 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
     this.positionChangedCallback = positionChangedCallback;
     this.errorCallback = errorCallback;
 
-    this.currentLocationProvider = getBestProvider(this.locationManager);
-
-    if (this.currentLocationProvider == null) {
-      errorCallback.onError(ErrorCodes.locationServicesDisabled);
-      return;
-    }
-
+    LocationAccuracy accuracy = LocationAccuracy.best;
     long timeInterval = 0;
     float distanceFilter = 0;
     @LocationRequestCompat.Quality int quality = LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY;
     if (this.locationOptions != null) {
       timeInterval = locationOptions.getTimeInterval();
       distanceFilter = locationOptions.getDistanceFilter();
-      quality = accuracyToQuality(locationOptions.getAccuracy());
+      accuracy = locationOptions.getAccuracy();
+      quality = accuracyToQuality(accuracy);
+    }
+
+    this.currentLocationProvider = accuracy == LocationAccuracy.lowest
+        ? LocationManager.PASSIVE_PROVIDER
+        : getBestProvider(this.locationManager);
+
+    if (this.currentLocationProvider == null) {
+      errorCallback.onError(ErrorCodes.locationServicesDisabled);
+      return;
     }
 
     final LocationRequestCompat locationRequest = new LocationRequestCompat.Builder(timeInterval)
