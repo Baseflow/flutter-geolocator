@@ -1,6 +1,10 @@
+## 4.2.4
+
+* Fixes a bug where location readings were very inaccurate when using `forceLocationManager: true`.
+
 ## 4.2.3
 
-* Fixes a bug when requesting a position stream where positions are unnecessarily filtered based off their accuracy.
+* Fixes a bug where the position stream was unnecessarily filtered when using `forceLocationManager: true`.
 
 ## 4.2.2
 
