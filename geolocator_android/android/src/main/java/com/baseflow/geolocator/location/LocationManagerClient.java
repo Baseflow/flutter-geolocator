@@ -75,10 +75,15 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
     return false;
   }
 
-  private static @Nullable String getBestProvider(@NonNull LocationManager locationManager) {
+  private static @Nullable String determineProvider(
+      @NonNull LocationManager locationManager,
+      @NonNull LocationAccuracy accuracy) {
+
       final List<String> enabledProviders = locationManager.getProviders(true);
 
-      if (enabledProviders.contains(LocationManager.FUSED_PROVIDER) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      if (accuracy == LocationAccuracy.lowest) {
+          return LocationManager.PASSIVE_PROVIDER;
+      } else if (enabledProviders.contains(LocationManager.FUSED_PROVIDER) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
           return LocationManager.FUSED_PROVIDER;
       } else if (enabledProviders.contains(LocationManager.GPS_PROVIDER)) {
           return LocationManager.GPS_PROVIDER;
@@ -157,16 +162,17 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
     long timeInterval = 0;
     float distanceFilter = 0;
     @LocationRequestCompat.Quality int quality = LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY;
+
     if (this.locationOptions != null) {
-      timeInterval = locationOptions.getTimeInterval();
       distanceFilter = locationOptions.getDistanceFilter();
       accuracy = locationOptions.getAccuracy();
+      timeInterval = accuracy == LocationAccuracy.lowest
+          ? LocationRequestCompat.PASSIVE_INTERVAL
+          : locationOptions.getTimeInterval();
       quality = accuracyToQuality(accuracy);
     }
 
-    this.currentLocationProvider = accuracy == LocationAccuracy.lowest
-        ? LocationManager.PASSIVE_PROVIDER
-        : getBestProvider(this.locationManager);
+    this.currentLocationProvider = determineProvider(this.locationManager, accuracy);
 
     if (this.currentLocationProvider == null) {
       errorCallback.onError(ErrorCodes.locationServicesDisabled);
