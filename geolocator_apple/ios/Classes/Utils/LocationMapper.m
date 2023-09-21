@@ -26,11 +26,28 @@
     [locationMap setObject:@(location.coordinate.latitude) forKey: @"latitude"];
     [locationMap setObject:@(location.coordinate.longitude) forKey: @"longitude"];
     [locationMap setObject:@(timestamp) forKey: @"timestamp"];
-    [locationMap setObject:@(location.altitude) forKey: @"altitude"];
     [locationMap setObject:@(location.horizontalAccuracy) forKey: @"accuracy"];
     [locationMap setObject:@(location.speed) forKey: @"speed"];
     [locationMap setObject:@(speedAccuracy) forKey: @"speed_accuracy"];
-    [locationMap setObject:@(location.course) forKey: @"heading"];
+    
+    double altitudeAccuracy = location.verticalAccuracy;
+    if (altitudeAccuracy > 0.0) {
+        [locationMap setObject:@(location.altitude) forKey: @"altitude"];
+        [locationMap setObject:@(altitudeAccuracy) forKey: @"altitude_accuracy"];
+    }
+    
+    double heading = location.course;
+    if (heading >= 0.0) {
+        if (@available(iOS 13.4, *)) {
+            double headingAccuracy = location.courseAccuracy;
+            if (headingAccuracy >= 0.0) {
+                [locationMap setObject:@(heading) forKey: @"heading"];
+                [locationMap setObject:@(headingAccuracy) forKey: @"heading_accuracy"];
+            }
+        } else {
+            [locationMap setObject:@(heading) forKey: @"heading"];
+        }
+    }
     
     if(@available(iOS 15.0, *)) {
         [locationMap setObject:@(location.sourceInformation.isSimulatedBySoftware) forKey: @"is_mocked"];
