@@ -1,3 +1,7 @@
+## 4.3.0
+
+* Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
+
 ## 4.2.4
 
 * Fixes a bug where location readings were very inaccurate when using `forceLocationManager: true`.
