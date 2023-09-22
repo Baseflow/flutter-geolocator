@@ -1,3 +1,7 @@
+## 2.3.2
+
+* Fixes build error and warnings regarding unused variables and unavailable APIs on macOS.
+
 ## 2.3.1
 
 * Fixes a bug where invalid speed and speed accuracy readings where returned instead of ignored.

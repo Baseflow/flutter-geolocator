@@ -59,7 +59,7 @@
     // - https://developer.apple.com/documentation/corelocation/cllocation/3524338-courseaccuracy?language=objc
     double heading = location.course;
     if (heading >= 0.0) {
-        if (@available(iOS 13.4, *)) {
+        if (@available(iOS 13.4, macOS 10.15.4, *)) {
             double headingAccuracy = location.courseAccuracy;
             if (headingAccuracy >= 0.0) {
                 [locationMap setObject:@(heading) forKey: @"heading"];
@@ -70,7 +70,7 @@
         }
     }
     
-    if(@available(iOS 15.0, *)) {
+    if(@available(iOS 15.0, macOS 12.0, *)) {
         [locationMap setObject:@(location.sourceInformation.isSimulatedBySoftware) forKey: @"is_mocked"];
     }
     
