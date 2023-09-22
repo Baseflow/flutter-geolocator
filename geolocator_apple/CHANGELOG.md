@@ -1,3 +1,7 @@
+## 2.3.1
+
+* Fixes a bug where invalid speed and speed accuracy readings where returned instead of ignored.
+
 ## 2.3.0
 
 * Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
