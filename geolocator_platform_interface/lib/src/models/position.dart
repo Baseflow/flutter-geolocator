@@ -12,7 +12,9 @@ class Position {
     required this.timestamp,
     required this.accuracy,
     required this.altitude,
+    required this.altitudeAccuracy,
     required this.heading,
+    required this.headingAccuracy,
     required this.speed,
     required this.speedAccuracy,
     this.floor,
@@ -36,6 +38,12 @@ class Position {
   /// value is 0.0.
   final double altitude;
 
+  /// The estimated vertical accuracy of the position in meters.
+  ///
+  /// The accuracy is not available on all devices. In these cases the value is
+  /// 0.0.
+  final double altitudeAccuracy;
+
   /// The estimated horizontal accuracy of the position in meters.
   ///
   /// The accuracy is not available on all devices. In these cases the value is
@@ -47,6 +55,12 @@ class Position {
   /// The heading is not available on all devices. In these cases the value is
   /// 0.0.
   final double heading;
+
+  /// The estimated heading accuracy of the position in degrees.
+  ///
+  /// The heading accuracy is not available on all devices. In these cases the
+  /// value is 0.0.
+  final double headingAccuracy;
 
   /// The floor specifies the floor of the building on which the device is
   /// located.
@@ -79,7 +93,9 @@ class Position {
     var areEqual = other is Position &&
         other.accuracy == accuracy &&
         other.altitude == altitude &&
+        other.altitudeAccuracy == altitudeAccuracy &&
         other.heading == heading &&
+        other.headingAccuracy == headingAccuracy &&
         other.latitude == latitude &&
         other.longitude == longitude &&
         other.floor == floor &&
@@ -95,7 +111,9 @@ class Position {
   int get hashCode =>
       accuracy.hashCode ^
       altitude.hashCode ^
+      altitudeAccuracy.hashCode ^
       heading.hashCode ^
+      headingAccuracy.hashCode ^
       latitude.hashCode ^
       longitude.hashCode ^
       floor.hashCode ^
@@ -133,8 +151,10 @@ class Position {
       longitude: positionMap['longitude'],
       timestamp: timestamp,
       altitude: positionMap['altitude'] ?? 0.0,
+      altitudeAccuracy: positionMap['altitude_accuracy'] ?? 0.0,
       accuracy: positionMap['accuracy'] ?? 0.0,
       heading: positionMap['heading'] ?? 0.0,
+      headingAccuracy: positionMap['heading_accuracy'] ?? 0.0,
       floor: positionMap['floor'],
       speed: positionMap['speed'] ?? 0.0,
       speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
@@ -150,8 +170,10 @@ class Position {
         'timestamp': timestamp?.millisecondsSinceEpoch,
         'accuracy': accuracy,
         'altitude': altitude,
+        'altitude_accuracy': altitudeAccuracy,
         'floor': floor,
         'heading': heading,
+        'heading_accuracy': headingAccuracy,
         'speed': speed,
         'speed_accuracy': speedAccuracy,
         'is_mocked': isMocked,

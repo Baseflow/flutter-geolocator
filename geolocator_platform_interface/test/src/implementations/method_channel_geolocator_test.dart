@@ -17,8 +17,10 @@ Position get mockPosition => Position(
       isUtc: true,
     ),
     altitude: 3000.0,
+    altitudeAccuracy: 2.0,
     accuracy: 0.0,
     heading: 0.0,
+    headingAccuracy: 0.0,
     speed: 0.0,
     speedAccuracy: 0.0,
     isMocked: false);
@@ -33,7 +35,6 @@ void main() {
 
     group('checkPermission: When checking for permission', () {
       test(
-          // ignore: lines_longer_than_80_chars
           'Should receive whenInUse if permission is granted when App is in use',
           () async {
         // Arrange
@@ -234,7 +235,7 @@ void main() {
         expect(locationAccuracy, LocationAccuracyStatus.reduced);
       });
 
-      test('Should receive reduced accuracy if Location Accuracy is reduced',
+      test('Should receive reduced accuracy if Location Accuracy is precise',
           () async {
         // Arrange
         MethodChannelMock(
@@ -254,7 +255,6 @@ void main() {
 
     group('requestPermission: When requesting for permission', () {
       test(
-          // ignore: lines_longer_than_80_chars
           'Should receive whenInUse if permission is granted when App is in use',
           () async {
         // Arrange
@@ -608,7 +608,6 @@ void main() {
       });
 
       test(
-          // ignore: lines_longer_than_80_chars
           'Should throw a location service disabled exception if location services are disabled',
           () async {
         // Arrange
@@ -727,9 +726,7 @@ void main() {
         streamSubscription = null;
       });
 
-      test(
-          // ignore: lines_longer_than_80_chars
-          'Should correctly handle done event', () async {
+      test('Should correctly handle done event', () async {
         // Arrange
         final completer = Completer();
         completer.future.timeout(const Duration(milliseconds: 50),
@@ -755,7 +752,6 @@ void main() {
       });
 
       test(
-          // ignore: lines_longer_than_80_chars
           'Should receive a stream with position updates if permissions are granted',
           () async {
         // Arrange
@@ -785,9 +781,7 @@ void main() {
         await streamController.close();
       });
 
-      test(
-          // ignore: lines_longer_than_80_chars
-          'Should continue listening to the stream when exception is thrown ',
+      test('Should continue listening to the stream when exception is thrown ',
           () async {
         // Arrange
         final streamController =
@@ -828,7 +822,6 @@ void main() {
       });
 
       test(
-          // ignore: lines_longer_than_80_chars
           'Should receive a permission denied exception if permission is denied',
           () async {
         // Arrange
@@ -866,7 +859,6 @@ void main() {
       });
 
       test(
-          // ignore: lines_longer_than_80_chars
           'Should receive a location service disabled exception if location service is disabled',
           () async {
         // Arrange
@@ -899,9 +891,8 @@ void main() {
         streamController.close();
       });
 
-      test(
-          // ignore: lines_longer_than_80_chars
-          'Should receive a already subscribed exception', () async {
+      test('Should receive a permission request in progress exception',
+          () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -932,9 +923,7 @@ void main() {
         streamController.close();
       });
 
-      test(
-          // ignore: lines_longer_than_80_chars
-          'Should receive a already subscribed exception', () async {
+      test('Should receive an already subscribed exception', () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -965,9 +954,7 @@ void main() {
         streamController.close();
       });
 
-      test(
-          // ignore: lines_longer_than_80_chars
-          'Should receive a position update exception', () async {
+      test('Should receive a position update exception', () async {
         // Arrange
         final streamController =
             StreamController<PlatformException>.broadcast();
@@ -1077,7 +1064,6 @@ void main() {
     });
 
     group(
-        // ignore: lines_longer_than_80_chars
         'getServiceStream: When requesting a stream of location service status updates',
         () {
       group('And requesting for location service status updates multiple times',
@@ -1095,7 +1081,6 @@ void main() {
       });
 
       test(
-          // ignore: lines_longer_than_80_chars
           'Should receive a stream with location service updates if permissions are granted',
           () async {
         // Arrange
@@ -1122,9 +1107,7 @@ void main() {
         await streamController.close();
       });
 
-      test(
-          // ignore: lines_longer_than_80_chars
-          'Should receive an exception if android activity is missing',
+      test('Should receive an exception if android activity is missing',
           () async {
         // Arrange
         final streamController =

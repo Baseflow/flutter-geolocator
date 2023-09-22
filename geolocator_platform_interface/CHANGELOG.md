@@ -1,3 +1,7 @@
+## 4.1.0
+
+- Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
+
 ## 4.0.8
 
 - Updates documentation for `getCurrentPosition()` and `LocationAccuracy`, to clarify the behavior of location accuracy on Android devices.
