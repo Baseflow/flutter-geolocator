@@ -23,6 +23,7 @@ jobs:
 
     env:
       source-directory: ./geolocator_web
+      example-directory: ./geolocator_web/example 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
