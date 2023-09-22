@@ -26,11 +26,39 @@
     [locationMap setObject:@(location.coordinate.latitude) forKey: @"latitude"];
     [locationMap setObject:@(location.coordinate.longitude) forKey: @"longitude"];
     [locationMap setObject:@(timestamp) forKey: @"timestamp"];
-    [locationMap setObject:@(location.altitude) forKey: @"altitude"];
     [locationMap setObject:@(location.horizontalAccuracy) forKey: @"accuracy"];
     [locationMap setObject:@(location.speed) forKey: @"speed"];
     [locationMap setObject:@(speedAccuracy) forKey: @"speed_accuracy"];
-    [locationMap setObject:@(location.course) forKey: @"heading"];
+    
+    // When verticalAccuracy contains 0 or a negative number, the value of altitude is invalid.
+    //
+    // Relevant documentation:
+    // - https://developer.apple.com/documentation/corelocation/cllocation/1423820-altitude?language=objc
+    // - https://developer.apple.com/documentation/corelocation/cllocation/1423550-verticalaccuracy?language=objc
+    double altitudeAccuracy = location.verticalAccuracy;
+    if (altitudeAccuracy > 0.0) {
+        [locationMap setObject:@(location.altitude) forKey: @"altitude"];
+        [locationMap setObject:@(altitudeAccuracy) forKey: @"altitude_accuracy"];
+    }
+    
+    // A negative course value indicates that the course information is invalid.
+    // When courseAccuracy contains a negative number, the value in the course property is invalid.
+    //
+    // Relevant documentation:
+    // - https://developer.apple.com/documentation/corelocation/cllocation/1423832-course?language=objc
+    // - https://developer.apple.com/documentation/corelocation/cllocation/3524338-courseaccuracy?language=objc
+    double heading = location.course;
+    if (heading >= 0.0) {
+        if (@available(iOS 13.4, *)) {
+            double headingAccuracy = location.courseAccuracy;
+            if (headingAccuracy >= 0.0) {
+                [locationMap setObject:@(heading) forKey: @"heading"];
+                [locationMap setObject:@(headingAccuracy) forKey: @"heading_accuracy"];
+            }
+        } else {
+            [locationMap setObject:@(heading) forKey: @"heading"];
+        }
+    }
     
     if(@available(iOS 15.0, *)) {
         [locationMap setObject:@(location.sourceInformation.isSimulatedBySoftware) forKey: @"is_mocked"];

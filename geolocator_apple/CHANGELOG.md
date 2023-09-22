@@ -1,3 +1,7 @@
+## 2.3.0
+
+* Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
+
 ## 2.2.7
 
 * Fixes the propagation of the activity type setting.

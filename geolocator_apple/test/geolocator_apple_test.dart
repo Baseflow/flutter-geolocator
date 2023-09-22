@@ -16,8 +16,10 @@ Position get mockPosition => Position(
       isUtc: true,
     ),
     altitude: 3000.0,
+    altitudeAccuracy: 0.0,
     accuracy: 0.0,
     heading: 0.0,
+    headingAccuracy: 0.0,
     speed: 0.0,
     speedAccuracy: 0.0,
     isMocked: false);
