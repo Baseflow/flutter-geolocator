@@ -257,6 +257,11 @@ EncodableMap GeolocatorPlugin::LocationToEncodableMap(Geoposition const& locatio
     : 0;
   position.insert(std::make_pair(EncodableValue("altitude"), EncodableValue(altitude)));
   
+  double altitudeAccuracy = location.Coordinate().AltitudeAccuracy() != nullptr && !std::isnan(location.Coordinate().AltitudeAccuracy().GetDouble())
+    ? location.Coordinate().AltitudeAccuracy().GetDouble()
+    : 0;
+  position.insert(std::make_pair(EncodableValue("altitude_accuracy"), EncodableValue(altitudeAccuracy)));
+  
   position.insert(std::make_pair(EncodableValue("accuracy"), EncodableValue(location.Coordinate().Accuracy())));
   
   double heading = location.Coordinate().Heading() != nullptr && !std::isnan(location.Coordinate().Heading().GetDouble())
