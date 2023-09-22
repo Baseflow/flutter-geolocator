@@ -159,7 +159,9 @@ final dummyLocation = GeoClueLocation(
 final dummyPosition = Position(
   accuracy: 1,
   altitude: 2,
+  altitudeAccuracy: 0,
   heading: 3,
+  headingAccuracy: 0,
   latitude: 4,
   longitude: 5,
   speed: 6,

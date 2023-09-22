@@ -18,7 +18,9 @@ extension GeoCluePosition on GeoClueLocation {
     return Position(
       accuracy: accuracy,
       altitude: altitude ?? 0,
+      altitudeAccuracy: 0,
       heading: heading ?? 0,
+      headingAccuracy: 0,
       latitude: latitude,
       longitude: longitude,
       timestamp: timestamp,
