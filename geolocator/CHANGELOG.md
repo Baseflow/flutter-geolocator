@@ -1,3 +1,7 @@
+## 10.1.0
+
+- Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
+
 ## 10.0.1
 
 - Updates documentation for `getCurrentPosition()`, to clarify the behavior of location accuracy on Android devices.
