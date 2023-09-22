@@ -1,3 +1,7 @@
+## 2.2.0
+
+- Exposes altitude accuracy field in `Position` object.
+
 ## 2.1.7
 
 - Mark `geolocator_web` as implementation of `geolocator` 

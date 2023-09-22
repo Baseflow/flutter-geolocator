@@ -23,6 +23,7 @@ jobs:
 
     env:
       source-directory: ./geolocator_web
+      example-directory: ./geolocator_web/example 
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -51,5 +52,5 @@ jobs:
         
       # Build Web version of the example App
       - name: Run Web build
-        run: flutter build web --release --no-sound-null-safety
+        run: flutter build web --release
         working-directory: ${{env.example-directory}}
