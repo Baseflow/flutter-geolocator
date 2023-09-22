@@ -51,5 +51,5 @@ jobs:
         
       # Build Web version of the example App
       - name: Run Web build
-        run: flutter build web --release --no-sound-null-safety
+        run: flutter build web --release
         working-directory: ${{env.example-directory}}
