@@ -60,11 +60,11 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
   self.errorHandler = errorHandler;
   self.currentLocationResultHandler = resultHandler;
     
-  CLLocationManager *locationManager = [self getLocationManager];
   BOOL showBackgroundLocationIndicator = NO;
   BOOL allowBackgroundLocationUpdates = NO;
   #if TARGET_OS_IOS
     if (self.isListeningForPositionUpdates) {
+      CLLocationManager *locationManager = [self getLocationManager];
       showBackgroundLocationIndicator = locationManager.showsBackgroundLocationIndicator;
       allowBackgroundLocationUpdates = locationManager.allowsBackgroundLocationUpdates;
     }
