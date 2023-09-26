@@ -1,3 +1,7 @@
+## 4.3.1
+
+- Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
+
 ## 4.3.0
 
 * Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.

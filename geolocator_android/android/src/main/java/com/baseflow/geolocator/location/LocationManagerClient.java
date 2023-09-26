@@ -215,6 +215,13 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
     }
   }
 
+  /**
+   * This callback will never be invoked on Android Q and above, and providers can be considered as
+   * always in the {@link android.location.LocationProvider#AVAILABLE} state.
+   * See the <a href=https://developer.android.com/reference/android/location/LocationListener#onStatusChanged(java.lang.String,%20int,%20android.os.Bundle)>Android documentation</a>
+   * for more information.
+   */
+  @SuppressWarnings({"deprecation", "RedundantSuppression"})
   @TargetApi(28)
   @Override
   public void onStatusChanged(@NonNull String provider, int status, Bundle extras) {
