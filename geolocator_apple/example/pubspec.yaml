@@ -20,7 +20,6 @@ dependencies:
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.
     path: ../
-  geolocator_platform_interface: ^4.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -28,12 +27,12 @@ dependencies:
 
   # The following adds the URL Launcher plugin which is used by
   # the demo application to open the links in the web browser.
-  url_launcher: ^6.1.14
+  url_launcher: ^6.0.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.3
+  flutter_lints: ^1.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -1,7 +1,3 @@
-## 2.4.0
-
-- Update dependencies
-
 ## 2.3.2
 
 * Fixes build error and warnings regarding unused variables and unavailable APIs on macOS.
