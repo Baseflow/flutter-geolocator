@@ -1,3 +1,7 @@
+## 10.2.0
+
+- Update dependencies
+
 ## 10.1.0
 
 - Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.

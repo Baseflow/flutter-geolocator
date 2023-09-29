@@ -1,3 +1,7 @@
+## 4.2.0
+
+- Update dependencies
+
 ## 4.1.0
 
 - Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.

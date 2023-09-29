@@ -1,3 +1,7 @@
+## 4.4.0
+
+- Update dependencies
+
 ## 4.3.1
 
 - Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
