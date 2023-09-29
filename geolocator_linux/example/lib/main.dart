@@ -86,7 +86,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         children: [
           FloatingActionButton(
             child: (_positionStreamSubscription == null ||
-                _positionStreamSubscription!.isPaused)
+                    _positionStreamSubscription!.isPaused)
                 ? const Icon(Icons.play_arrow)
                 : const Icon(Icons.pause),
             onPressed: _toggleListening,

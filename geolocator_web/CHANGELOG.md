@@ -1,7 +1,3 @@
-## 2.3.0
-
-- Update dependencies
-
 ## 2.2.0
 
 - Exposes altitude accuracy field in `Position` object.

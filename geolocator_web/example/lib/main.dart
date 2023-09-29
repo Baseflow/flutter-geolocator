@@ -30,7 +30,7 @@ class GeolocatorWidget extends StatefulWidget {
   }
 
   @override
-  State<GeolocatorWidget> createState() => _GeolocatorWidgetState();
+  _GeolocatorWidgetState createState() => _GeolocatorWidgetState();
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
@@ -85,6 +85,10 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            child: (_positionStreamSubscription == null ||
+                    _positionStreamSubscription!.isPaused)
+                ? const Icon(Icons.play_arrow)
+                : const Icon(Icons.pause),
             onPressed: _toggleListening,
             tooltip: (_positionStreamSubscription == null)
                 ? 'Start position updates'
@@ -92,21 +96,17 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                     ? 'Resume'
                     : 'Pause',
             backgroundColor: _determineButtonColor(),
-            child: (_positionStreamSubscription == null ||
-                    _positionStreamSubscription!.isPaused)
-                ? const Icon(Icons.play_arrow)
-                : const Icon(Icons.pause),
           ),
           buttonSpacer,
           FloatingActionButton(
-            onPressed: _getCurrentPosition,
             child: const Icon(Icons.my_location),
+            onPressed: _getCurrentPosition,
           ),
           buttonSpacer,
           FloatingActionButton(
+            child: const Icon(Icons.close),
             onPressed: () => setState(_positionItems.clear),
             tooltip: 'clear',
-            child: const Icon(Icons.close),
           ),
         ],
       ),
