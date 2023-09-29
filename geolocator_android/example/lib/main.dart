@@ -27,7 +27,7 @@ class GeolocatorWidget extends StatefulWidget {
   }
 
   @override
-  State<GeolocatorWidget> createState() => _GeolocatorWidgetState();
+  _GeolocatorWidgetState createState() => _GeolocatorWidgetState();
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
@@ -75,26 +75,26 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       },
       itemBuilder: (context) => [
         const PopupMenuItem(
-          value: 1,
           child: Text("Get Location Accuracy"),
+          value: 1,
         ),
         if (Platform.isIOS)
           const PopupMenuItem(
-            value: 2,
             child: Text("Request Temporary Full Accuracy"),
+            value: 2,
           ),
         const PopupMenuItem(
-          value: 3,
           child: Text("Open App Settings"),
+          value: 3,
         ),
         if (Platform.isAndroid)
           const PopupMenuItem(
-            value: 4,
             child: Text("Open Location Settings"),
+            value: 4,
           ),
         const PopupMenuItem(
-          value: 5,
           child: Text("Clear"),
+          value: 5,
         ),
       ],
     );
@@ -150,6 +150,10 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FloatingActionButton(
+                    child: (_positionStreamSubscription == null ||
+                            _positionStreamSubscription!.isPaused)
+                        ? const Icon(Icons.play_arrow)
+                        : const Icon(Icons.pause),
                     onPressed: _toggleListening,
                     tooltip: (_positionStreamSubscription == null)
                         ? 'Start position updates'
@@ -157,20 +161,16 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                             ? 'Resume'
                             : 'Pause',
                     backgroundColor: _determineButtonColor(),
-                    child: (_positionStreamSubscription == null ||
-                            _positionStreamSubscription!.isPaused)
-                        ? const Icon(Icons.play_arrow)
-                        : const Icon(Icons.pause),
                   ),
                   sizedBox,
                   FloatingActionButton(
-                    onPressed: _getCurrentPosition,
                     child: const Icon(Icons.my_location),
+                    onPressed: _getCurrentPosition,
                   ),
                   sizedBox,
                   FloatingActionButton(
-                    onPressed: _getLastKnownPosition,
                     child: const Icon(Icons.bookmark),
+                    onPressed: _getLastKnownPosition,
                   ),
                 ],
               ),
