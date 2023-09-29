@@ -1,7 +1,3 @@
-## 0.3.0
-
-- Update dependencies
-
 ## 0.2.1
 
 * Exposes altitude accuracy to the `Position` class.
