@@ -13,7 +13,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  geolocator_platform_interface: ^4.0.7
   geolocator_windows:
     # When depending on this package from a real application you should use:
     #   geolocator_windows: ^x.y.z
@@ -21,6 +20,7 @@ dependencies:
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.
     path: ../
+  geolocator_platform_interface: ^4.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
