@@ -1,7 +1,3 @@
-## 0.3.0
-
-- Update dependencies
-
 ## 0.2.0
 
 - Bumps `geolocator_platform_interface` dependency to `^4.1.0`.
