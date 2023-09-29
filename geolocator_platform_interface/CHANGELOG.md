@@ -1,6 +1,6 @@
 ## 4.1.1
 
-- Update dependencies
+- Updates dependencies to latest versions to prevent conflicts with other packages.
 
 ## 4.1.0
 
