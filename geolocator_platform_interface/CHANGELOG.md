@@ -1,3 +1,7 @@
+## 4.1.2
+
+- Fixed spellings in comments of LocationPermission
+
 ## 4.1.1
 
 - Updates dependencies to latest versions to prevent conflicts with other packages.
@@ -24,7 +28,7 @@
 
 ## 4.0.4
 
-- Fixes a bug where listening to the position stream immediately after an error, results in listening to a dead stream. 
+- Fixes a bug where listening to the position stream immediately after an error, results in listening to a dead stream.
 
 ## 4.0.3
 
