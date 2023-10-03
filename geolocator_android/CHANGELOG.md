@@ -1,3 +1,9 @@
+## 4.3.2
+
+- Updates dependencies to latest versions to prevent conflicts with other packages.
+- Updates Android Gradle Plugin to version 8.
+- Updates `compileSdk` version to `34`.
+
 ## 4.3.1
 
 - Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
