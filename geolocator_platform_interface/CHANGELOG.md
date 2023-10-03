@@ -1,6 +1,6 @@
 ## 4.1.2
 
-- Fixed spellings in comments of LocationPermission
+- Fix spellings in comments of LocationPermission
 
 ## 4.1.1
 
