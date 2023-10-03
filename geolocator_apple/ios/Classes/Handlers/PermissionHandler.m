@@ -50,13 +50,6 @@
     return;
   }
   
-  if (self.confirmationHandler) {
-    // Permission request is already running, return immediatly with error
-    errorHandler(GeolocatorErrorPermissionRequestInProgress,
-                 @"A request for location permissions is already running, please wait for it to complete before doing another request.");
-    return;
-  }
-  
   self.confirmationHandler = confirmationHandler;
   self.errorHandler = errorHandler;
   CLLocationManager *locationManager = [self getLocationManager];
