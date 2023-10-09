@@ -1,3 +1,8 @@
+## 4.3.2
+
+- Removes deprecated code from v1 embedding
+- Registers
+
 ## 4.3.1
 
 - Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
