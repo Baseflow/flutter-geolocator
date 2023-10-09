@@ -53,48 +53,12 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
       };
   @Nullable private LocationServiceHandlerImpl locationServiceHandler;
 
-  @SuppressWarnings("deprecation")
-  @Nullable
-  private io.flutter.plugin.common.PluginRegistry.Registrar pluginRegistrar;
-
   @Nullable private ActivityPluginBinding pluginBinding;
 
   public GeolocatorPlugin() {
     permissionManager = new PermissionManager();
     geolocationManager = new GeolocationManager();
     locationAccuracyManager = new LocationAccuracyManager();
-  }
-
-  // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-  // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-  // plugin registration via this function while apps migrate to use the new Android APIs
-  // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-  //
-  // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-  // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-  // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-  // in the same class.
-  @SuppressWarnings("deprecation")
-  public static void registerWith(io.flutter.plugin.common.PluginRegistry.Registrar registrar) {
-    GeolocatorPlugin geolocatorPlugin = new GeolocatorPlugin();
-    geolocatorPlugin.pluginRegistrar = registrar;
-    geolocatorPlugin.registerListeners();
-
-    MethodCallHandlerImpl methodCallHandler =
-        new MethodCallHandlerImpl(
-            geolocatorPlugin.permissionManager,
-            geolocatorPlugin.geolocationManager,
-            geolocatorPlugin.locationAccuracyManager);
-    methodCallHandler.startListening(registrar.context(), registrar.messenger());
-    methodCallHandler.setActivity(registrar.activity());
-
-    StreamHandlerImpl streamHandler = new StreamHandlerImpl(geolocatorPlugin.permissionManager);
-    streamHandler.startListening(registrar.context(), registrar.messenger());
-
-    LocationServiceHandlerImpl locationServiceHandler = new LocationServiceHandlerImpl();
-    locationServiceHandler.startListening(registrar.context(), registrar.messenger());
-    locationServiceHandler.setContext(registrar.activeContext());
-    geolocatorPlugin.bindForegroundService(registrar.activeContext());
   }
 
   @Override
@@ -168,10 +132,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   }
 
   private void registerListeners() {
-    if (pluginRegistrar != null) {
-      pluginRegistrar.addActivityResultListener(this.geolocationManager);
-      pluginRegistrar.addRequestPermissionsResultListener(this.permissionManager);
-    } else if (pluginBinding != null) {
+    if (pluginBinding != null) {
       pluginBinding.addActivityResultListener(this.geolocationManager);
       pluginBinding.addRequestPermissionsResultListener(this.permissionManager);
     }
