@@ -1,3 +1,7 @@
+## 0.2.2
+
+* Fixes crash under Windows when getCurrentPosition method is called. (#1240)
+
 ## 0.2.1
 
 * Exposes altitude accuracy to the `Position` class.
