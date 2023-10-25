@@ -1,3 +1,9 @@
+## 4.3.2
+
+- Updates the following dependencies:
+  - uuid package from ^3.0.7 to ^4.1.0
+  - flutter_lints from ^2.0.0 to ^3.0.0
+
 ## 4.3.1
 
 - Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
