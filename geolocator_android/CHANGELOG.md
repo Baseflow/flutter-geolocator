@@ -1,3 +1,8 @@
+## 4.3.3
+
+- Removes deprecated support for Android V1 embedding from the JAVA code base. Note that the geolocator's Flutter version restrictions already don't support V1 embedding anymore.
+- Registers location services state change broadcast receiver with required exported flags
+
 ## 4.3.2
 
 - Updates the following dependencies:

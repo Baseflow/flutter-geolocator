@@ -1,6 +1,5 @@
 package com.baseflow.geolocator;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,6 +7,7 @@ import android.location.LocationManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.baseflow.geolocator.location.LocationServiceStatusReceiver;
 
@@ -55,7 +55,7 @@ public class LocationServiceHandlerImpl implements EventChannel.StreamHandler {
     IntentFilter filter = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
     filter.addAction(Intent.ACTION_PROVIDER_CHANGED);
     receiver = new LocationServiceStatusReceiver(events);
-    context.registerReceiver(receiver, filter);
+    ContextCompat.registerReceiver(context, receiver, filter, ContextCompat.RECEIVER_EXPORTED);
   }
 
   @Override
