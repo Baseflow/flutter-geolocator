@@ -1,7 +1,9 @@
 namespace geolocator_plugin {
 
 enum ErrorCode {
-    PermissionDefinitionsNotFound
+    PermissionDefinitionsNotFound,
+    OperationCanceled,
+    UnknownError
 };
 
 enum LocationPermission {

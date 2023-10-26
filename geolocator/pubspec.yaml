@@ -30,7 +30,7 @@ dependencies:
   geolocator_android: ^4.3.0
   geolocator_apple: ^2.3.0
   geolocator_web: ^2.2.0
-  geolocator_windows: ^0.2.1
+  geolocator_windows: ^0.2.2
 
 dev_dependencies:
   flutter_test:
