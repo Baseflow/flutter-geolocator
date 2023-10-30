@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -88,10 +89,10 @@ public class BackgroundNotification {
                 .setContentIntent(buildBringToFrontIntent())
                 .setOngoing(options.isSetOngoing());
 
-        int notificationColor = options.getColor();
-        if (notificationColor != -1) {
+        @Nullable final Integer notificationColor = options.getColor();
+        if (notificationColor != null) {
             builder = builder
-                .setColor(options.getColor());
+                .setColor(notificationColor);
         }
 
         if (notify) {

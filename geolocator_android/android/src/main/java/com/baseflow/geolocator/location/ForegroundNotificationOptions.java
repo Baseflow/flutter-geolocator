@@ -17,7 +17,8 @@ public class ForegroundNotificationOptions {
     private final boolean enableWifiLock;
     private final boolean enableWakeLock;
     private final boolean setOngoing;
-    private final int color;
+    @Nullable
+    private final Integer color;
 
 
     public static ForegroundNotificationOptions parseArguments(@Nullable  Map<String, Object> arguments) {
@@ -31,7 +32,12 @@ public class ForegroundNotificationOptions {
     final Boolean enableWifiLock = (Boolean) arguments.get("enableWifiLock");
     final Boolean enableWakeLock = (Boolean) arguments.get("enableWakeLock");
     final Boolean setOngoing = (Boolean) arguments.get("setOngoing");
-    final int color = ((Number) arguments.get("color")).intValue();
+
+    @Nullable Integer color = null;
+    final Object colorObject = arguments.get("color");
+    if (colorObject != null) {
+        color = ((Number) colorObject).intValue();
+    }
 
     return new ForegroundNotificationOptions(
             notificationTitle,
@@ -50,7 +56,7 @@ public class ForegroundNotificationOptions {
         boolean enableWifiLock,
         boolean enableWakeLock,
         boolean setOngoing,
-        int color) {
+        @Nullable Integer color) {
         this.notificationTitle = notificationTitle;
         this.notificationText = notificationText;
         this.notificationIcon = notificationIcon;
@@ -87,7 +93,7 @@ public class ForegroundNotificationOptions {
         return setOngoing;
     }
 
-    public int getColor() {
+    @Nullable public Integer getColor() {
         return color;
     }
 }

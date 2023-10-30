@@ -64,6 +64,8 @@ class ForegroundNotificationConfig {
   /// The current template design constructs a colorful header image by
   /// overlaying the icon image (stenciled in white) atop a field of this color.
   /// Alpha components are ignored.
+  ///
+  /// If this color is null, a system default color is used.
   final Color? color;
 
   /// Creates an Android specific configuration for the [FlutterBackground] plugin.
@@ -106,7 +108,7 @@ class ForegroundNotificationConfig {
       'notificationIcon': notificationIcon.toJson(),
       'notificationText': notificationText,
       'setOngoing': setOngoing,
-      'color': color?.value ?? -1,
+      'color': color?.value,
     };
   }
 }
