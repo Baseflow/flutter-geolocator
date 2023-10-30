@@ -38,7 +38,7 @@ class Position {
   /// value is 0.0.
   final double altitude;
 
-  /// On Android: if available it resturns the number of GNSS satellites.
+  /// On Android: if available it returns the number of GNSS satellites.
   /// On other platforms: the number of satellites is not available.
   ///
   /// If the number of satellites is not available it returns the default value: 0.0.

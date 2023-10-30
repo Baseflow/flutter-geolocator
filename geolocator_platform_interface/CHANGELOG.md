@@ -1,6 +1,6 @@
 ## 4.1.0
 
-- Added satellite count and satellite used in fix.
+- Added `satelliteCount` and `satellitesUsedInFix` to `Position`.
 
 ## 4.0.7
 
