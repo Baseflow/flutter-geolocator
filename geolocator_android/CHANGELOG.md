@@ -1,3 +1,7 @@
+## 4.3.0
+
+* Adds the `gnss_satellite_count` and `gnss_satellites_used_in_fix` properties from the GNSS status callback to the Android platform.
+
 ## 4.2.2
 
 * Adds back the `applicationId` property of the AndroidManifest.xml file to keep backwardscompatibility with older applications that still rely on Gradle version <7.0.

@@ -27,10 +27,18 @@ public class LocationMapper {
       position.put("speed_accuracy", (double) location.getSpeedAccuracyMetersPerSecond());
 
     if (location.getExtras() != null) {
-      if (location.getExtras().containsKey(NmeaClient.NMEA_ALTITUDE_EXTRA)) {
-        Double mslAltitude = location.getExtras().getDouble(NmeaClient.NMEA_ALTITUDE_EXTRA);
-        position.put("altitude", mslAltitude);
-      }
+        if (location.getExtras().containsKey(NmeaClient.NMEA_ALTITUDE_EXTRA)) {
+            Double mslAltitude = location.getExtras().getDouble(NmeaClient.NMEA_ALTITUDE_EXTRA);
+            position.put("altitude", mslAltitude);
+        }
+        if (location.getExtras().containsKey(NmeaClient.GNSS_SATELLITE_COUNT_EXTRA)) {
+            Double mslSatelliteCount = location.getExtras().getDouble(NmeaClient.GNSS_SATELLITE_COUNT_EXTRA);
+            position.put("gnss_satellite_count", mslSatelliteCount);
+        }
+        if (location.getExtras().containsKey(NmeaClient.GNSS_SATELLITES_USED_IN_FIX_EXTRA)) {
+            Double mslSatellitesUsedInFix = location.getExtras().getDouble(NmeaClient.GNSS_SATELLITES_USED_IN_FIX_EXTRA);
+            position.put("gnss_satellites_used_in_fix", mslSatellitesUsedInFix);
+        }
     }
     return position;
   }

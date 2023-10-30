@@ -1,3 +1,7 @@
+## 4.1.0
+
+- Added satellite count and satellite used in fix.
+
 ## 4.0.7
 
 - Fixed a spelling error in docs.

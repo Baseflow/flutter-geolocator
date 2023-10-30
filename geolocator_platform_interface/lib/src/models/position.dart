@@ -12,6 +12,8 @@ class Position {
     required this.timestamp,
     required this.accuracy,
     required this.altitude,
+    required this.satelliteCount,
+    required this.satellitesUsedInFix,
     required this.heading,
     required this.speed,
     required this.speedAccuracy,
@@ -35,6 +37,18 @@ class Position {
   /// The altitude is not available on all devices. In these cases the returned
   /// value is 0.0.
   final double altitude;
+
+  /// On Android: if available it resturns the number of GNSS satellites.
+  /// On other platforms: the number of satellites is not available.
+  ///
+  /// If the number of satellites is not available it returns the default value: 0.0.
+  final double satelliteCount;
+
+  /// On Android: if available it returns the number of GNSS satellites used in fix.
+  /// On other platforms: the number of satellites used in fix is not available.
+  ///
+  /// If the number of satellites used in fix is not available it returns the default value: 0.0.
+  final double satellitesUsedInFix;
 
   /// The estimated horizontal accuracy of the position in meters.
   ///
@@ -79,6 +93,8 @@ class Position {
     var areEqual = other is Position &&
         other.accuracy == accuracy &&
         other.altitude == altitude &&
+        other.satelliteCount == satelliteCount &&
+        other.satellitesUsedInFix == satellitesUsedInFix &&
         other.heading == heading &&
         other.latitude == latitude &&
         other.longitude == longitude &&
@@ -95,6 +111,8 @@ class Position {
   int get hashCode =>
       accuracy.hashCode ^
       altitude.hashCode ^
+      satelliteCount.hashCode ^
+      satellitesUsedInFix.hashCode ^
       heading.hashCode ^
       latitude.hashCode ^
       longitude.hashCode ^
@@ -133,6 +151,8 @@ class Position {
       longitude: positionMap['longitude'],
       timestamp: timestamp,
       altitude: positionMap['altitude'] ?? 0.0,
+      satelliteCount: positionMap['gnss_satellite_count'] ?? 0.0,
+      satellitesUsedInFix: positionMap['gnss_satellites_used_in_fix'] ?? 0.0,
       accuracy: positionMap['accuracy'] ?? 0.0,
       heading: positionMap['heading'] ?? 0.0,
       floor: positionMap['floor'],
@@ -150,6 +170,8 @@ class Position {
         'timestamp': timestamp?.millisecondsSinceEpoch,
         'accuracy': accuracy,
         'altitude': altitude,
+        'gnss_satellite_count': satelliteCount,
+        'gnss_satellites_used_in_fix': satellitesUsedInFix,
         'floor': floor,
         'heading': heading,
         'speed': speed,
