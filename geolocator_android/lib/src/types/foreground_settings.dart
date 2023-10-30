@@ -1,13 +1,20 @@
+import 'dart:ui';
+
 /// Uniquely identifies an Android resource.
 class AndroidResource {
   /// The name of the desired resource.
   final String name;
 
-  /// Optional default resource type to find, if "type/" is not included in the name. Can be null to require an explicit type.
+  /// Optional default resource type to find, if "type/" is not included in the name.
+  ///
+  /// Can be null to require an explicit type.
   final String defType;
 
   /// Uniquely identifies an Android resource.
-  const AndroidResource({required this.name, this.defType = 'drawable'});
+  const AndroidResource({
+    required this.name,
+    this.defType = 'drawable',
+  });
 
   /// Returns a JSON representation of this class.
   Map<String, dynamic> toJson() {
@@ -51,16 +58,34 @@ class ForegroundNotificationConfig {
   /// the user cannot dismiss it
   final bool setOngoing;
 
+  /// Accent color (an ARGB integer like the constants in Color) to be applied
+  /// by the standard Style templates when presenting this notification.
+  ///
+  /// The current template design constructs a colorful header image by
+  /// overlaying the icon image (stenciled in white) atop a field of this color.
+  /// Alpha components are ignored.
+  final Color? color;
+
   /// Creates an Android specific configuration for the [FlutterBackground] plugin.
   ///
-  /// [notificationTitle] is the title used for the foreground service notification.
-  /// [notificationText] is the body used for the foreground service notification.
+  /// [notificationTitle] is the title used for the foreground service
+  /// notification.
+  /// [notificationText] is the body used for the foreground service
+  /// notification.
   /// [notificationIcon] must be a drawable resource.
-  /// E. g. if the icon with name "background_icon" is in the "drawable" resource folder,
-  /// it should be of value `AndroidResource(name: 'background_icon', defType: 'drawable').
+  /// E. g. if the icon with name "background_icon" is in the "drawable"
+  /// resource folder, it should be of value
+  /// `AndroidResource(name: 'background_icon', defType: 'drawable').
   /// [enableWifiLock] indicates wether or not a WifiLock is acquired, when the
   /// background execution is started. This allows the application to keep the
   /// Wi-Fi radio awake, even when the user has not used the device in a while.
+  /// [enableWakeLock] indicates wether or not a Wakelock is acquired, when the
+  /// background execution is started. If this is false then the system can
+  /// still sleep and all location events will be received at once when the
+  /// system wakes up again.
+  /// [setOngoing] indicates wether or not the displayed notification is
+  /// persistent and the user cannot dismiss it.
+  /// [color] is the accent color that is applied to the [notificationIcon].
   const ForegroundNotificationConfig({
     required this.notificationTitle,
     required this.notificationText,
@@ -69,17 +94,19 @@ class ForegroundNotificationConfig {
     this.enableWifiLock = false,
     this.enableWakeLock = false,
     this.setOngoing = false,
+    this.color,
   });
 
   /// Returns a JSON representation of this class.
   Map<String, dynamic> toJson() {
     return {
-      'notificationTitle': notificationTitle,
-      'notificationText': notificationText,
-      'notificationIcon': notificationIcon.toJson(),
-      'enableWifiLock': enableWifiLock,
       'enableWakeLock': enableWakeLock,
+      'enableWifiLock': enableWifiLock,
+      'notificationTitle': notificationTitle,
+      'notificationIcon': notificationIcon.toJson(),
+      'notificationText': notificationText,
       'setOngoing': setOngoing,
+      'color': color?.value ?? -1,
     };
   }
 }

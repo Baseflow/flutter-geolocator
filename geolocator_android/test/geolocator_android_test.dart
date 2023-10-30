@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_android/geolocator_android.dart';
@@ -1433,19 +1434,25 @@ void main() {
           () async {
         // Arrange
         final settings = AndroidSettings(
-            accuracy: LocationAccuracy.best,
-            distanceFilter: 5,
-            forceLocationManager: false,
-            intervalDuration: const Duration(seconds: 1),
-            timeLimit: const Duration(seconds: 1),
-            useMSLAltitude: false,
-            foregroundNotificationConfig: const ForegroundNotificationConfig(
-                notificationText: 'text',
-                notificationTitle: 'title',
-                enableWakeLock: false,
-                enableWifiLock: false,
-                notificationIcon:
-                    AndroidResource(name: 'name', defType: 'defType')));
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 5,
+          forceLocationManager: false,
+          intervalDuration: const Duration(seconds: 1),
+          timeLimit: const Duration(seconds: 1),
+          useMSLAltitude: false,
+          foregroundNotificationConfig: const ForegroundNotificationConfig(
+            color: Colors.amber,
+            enableWakeLock: false,
+            enableWifiLock: false,
+            notificationIcon: AndroidResource(
+              name: 'name',
+              defType: 'defType',
+            ),
+            notificationText: 'text',
+            notificationTitle: 'title',
+            setOngoing: true,
+          ),
+        );
 
         // Act
         final jsonMap = settings.toJson();
@@ -1470,6 +1477,39 @@ void main() {
         expect(
           jsonMap['useMSLAltitude'],
           settings.useMSLAltitude,
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['enableWakeLock'],
+          settings.foregroundNotificationConfig!.enableWakeLock,
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['enableWifiLock'],
+          settings.foregroundNotificationConfig!.enableWifiLock,
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['notificationIcon']['name'],
+          settings.foregroundNotificationConfig!.notificationIcon.name,
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['notificationIcon']
+              ['defType'],
+          settings.foregroundNotificationConfig!.notificationIcon.defType,
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['notificationText'],
+          settings.foregroundNotificationConfig!.notificationText,
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['notificationTitle'],
+          settings.foregroundNotificationConfig!.notificationTitle,
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['setOngoing'],
+          settings.foregroundNotificationConfig!.setOngoing,
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['color'],
+          settings.foregroundNotificationConfig!.color!.value,
         );
       });
 

@@ -1,3 +1,7 @@
+## 4.4.0
+
+- Adds `color` to `ForegroundNotificationConfig` to set the color of the notification icon.
+
 ## 4.3.3
 
 - Removes deprecated support for Android V1 embedding from the JAVA code base. Note that the geolocator's Flutter version restrictions already don't support V1 embedding anymore.

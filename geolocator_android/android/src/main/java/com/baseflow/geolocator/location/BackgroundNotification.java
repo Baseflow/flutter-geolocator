@@ -24,10 +24,10 @@ public class BackgroundNotification {
     private NotificationCompat.Builder builder;
 
     public BackgroundNotification(
-            Context context,
-            String channelId ,
-            Integer notificationId,
-            ForegroundNotificationOptions options
+        @NonNull Context context,
+        @NonNull String channelId ,
+        @NonNull Integer notificationId,
+        ForegroundNotificationOptions options
     ) {
         this.context = context;
         this.notificationId = notificationId;
@@ -87,6 +87,12 @@ public class BackgroundNotification {
                 .setContentText(options.getNotificationText())
                 .setContentIntent(buildBringToFrontIntent())
                 .setOngoing(options.isSetOngoing());
+
+        int notificationColor = options.getColor();
+        if (notificationColor != -1) {
+            builder = builder
+                .setColor(options.getColor());
+        }
 
         if (notify) {
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

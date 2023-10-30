@@ -14,13 +14,10 @@ public class ForegroundNotificationOptions {
     private final String notificationText;
     @NonNull
     private final AndroidIconResource notificationIcon;
-    @NonNull
     private final boolean enableWifiLock;
-    @NonNull
     private final boolean enableWakeLock;
-
-    @NonNull
     private final boolean setOngoing;
+    private final int color;
 
 
     public static ForegroundNotificationOptions parseArguments(@Nullable  Map<String, Object> arguments) {
@@ -28,13 +25,13 @@ public class ForegroundNotificationOptions {
       return null;
     }
 
-   final AndroidIconResource notificationIcon = AndroidIconResource.parseArguments((Map<String, Object>)arguments.get("notificationIcon"));
+    final AndroidIconResource notificationIcon = AndroidIconResource.parseArguments((Map<String, Object>)arguments.get("notificationIcon"));
     final String notificationTitle = (String) arguments.get("notificationTitle");
     final String notificationText = (String) arguments.get("notificationText");
     final Boolean enableWifiLock = (Boolean) arguments.get("enableWifiLock");
     final Boolean enableWakeLock = (Boolean) arguments.get("enableWakeLock");
     final Boolean setOngoing = (Boolean) arguments.get("setOngoing");
-
+    final int color = ((Number) arguments.get("color")).intValue();
 
     return new ForegroundNotificationOptions(
             notificationTitle,
@@ -42,26 +39,38 @@ public class ForegroundNotificationOptions {
             notificationIcon,
             enableWifiLock,
             enableWakeLock,
-            setOngoing);
+            setOngoing,
+            color);
   }
 
-    private ForegroundNotificationOptions(String notificationTitle, String notificationText, AndroidIconResource notificationIcon, boolean enableWifiLock, boolean enableWakeLock, boolean setOngoing) {
+    private ForegroundNotificationOptions(
+        @NonNull String notificationTitle,
+        @NonNull String notificationText,
+        @NonNull AndroidIconResource notificationIcon,
+        boolean enableWifiLock,
+        boolean enableWakeLock,
+        boolean setOngoing,
+        int color) {
         this.notificationTitle = notificationTitle;
         this.notificationText = notificationText;
         this.notificationIcon = notificationIcon;
         this.enableWifiLock = enableWifiLock;
         this.enableWakeLock = enableWakeLock;
         this.setOngoing = setOngoing;
+        this.color = color;
     }
 
+    @NonNull
     public String getNotificationTitle() {
         return notificationTitle;
     }
 
+    @NonNull
     public String getNotificationText() {
         return notificationText;
     }
 
+    @NonNull
     public AndroidIconResource getNotificationIcon() {
         return notificationIcon;
     }
@@ -78,4 +87,7 @@ public class ForegroundNotificationOptions {
         return setOngoing;
     }
 
+    public int getColor() {
+        return color;
+    }
 }
