@@ -1,3 +1,7 @@
+## 4.4.0
+
+* Adds the `gnss_satellite_count` and `gnss_satellites_used_in_fix` properties from the GNSS status callback to the Android platform.
+
 ## 4.3.3
 
 - Removes deprecated support for Android V1 embedding from the JAVA code base. Note that the geolocator's Flutter version restrictions already don't support V1 embedding anymore.
