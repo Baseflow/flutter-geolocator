@@ -87,27 +87,39 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     );
   }
 
-  /// Returns the current position taking the supplied [desiredAccuracy] into
-  /// account.
+  /// Returns the current position.
   ///
-  /// Calling the `getCurrentPosition` method will request the platform to
-  /// obtain a location fix, depending on the availability of different location
-  /// services this can take several seconds. The recommended use would be to
-  /// call the `getLastKnownPosition` method to receive a cached position and
-  /// update it with the result of the `getCurrentPosition` method.
+  /// You can control the settings used for retrieving the location by supplying
+  /// [locationSettings].
   ///
-  /// On Android you can force the use of the Android LocationManager instead of
-  /// the FusedLocationProvider by setting the [forceLocationManager]
-  /// parameter of [LocationSettings] to true. The [timeLimit] parameter of
-  /// [LocationSettings] allows you to specify a timeout interval (by default no
-  /// time limit is configured).
+  /// Calling the [getCurrentPosition] method will request the platform to
+  /// obtain a location fix. Depending on the availability of different location
+  /// services, this can take several seconds. The recommended use would be to
+  /// call the [getLastKnownPosition] method to receive a cached position and
+  /// update it with the result of the [getCurrentPosition] method.
   ///
-  /// Throws a [TimeoutException] when no location is received within the
-  /// supplied [timeLimit] duration.
-  /// Throws a [PermissionDeniedException] when trying to request the device's
-  /// location when the user denied access.
-  /// Throws a [LocationServiceDisabledException] when the user allowed access,
-  /// but the location services of the device are disabled.
+  /// **Note**: On Android, when setting the location accuracy, the location
+  /// *accuracy* is interpreted as
+  /// [location *priority*](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#constants).
+  /// The interpretation works as follows:
+  ///
+  /// [LocationAccuracy.lowest] -> [PRIORITY_PASSIVE](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#public-static-final-int-priority_passive):
+  /// Ensures that no extra power will be used to derive locations. This
+  /// enforces that the request will act as a passive listener that will only
+  /// receive "free" locations calculated on behalf of other clients, and no
+  /// locations will be calculated on behalf of only this request.
+  ///
+  /// [LocationAccuracy.low] -> [PRIORITY_LOW_POWER](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#public-static-final-int-priority_low_power):
+  /// Requests a tradeoff that favors low power usage at the possible expense of
+  /// location accuracy.
+  ///
+  /// [LocationAccuracy.medium] -> [PRIORITY_BALANCED_POWER_ACCURACY](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#public-static-final-int-priority_balanced_power_accuracy):
+  /// Requests a tradeoff that is balanced between location accuracy and power
+  /// usage.
+  ///
+  /// [LocationAccuracy.high]+ -> [PRIORITY_HIGH_ACCURACY](https://developers.google.com/android/reference/com/google/android/gms/location/Priority#public-static-final-int-priority_high_accuracy):
+  /// Requests a tradeoff that favors highly accurate locations at the possible
+  /// expense of additional power usage.
   Future<Position> getCurrentPosition({
     LocationSettings? locationSettings,
   }) {

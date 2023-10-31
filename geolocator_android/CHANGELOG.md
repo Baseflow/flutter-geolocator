@@ -1,3 +1,30 @@
+## 4.3.3
+
+- Removes deprecated support for Android V1 embedding from the JAVA code base. Note that the geolocator's Flutter version restrictions already don't support V1 embedding anymore.
+- Registers location services state change broadcast receiver with required exported flags
+
+## 4.3.2
+
+- Updates the following dependencies:
+  - uuid package from ^3.0.7 to ^4.1.0
+  - flutter_lints from ^2.0.0 to ^3.0.0
+
+## 4.3.1
+
+- Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
+
+## 4.3.0
+
+* Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
+
+## 4.2.4
+
+* Fixes a bug where location readings were very inaccurate when using `forceLocationManager: true`.
+
+## 4.2.3
+
+* Fixes a bug where the position stream was unnecessarily filtered when using `forceLocationManager: true`.
+
 ## 4.2.2
 
 * Adds back the `applicationId` property of the AndroidManifest.xml file to keep backwardscompatibility with older applications that still rely on Gradle version <7.0.

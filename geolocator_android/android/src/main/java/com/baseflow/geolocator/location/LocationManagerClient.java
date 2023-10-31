@@ -4,22 +4,24 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.location.LocationListenerCompat;
+import androidx.core.location.LocationManagerCompat;
+import androidx.core.location.LocationRequestCompat;
 
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 
 import java.util.List;
 
-class LocationManagerClient implements LocationClient, LocationListener {
+class LocationManagerClient implements LocationClient, LocationListenerCompat {
 
   private static final long TWO_MINUTES = 120000;
   private final LocationManager locationManager;
@@ -73,60 +75,40 @@ class LocationManagerClient implements LocationClient, LocationListener {
     return false;
   }
 
-  private static String getBestProvider(
-      LocationManager locationManager, LocationAccuracy accuracy) {
-    Criteria criteria = new Criteria();
+  private static @Nullable String determineProvider(
+      @NonNull LocationManager locationManager,
+      @NonNull LocationAccuracy accuracy) {
 
-    criteria.setBearingRequired(false);
-    criteria.setAltitudeRequired(false);
-    criteria.setSpeedRequired(false);
+      final List<String> enabledProviders = locationManager.getProviders(true);
 
-    switch (accuracy) {
-      case lowest:
-        criteria.setAccuracy(Criteria.NO_REQUIREMENT);
-        criteria.setHorizontalAccuracy(Criteria.NO_REQUIREMENT);
-        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-        break;
-      case low:
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_LOW);
-        criteria.setPowerRequirement(Criteria.NO_REQUIREMENT);
-        break;
-      case medium:
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_MEDIUM);
-        criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
-        break;
-      default:
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-        criteria.setPowerRequirement(Criteria.POWER_HIGH);
-        break;
-    }
-
-    String provider = locationManager.getBestProvider(criteria, true);
-
-    if (provider.trim().isEmpty()) {
-      List<String> providers = locationManager.getProviders(true);
-      if (providers.size() > 0) provider = providers.get(0);
-    }
-
-    return provider;
+      if (accuracy == LocationAccuracy.lowest) {
+          return LocationManager.PASSIVE_PROVIDER;
+      } else if (enabledProviders.contains(LocationManager.FUSED_PROVIDER) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          return LocationManager.FUSED_PROVIDER;
+      } else if (enabledProviders.contains(LocationManager.GPS_PROVIDER)) {
+          return LocationManager.GPS_PROVIDER;
+      } else if (enabledProviders.contains(LocationManager.NETWORK_PROVIDER)) {
+          return LocationManager.NETWORK_PROVIDER;
+      } else if (!enabledProviders.isEmpty()){
+          return enabledProviders.get(0);
+      } else {
+          return null;
+      }
   }
 
-  private static float accuracyToFloat(LocationAccuracy accuracy) {
-    switch (accuracy) {
-      case lowest:
-      case low:
-        return 500;
-      case medium:
-        return 250;
-      case best:
-      case bestForNavigation:
-        return 50;
-      default:
-        return 100;
-    }
+  private static @LocationRequestCompat.Quality int accuracyToQuality(@NonNull LocationAccuracy accuracy) {
+      switch (accuracy) {
+          case lowest:
+          case low:
+              return LocationRequestCompat.QUALITY_LOW_POWER;
+          case high:
+          case best:
+          case bestForNavigation:
+              return LocationRequestCompat.QUALITY_HIGH_ACCURACY;
+          case medium:
+          default:
+              return LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY;
+      }
   }
 
   @Override
@@ -176,27 +158,41 @@ class LocationManagerClient implements LocationClient, LocationListener {
     this.positionChangedCallback = positionChangedCallback;
     this.errorCallback = errorCallback;
 
-    LocationAccuracy locationAccuracy =
-        this.locationOptions != null ? this.locationOptions.getAccuracy() : LocationAccuracy.best;
+    LocationAccuracy accuracy = LocationAccuracy.best;
+    long timeInterval = 0;
+    float distanceFilter = 0;
+    @LocationRequestCompat.Quality int quality = LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY;
 
-    this.currentLocationProvider = getBestProvider(this.locationManager, locationAccuracy);
+    if (this.locationOptions != null) {
+      distanceFilter = locationOptions.getDistanceFilter();
+      accuracy = locationOptions.getAccuracy();
+      timeInterval = accuracy == LocationAccuracy.lowest
+          ? LocationRequestCompat.PASSIVE_INTERVAL
+          : locationOptions.getTimeInterval();
+      quality = accuracyToQuality(accuracy);
+    }
 
-    if (this.currentLocationProvider.trim().isEmpty()) {
+    this.currentLocationProvider = determineProvider(this.locationManager, accuracy);
+
+    if (this.currentLocationProvider == null) {
       errorCallback.onError(ErrorCodes.locationServicesDisabled);
       return;
     }
 
-    long timeInterval = 0;
-    float distanceFilter = 0;
-    if (this.locationOptions != null) {
-      timeInterval = locationOptions.getTimeInterval();
-      distanceFilter = locationOptions.getDistanceFilter();
-    }
+    final LocationRequestCompat locationRequest = new LocationRequestCompat.Builder(timeInterval)
+        .setMinUpdateDistanceMeters(distanceFilter)
+        .setQuality(quality)
+        .build();
 
     this.isListening = true;
     this.nmeaClient.start();
-    this.locationManager.requestLocationUpdates(
-        this.currentLocationProvider, timeInterval, distanceFilter, this, Looper.getMainLooper());
+
+    LocationManagerCompat.requestLocationUpdates(
+        this.locationManager,
+        this.currentLocationProvider,
+        locationRequest,
+        this,
+        Looper.getMainLooper());
   }
 
   @SuppressLint("MissingPermission")
@@ -209,11 +205,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
 
   @Override
   public synchronized void onLocationChanged(Location location) {
-    float desiredAccuracy =
-        locationOptions != null ? accuracyToFloat(locationOptions.getAccuracy()) : 50;
-
-    if (isBetterLocation(location, currentBestLocation)
-        && location.getAccuracy() <= desiredAccuracy) {
+    if (isBetterLocation(location, currentBestLocation)) {
       this.currentBestLocation = location;
 
       if (this.positionChangedCallback != null) {
@@ -223,10 +215,16 @@ class LocationManagerClient implements LocationClient, LocationListener {
     }
   }
 
+  /**
+   * This callback will never be invoked on Android Q and above, and providers can be considered as
+   * always in the {@link android.location.LocationProvider#AVAILABLE} state.
+   * See the <a href=https://developer.android.com/reference/android/location/LocationListener#onStatusChanged(java.lang.String,%20int,%20android.os.Bundle)>Android documentation</a>
+   * for more information.
+   */
+  @SuppressWarnings({"deprecation", "RedundantSuppression"})
   @TargetApi(28)
-  @SuppressWarnings("deprecation")
   @Override
-  public void onStatusChanged(String provider, int status, Bundle extras) {
+  public void onStatusChanged(@NonNull String provider, int status, Bundle extras) {
     if (status == android.location.LocationProvider.AVAILABLE) {
       onProviderEnabled(provider);
     } else if (status == android.location.LocationProvider.OUT_OF_SERVICE) {
@@ -235,7 +233,7 @@ class LocationManagerClient implements LocationClient, LocationListener {
   }
 
   @Override
-  public void onProviderEnabled(String provider) {}
+  public void onProviderEnabled(@NonNull String provider) {}
 
   @SuppressLint("MissingPermission")
   @Override

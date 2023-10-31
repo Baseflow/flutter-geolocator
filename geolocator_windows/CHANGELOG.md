@@ -1,3 +1,11 @@
+## 0.2.2
+
+* Fixes crash under Windows when getCurrentPosition method is called. (#1240)
+
+## 0.2.1
+
+* Exposes altitude accuracy to the `Position` class.
+
 ## 0.2.0
 
 * **BREAKING CHANGE:** Synchronizes the default values of `Position.altitude`, `Position.heading` and `Position.speed` with the other platforms and return 0.0 if the value is not known.

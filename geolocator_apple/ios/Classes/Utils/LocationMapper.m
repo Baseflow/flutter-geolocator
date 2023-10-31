@@ -13,26 +13,64 @@
         return nil;
     }
     
-    double timestamp = [LocationMapper currentTimeInMilliSeconds:location.timestamp];
-    double speedAccuracy = 0.0;
+    NSMutableDictionary *locationMap = [[NSMutableDictionary alloc]initWithCapacity:13];
     
+    [locationMap setObject:@(location.coordinate.latitude) forKey: @"latitude"];
+    [locationMap setObject:@(location.coordinate.longitude) forKey: @"longitude"];
+    [locationMap setObject:@(location.horizontalAccuracy) forKey: @"accuracy"];
+    
+    double timestamp = [LocationMapper currentTimeInMilliSeconds:location.timestamp];
+    [locationMap setObject:@(timestamp) forKey: @"timestamp"];
+    
+    // A negative speed value indicates an invalid speed.
+    // When the speedAccuracy contains a negative number, the value in the speed property is invalid.
+    //
+    // Relevant documentation:
+    // - https://developer.apple.com/documentation/corelocation/cllocation/1423798-speed?language=objc
+    // - https://developer.apple.com/documentation/corelocation/cllocation/3524340-speedaccuracy?language=objc
+    double speed = location.speed;
+    double speedAccuracy = 0.0;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
     if (@available(iOS 10.0, *)) {
         speedAccuracy = location.speedAccuracy;
     }
 #endif
+    if (speed >= 0 && speedAccuracy >= 0) {
+        [locationMap setObject:@(speed) forKey: @"speed"];
+        [locationMap setObject:@(speedAccuracy) forKey: @"speed_accuracy"];
+    }
     
-    NSMutableDictionary *locationMap = [[NSMutableDictionary alloc]initWithCapacity:9];
-    [locationMap setObject:@(location.coordinate.latitude) forKey: @"latitude"];
-    [locationMap setObject:@(location.coordinate.longitude) forKey: @"longitude"];
-    [locationMap setObject:@(timestamp) forKey: @"timestamp"];
-    [locationMap setObject:@(location.altitude) forKey: @"altitude"];
-    [locationMap setObject:@(location.horizontalAccuracy) forKey: @"accuracy"];
-    [locationMap setObject:@(location.speed) forKey: @"speed"];
-    [locationMap setObject:@(speedAccuracy) forKey: @"speed_accuracy"];
-    [locationMap setObject:@(location.course) forKey: @"heading"];
+    // When verticalAccuracy contains 0 or a negative number, the value of altitude is invalid.
+    //
+    // Relevant documentation:
+    // - https://developer.apple.com/documentation/corelocation/cllocation/1423820-altitude?language=objc
+    // - https://developer.apple.com/documentation/corelocation/cllocation/1423550-verticalaccuracy?language=objc
+    double altitudeAccuracy = location.verticalAccuracy;
+    if (altitudeAccuracy > 0.0) {
+        [locationMap setObject:@(location.altitude) forKey: @"altitude"];
+        [locationMap setObject:@(altitudeAccuracy) forKey: @"altitude_accuracy"];
+    }
     
-    if(@available(iOS 15.0, *)) {
+    // A negative course value indicates that the course information is invalid.
+    // When courseAccuracy contains a negative number, the value in the course property is invalid.
+    //
+    // Relevant documentation:
+    // - https://developer.apple.com/documentation/corelocation/cllocation/1423832-course?language=objc
+    // - https://developer.apple.com/documentation/corelocation/cllocation/3524338-courseaccuracy?language=objc
+    double heading = location.course;
+    if (heading >= 0.0) {
+        if (@available(iOS 13.4, macOS 10.15.4, *)) {
+            double headingAccuracy = location.courseAccuracy;
+            if (headingAccuracy >= 0.0) {
+                [locationMap setObject:@(heading) forKey: @"heading"];
+                [locationMap setObject:@(headingAccuracy) forKey: @"heading_accuracy"];
+            }
+        } else {
+            [locationMap setObject:@(heading) forKey: @"heading"];
+        }
+    }
+    
+    if(@available(iOS 15.0, macOS 12.0, *)) {
         [locationMap setObject:@(location.sourceInformation.isSimulatedBySoftware) forKey: @"is_mocked"];
     }
     

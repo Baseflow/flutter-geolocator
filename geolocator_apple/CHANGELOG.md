@@ -1,3 +1,15 @@
+## 2.3.2
+
+* Fixes build error and warnings regarding unused variables and unavailable APIs on macOS.
+
+## 2.3.1
+
+* Fixes a bug where invalid speed and speed accuracy readings where returned instead of ignored.
+
+## 2.3.0
+
+* Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
+
 ## 2.2.7
 
 * Fixes the propagation of the activity type setting.

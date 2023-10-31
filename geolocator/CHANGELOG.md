@@ -1,6 +1,15 @@
+## 10.1.1
+
+- Replaced optional DateTime? `timestamp` in `Position` object for an NonNull DateTime `timestamp`. 
+
+## 10.1.0
+
+- Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
+
 ## 10.0.1
 
-- Optional timestamp in Position object is not optional anymore. 
+- Updates documentation for `getCurrentPosition()`, to clarify the behavior of location accuracy on Android devices.
+- Updates README regarding the plugin interpretation of `LocationAccuracy`.
 
 ## 10.0.0
 

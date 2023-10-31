@@ -25,8 +25,12 @@ std::string ErrorCodeToString(ErrorCode errorCode) {
   switch (errorCode) {
     case ErrorCode::PermissionDefinitionsNotFound:
       return "PERMISSION_DEFINITIONS_NOT_FOUND";
+    case ErrorCode::OperationCanceled:
+      return "OPERATION_CANCELED";
+    case ErrorCode::UnknownError:
+      return "UNKNOWN_ERROR";
     default:
-      return "";
+      throw std::logic_error("unexcepted value" + static_cast<int>(errorCode));
   }
 }
 
@@ -146,8 +150,13 @@ void GeolocatorPlugin::OnCheckPermission(std::unique_ptr<MethodResult<>> result)
   RequestAccessAsync(std::move(result));
 }
 
+bool isLocationStatusValid (const PositionStatus& status) {
+    return status != PositionStatus::Disabled 
+        && status != PositionStatus::NotAvailable;
+}
+
 void GeolocatorPlugin::OnIsLocationServiceEnabled(std::unique_ptr<MethodResult<>> result) {
-  result->Success(EncodableValue(geolocator.LocationStatus() != PositionStatus::NotAvailable));
+    result->Success(EncodableValue(isLocationStatusValid(geolocator.LocationStatus())));
 }
 
 void GeolocatorPlugin::OnRequestPermission(std::unique_ptr<MethodResult<>> result) {
@@ -156,8 +165,18 @@ void GeolocatorPlugin::OnRequestPermission(std::unique_ptr<MethodResult<>> resul
 
 winrt::fire_and_forget GeolocatorPlugin::OnGetLastKnownPosition(const MethodCall<>& method_call,
   std::unique_ptr<MethodResult<>> result) {
-  auto location = co_await geolocator.GetGeopositionAsync(std::chrono::hours(1), std::chrono::milliseconds::zero());
-  result->Success(LocationToEncodableMap(location));
+    try {
+        auto location = co_await geolocator.GetGeopositionAsync(std::chrono::hours(1), std::chrono::milliseconds::zero());
+        result->Success(LocationToEncodableMap(location));
+    }
+    catch (hresult_canceled const& error) {
+        result->Error(ErrorCodeToString(ErrorCode::OperationCanceled), 
+            to_string(error.message()));
+    }
+    catch (hresult_error const& error) {
+        result->Error(ErrorCodeToString(ErrorCode::UnknownError), 
+            to_string(error.message()));
+    }
 }
 
 void GeolocatorPlugin::GetLocationAccuracy(std::unique_ptr<MethodResult<>> result) {
@@ -169,9 +188,18 @@ void GeolocatorPlugin::GetLocationAccuracy(std::unique_ptr<MethodResult<>> resul
 
 winrt::fire_and_forget GeolocatorPlugin::OnGetCurrentPosition(const MethodCall<>& method_call,
   std::unique_ptr<MethodResult<>> result) {
-
-  auto location = co_await geolocator.GetGeopositionAsync();
-  result->Success(LocationToEncodableMap(location));
+    try {
+        auto location = co_await geolocator.GetGeopositionAsync();
+        result->Success(LocationToEncodableMap(location));
+    }
+    catch (hresult_canceled const& error) {
+        result->Error(ErrorCodeToString(ErrorCode::OperationCanceled), 
+            to_string(error.message()));
+    }
+    catch (hresult_error const& error) {
+        result->Error(ErrorCodeToString(ErrorCode::UnknownError), 
+            to_string(error.message()));
+    }
 }
 
 std::unique_ptr<StreamHandlerError<EncodableValue>> GeolocatorPlugin::OnListen(
@@ -256,6 +284,11 @@ EncodableMap GeolocatorPlugin::LocationToEncodableMap(Geoposition const& locatio
     ? location.Coordinate().Altitude().GetDouble()
     : 0;
   position.insert(std::make_pair(EncodableValue("altitude"), EncodableValue(altitude)));
+  
+  double altitudeAccuracy = location.Coordinate().AltitudeAccuracy() != nullptr && !std::isnan(location.Coordinate().AltitudeAccuracy().GetDouble())
+    ? location.Coordinate().AltitudeAccuracy().GetDouble()
+    : 0;
+  position.insert(std::make_pair(EncodableValue("altitude_accuracy"), EncodableValue(altitudeAccuracy)));
   
   position.insert(std::make_pair(EncodableValue("accuracy"), EncodableValue(location.Coordinate().Accuracy())));
   
