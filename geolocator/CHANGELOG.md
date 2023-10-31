@@ -1,6 +1,6 @@
 ## 10.1.1
 
-- Replaced optional DateTime? `timestamp` in `Position` object for an NonNull DateTime `timestamp`. 
+- Replaces an optional DateTime? `timestamp` in `Position` object for an NonNull DateTime `timestamp`. 
 
 ## 10.1.0
 
