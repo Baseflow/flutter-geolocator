@@ -1,7 +1,3 @@
-## 10.1.1
-
-- Replaces an optional DateTime? `timestamp` in `Position` object for an NonNull DateTime `timestamp`. 
-
 ## 10.1.0
 
 - Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
