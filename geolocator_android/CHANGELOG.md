@@ -1,7 +1,11 @@
-## 4.4.0
+## 4.5.0
 
 * Creates `AndroidPosition`, a child class of `Position` with Android specific properties.
 * Adds the `satelliteCount` and `satellitesUsedInFix` to `AndroidPosition`.
+
+## 4.4.0
+
+- Adds `color` to `ForegroundNotificationConfig` to set the color of the notification icon.
 
 ## 4.3.3
 

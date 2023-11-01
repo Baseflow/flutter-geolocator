@@ -15,7 +15,7 @@ void main() {
   runApp(const GeolocatorWidget());
 }
 
-/// Example [Widget] showing the functionalities of the geolocator plugin
+/// Example [Widget] showing the functionalities of the geolocator plugin.
 class GeolocatorWidget extends StatefulWidget {
   /// Creates a new GeolocatorWidget.
   const GeolocatorWidget({Key? key}) : super(key: key);
@@ -297,13 +297,15 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         forceLocationManager: false,
         useMSLAltitude: true,
         foregroundNotificationConfig: const ForegroundNotificationConfig(
+          // Explain to the user why we are showing this notification.
           notificationText:
               "Example app will continue to receive your location even when you aren't using it",
-          //Explain to the user why we are showing this notification
+          // Tell the user what we are doing.
           notificationTitle: "Running in Background",
-          //Tell the user what we are doing
-          enableWakeLock:
-              false, //Keep the system awake to receive background location information.
+          // Keep the system awake to receive background location information.
+          enableWakeLock: false,
+          // Give the notification an amber color.
+          color: Colors.amber,
         ),
       );
       final positionStream = geolocatorAndroid.getPositionStream(
