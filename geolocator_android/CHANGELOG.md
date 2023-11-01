@@ -1,6 +1,7 @@
 ## 4.4.0
 
-* Adds the `gnss_satellite_count` and `gnss_satellites_used_in_fix` properties from the GNSS status callback to the Android platform.
+* Creates `AndroidPosition`, a child class of `Position` with Android specific properties.
+* Adds the `satelliteCount` and `satellitesUsedInFix` to `AndroidPosition`.
 
 ## 4.3.3
 

@@ -8,7 +8,7 @@ import 'package:geolocator_android/geolocator_android.dart';
 import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
 
-Position get mockPosition => Position(
+Position get mockPosition => AndroidPosition(
     latitude: 52.561270,
     longitude: 5.639382,
     timestamp: DateTime.fromMillisecondsSinceEpoch(

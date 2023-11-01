@@ -20,7 +20,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  geolocator_platform_interface: ^4.2.0
+  geolocator_platform_interface: ^4.1.1
   uuid: ^4.1.0
 
 dev_dependencies:

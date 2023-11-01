@@ -10,20 +10,21 @@ import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
 
 Position get mockPosition => Position(
-    latitude: 52.561270,
-    longitude: 5.639382,
-    timestamp: DateTime.fromMillisecondsSinceEpoch(
-      500,
-      isUtc: true,
-    ),
-    altitude: 3000.0,
-    altitudeAccuracy: 2.0,
-    accuracy: 0.0,
-    heading: 0.0,
-    headingAccuracy: 0.0,
-    speed: 0.0,
-    speedAccuracy: 0.0,
-    isMocked: false);
+      latitude: 52.561270,
+      longitude: 5.639382,
+      timestamp: DateTime.fromMillisecondsSinceEpoch(
+        500,
+        isUtc: true,
+      ),
+      altitude: 3000.0,
+      altitudeAccuracy: 2.0,
+      accuracy: 0.0,
+      heading: 0.0,
+      headingAccuracy: 0.0,
+      speed: 0.0,
+      speedAccuracy: 0.0,
+      isMocked: false,
+    );
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
