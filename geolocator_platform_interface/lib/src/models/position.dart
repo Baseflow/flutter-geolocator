@@ -151,10 +151,6 @@ class Position {
       longitude: positionMap['longitude'],
       timestamp: timestamp,
       altitude: positionMap['altitude'] ?? 0.0,
-      // androidPosition: AndroidPosition(
-      //     satelliteCount: positionMap['gnss_satellite_count'] ?? 0.0,
-      //     satellitesUsedInFix:
-      //         positionMap['gnss_satellites_used_in_fix'] ?? 0.0),
       accuracy: positionMap['accuracy'] ?? 0.0,
       heading: positionMap['heading'] ?? 0.0,
       headingAccuracy: positionMap['heading_accuracy'] ?? 0.0,
@@ -175,7 +171,6 @@ class Position {
         'accuracy': accuracy,
         'altitude': altitude,
         'altitude_accuracy': altitudeAccuracy,
-        // 'android_position': androidPosition,
         'floor': floor,
         'heading': heading,
         'heading_accuracy': headingAccuracy,
