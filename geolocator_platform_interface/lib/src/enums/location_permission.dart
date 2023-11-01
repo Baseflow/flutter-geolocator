@@ -4,8 +4,8 @@ enum LocationPermission {
   /// to request permission using the `Geolocator.requestPermission()` method.
   denied,
 
-  /// Permission to access the device's location is permenantly denied. When
-  /// requestiong permissions the permission dialog will not been shown until
+  /// Permission to access the device's location is permanently denied. When
+  /// requesting permissions the permission dialog will not been shown until
   /// the user updates the permission in the App settings.
   deniedForever,
 

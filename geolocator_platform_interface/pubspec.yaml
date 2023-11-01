@@ -3,12 +3,12 @@ description: A common platform interface for the geolocator plugin.
 repository: https://github.com/baseflow/flutter-geolocator/tree/main/geolocator_platform_interface
 # NOTE: We strongly prefer non-breaking changes, even at the expense of a
 # less-clean API. See https://flutter.dev/go/platform-interface-breaking-changes
-version: 4.1.1
+version: 4.1.2
 
 dependencies:
   flutter:
     sdk: flutter
-  
+
   plugin_platform_interface: ^2.1.6
   vector_math: ^2.1.4
   meta: ^1.9.1
