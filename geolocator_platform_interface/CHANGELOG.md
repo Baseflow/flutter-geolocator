@@ -1,7 +1,3 @@
-## 4.2.0
-
-- Includes `satelliteCount` and `satellitesUsedInFix` in `Position`.
-
 ## 4.1.1
 
 - Updates dependencies to latest versions to prevent conflicts with other packages.
