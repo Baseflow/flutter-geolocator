@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
 
 import java.security.SecureRandom;
 
@@ -167,6 +168,13 @@ class FusedLocationClient implements LocationClient {
                 listener.onLocationServiceResult(isGpsUsable || isNetworkUsable);
               } else {
                 listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+              }
+            })
+        .addOnFailureListener(
+            new OnFailureListener() {
+              @Override
+              public void onFailure(@NonNull Exception e) {
+                listener.onLocationServiceError(ErrorCodes.locationServicesFailed);
               }
             });
   }

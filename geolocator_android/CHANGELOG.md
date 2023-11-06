@@ -1,3 +1,7 @@
+## 4.4.1
+
+- Adds addOnFailureListener to getSettingsClient to prevent crashes.
+
 ## 4.4.0
 
 - Adds `color` to `ForegroundNotificationConfig` to set the color of the notification icon.
