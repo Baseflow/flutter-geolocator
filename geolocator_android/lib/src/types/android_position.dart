@@ -62,7 +62,6 @@ class AndroidPosition extends Position {
   int get hashCode => satelliteCount.hashCode ^ satellitesUsedInFix.hashCode;
 
   /// Converts the supplied [Map] to an instance of the [AndroidPosition] class.
-
   static AndroidPosition fromMap(dynamic message) {
     final Map<dynamic, dynamic> positionMap = message;
 
