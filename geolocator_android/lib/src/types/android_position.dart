@@ -8,8 +8,8 @@ class AndroidPosition extends Position {
   /// Constructs an instance with the given values for testing. [AndroidPosition]
   /// instances constructed this way won't actually reflect any real information
   /// from the platform, just whatever was passed in at construction time.
-  const AndroidPosition(
-      {required this.satelliteCount,
+  const AndroidPosition({
+      required this.satelliteCount,
       required this.satellitesUsedInFix,
       required longitude,
       required latitude,
