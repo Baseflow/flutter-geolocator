@@ -55,9 +55,11 @@ public class NmeaClient {
             public void onSatelliteStatusChanged(@NonNull GnssStatus status) {
                 gnss_satellite_count = status.getSatelliteCount();
                 gnss_satellites_used_in_fix = 0;
-                for (int i = 0; i < gnss_satellite_count; ++i)
-                    if (status.usedInFix(i))
+                for (int i = 0; i < gnss_satellite_count; ++i) {
+                    if (status.usedInFix(i)) {
                         ++gnss_satellites_used_in_fix;
+                    }
+                }
             }
         };
     }
