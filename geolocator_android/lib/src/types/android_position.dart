@@ -22,7 +22,8 @@ class AndroidPosition extends Position {
       required speed,
       required speedAccuracy,
       int? floor,
-      isMocked = false})
+      isMocked = false,
+    })
       : super(
             longitude: longitude,
             latitude: latitude,
