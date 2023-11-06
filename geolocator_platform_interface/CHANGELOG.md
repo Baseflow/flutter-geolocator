@@ -1,3 +1,7 @@
+## 4.2.0
+
+- Replaces an optional DateTime? `timestamp` in `Position` object for an NonNull DateTime `timestamp`. 
+
 ## 4.1.1
 
 - Updates dependencies to latest versions to prevent conflicts with other packages.
