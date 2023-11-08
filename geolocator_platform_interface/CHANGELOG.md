@@ -1,3 +1,7 @@
+## 4.2.1
+
+- Updates documentation `isMocked` to bring it in line with the functionality. `isMocked` for iOS 15 and higher depends on the result from isSimulatedBySoftware.
+
 ## 4.2.0
 
 - Replaces an optional DateTime? `timestamp` in `Position` object for an NonNull DateTime `timestamp`. 
