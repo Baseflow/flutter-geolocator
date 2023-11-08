@@ -82,10 +82,12 @@ class Position {
   /// value is 0.0.
   final double speedAccuracy;
 
-  /// Will be true on Android (starting from API lvl 18) when the location came
+  /// Will be true on Android (starting from API lvl 18) and when the location came
   /// from the mocked provider.
   ///
-  /// On iOS this value will always be false.
+  /// Is available for iOS 15 and higher and is true when flag isSimulatedBySoftware is true (otherwise false).
+  ///
+  /// When not available the default value is false.
   final bool isMocked;
 
   @override
