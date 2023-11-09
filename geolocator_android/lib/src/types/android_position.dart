@@ -9,22 +9,21 @@ class AndroidPosition extends Position {
   /// instances constructed this way won't actually reflect any real information
   /// from the platform, just whatever was passed in at construction time.
   const AndroidPosition({
-      required this.satelliteCount,
-      required this.satellitesUsedInFix,
-      required longitude,
-      required latitude,
-      required timestamp,
-      required accuracy,
-      required altitude,
-      required altitudeAccuracy,
-      required heading,
-      required headingAccuracy,
-      required speed,
-      required speedAccuracy,
-      int? floor,
-      isMocked = false,
-    })
-      : super(
+    required this.satelliteCount,
+    required this.satellitesUsedInFix,
+    required longitude,
+    required latitude,
+    required timestamp,
+    required accuracy,
+    required altitude,
+    required altitudeAccuracy,
+    required heading,
+    required headingAccuracy,
+    required speed,
+    required speedAccuracy,
+    int? floor,
+    isMocked = false,
+  }) : super(
             longitude: longitude,
             latitude: latitude,
             timestamp: timestamp,
