@@ -12,20 +12,21 @@ Position toPosition(html.Geoposition webPosition) {
   }
 
   return Position(
-      latitude: coords.latitude as double,
-      longitude: coords.longitude as double,
-      timestamp: webPosition.timestamp != null
-          ? DateTime.fromMillisecondsSinceEpoch(webPosition.timestamp!)
-          : DateTime.now(),
-      altitude: coords.altitude as double? ?? 0.0,
-      altitudeAccuracy: coords.altitudeAccuracy as double? ?? 0.0,
-      accuracy: coords.accuracy as double? ?? 0.0,
-      heading: coords.heading as double? ?? 0.0,
-      headingAccuracy: 0.0,
-      floor: null,
-      speed: coords.speed as double? ?? 0.0,
-      speedAccuracy: 0.0,
-      isMocked: false);
+    latitude: coords.latitude as double,
+    longitude: coords.longitude as double,
+    timestamp: webPosition.timestamp != null
+        ? DateTime.fromMillisecondsSinceEpoch(webPosition.timestamp!)
+        : DateTime.now(),
+    altitude: coords.altitude as double? ?? 0.0,
+    altitudeAccuracy: coords.altitudeAccuracy as double? ?? 0.0,
+    accuracy: coords.accuracy as double? ?? 0.0,
+    heading: coords.heading as double? ?? 0.0,
+    headingAccuracy: 0.0,
+    floor: null,
+    speed: coords.speed as double? ?? 0.0,
+    speedAccuracy: 0.0,
+    isMocked: false,
+  );
 }
 
 /// Converts the permission result received from the browser into a

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
@@ -532,6 +530,7 @@ void main() {
         speedAccuracy: 0,
         isMocked: false,
       );
+
       // Act
       final readablePosition = position.toString();
 
