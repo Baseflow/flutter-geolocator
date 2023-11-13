@@ -151,6 +151,7 @@ class Position {
       longitude: positionMap['longitude'],
       timestamp: timestamp,
       altitude: positionMap['altitude'] ?? 0.0,
+      altitudeAccuracy: positionMap['altitude_accuracy'] ?? 0.0,
       accuracy: positionMap['accuracy'] ?? 0.0,
       heading: positionMap['heading'] ?? 0.0,
       headingAccuracy: positionMap['heading_accuracy'] ?? 0.0,
@@ -158,7 +159,6 @@ class Position {
       speed: positionMap['speed'] ?? 0.0,
       speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
       isMocked: positionMap['is_mocked'] ?? false,
-      altitudeAccuracy: positionMap['altitude_accuracy'] ?? 0.0,
     );
   }
 
