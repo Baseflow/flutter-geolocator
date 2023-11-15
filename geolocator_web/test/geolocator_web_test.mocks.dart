@@ -8,8 +8,8 @@ import 'dart:async' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart'
     as _i2;
-import 'package:geolocator_web/src/geolocation_manager.dart'; as _i3;
-import 'package:geolocator_web/src/permissions_manager.dart'; as _i5;
+import 'package:geolocator_web/src/geolocation_manager.dart' as _i3;
+import 'package:geolocator_web/src/permissions_manager.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
