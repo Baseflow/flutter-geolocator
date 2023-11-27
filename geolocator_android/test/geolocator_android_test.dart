@@ -1442,14 +1442,8 @@ void main() {
           useMSLAltitude: false,
           foregroundNotificationConfig: const ForegroundNotificationConfig(
             color: Colors.amber,
-            enableWakeLock: false,
+            enableWakeLock: true,
             enableWifiLock: false,
-            notificationIcon: AndroidResource(
-              name: 'name',
-              defType: 'defType',
-            ),
-            notificationText: 'text',
-            notificationTitle: 'title',
             setOngoing: true,
           ),
         );
@@ -1486,23 +1480,7 @@ void main() {
           jsonMap['foregroundNotificationConfig']['enableWifiLock'],
           settings.foregroundNotificationConfig!.enableWifiLock,
         );
-        expect(
-          jsonMap['foregroundNotificationConfig']['notificationIcon']['name'],
-          settings.foregroundNotificationConfig!.notificationIcon.name,
-        );
-        expect(
-          jsonMap['foregroundNotificationConfig']['notificationIcon']
-              ['defType'],
-          settings.foregroundNotificationConfig!.notificationIcon.defType,
-        );
-        expect(
-          jsonMap['foregroundNotificationConfig']['notificationText'],
-          settings.foregroundNotificationConfig!.notificationText,
-        );
-        expect(
-          jsonMap['foregroundNotificationConfig']['notificationTitle'],
-          settings.foregroundNotificationConfig!.notificationTitle,
-        );
+
         expect(
           jsonMap['foregroundNotificationConfig']['setOngoing'],
           settings.foregroundNotificationConfig!.setOngoing,

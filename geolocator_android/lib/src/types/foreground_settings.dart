@@ -28,13 +28,13 @@ class AndroidResource {
 /// Configuration for the foreground notification. When this is provided the location service will run as a foreground service.
 class ForegroundNotificationConfig {
   /// The title used for the foreground service notification.
-  final String notificationTitle;
+ 
 
   /// The body used for the foreground service notification.
-  final String notificationText;
+
 
   /// The resource name of the icon to be used for the foreground notification.
-  final AndroidResource notificationIcon;
+ 
 
   /// When enabled, a WifiLock is acquired when background execution is started.
   /// This allows the application to keep the Wi-Fi radio awake, even when the
@@ -70,9 +70,7 @@ class ForegroundNotificationConfig {
 
   /// Creates an Android specific configuration for the [FlutterBackground] plugin.
   ///
-  /// [notificationTitle] is the title used for the foreground service
-  /// notification.
-  /// [notificationText] is the body used for the foreground service
+
   /// notification.
   /// [notificationIcon] must be a drawable resource.
   /// E. g. if the icon with name "background_icon" is in the "drawable"
@@ -89,10 +87,6 @@ class ForegroundNotificationConfig {
   /// persistent and the user cannot dismiss it.
   /// [color] is the accent color that is applied to the [notificationIcon].
   const ForegroundNotificationConfig({
-    required this.notificationTitle,
-    required this.notificationText,
-    this.notificationIcon =
-        const AndroidResource(name: 'ic_launcher', defType: 'mipmap'),
     this.enableWifiLock = false,
     this.enableWakeLock = false,
     this.setOngoing = false,
@@ -104,9 +98,6 @@ class ForegroundNotificationConfig {
     return {
       'enableWakeLock': enableWakeLock,
       'enableWifiLock': enableWifiLock,
-      'notificationTitle': notificationTitle,
-      'notificationIcon': notificationIcon.toJson(),
-      'notificationText': notificationText,
       'setOngoing': setOngoing,
       'color': color?.value,
     };
