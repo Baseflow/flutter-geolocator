@@ -1,3 +1,8 @@
+## 2.3.3
+
+* Ensures the `[CLLocationManager locationServicesEnabled]` message is called
+on a background thread when listening for service updates.
+
 ## 2.3.2
 
 * Fixes build error and warnings regarding unused variables and unavailable APIs on macOS.
