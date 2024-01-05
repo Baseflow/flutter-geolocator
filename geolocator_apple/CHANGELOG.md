@@ -1,6 +1,6 @@
 ## 2.3.4
 
-* Iphonesimulator arm64 as valid architecture.  
+* Allows the ARM64 architecture as a valid IPhone simulator architecture.
 
 ## 2.3.3
 
