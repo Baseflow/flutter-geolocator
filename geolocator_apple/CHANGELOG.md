@@ -1,5 +1,9 @@
 ## 2.3.3
 
+* Iphonesimulator arm64 as valid architecture.  
+
+## 2.3.3
+
 * Ensures the `[CLLocationManager locationServicesEnabled]` message is called
 on a background thread when listening for service updates.
 
