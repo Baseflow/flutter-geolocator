@@ -1,4 +1,4 @@
-## 2.3.3
+## 2.3.4
 
 * Iphonesimulator arm64 as valid architecture.  
 
