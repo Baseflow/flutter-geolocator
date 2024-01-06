@@ -184,11 +184,12 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         return _positionStream!;
       }
     }
-    var originalStream = (useForegroundNotification ? _eventChannelFGN : _eventChannel)
-        .receiveBroadcastStream(
+    var originalStream =
+        (useForegroundNotification ? _eventChannelFGN : _eventChannel)
+            .receiveBroadcastStream(
       locationSettings?.toJson(),
     );
-    var positionStream = _wrapStream(originalStream);
+    var positionStream = _wrapStream(originalStream, useForegroundNotification);
 
     var timeLimit = locationSettings?.timeLimit;
 
@@ -229,10 +230,17 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     return tmpStream;
   }
 
-  Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
+  Stream<dynamic> _wrapStream(
+    Stream<dynamic> incoming,
+    bool useForegroundNotification,
+  ) {
     return incoming.asBroadcastStream(onCancel: (subscription) {
       subscription.cancel();
-      _positionStream = null;
+      if (useForegroundNotification) {
+        _positionStreamFGN = null;
+      } else {
+        _positionStream = null;
+      }
     });
   }
 
