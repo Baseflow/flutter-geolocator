@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:geolocator_android/src/types/android_settings.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,6 +15,11 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   /// platform.
   static const _eventChannel =
       EventChannel('flutter.baseflow.com/geolocator_updates_android');
+
+  /// The secondary event channel used to receive [Position] updates from the
+  /// native platform.
+  static const _eventChannel2 =
+      EventChannel('flutter.baseflow.com/geolocator_updates_android2');
 
   /// The event channel used to receive [LocationServiceStatus] updates from the
   /// native platform.
@@ -32,6 +38,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   bool forcedLocationManager = false;
 
   Stream<Position>? _positionStream;
+  Stream<Position>? _positionStream2;
   Stream<ServiceStatus>? _serviceStatusStream;
 
   final Uuid _uuid = const Uuid();
@@ -165,10 +172,20 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   Stream<Position> getPositionStream({
     LocationSettings? locationSettings,
   }) {
-    if (_positionStream != null) {
-      return _positionStream!;
+    final bool useSecondaryStream = locationSettings is AndroidSettings
+        ? locationSettings.useSecondaryStream
+        : false;
+    if (useSecondaryStream) {
+      if (_positionStream2 != null) {
+        return _positionStream2!;
+      }
+    } else {
+      if (_positionStream != null) {
+        return _positionStream!;
+      }
     }
-    var originalStream = _eventChannel.receiveBroadcastStream(
+    var originalStream = (useSecondaryStream ? _eventChannel2 : _eventChannel)
+        .receiveBroadcastStream(
       locationSettings?.toJson(),
     );
     var positionStream = _wrapStream(originalStream);
@@ -179,7 +196,11 @@ class GeolocatorAndroid extends GeolocatorPlatform {
       positionStream = positionStream.timeout(
         timeLimit,
         onTimeout: (s) {
-          _positionStream = null;
+          if (useSecondaryStream) {
+            _positionStream2 = null;
+          } else {
+            _positionStream = null;
+          }
           s.addError(TimeoutException(
             'Time limit reached while waiting for position update.',
             timeLimit,
@@ -189,7 +210,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
       );
     }
 
-    _positionStream = positionStream
+    final Stream<Position> tmpStream = positionStream
         .map<Position>((dynamic element) =>
             Position.fromMap(element.cast<String, dynamic>()))
         .handleError(
@@ -200,7 +221,12 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         throw error;
       },
     );
-    return _positionStream!;
+    if (useSecondaryStream) {
+      _positionStream2 = tmpStream;
+    } else {
+      _positionStream = tmpStream;
+    }
+    return tmpStream;
   }
 
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {

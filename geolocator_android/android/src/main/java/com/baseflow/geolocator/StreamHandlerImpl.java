@@ -25,6 +25,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   private static final String TAG = "FlutterGeolocator";
 
   private final PermissionManager permissionManager;
+  private final String eventChannelIdentifier;
 
   @Nullable private EventChannel channel;
   @Nullable private Context context;
@@ -33,8 +34,9 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   @Nullable private GeolocationManager geolocationManager;
   @Nullable private LocationClient locationClient;
 
-  public StreamHandlerImpl(PermissionManager permissionManager) {
+  public StreamHandlerImpl(PermissionManager permissionManager, String eventChannelIdentifier) {
     this.permissionManager = permissionManager;
+    this.eventChannelIdentifier = eventChannelIdentifier;
     geolocationManager = new GeolocationManager();
   }
 
@@ -65,7 +67,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       stopListening();
     }
 
-    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_updates_android");
+    channel = new EventChannel(messenger, eventChannelIdentifier);
     channel.setStreamHandler(this);
     this.context = context;
   }
