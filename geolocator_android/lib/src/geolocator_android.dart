@@ -18,8 +18,8 @@ class GeolocatorAndroid extends GeolocatorPlatform {
 
   /// The secondary event channel used to receive [Position] updates from the
   /// native platform.
-  static const _eventChannel2 =
-      EventChannel('flutter.baseflow.com/geolocator_updates_android2');
+  static const _eventChannelFGN =
+      EventChannel('flutter.baseflow.com/geolocator_updates_android_fgn');
 
   /// The event channel used to receive [LocationServiceStatus] updates from the
   /// native platform.
@@ -38,7 +38,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   bool forcedLocationManager = false;
 
   Stream<Position>? _positionStream;
-  Stream<Position>? _positionStream2;
+  Stream<Position>? _positionStreamFGN;
   Stream<ServiceStatus>? _serviceStatusStream;
 
   final Uuid _uuid = const Uuid();
@@ -172,19 +172,19 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   Stream<Position> getPositionStream({
     LocationSettings? locationSettings,
   }) {
-    final bool useSecondaryStream = locationSettings is AndroidSettings
-        ? locationSettings.useSecondaryStream
+    final bool useForegroundNotification = locationSettings is AndroidSettings
+        ? locationSettings.foregroundNotificationConfig != null
         : false;
-    if (useSecondaryStream) {
-      if (_positionStream2 != null) {
-        return _positionStream2!;
+    if (useForegroundNotification) {
+      if (_positionStreamFGN != null) {
+        return _positionStreamFGN!;
       }
     } else {
       if (_positionStream != null) {
         return _positionStream!;
       }
     }
-    var originalStream = (useSecondaryStream ? _eventChannel2 : _eventChannel)
+    var originalStream = (useForegroundNotification ? _eventChannelFGN : _eventChannel)
         .receiveBroadcastStream(
       locationSettings?.toJson(),
     );
@@ -196,8 +196,8 @@ class GeolocatorAndroid extends GeolocatorPlatform {
       positionStream = positionStream.timeout(
         timeLimit,
         onTimeout: (s) {
-          if (useSecondaryStream) {
-            _positionStream2 = null;
+          if (useForegroundNotification) {
+            _positionStreamFGN = null;
           } else {
             _positionStream = null;
           }
@@ -221,8 +221,8 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         throw error;
       },
     );
-    if (useSecondaryStream) {
-      _positionStream2 = tmpStream;
+    if (useForegroundNotification) {
+      _positionStreamFGN = tmpStream;
     } else {
       _positionStream = tmpStream;
     }

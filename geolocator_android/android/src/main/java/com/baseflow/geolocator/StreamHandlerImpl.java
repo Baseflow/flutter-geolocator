@@ -107,11 +107,6 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       return;
     }
 
-    if (foregroundLocationService == null) {
-      Log.e(TAG, "Location background service has not started correctly");
-      return;
-    }
-
     @SuppressWarnings("unchecked")
     Map<String, Object> map = (Map<String, Object>) arguments;
     boolean forceLocationManager = false;
@@ -127,6 +122,10 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
               (Map<String, Object>) map.get("foregroundNotificationConfig"));
     }
     if (foregroundNotificationOptions != null) {
+      if (foregroundLocationService == null) {
+        Log.e(TAG, "Location background service has not started correctly");
+        return;
+      }
       Log.e(TAG, "Geolocator position updates started using Android foreground service");
       foregroundLocationService.startLocationService(forceLocationManager, locationOptions, events);
       foregroundLocationService.enableBackgroundMode(foregroundNotificationOptions);

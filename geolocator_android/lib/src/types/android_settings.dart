@@ -17,7 +17,6 @@ class AndroidSettings extends LocationSettings {
     Duration? timeLimit,
     this.foregroundNotificationConfig,
     this.useMSLAltitude = false,
-    this.useSecondaryStream = false,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
@@ -75,8 +74,6 @@ class AndroidSettings extends LocationSettings {
   /// Defaults to false
   final bool useMSLAltitude;
 
-  final bool useSecondaryStream;
-
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
@@ -85,7 +82,6 @@ class AndroidSettings extends LocationSettings {
         'timeInterval': intervalDuration?.inMilliseconds,
         'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
         'useMSLAltitude': useMSLAltitude,
-        'useSecondaryStream': useSecondaryStream,
       });
   }
 }
