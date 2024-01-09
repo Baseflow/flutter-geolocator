@@ -21,11 +21,11 @@ public class LocationMapper {
 
     if (location.hasAltitude()) position.put("altitude", location.getAltitude());
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasVerticalAccuracy())
-        position.put("altitude_accuracy", location.getVerticalAccuracyMeters());
+      position.put("altitude_accuracy", location.getVerticalAccuracyMeters());
     if (location.hasAccuracy()) position.put("accuracy", (double) location.getAccuracy());
     if (location.hasBearing()) position.put("heading", (double) location.getBearing());
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasBearingAccuracy())
-        position.put("heading_accuracy", location.getBearingAccuracyDegrees());
+      position.put("heading_accuracy", location.getBearingAccuracyDegrees());
     if (location.hasSpeed()) position.put("speed", (double) location.getSpeed());
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && location.hasSpeedAccuracy())
       position.put("speed_accuracy", (double) location.getSpeedAccuracyMetersPerSecond());
