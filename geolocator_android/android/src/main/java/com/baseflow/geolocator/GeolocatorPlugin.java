@@ -189,5 +189,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
     if (foregroundLocationService != null) {
       foregroundLocationService.setActivity(null);
     }
+
+    if (pluginBinding != null) {
+      pluginBinding = null;
+    }
   }
 }

@@ -1,6 +1,10 @@
+## 4.4.2
+
+* Fixes bug where Android activity is leaked when embedded in native Android application.
+
 ## 4.4.1
 
-* Fixes a bug where `getPositionStream` caused an `java.lang.IllegalStateException: passive location requests must have an explicit minimum update interval` because `minUpdateIntervalMillis` property in location request was set to -1 by default
+* Fixes a bug where `getPositionStream` caused an `java.lang.IllegalStateException: passive location requests must have an explicit minimum update interval` because `minUpdateIntervalMillis` property in location request was set to -1 by default.
 
 ## 4.4.0
 
