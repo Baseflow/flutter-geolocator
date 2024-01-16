@@ -1,3 +1,7 @@
+## 0.2.0+1
+
+- Ensures the `Position` instance always contains a timestamp.
+
 ## 0.2.0
 
 - Bumps `geolocator_platform_interface` dependency to `^4.1.0`.
