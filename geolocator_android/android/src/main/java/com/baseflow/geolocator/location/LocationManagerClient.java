@@ -181,6 +181,7 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
 
     final LocationRequestCompat locationRequest = new LocationRequestCompat.Builder(timeInterval)
         .setMinUpdateDistanceMeters(distanceFilter)
+        .setMinUpdateIntervalMillis(timeInterval)
         .setQuality(quality)
         .build();
 
