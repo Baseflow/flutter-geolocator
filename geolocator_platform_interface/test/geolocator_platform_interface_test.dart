@@ -333,7 +333,6 @@ void main() {
 
       expect(position, isNotNull);
     });
-
   });
 }
 
