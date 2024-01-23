@@ -44,15 +44,6 @@ void main() {
       expect(isLocationServiceEnabled, true);
     });
 
-    test('generatePositionWithoutTimestamp', () async {
-      final Position? position = Position.fromMap({
-        'latitude': 0.0,
-        'longitude': 0.0,
-      });
-
-      expect(position != null, true);
-    });
-
     test('getLastKnownPosition', () async {
       final position = await Geolocator.getLastKnownPosition();
 
