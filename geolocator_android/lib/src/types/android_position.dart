@@ -28,12 +28,15 @@ class AndroidPosition extends Position {
             latitude: latitude,
             timestamp: timestamp,
             accuracy: accuracy,
-            altitude: 0.0,
-            altitudeAccuracy: 0.0,
-            heading: 0.0,
-            headingAccuracy: 0.0,
-            speed: 0.0,
-            speedAccuracy: 0.0);
+            altitude: altitude,
+            altitudeAccuracy: altitudeAccuracy,
+            heading: heading,
+            headingAccuracy: headingAccuracy,
+            speed: speed,
+            speedAccuracy: speedAccuracy,
+            floor: floor,
+            isMocked: isMocked,
+  );
 
   /// If available it returns the number of GNSS satellites.
   ///
@@ -48,40 +51,36 @@ class AndroidPosition extends Position {
   @override
   bool operator ==(Object other) {
     var areEqual = other is AndroidPosition &&
+        super == other &&
         other.satelliteCount == satelliteCount &&
         other.satellitesUsedInFix == satellitesUsedInFix;
     return areEqual;
   }
 
   @override
-  String toString() {
-    return 'Latitude: $latitude, Longitude: $longitude, Satellite count: $satelliteCount, Satellites used in fix: $satellitesUsedInFix';
-  }
-
-  @override
-  int get hashCode => satelliteCount.hashCode ^ satellitesUsedInFix.hashCode;
+  int get hashCode => satelliteCount.hashCode ^ satellitesUsedInFix.hashCode ^ super.hashCode;
 
   /// Converts the supplied [Map] to an instance of the [AndroidPosition] class.
   static AndroidPosition fromMap(dynamic message) {
     final Map<dynamic, dynamic> positionMap = message;
+    // Call the Position fromMap method so future changes to the Position class are automatically picked up.
+    final position = Position.fromMap(positionMap);
 
     return AndroidPosition(
       satelliteCount: positionMap['gnss_satellite_count'] ?? 0.0,
       satellitesUsedInFix: positionMap['gnss_satellites_used_in_fix'] ?? 0.0,
-      latitude: positionMap['latitude'],
-      longitude: positionMap['longitude'],
-      timestamp: DateTime.fromMillisecondsSinceEpoch(
-          positionMap['timestamp'].toInt(),
-          isUtc: true),
-      altitude: positionMap['altitude'] ?? 0.0,
-      altitudeAccuracy: positionMap['altitude_accuracy'] ?? 0.0,
-      accuracy: positionMap['accuracy'] ?? 0.0,
-      heading: positionMap['heading'] ?? 0.0,
-      headingAccuracy: positionMap['heading_accuracy'] ?? 0.0,
-      floor: positionMap['floor'],
-      speed: positionMap['speed'] ?? 0.0,
-      speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
-      isMocked: positionMap['is_mocked'] ?? false,
+      latitude: position.latitude,
+      longitude: position.longitude,
+      timestamp: position.timestamp,
+      accuracy: position.accuracy,
+      altitude: position.altitude,
+      altitudeAccuracy: position.altitudeAccuracy,
+      heading: position.heading,
+      headingAccuracy: position.headingAccuracy,
+      speed: position.speed,
+      speedAccuracy: position.speedAccuracy,
+      floor: position.floor,
+      isMocked: position.isMocked,
     );
   }
 

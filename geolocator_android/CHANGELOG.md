@@ -1,3 +1,7 @@
+## 4.5.1
+
+* Fixes a bug where the Position class properties were not set correctly.
+
 ## 4.5.0
 
 * Creates `AndroidPosition`, a child class of `Position` with Android specific properties.
