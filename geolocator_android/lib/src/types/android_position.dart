@@ -24,19 +24,19 @@ class AndroidPosition extends Position {
     int? floor,
     isMocked = false,
   }) : super(
-            longitude: longitude,
-            latitude: latitude,
-            timestamp: timestamp,
-            accuracy: accuracy,
-            altitude: altitude,
-            altitudeAccuracy: altitudeAccuracy,
-            heading: heading,
-            headingAccuracy: headingAccuracy,
-            speed: speed,
-            speedAccuracy: speedAccuracy,
-            floor: floor,
-            isMocked: isMocked,
-  );
+          longitude: longitude,
+          latitude: latitude,
+          timestamp: timestamp,
+          accuracy: accuracy,
+          altitude: altitude,
+          altitudeAccuracy: altitudeAccuracy,
+          heading: heading,
+          headingAccuracy: headingAccuracy,
+          speed: speed,
+          speedAccuracy: speedAccuracy,
+          floor: floor,
+          isMocked: isMocked,
+        );
 
   /// If available it returns the number of GNSS satellites.
   ///
@@ -58,7 +58,8 @@ class AndroidPosition extends Position {
   }
 
   @override
-  int get hashCode => satelliteCount.hashCode ^ satellitesUsedInFix.hashCode ^ super.hashCode;
+  int get hashCode =>
+      satelliteCount.hashCode ^ satellitesUsedInFix.hashCode ^ super.hashCode;
 
   /// Converts the supplied [Map] to an instance of the [AndroidPosition] class.
   static AndroidPosition fromMap(dynamic message) {
