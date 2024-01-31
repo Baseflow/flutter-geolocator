@@ -1,6 +1,6 @@
 ## 2.2.1
 
-- Migrate tests to support sound null safety.
+- Migrates tests to support sound null safety.
 
 ## 2.2.0
 

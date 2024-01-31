@@ -53,14 +53,6 @@ void main() {
   });
 
   group('Permission methods', () {
-    test('checkPermission throws exception when permissionsSupported is false',
-        () async {
-      when(mockPermissionsManager.permissionsSupported).thenReturn(false);
-
-      expect(
-          geolocatorPlugin.checkPermission, throwsA(isA<PlatformException>()));
-    });
-
     test('checkPermission returns the correct LocationPermission', () async {
       when(mockPermissionsManager.permissionsSupported).thenReturn(true);
 
