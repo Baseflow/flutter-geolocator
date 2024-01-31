@@ -141,9 +141,14 @@ class Position {
           'The supplied map doesn\'t contain the mandatory key `longitude`.');
     }
 
-    final timestamp = DateTime.fromMillisecondsSinceEpoch(
-        positionMap['timestamp'].toInt(),
-        isUtc: true);
+    // Assume that the timestamp is null if the map does not contain one
+    dynamic timestampInMap = positionMap['timestamp'];
+    final timestamp = timestampInMap == null
+        ? DateTime.now()
+        : DateTime.fromMillisecondsSinceEpoch(
+            timestampInMap.toInt(),
+            isUtc: true,
+          );
 
     return Position(
       latitude: positionMap['latitude'],
