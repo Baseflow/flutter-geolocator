@@ -27,11 +27,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^2.1.8
-<<<<<<< HEAD
   flutter_lints: ^3.0.1
-=======
-  flutter_lints: ">=1.0.4 <4.0.0"
->>>>>>> 49a8abd1e03658c4abdda5ed624f3df5d025f663
   flutter_test:
     sdk: flutter
   mockito: ^5.0.17
