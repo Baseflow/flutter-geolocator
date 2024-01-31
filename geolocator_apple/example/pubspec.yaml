@@ -10,9 +10,11 @@ environment:
 
 dependencies:
   baseflow_plugin_template: ^2.1.2
-  flutter:
-    sdk: flutter
 
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.1+1
+  
   geolocator_apple:
     # When depending on this package from a real application you should use:
     #   geolocator_apple: ^x.y.z
@@ -21,9 +23,10 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.1+1
+  geolocator_platform_interface: ^4.2.0
+
+  flutter:
+    sdk: flutter
 
   # The following adds the URL Launcher plugin which is used by
   # the demo application to open the links in the web browser.
@@ -32,7 +35,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.4
+  flutter_lints: ^3.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
