@@ -1,11 +1,19 @@
-import 'dart:html' as html;
 import 'dart:async';
+import 'dart:html';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:geolocator_web/src/utils.dart';
-import 'package:mockito/mockito.dart';
 
+import 'geolocator_utils_test.mocks.dart';
+
+@GenerateNiceMocks([
+  MockSpec<Geoposition>(),
+  MockSpec<PositionError>(),
+])
 void main() {
   test('toPosition should throw a exception if coords is null', () {
     final geoposition = MockGeoposition();
@@ -39,7 +47,3 @@ void main() {
     expect(convertPositionError(positionError), isA<PlatformException>());
   });
 }
-
-class MockGeoposition extends Mock implements html.Geoposition {}
-
-class MockPositionError extends Mock implements html.PositionError {}
