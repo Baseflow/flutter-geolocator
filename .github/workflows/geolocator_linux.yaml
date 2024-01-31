@@ -7,10 +7,12 @@ on:
     branches: [ main ]
     paths:
     - 'geolocator_linux/**'
+    - '.github/workflows/geolocator_linux.yaml'
   pull_request:
     branches: [ main ]
     paths:
     - 'geolocator_linux/**'
+    - '.github/workflows/geolocator_linux.yaml'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
