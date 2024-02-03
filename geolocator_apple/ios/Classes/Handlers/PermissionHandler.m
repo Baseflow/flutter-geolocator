@@ -72,7 +72,7 @@
   if ([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"] != nil) {
     [locationManager requestWhenInUseAuthorization];
   }
-#if PERMISSION_LOCATION_ALWAYS
+#if !BYPASS_PERMISSION_LOCATION_ALWAYS
   else if ([self containsLocationAlwaysDescription]) {
     [locationManager requestAlwaysAuthorization];
   }
@@ -91,7 +91,7 @@
   }
 }
 
-#if PERMISSION_LOCATION_ALWAYS
+#if !BYPASS_PERMISSION_LOCATION_ALWAYS
 - (BOOL) containsLocationAlwaysDescription {
   BOOL containsAlwaysDescription = NO;
   if (@available(iOS 11.0, *)) {
