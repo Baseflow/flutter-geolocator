@@ -1,3 +1,11 @@
+## 2.3.5
+
+* Previously the plugin filtered out negative values for heading and/or heading accuracy. Now the plugin is returning the heading and/or the heading accuracy even if the they have a negative value (invalid), so that the developer can use it and decide what to do with it.
+
+## 2.3.4
+
+* Allows the ARM64 architecture as a valid IPhone simulator architecture.
+
 ## 2.3.3
 
 * Ensures the `[CLLocationManager locationServicesEnabled]` message is called

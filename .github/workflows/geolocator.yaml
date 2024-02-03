@@ -9,10 +9,12 @@ on:
     branches: [ main ]
     paths:
     - 'geolocator/**'
+    - '.github/workflows/geolocator.yaml'
   pull_request:
     branches: [ main ]
     paths:
     - 'geolocator/**'
+    - '.github/workflows/geolocator.yaml'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -29,10 +31,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Ensures JAVA 11 is installed on the build agent.
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '11'
@@ -71,12 +73,3 @@ jobs:
       - name: Run unit tests
         run: flutter test --coverage
         working-directory: ${{env.source-directory}}
-
-      # Upload code coverage information
-      - uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{env.source-directory}}/coverage/lcov.info # optional
-          name: geolocator (App Facing Package) # optional
-          flags: unittests # optional
-          fail_ci_if_error: true

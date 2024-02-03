@@ -1,3 +1,16 @@
+## 4.5.1
+
+* Fixes a bug where the Position class properties were not set correctly.
+
+## 4.5.0
+
+* Creates `AndroidPosition`, a child class of `Position` with Android specific properties.
+* Adds the `satelliteCount` and `satellitesUsedInFix` to `AndroidPosition`.
+
+## 4.4.1
+
+* Fixes a bug where `getPositionStream` caused an `java.lang.IllegalStateException: passive location requests must have an explicit minimum update interval` because `minUpdateIntervalMillis` property in location request was set to -1 by default
+
 ## 4.4.0
 
 - Adds `color` to `ForegroundNotificationConfig` to set the color of the notification icon.

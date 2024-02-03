@@ -1,3 +1,7 @@
+## 2.2.1
+
+- Migrates tests to support sound null safety.
+
 ## 2.2.0
 
 - Exposes altitude accuracy field in `Position` object.

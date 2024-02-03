@@ -9,10 +9,12 @@ on:
     branches: [ main ]
     paths:
     - 'geolocator_apple/**'
+    - '.github/workflows/geolocator_apple.yaml'
   pull_request:
     branches: [ main ]
     paths:
     - 'geolocator_apple/**'
+    - '.github/workflows/geolocator_apple.yaml'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -29,7 +31,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       # Make sure the stable version of Flutter is available
       - uses: subosito/flutter-action@v2
