@@ -1,3 +1,7 @@
+## 4.5.2
+
+* Fixes a bug where the Android `activity` is leaked when the `activiy` is detached from the Flutter application. 
+
 ## 4.5.1
 
 * Fixes a bug where the Position class properties were not set correctly.

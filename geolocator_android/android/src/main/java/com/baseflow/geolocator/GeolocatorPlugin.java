@@ -88,7 +88,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-
     Log.d(TAG, "Attaching Geolocator to activity");
     this.pluginBinding = binding;
     registerListeners();
