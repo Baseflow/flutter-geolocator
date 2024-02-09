@@ -116,6 +116,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   }
 
   @override
+  Stream<ServiceStatus> getServiceStatusStream() =>
+      throw _unsupported('getServiceStatusStream');
+
+  @override
   Future<bool> openAppSettings() => throw _unsupported('openAppSettings');
 
   @override
