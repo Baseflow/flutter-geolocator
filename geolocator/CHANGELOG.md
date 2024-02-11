@@ -1,6 +1,6 @@
 ## 10.1.1
 
-- On iOS, adds option to bypass the request for permission to update location in the background (which can attract scrutiny from Apple upon app submission). To bypass, set the preprocessor macro BYPASS_PERMISSION_LOCATION_ALWAYS to 1 in XCode  
+- Adds a description to the README on how to add the `BYPASS_PERMISSION_LOCATION_ALWAYS` preprocessor to bypass the need for adding the `NSLocationAlwaysUsageDescription` to the `Info.plist`.
 
 ## 10.1.0
 
