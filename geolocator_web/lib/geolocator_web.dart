@@ -143,10 +143,9 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     }
   }
 
-  PlatformException _unsupported(String method) {
-    return PlatformException(
-      code: 'UNSUPPORTED_OPERATION',
-      message: '$method is not supported on the web platform.',
+  UnsupportedError _unsupported(String method) {
+    return UnsupportedError(
+      '$method is not supported on the web platform.',
     );
   }
 }

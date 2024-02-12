@@ -134,11 +134,12 @@ The second key (in this example called `YourPurposeKey`) should match the purpos
 
 To use the Geolocator plugin on the web you need to be using Flutter 1.20 or higher. Flutter will automatically add the endorsed [geolocator_web]() package to your application when you add the `geolocator: ^6.2.0` dependency to your `pubspec.yaml`.
 
-The following methods of the geolocator API are not supported on the web and will result in a `PlatformException` with the code `UNSUPPORTED_OPERATION`:
+The following methods of the geolocator API are not supported on the web and will result in a `UnsupportedError`:
 
 - `getLastKnownPosition({ bool forceAndroidLocationManager = true })`
 - `openAppSettings()`
 - `openLocationSettings()`
+- `getServiceStatusStream()`
 
 **NOTE**
 
