@@ -86,7 +86,7 @@ On iOS you'll need to add the following entry to your Info.plist file (located u
 If you don't need to receive updates when your app is in the background, then add a compiler flag as follows: in XCode, click on Pods, choose the Target 'geolocator_apple', choose Build Settings, in the search box look for 'Preprocessor Macros' then add the `BYPASS_PERMISSION_LOCATION_ALWAYS=1` flag.
 Setting this flag prevents your app from requiring the `NSLocationAlwaysAndWhenInUseUsageDescription` entry in Info.plist, and avoids questions from Apple when submitting your app. 
 
-You can also have this flag be set automatically by adding to the `Podfile` for your application:
+You can also have the flag set automatically by adding the following to the `ios/Podfile` of your application:
 ```agsl
 post_install do |installer|
   installer.pods_project.targets.each do |target|
