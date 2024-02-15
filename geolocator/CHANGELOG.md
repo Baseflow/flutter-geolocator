@@ -1,3 +1,7 @@
+## 11.0.0
+
+- **BREAKING CHANGE:** Updates dependency on geolocator_web to version [3.0.0](https://pub.dev/packages/geolocator_web/changelog).
+
 ## 10.1.1
 
 - Adds a description to the README on how to add the `BYPASS_PERMISSION_LOCATION_ALWAYS` preprocessor to bypass the need for adding the `NSLocationAlwaysUsageDescription` to the `Info.plist`.
