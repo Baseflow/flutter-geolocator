@@ -1,3 +1,7 @@
+## 10.1.1
+
+- Adds a description to the README on how to add the `BYPASS_PERMISSION_LOCATION_ALWAYS` preprocessor to bypass the need for adding the `NSLocationAlwaysUsageDescription` to the `Info.plist`.
+
 ## 10.1.0
 
 - Includes `altitudeAccuracy` and `headingAccuracy` in `Position`.
