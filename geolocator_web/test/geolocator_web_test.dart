@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_web/geolocator_web.dart';
 import 'package:geolocator_web/src/geolocation_manager.dart';
@@ -117,17 +116,22 @@ void main() {
   group('Unsupported exceptions', () {
     test('getLastKnownPosition throws unsupported exception', () async {
       expect(geolocatorPlugin.getLastKnownPosition,
-          throwsA(isA<PlatformException>()));
+          throwsA(isA<UnsupportedError>()));
     });
 
     test('openAppSettings throws unsupported exception', () async {
       expect(
-          geolocatorPlugin.openAppSettings, throwsA(isA<PlatformException>()));
+          geolocatorPlugin.openAppSettings, throwsA(isA<UnsupportedError>()));
     });
 
     test('openLocationSettings throws unsupported exception', () async {
       expect(geolocatorPlugin.openLocationSettings,
-          throwsA(isA<PlatformException>()));
+          throwsA(isA<UnsupportedError>()));
+    });
+
+    test('getServiceStatusStream throws unsupported exception', () async {
+      expect(geolocatorPlugin.getServiceStatusStream,
+          throwsA(isA<UnsupportedError>()));
     });
   });
 }

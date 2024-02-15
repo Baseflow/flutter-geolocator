@@ -1,3 +1,8 @@
+## 3.0.0
+
+**BREAKING CHANGE:**
+- `getServiceStatusStream` on web returns a PlatformException i.s.o. UnimplementedError. As the concept of location service doesn't exist on the web platform.
+
 ## 2.2.1
 
 - Migrates tests to support sound null safety.
