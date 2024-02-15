@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'src/geolocation_manager.dart';
