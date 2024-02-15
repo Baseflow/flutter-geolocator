@@ -117,17 +117,22 @@ void main() {
   group('Unsupported exceptions', () {
     test('getLastKnownPosition throws unsupported exception', () async {
       expect(geolocatorPlugin.getLastKnownPosition,
-          throwsA(isA<PlatformException>()));
+          throwsA(isA<UnsupportedError>()));
     });
 
     test('openAppSettings throws unsupported exception', () async {
       expect(
-          geolocatorPlugin.openAppSettings, throwsA(isA<PlatformException>()));
+          geolocatorPlugin.openAppSettings, throwsA(isA<UnsupportedError>()));
     });
 
     test('openLocationSettings throws unsupported exception', () async {
       expect(geolocatorPlugin.openLocationSettings,
-          throwsA(isA<PlatformException>()));
+          throwsA(isA<UnsupportedError>()));
+    });
+
+    test('getServiceStatusStream throws unsupported exception', () async {
+      expect(geolocatorPlugin.getServiceStatusStream,
+          throwsA(isA<UnsupportedError>()));
     });
   });
 }
