@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_web/geolocator_web.dart';
 import 'package:geolocator_web/src/geolocation_manager.dart';
