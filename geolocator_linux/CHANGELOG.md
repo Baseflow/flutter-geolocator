@@ -1,3 +1,7 @@
+## 0.2.0+2
+
+- Updates dependency on package_info_plus to version 5.0.1.
+
 ## 0.2.0+1
 
 - Ensures the `Position` instance always contains a timestamp.
