@@ -141,8 +141,12 @@ winrt::fire_and_forget GeolocatorPlugin::RequestAccessAsync(std::unique_ptr<Meth
       result->Success(EncodableValue((int)LocationPermission::Denied));
     else if(access == GeolocationAccessStatus::Unspecified)
       result->Success(EncodableValue((int)LocationPermission::DeniedForever));
-  } catch(const std::exception& ex) {
+  } 
+  catch(const std::exception& ex) {
     result->Error(ErrorCodeToString(ErrorCode::PermissionDefinitionsNotFound), ex.what());
+  }
+  catch (...) {
+    result->Error(ErrorCodeToString(ErrorCode::UnknownError), "RequestAccess failed. Check the Geolocation Service is running.");
   }
 }
 
