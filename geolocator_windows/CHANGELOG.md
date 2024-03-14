@@ -1,3 +1,7 @@
+## 0.2.3
+
+* Fixes crash under Windows when RequestAcess is called while the Geolocation Service is disabled. (#1455)
+
 ## 0.2.2
 
 * Fixes crash under Windows when getCurrentPosition method is called. (#1240)
