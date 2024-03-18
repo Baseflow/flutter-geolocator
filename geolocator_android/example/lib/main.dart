@@ -298,12 +298,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         useMSLAltitude: true,
         foregroundNotificationConfig: const ForegroundNotificationConfig(
           // Explain to the user why we are showing this notification.
-          notificationText:
-              "Example app will continue to receive your location even when you aren't using it",
-          // Tell the user what we are doing.
-          notificationTitle: "Running in Background",
           // Keep the system awake to receive background location information.
-          enableWakeLock: false,
+          enableWakeLock: true,
           // Give the notification an amber color.
           color: Colors.amber,
         ),
