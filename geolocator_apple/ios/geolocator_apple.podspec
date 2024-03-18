@@ -21,4 +21,5 @@ Pod::Spec.new do |s|
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386'}
+  s.resource_bundles = {'geolocator_apple_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 end
