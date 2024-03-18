@@ -1,3 +1,8 @@
+## 4.5.3
+
+* Adds the `notificationChannelName` field to the `ForegroundNotificationConfig` class, allowing to override the channel name.
+* Reverts `com.google.android.gms:play-services-location` to version `21.0.1`. Version `21.1.0` forces users to update AGP to version 8.0.0 and Kotlin to 1.9.0 which is not inline with stable Flutter version.
+
 ## 4.5.2
 
 * Fixes a bug where the Android `activity` is leaked when the `activiy` is detached from the Flutter application. 

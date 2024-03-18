@@ -13,6 +13,8 @@ public class ForegroundNotificationOptions {
     @NonNull
     private final String notificationText;
     @NonNull
+    private final String notificationChannelName;
+    @NonNull
     private final AndroidIconResource notificationIcon;
     private final boolean enableWifiLock;
     private final boolean enableWakeLock;
@@ -28,6 +30,7 @@ public class ForegroundNotificationOptions {
 
     final AndroidIconResource notificationIcon = AndroidIconResource.parseArguments((Map<String, Object>)arguments.get("notificationIcon"));
     final String notificationTitle = (String) arguments.get("notificationTitle");
+    final String notificationChannelName = (String) arguments.get("notificationChannelName");
     final String notificationText = (String) arguments.get("notificationText");
     final Boolean enableWifiLock = (Boolean) arguments.get("enableWifiLock");
     final Boolean enableWakeLock = (Boolean) arguments.get("enableWakeLock");
@@ -42,6 +45,7 @@ public class ForegroundNotificationOptions {
     return new ForegroundNotificationOptions(
             notificationTitle,
             notificationText,
+            notificationChannelName,
             notificationIcon,
             enableWifiLock,
             enableWakeLock,
@@ -52,6 +56,7 @@ public class ForegroundNotificationOptions {
     private ForegroundNotificationOptions(
         @NonNull String notificationTitle,
         @NonNull String notificationText,
+        @NonNull String notificationChannelName,
         @NonNull AndroidIconResource notificationIcon,
         boolean enableWifiLock,
         boolean enableWakeLock,
@@ -59,6 +64,7 @@ public class ForegroundNotificationOptions {
         @Nullable Integer color) {
         this.notificationTitle = notificationTitle;
         this.notificationText = notificationText;
+        this.notificationChannelName = notificationChannelName;
         this.notificationIcon = notificationIcon;
         this.enableWifiLock = enableWifiLock;
         this.enableWakeLock = enableWakeLock;
@@ -74,6 +80,11 @@ public class ForegroundNotificationOptions {
     @NonNull
     public String getNotificationText() {
         return notificationText;
+    }
+
+    @NonNull
+    public String getNotificationChannelName() {
+        return notificationChannelName;
     }
 
     @NonNull
