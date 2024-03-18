@@ -1,3 +1,7 @@
+## 2.3.7
+
+* Adds privacy manifest.
+
 ## 2.3.6
 
 * Adds option to bypass the request for permission to update location in the background (which can attract scrutiny from Apple upon app submission). To bypass, set the preprocessor macro `BYPASS_PERMISSION_LOCATION_ALWAYS` to 1 in XCode.
