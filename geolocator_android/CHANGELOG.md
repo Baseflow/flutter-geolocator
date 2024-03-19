@@ -1,3 +1,7 @@
+## 4.5.3+1
+
+* Reverts `androidx.core:core` to version `1.9.0`.
+
 ## 4.5.3
 
 * Adds the `notificationChannelName` field to the `ForegroundNotificationConfig` class, allowing to override the channel name.
