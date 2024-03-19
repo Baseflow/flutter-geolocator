@@ -33,9 +33,9 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   @Nullable private GeolocationManager geolocationManager;
   @Nullable private LocationClient locationClient;
 
-  public StreamHandlerImpl(PermissionManager permissionManager) {
+  public StreamHandlerImpl(PermissionManager permissionManager, GeolocationManager geolocationManager) {
     this.permissionManager = permissionManager;
-    geolocationManager = new GeolocationManager();
+    this.geolocationManager = geolocationManager;
   }
 
   public void setForegroundLocationService(
