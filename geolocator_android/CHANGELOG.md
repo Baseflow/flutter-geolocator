@@ -1,3 +1,7 @@
+## 4.5.4
+
+* Fixes a bug where the `getPositionStream` was not informed of the location service resolution result. This resulted in a stream that was kept open indefinitely.
+
 ## 4.5.3+1
 
 * Reverts `androidx.core:core` to version `1.9.0`.

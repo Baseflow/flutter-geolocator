@@ -50,7 +50,6 @@ public class GeolocatorLocationService extends Service {
   public void onCreate() {
     super.onCreate();
     Log.d(TAG, "Creating service.");
-    geolocationManager = new GeolocationManager();
   }
 
   @Override
@@ -175,6 +174,10 @@ public class GeolocatorLocationService extends Service {
 
   public void setActivity(@Nullable Activity activity) {
     this.activity = activity;
+  }
+
+  public void setGeolocationManager(@Nullable GeolocationManager geolocationManager) {
+      this.geolocationManager = geolocationManager;
   }
 
   private void releaseWakeLocks() {
