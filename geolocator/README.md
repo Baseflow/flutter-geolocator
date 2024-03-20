@@ -62,7 +62,7 @@ On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
 
-Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission) if you want to continue receiving updates even when your App is running in the background (note that the geolocator plugin doesn't support receiving and processing location updates while running in the background):
+Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission) if you want to continue receiving updates even when your App is running in the background:
 
 ``` xml
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
