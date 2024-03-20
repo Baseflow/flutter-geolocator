@@ -228,7 +228,7 @@ Future<Position> _determinePosition() async {
 To query the current location of the device simply make a call to the `getCurrentPosition` method. You can finetune the results by specifying the following parameters:
 
 - `desiredAccuracy`: the accuracy of the location data that your app wants to receive;
-- `timeLimit`: the maximum amount of time allowed to acquire the current location. When the time limit is passed a `TimeOutException` will be thrown and the call will be cancelled. By default no limit is configured.
+- `timeLimit`: the maximum amount of time allowed to acquire the current location. When the time limit is passed a `TimeoutException` will be thrown and the call will be cancelled. By default no limit is configured.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
@@ -252,7 +252,7 @@ To listen for location changes you can call the `getPositionStream` to receive s
 
 - `accuracy`: the accuracy of the location data that your app wants to receive;
 - `distanceFilter`: the minimum distance (measured in meters) a device must move horizontally before an update event is generated;
-- `timeLimit`: the maximum amount of time allowed between location updates. When the time limit is passed a `TimeOutException` will be thrown and the stream will be cancelled. By default no limit is configured.
+- `timeLimit`: the maximum amount of time allowed between location updates. When the time limit is passed a `TimeoutException` will be thrown and the stream will be cancelled. By default no limit is configured.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
