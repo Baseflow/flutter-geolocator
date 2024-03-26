@@ -324,6 +324,15 @@ void main() {
 
       expect(bearing, -90.0);
     });
+
+    test('generate Position object from map without timestamp', () async {
+      final Position position = Position.fromMap({
+        'latitude': 0.0,
+        'longitude': 0.0,
+      });
+
+      expect(position, isNotNull);
+    });
   });
 }
 

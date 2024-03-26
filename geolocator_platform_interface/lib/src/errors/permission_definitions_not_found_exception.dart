@@ -1,5 +1,5 @@
 /// An exception thrown when the required platform specific permission
-/// definications could not be found (e.g. in the AndroidManifest.xml file on
+/// definitions could not be found (e.g. in the AndroidManifest.xml file on
 /// Android or in the Info.plist file on iOS).
 class PermissionDefinitionsNotFoundException implements Exception {
   /// Constructs the [PermissionDefinitionsNotFoundException]

@@ -1,3 +1,11 @@
+## 4.2.2
+
+- Updates the documentation of the `getServiceStatusStream` method as it nolonger throws a `UnimplementedError` on web.
+
+## 4.2.1
+
+- Ensures that `timestamp` is set to current date and time if platform implementations return a `null` value.
+
 ## 4.2.0
 
 - Replaces an optional DateTime? `timestamp` in `Position` object for an NonNull DateTime `timestamp`. 

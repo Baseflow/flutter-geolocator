@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'src/geolocation_manager.dart';
@@ -116,6 +115,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
   }
 
   @override
+  Stream<ServiceStatus> getServiceStatusStream() =>
+      throw _unsupported('getServiceStatusStream');
+
+  @override
   Future<bool> openAppSettings() => throw _unsupported('openAppSettings');
 
   @override
@@ -139,10 +142,9 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     }
   }
 
-  PlatformException _unsupported(String method) {
-    return PlatformException(
-      code: 'UNSUPPORTED_OPERATION',
-      message: '$method is not supported on the web platform.',
+  UnsupportedError _unsupported(String method) {
+    return UnsupportedError(
+      '$method is not supported on the web platform.',
     );
   }
 }

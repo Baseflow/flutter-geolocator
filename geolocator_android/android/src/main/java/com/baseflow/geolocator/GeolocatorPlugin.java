@@ -70,7 +70,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
             this.permissionManager, this.geolocationManager, this.locationAccuracyManager);
     methodCallHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
-    streamHandler = new StreamHandlerImpl(this.permissionManager, "flutter.baseflow.com/geolocator_updates_android");
+    streamHandler = new StreamHandlerImpl(this.permissionManager, this.geolocationManager, "flutter.baseflow.com/geolocator_updates_android");
     streamHandler.startListening(
         flutterPluginBinding.getApplicationContext(), flutterPluginBinding.getBinaryMessenger());
     streamHandlerFGN = new StreamHandlerImpl(this.permissionManager, "flutter.baseflow.com/geolocator_updates_android_fgn");
@@ -93,7 +93,6 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-
     Log.d(TAG, "Attaching Geolocator to activity");
     this.pluginBinding = binding;
     registerListeners();
@@ -173,6 +172,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   private void initialize(GeolocatorLocationService service) {
     Log.d(TAG, "Initializing Geolocator services");
     foregroundLocationService = service;
+    foregroundLocationService.setGeolocationManager(geolocationManager);
     foregroundLocationService.flutterEngineConnected();
 
     if (streamHandlerFGN != null) {

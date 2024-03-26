@@ -8,10 +8,12 @@ on:
     branches: [ main ]
     paths:
     - 'geolocator_web/**'
+    - '.github/workflows/geolocator_web.yaml'
   pull_request:
     branches: [ main ]
     paths:
     - 'geolocator_web/**'
+    - '.github/workflows/geolocator_web.yaml'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -28,7 +30,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       # Make sure the stable version of Flutter is available
       - uses: subosito/flutter-action@v2
@@ -54,3 +56,7 @@ jobs:
       - name: Run Web build
         run: flutter build web --release
         working-directory: ${{env.example-directory}}
+
+      - name: Run Web Tests
+        run: flutter test --platform chrome
+        working-directory: ${{env.source-directory}}

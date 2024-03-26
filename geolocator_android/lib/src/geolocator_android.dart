@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:geolocator_android/src/types/android_settings.dart';
+import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:uuid/uuid.dart';
 
@@ -90,7 +91,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
       final positionMap =
           await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
 
-      return positionMap != null ? Position.fromMap(positionMap) : null;
+      return positionMap != null ? AndroidPosition.fromMap(positionMap) : null;
     } on PlatformException catch (e) {
       final error = _handlePlatformException(e);
 
@@ -130,7 +131,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
       }
 
       final positionMap = await positionFuture;
-      return Position.fromMap(positionMap);
+      return AndroidPosition.fromMap(positionMap);
     } on TimeoutException {
       final parameters = <String, dynamic>{
         'requestId': requestId,
@@ -213,7 +214,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
 
     final Stream<Position> tmpStream = positionStream
         .map<Position>((dynamic element) =>
-            Position.fromMap(element.cast<String, dynamic>()))
+            AndroidPosition.fromMap(element.cast<String, dynamic>()))
         .handleError(
       (error) {
         if (error is PlatformException) {
