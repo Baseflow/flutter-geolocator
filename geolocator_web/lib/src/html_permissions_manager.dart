@@ -1,7 +1,6 @@
-import 'dart:html' as html;
-
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
-
+import 'package:web/web.dart' as web;
+import 'dart:js_interop';
 import 'permissions_manager.dart';
 import 'utils.dart';
 
@@ -9,10 +8,10 @@ import 'utils.dart';
 /// [html.Permissions] class.
 class HtmlPermissionsManager implements PermissionsManager {
   static const _permissionQuery = {'name': 'geolocation'};
-  final html.Permissions? _permissions;
+  final web.Permissions? _permissions;
 
   /// Creates a new instance of the HtmlPermissionsManager class.
-  HtmlPermissionsManager() : _permissions = html.window.navigator.permissions;
+  HtmlPermissionsManager() : _permissions = web.window.navigator.permissions;
 
   @override
   bool get permissionsSupported => _permissions != null;
@@ -23,12 +22,10 @@ class HtmlPermissionsManager implements PermissionsManager {
       return LocationPermission.unableToDetermine;
     }
 
-    final html.PermissionStatus status = await _permissions!.query(
-      _permissionQuery,
-    );
+    // navigator.permissions.query({ name: "geolocation" })
+    final web.PermissionStatus? status =
+        await _permissions?.query(_permissionQuery.jsify() as JSObject).toDart;
 
-    return status.state != null
-        ? toLocationPermission(status.state)
-        : LocationPermission.denied;
+    return toLocationPermission(status?.state);
   }
 }

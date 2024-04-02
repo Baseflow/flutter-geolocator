@@ -1,28 +1,26 @@
+@TestOn('browser')
+library;
+
 import 'dart:async';
-import 'dart:html';
+import 'dart:js_interop';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:geolocator_web/src/utils.dart';
+import 'package:web/web.dart' as web;
 
-import 'geolocator_utils_test.mocks.dart';
+@JSExport()
+class MockGeolocationPositionError {
+  final int code;
+  final String message;
 
-@GenerateNiceMocks([
-  MockSpec<Geoposition>(),
-  MockSpec<PositionError>(),
-])
+  MockGeolocationPositionError({required this.code, required this.message});
+}
+
+typedef GeolocationPosition = web.GeolocationPosition;
+
 void main() {
-  test('toPosition should throw a exception if coords is null', () {
-    final geoposition = MockGeoposition();
-    when(geoposition.coords).thenReturn(null);
-
-    expect(
-        () => toPosition(geoposition), throwsA(isA<PositionUpdateException>()));
-  });
-
   test('toLocationPermission returns the correct LocationPermission', () {
     expect(toLocationPermission('granted'), LocationPermission.whileInUse);
     expect(toLocationPermission('prompt'), LocationPermission.denied);
@@ -31,19 +29,20 @@ void main() {
   });
 
   test('convertPositionError returns the correct exception', () {
-    final positionError = MockPositionError();
+    web.GeolocationPositionError createError(int code) {
+      return createJSInteropWrapper<MockGeolocationPositionError>(
+              MockGeolocationPositionError(code: code, message: 'message'))
+          as web.GeolocationPositionError;
+    }
 
-    when(positionError.code).thenReturn(1);
     expect(
-        convertPositionError(positionError), isA<PermissionDeniedException>());
+        convertPositionError(createError(1)), isA<PermissionDeniedException>());
 
-    when(positionError.code).thenReturn(2);
-    expect(convertPositionError(positionError), isA<PositionUpdateException>());
+    expect(
+        convertPositionError(createError(2)), isA<PositionUpdateException>());
 
-    when(positionError.code).thenReturn(3);
-    expect(convertPositionError(positionError), isA<TimeoutException>());
+    expect(convertPositionError(createError(3)), isA<TimeoutException>());
 
-    when(positionError.code).thenReturn(4);
-    expect(convertPositionError(positionError), isA<PlatformException>());
+    expect(convertPositionError(createError(4)), isA<PlatformException>());
   });
 }
