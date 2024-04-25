@@ -44,7 +44,7 @@ public class NmeaClient {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       nmeaMessageListener =
           (message, timestamp) -> {
-            if (message.startsWith("$GPGGA")) {
+            if (message.trim().matches("^\\$..GGA.*$")) {
               lastNmeaMessage = message;
               lastNmeaMessageTime = Calendar.getInstance();
             }
@@ -117,7 +117,7 @@ public class NmeaClient {
 
         // Parse altitude above sea level, Detailed description of NMEA string here
         // http://aprs.gids.nl/nmea/#gga
-        if (type.startsWith("$GPGGA") && tokens.length > 9) {
+        if (message.trim().matches("^\\$..GGA.*$") && tokens.length > 9) {
           if (!tokens[9].isEmpty()) {
             double mslAltitude = Double.parseDouble(tokens[9]);
             if (location.getExtras() == null) {

@@ -67,6 +67,7 @@ class FusedLocationClient implements LocationClient {
             }
 
             Location location = locationResult.getLastLocation();
+            location.getExtras().putBoolean(LocationOptions.USE_MSL_ALTITUDE_EXTRA, locationOptions.useMSLAltitude);
             nmeaClient.enrichExtrasWithNmea(location);
             positionChangedCallback.onPositionChanged(location);
           }

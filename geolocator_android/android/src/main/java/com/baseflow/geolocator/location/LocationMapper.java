@@ -45,6 +45,13 @@ public class LocationMapper {
             location.getExtras().getDouble(NmeaClient.GNSS_SATELLITES_USED_IN_FIX_EXTRA);
         position.put("gnss_satellites_used_in_fix", mslSatellitesUsedInFix);
       }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && location.hasMslAltitude())
+        {
+            Double mslAltitude = location.getMslAltitude();
+            position.put("altitude", mslAltitude);
+            Double mslAccuracy = location.getMslAccuracy();
+            position.put("altitude_accuracy", mslAccuracy);
+        }
     }
     return position;
   }
