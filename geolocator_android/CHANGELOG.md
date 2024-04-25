@@ -1,3 +1,11 @@
+## 4.6.0
+
+* Adds support to read NMEA messages from other satellites constellations.
+* Read the MSL altitude directly from the Android location starting with API 34.
+* Always listen to NMEA message to get GPS position fix data.
+* Updates `com.google.android.gms:play-services-location` to version `21.2.0`.
+* Updates `androidx.core:core` to version `1.13.0`.
+
 ## 4.5.4
 
 * Fixes a bug where the `getPositionStream` was not informed of the location service resolution result. This resulted in a stream that was kept open indefinitely.
