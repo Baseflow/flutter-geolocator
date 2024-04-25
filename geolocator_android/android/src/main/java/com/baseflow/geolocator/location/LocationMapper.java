@@ -47,10 +47,12 @@ public class LocationMapper {
       }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && location.hasMslAltitude())
         {
-            Double mslAltitude = location.getMslAltitude();
+            double mslAltitude = location.getMslAltitudeMeters();
             position.put("altitude", mslAltitude);
-            Double mslAccuracy = location.getMslAccuracy();
-            position.put("altitude_accuracy", mslAccuracy);
+            if (location.hasMslAltitudeAccuracy()) {
+                float mslAccuracy = location.getMslAltitudeAccuracyMeters();
+                position.put("altitude_accuracy", mslAccuracy);
+            }
         }
     }
     return position;
