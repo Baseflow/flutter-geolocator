@@ -3,7 +3,7 @@ package com.baseflow.geolocator.location;
 import java.util.Map;
 
 public class LocationOptions {
-  public static final String USE_MSL_ALTITUDE_EXTRA = "geolocator_mslAltitude";
+  public static final String USE_MSL_ALTITUDE_EXTRA = "geolocator_use_mslAltitude";
 
   private final LocationAccuracy accuracy;
   private final long distanceFilter;
