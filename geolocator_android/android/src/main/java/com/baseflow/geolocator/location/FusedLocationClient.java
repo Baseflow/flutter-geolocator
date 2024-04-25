@@ -72,10 +72,10 @@ class FusedLocationClient implements LocationClient {
               return;
             }
             if (location.getExtras() == null) {
-                location.setExtras(Bundle.EMPTY);
+              location.setExtras(Bundle.EMPTY);
             }
-            if(locationOptions != null) {
-                location.getExtras().putBoolean(LocationOptions.USE_MSL_ALTITUDE_EXTRA, locationOptions.isUseMSLAltitude());
+            if (locationOptions != null) {
+              location.getExtras().putBoolean(LocationOptions.USE_MSL_ALTITUDE_EXTRA, locationOptions.isUseMSLAltitude());
             }
 
             nmeaClient.enrichExtrasWithNmea(location);
