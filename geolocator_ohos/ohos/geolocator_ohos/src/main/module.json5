@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "geolocator_ohos",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}

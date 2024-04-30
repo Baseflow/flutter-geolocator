@@ -1,0 +1,10 @@
+
+/node_modules
+/oh_modules
+/.preview
+/build
+/.cxx
+/.test
+/har
+/libs
+oh-package-lock.json5
