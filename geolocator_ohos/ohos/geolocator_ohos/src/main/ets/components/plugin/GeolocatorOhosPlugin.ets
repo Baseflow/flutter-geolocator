@@ -20,6 +20,7 @@ import {
 import { PermissionHandler } from './handlers/method_handler/PermissionHandler';
 import { geoLocationManager } from '@kit.LocationKit';
 import { PositionHandler } from './handlers/method_handler/PositionHandler';
+import { GeocoderHandler } from './handlers/method_handler/GeocoderHandler';
 
 
 /** GeolocatorOhosPlugin **/
@@ -116,28 +117,45 @@ export default class GeolocatorOhosPlugin implements FlutterPlugin, MethodCallHa
       case "getLastKnownPosition":
         result.success(JSON.stringify(await PositionHandler.getLastLocation()));
         break;
-      case "openAppSettings":
-        {
-          if (this.context == null || this.uiContext == null) {
-            result.error('100', 'context and uiContext are null', 'They should not be null');
-            return;
-          }
-          let applicationInfo = this.context!.applicationInfo;
-          let wantInfo: Want = {
-            bundleName: 'com.huawei.hmos.settings',
-            abilityName: 'com.huawei.hmos.settings.MainAbility',
-            uri: 'application_info_entry',
-            parameters: {
-              pushParams: applicationInfo.name // 打开指定应用的详情页面
-            }
-          }
-          this.uiContext!.startAbility(wantInfo).then(() => {
-            result.success(true);
-          }).catch((err: BusinessError) => {
-            console.error(`openAppSettings failed, code is ${err.code}, message is ${err.message}`);
-            result.error(err.code.toString(), 'openAppSettings failed', err.message);
-          })
+      case "openAppSettings": {
+        if (this.context == null || this.uiContext == null) {
+          result.error('100', 'context and uiContext are null', 'They should not be null');
+          return;
         }
+        let applicationInfo = this.context!.applicationInfo;
+        let wantInfo: Want = {
+          bundleName: 'com.huawei.hmos.settings',
+          abilityName: 'com.huawei.hmos.settings.MainAbility',
+          uri: 'application_info_entry',
+          parameters: {
+            pushParams: applicationInfo.name // 打开指定应用的详情页面
+          }
+        }
+        this.uiContext!.startAbility(wantInfo).then(() => {
+          result.success(true);
+        }).catch((err: BusinessError) => {
+          console.error(`openAppSettings failed, code is ${err.code}, message is ${err.message}`);
+          result.error(err.code.toString(), 'openAppSettings failed', err.message);
+        })
+      }
+        break;
+
+      case "isGeocoderAvailable":
+        result.success(GeocoderHandler.isGeocoderAvailable());
+        break;
+      case "getAddressesFromLocation": {
+        let list = await GeocoderHandler.getAddressesFromLocation(call.args);
+        result.success(list.map<String>(e => JSON.stringify(e)));
+      }
+        break;
+      case "getAddressesFromLocationName": {
+        let list = await GeocoderHandler.getAddressesFromLocationName(call.args);
+        result.success(list.map<String>(e => JSON.stringify(e)));
+      }
+        break;
+      case "getCountryCode":
+        let countryCode = await geoLocationManager.getCountryCode();
+        result.success(JSON.stringify(countryCode));
         break;
       default:
         result.notImplemented()

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator_ohos/geolocator_ohos.dart';
 
@@ -192,6 +193,35 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         scenario: LocationRequestScenario.unset,
       ),
     );
+
+    CountryCode? countryCode= await geolocatorOhos.getCountryCode();
+    if (kDebugMode) {
+      print('CountryCode: $countryCode\n');
+    }
+
+    // ohos only
+    if (await geolocatorOhos.isGeocoderAvailable()) {
+      var addresses = await geolocatorOhos.getAddressesFromLocation(
+        ReverseGeoCodeRequest(
+          latitude: position.latitude,
+          longitude: position.longitude,
+          locale: 'zh',
+          maxItems: 1,
+        ),
+      );
+
+      for (var address in addresses) {
+        if (kDebugMode) {
+          print('ReverseGeoCode address:$address\n');
+        }
+        var position = await geolocatorOhos.getAddressesFromLocationName(
+          GeoCodeRequest(description: address.placeName ?? ''),
+        );
+        if (kDebugMode) {
+          print('geoCode position:$position\n');
+        }
+      }
+    }
     _updatePositionList(
       _PositionItemType.position,
       position.toString(),
@@ -354,6 +384,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLastKnownPosition() async {
+    final hasPermission = await _handlePermission();
+
+    if (!hasPermission) {
+      return;
+    }
+
     final position = await geolocatorOhos.getLastKnownPosition();
     if (position != null) {
       _updatePositionList(

@@ -22,3 +22,6 @@ export 'src/location/position_ohos.dart';
 export 'src/geocoder/geo_address.dart';
 export 'src/geocoder/geo_code_request.dart';
 export 'src/geocoder/reverse_geo_code_request.dart';
+
+export 'src/common/country_code.dart';
+ 

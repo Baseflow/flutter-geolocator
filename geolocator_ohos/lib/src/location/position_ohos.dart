@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:geolocator_ohos/src/utils.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Location information.
@@ -43,12 +44,12 @@ class PositionOhos extends Position {
   final int? additionSize;
 
   /// Converts the supplied [String] to an instance of the [PositionOhos] class.
-  static PositionOhos fromString(String message) {
+  factory PositionOhos.fromString(String message) {
     return PositionOhos._fromMap(jsonDecode(message));
   }
 
   /// Converts the supplied [Map] to an instance of the [PositionOhos] class.
-  static PositionOhos _fromMap(dynamic message) {
+  factory PositionOhos._fromMap(dynamic message) {
     final Map<dynamic, dynamic> positionMap = message;
 
     if (!positionMap.containsKey('latitude')) {
@@ -97,35 +98,3 @@ class PositionOhos extends Position {
   }
 }
 
-T? asT<T>(
-  dynamic value, {
-  T? defaultValue,
-  bool tryToFixType = true,
-}) {
-  if (value is T) {
-    return value;
-  }
-
-  if (defaultValue != null) {
-    return defaultValue;
-  }
-
-  if (tryToFixType && value != null) {
-    final String valueS = value.toString();
-    if (0 is T) {
-      return (int.tryParse(valueS) ?? double.tryParse(valueS)?.toInt()) as T?;
-    } else if (0.0 is T) {
-      return double.tryParse(valueS) as T?;
-    } else if ('' is T) {
-      return valueS as T;
-    } else if (false is T) {
-      if (valueS == '0' || valueS == '1') {
-        return (valueS == '1') as T;
-      }
-      return (valueS == 'true') as T;
-    } else if (DateTime.now() is T) {
-      return DateTime.tryParse(valueS) as T?;
-    }
-  }
-  return defaultValue;
-}

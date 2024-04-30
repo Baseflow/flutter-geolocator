@@ -2,14 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:geolocator_ohos/geolocator_ohos.dart';
+import 'package:geolocator_ohos/src/common/country_code.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 part 'geocoder/geocoder.dart';
 part 'gnss_fence/gnss_fence_status.dart';
 part 'location/location.dart';
+part 'common/common.dart';
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class GeolocatorOhos extends LocationImplements
-    with GeocoderImplements, GnssFenceStatusImplements {
+    with GeocoderMixin, GnssFenceStatusMixin, CommonMixin {
   /// The method channel used to interact with the native platform.
   static const _methodChannel =
       MethodChannel('flutter.baseflow.com/geolocator_ohos');
