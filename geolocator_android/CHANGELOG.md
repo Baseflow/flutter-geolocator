@@ -1,3 +1,7 @@
+## 4.5.5
+
+* Fixes a bug where location stream is not automatically started when enabling the location services.
+
 ## 4.5.4
 
 * Fixes a bug where the `getPositionStream` was not informed of the location service resolution result. This resulted in a stream that was kept open indefinitely.
