@@ -1,3 +1,8 @@
+## 4.5.5
+
+* Removes deprecated support for Android V1 embedding as support will be removed from Flutter (see [flutter/flutter#144726](https://github.com/flutter/flutter/pull/144726)).
+* Fixes a bug where location stream is not automatically started when enabling the location services.
+
 ## 4.5.4
 
 * Fixes a bug where the `getPositionStream` was not informed of the location service resolution result. This resulted in a stream that was kept open indefinitely.

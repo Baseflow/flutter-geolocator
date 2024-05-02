@@ -11,6 +11,18 @@ import com.baseflow.geolocator.errors.ErrorCodes;
 
 public class LocationAccuracyManager {
 
+    private LocationAccuracyManager() {}
+
+  private static LocationAccuracyManager locationAccuracyManagerInstance = null;
+
+  public static synchronized LocationAccuracyManager getInstance() {
+    if (locationAccuracyManagerInstance == null) {
+      locationAccuracyManagerInstance = new LocationAccuracyManager();
+    }
+
+    return locationAccuracyManagerInstance;
+  }
+
   public LocationAccuracyStatus getLocationAccuracy(Context context, ErrorCallback errorCallback) {
     if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
