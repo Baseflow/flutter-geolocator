@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:geolocator_ohos/geolocator_ohos.dart';
-import 'package:geolocator_ohos/src/common/country_code.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 part 'geocoder/geocoder.dart';
 part 'gnss_fence/gnss_fence_status.dart';
