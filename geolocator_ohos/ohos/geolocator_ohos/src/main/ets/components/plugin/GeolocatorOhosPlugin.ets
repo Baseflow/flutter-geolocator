@@ -21,6 +21,7 @@ import { PermissionHandler } from './handlers/method_handler/PermissionHandler';
 import { geoLocationManager } from '@kit.LocationKit';
 import { PositionHandler } from './handlers/method_handler/PositionHandler';
 import { GeocoderHandler } from './handlers/method_handler/GeocoderHandler';
+import { OpenSettingsHandler } from './handlers/method_handler/OpenSettingsHandler';
 
 
 /** GeolocatorOhosPlugin **/
@@ -117,29 +118,12 @@ export default class GeolocatorOhosPlugin implements FlutterPlugin, MethodCallHa
       case "getLastKnownPosition":
         result.success(JSON.stringify(await PositionHandler.getLastLocation()));
         break;
-      case "openAppSettings": {
-        if (this.context == null || this.uiContext == null) {
-          result.error('100', 'context and uiContext are null', 'They should not be null');
-          return;
-        }
-        let applicationInfo = this.context!.applicationInfo;
-        let wantInfo: Want = {
-          bundleName: 'com.huawei.hmos.settings',
-          abilityName: 'com.huawei.hmos.settings.MainAbility',
-          uri: 'application_info_entry',
-          parameters: {
-            pushParams: applicationInfo.name // 打开指定应用的详情页面
-          }
-        }
-        this.uiContext!.startAbility(wantInfo).then(() => {
-          result.success(true);
-        }).catch((err: BusinessError) => {
-          console.error(`openAppSettings failed, code is ${err.code}, message is ${err.message}`);
-          result.error(err.code.toString(), 'openAppSettings failed', err.message);
-        })
-      }
+      case "openAppSettings":
+        OpenSettingsHandler.openAppSettings(result);
         break;
-
+      case "openLocationSettings":
+        OpenSettingsHandler.openLocationSettings(result);
+        break;
       case "isGeocoderAvailable":
         result.success(GeocoderHandler.isGeocoderAvailable());
         break;

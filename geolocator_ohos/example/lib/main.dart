@@ -4,6 +4,7 @@ import 'dart:io' show Platform;
 import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_utils/flutter_platform_utils.dart';
 import 'package:geolocator_ohos/geolocator_ohos.dart';
 
 /// Defines the main theme color.
@@ -88,7 +89,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           value: 3,
           child: Text("Open App Settings"),
         ),
-        if (Platform.isAndroid)
+        if (Platform.isAndroid || PlatformUtils.isOhos)
           const PopupMenuItem(
             value: 4,
             child: Text("Open Location Settings"),
@@ -194,7 +195,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       ),
     );
 
-    CountryCode? countryCode= await geolocatorOhos.getCountryCode();
+    CountryCode? countryCode = await geolocatorOhos.getCountryCode();
     if (kDebugMode) {
       print('CountryCode: $countryCode\n');
     }
