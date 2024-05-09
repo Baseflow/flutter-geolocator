@@ -1,8 +1,0 @@
-/node_modules
-/oh_modules
-/.preview
-/build
-/.cxx
-/.test
-har/flutter.har
-oh-package-lock.json5
