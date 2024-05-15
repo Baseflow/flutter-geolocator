@@ -37,11 +37,8 @@ class HtmlGeolocationManager implements GeolocationManager {
         ),
       );
     } catch (e) {
-      completer.completeError(PlatformException(
-        code: 'LOCATION_UPDATE_FAILURE',
-        message: "Something went wrong while getting current position",
-        details: e,
-      ));
+      completer.completeError(const PositionUpdateException(
+          "Something went wrong while getting current position"));
     }
 
     return completer.future;
