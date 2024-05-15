@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:js_interop';
 
+import 'package:flutter/services.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:web/web.dart' as web;
 
@@ -36,7 +37,11 @@ class HtmlGeolocationManager implements GeolocationManager {
         ),
       );
     } catch (e) {
-      completer.completeError(e);
+      completer.completeError(PlatformException(
+        code: 'LOCATION_UPDATE_FAILURE',
+        message: "Something went wrong while getting current position",
+        details: e,
+      ));
     }
 
     return completer.future;
