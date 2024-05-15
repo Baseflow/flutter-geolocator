@@ -27,7 +27,7 @@ class HtmlPermissionsManager implements PermissionsManager {
         await _permissions?.query(_permissionQuery.jsify() as JSObject).toDart;
 
     return status != null
-            ? toLocationPermission(status.state)
-            : LocationPermission.denied;
+        ? toLocationPermission(status.state)
+        : LocationPermission.denied;
   }
 }
