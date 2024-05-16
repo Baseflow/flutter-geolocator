@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 
@@ -67,6 +68,16 @@ class FusedLocationClient implements LocationClient {
             }
 
             Location location = locationResult.getLastLocation();
+            if (location == null) {
+              return;
+            }
+            if (location.getExtras() == null) {
+              location.setExtras(Bundle.EMPTY);
+            }
+            if (locationOptions != null) {
+              location.getExtras().putBoolean(LocationOptions.USE_MSL_ALTITUDE_EXTRA, locationOptions.isUseMSLAltitude());
+            }
+
             nmeaClient.enrichExtrasWithNmea(location);
             positionChangedCallback.onPositionChanged(location);
           }
