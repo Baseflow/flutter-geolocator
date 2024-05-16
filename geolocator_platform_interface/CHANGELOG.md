@@ -1,3 +1,7 @@
+## 4.2.3
+
+- Fixes several grammar mistakes in the API documentation.
+
 ## 4.2.2
 
 - Updates the documentation of the `getServiceStatusStream` method as it nolonger throws a `UnimplementedError` on web.

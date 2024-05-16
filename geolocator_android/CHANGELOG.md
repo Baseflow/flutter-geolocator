@@ -6,6 +6,10 @@
 * Updates `com.google.android.gms:play-services-location` to version `21.2.0`.
 * Updates `androidx.core:core` to version `1.13.0`.
 
+## 4.5.5
+
+* Fixes a bug where location stream is not automatically started when enabling the location services.
+
 ## 4.5.4
 
 * Fixes a bug where the `getPositionStream` was not informed of the location service resolution result. This resulted in a stream that was kept open indefinitely.
@@ -38,22 +42,22 @@
 
 ## 4.4.0
 
-- Adds `color` to `ForegroundNotificationConfig` to set the color of the notification icon.
+* Adds `color` to `ForegroundNotificationConfig` to set the color of the notification icon.
 
 ## 4.3.3
 
-- Removes deprecated support for Android V1 embedding from the JAVA code base. Note that the geolocator's Flutter version restrictions already don't support V1 embedding anymore.
-- Registers location services state change broadcast receiver with required exported flags
+* Removes deprecated support for Android V1 embedding from the JAVA code base. Note that the geolocator's Flutter version restrictions already don't support V1 embedding anymore.
+* Registers location services state change broadcast receiver with required exported flags
 
 ## 4.3.2
 
-- Updates the following dependencies:
-  - uuid package from ^3.0.7 to ^4.1.0
-  - flutter_lints from ^2.0.0 to ^3.0.0
+* Updates the following dependencies:
+  * uuid package from ^3.0.7 to ^4.1.0
+  * flutter_lints from ^2.0.0 to ^3.0.0
 
 ## 4.3.1
 
-- Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
+* Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
 
 ## 4.3.0
 

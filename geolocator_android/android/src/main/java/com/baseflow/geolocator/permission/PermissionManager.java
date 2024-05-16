@@ -16,17 +16,30 @@ import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.baseflow.geolocator.errors.PermissionUndefinedException;
 
+import java.security.Permission;
 import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class PermissionManager
     implements io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener {
 
+    private PermissionManager() {}
+
   private static final int PERMISSION_REQUEST_CODE = 109;
+
+  private static PermissionManager permissionManagerInstance = null;
 
   @Nullable private Activity activity;
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PermissionResultCallback resultCallback;
+
+  public static synchronized PermissionManager getInstance() {
+      if (permissionManagerInstance == null) {
+          permissionManagerInstance = new PermissionManager();
+      }
+
+      return permissionManagerInstance;
+  }
 
   public LocationPermission checkPermissionStatus(Context context)
       throws PermissionUndefinedException {

@@ -62,7 +62,7 @@ On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
 
-Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission) if you want to continue receiving updates even when your App is running in the background (note that the geolocator plugin doesn't support receiving and processing location updates while running in the background):
+Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission) if you want to continue receiving updates even when your App is running in the background:
 
 ``` xml
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -76,7 +76,7 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 <details>
 <summary>iOS</summary>
 
-On iOS you'll need to add the following entry to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following (make sure you update the description so it is meaningfull in the context of your App):
+On iOS you'll need to add the following entry to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following (make sure you update the description so it is meaningful in the context of your App):
 
 ``` xml
 <key>NSLocationWhenInUseUsageDescription</key>
@@ -228,7 +228,7 @@ Future<Position> _determinePosition() async {
 To query the current location of the device simply make a call to the `getCurrentPosition` method. You can finetune the results by specifying the following parameters:
 
 - `desiredAccuracy`: the accuracy of the location data that your app wants to receive;
-- `timeLimit`: the maximum amount of time allowed to acquire the current location. When the time limit is passed a `TimeOutException` will be thrown and the call will be cancelled. By default no limit is configured.
+- `timeLimit`: the maximum amount of time allowed to acquire the current location. When the time limit is passed a `TimeoutException` will be thrown and the call will be cancelled. By default no limit is configured.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
@@ -252,7 +252,7 @@ To listen for location changes you can call the `getPositionStream` to receive s
 
 - `accuracy`: the accuracy of the location data that your app wants to receive;
 - `distanceFilter`: the minimum distance (measured in meters) a device must move horizontally before an update event is generated;
-- `timeLimit`: the maximum amount of time allowed between location updates. When the time limit is passed a `TimeOutException` will be thrown and the stream will be cancelled. By default no limit is configured.
+- `timeLimit`: the maximum amount of time allowed between location updates. When the time limit is passed a `TimeoutException` will be thrown and the stream will be cancelled. By default no limit is configured.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';

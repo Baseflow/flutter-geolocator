@@ -6,7 +6,11 @@ import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 export 'package:geolocator_android/geolocator_android.dart'
-    show AndroidSettings, ForegroundNotificationConfig, AndroidResource;
+    show
+        AndroidSettings,
+        ForegroundNotificationConfig,
+        AndroidResource,
+        AndroidPosition;
 export 'package:geolocator_apple/geolocator_apple.dart'
     show AppleSettings, ActivityType;
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
