@@ -1,3 +1,9 @@
+## 4.0.0
+
+**BREAKING CHANGE:**
+  - Migrates from dart:html to package:web and dart:js_interop
+  - Migrates to Dart SDK 3.3.0 and Flutter 3.16.0.
+
 ## 3.0.0
 
 **BREAKING CHANGE:**

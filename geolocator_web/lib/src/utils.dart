@@ -1,22 +1,16 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'package:web/web.dart' as web;
 import 'package:flutter/services.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Converts the Geoposition object into a [Position] object.
-Position toPosition(html.Geoposition webPosition) {
+Position toPosition(web.GeolocationPosition webPosition) {
   final coords = webPosition.coords;
-
-  if (coords == null) {
-    throw const PositionUpdateException('Received invalid position result.');
-  }
 
   return Position(
     latitude: coords.latitude as double,
     longitude: coords.longitude as double,
-    timestamp: webPosition.timestamp != null
-        ? DateTime.fromMillisecondsSinceEpoch(webPosition.timestamp!)
-        : DateTime.now(),
+    timestamp: DateTime.fromMillisecondsSinceEpoch(webPosition.timestamp),
     altitude: coords.altitude as double? ?? 0.0,
     altitudeAccuracy: coords.altitudeAccuracy as double? ?? 0.0,
     accuracy: coords.accuracy as double? ?? 0.0,
@@ -47,7 +41,7 @@ LocationPermission toLocationPermission(String? webPermission) {
 
 /// Converts an error received from the browser into a custom Geolocator
 /// exception.
-Exception convertPositionError(html.PositionError error) {
+Exception convertPositionError(web.GeolocationPositionError error) {
   switch (error.code) {
     case 1:
       return PermissionDeniedException(error.message);

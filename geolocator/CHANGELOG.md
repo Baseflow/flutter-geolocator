@@ -1,3 +1,7 @@
+## 12.0.0
+
+- **BREAKING CHANGE:** Updates dependency on geolocator_web to version [4.0.0](https://pub.dev/packages/geolocator_web/changelog).
+
 ## 11.1.0
 
 - Expose `AndroidPosition` from geolocator.
