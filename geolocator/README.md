@@ -76,7 +76,7 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 <details>
 <summary>iOS</summary>
 
-On iOS you'll need to add the following entry to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following (make sure you update the description so it is meaningfull in the context of your App):
+On iOS you'll need to add the following entry to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following (make sure you update the description so it is meaningful in the context of your App):
 
 ``` xml
 <key>NSLocationWhenInUseUsageDescription</key>
