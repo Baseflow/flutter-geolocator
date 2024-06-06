@@ -1,3 +1,13 @@
+## 12.1.0
+
+- Deprecates getCurrentPosition desiredAccuracy, forceAndroidLocationManager, and timeLimit parameters in favor of supplying a LocationSettings class
+- Expose `WebSettings` from geolocator.
+- Updates dependency on geolocator_web to version 4.1.0
+- Updates dependency on geolocator_android to version 4.3.0
+- Updates dependency on geolocator_apple to version 2.3.7
+- Updates dependency on geolocator_windows to version 0.2.3
+- Updates dependency on geolocator_platform_interface to version 4.2.3
+
 ## 12.0.0
 
 - **BREAKING CHANGE:** Updates dependency on geolocator_web to version [4.0.0](https://pub.dev/packages/geolocator_web/changelog).

@@ -1,3 +1,6 @@
+@TestOn('browser')
+library;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_web/geolocator_web.dart';
 import 'package:geolocator_web/src/geolocation_manager.dart';

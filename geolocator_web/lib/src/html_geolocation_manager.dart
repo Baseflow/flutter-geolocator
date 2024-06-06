@@ -19,6 +19,7 @@ class HtmlGeolocationManager implements GeolocationManager {
   Future<Position> getCurrentPosition({
     bool? enableHighAccuracy,
     Duration? timeout,
+    Duration? maximumAge,
   }) async {
     Completer<Position> completer = Completer();
     try {
@@ -33,6 +34,7 @@ class HtmlGeolocationManager implements GeolocationManager {
           enableHighAccuracy: enableHighAccuracy ?? false,
           timeout:
               timeout?.inMicroseconds ?? const Duration(days: 1).inMilliseconds,
+          maximumAge: maximumAge?.inMilliseconds ?? 0,
         ),
       );
     } catch (e) {
@@ -47,6 +49,7 @@ class HtmlGeolocationManager implements GeolocationManager {
   Stream<Position> watchPosition({
     bool? enableHighAccuracy,
     Duration? timeout,
+    Duration? maximumAge,
   }) {
     int? watchId;
     StreamController<Position> controller = StreamController<Position>(
@@ -69,6 +72,7 @@ class HtmlGeolocationManager implements GeolocationManager {
           enableHighAccuracy: enableHighAccuracy ?? false,
           timeout:
               timeout?.inMicroseconds ?? const Duration(days: 1).inMilliseconds,
+          maximumAge: maximumAge?.inMilliseconds ?? 0,
         ),
       );
     };

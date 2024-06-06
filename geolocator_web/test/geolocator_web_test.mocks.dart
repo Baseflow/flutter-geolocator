@@ -43,6 +43,7 @@ class MockGeolocationManager extends _i1.Mock
   _i4.Future<_i2.Position> getCurrentPosition({
     bool? enableHighAccuracy,
     Duration? timeout,
+    Duration? maximumAge,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -51,6 +52,7 @@ class MockGeolocationManager extends _i1.Mock
           {
             #enableHighAccuracy: enableHighAccuracy,
             #timeout: timeout,
+            #maximumAge: maximumAge,
           },
         ),
         returnValue: _i4.Future<_i2.Position>.value(_FakePosition_0(
@@ -61,6 +63,7 @@ class MockGeolocationManager extends _i1.Mock
             {
               #enableHighAccuracy: enableHighAccuracy,
               #timeout: timeout,
+              #maximumAge: maximumAge,
             },
           ),
         )),
@@ -73,6 +76,7 @@ class MockGeolocationManager extends _i1.Mock
             {
               #enableHighAccuracy: enableHighAccuracy,
               #timeout: timeout,
+              #maximumAge: maximumAge,
             },
           ),
         )),
@@ -82,6 +86,7 @@ class MockGeolocationManager extends _i1.Mock
   _i4.Stream<_i2.Position> watchPosition({
     bool? enableHighAccuracy,
     Duration? timeout,
+    Duration? maximumAge,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -90,6 +95,7 @@ class MockGeolocationManager extends _i1.Mock
           {
             #enableHighAccuracy: enableHighAccuracy,
             #timeout: timeout,
+            #maximumAge: maximumAge,
           },
         ),
         returnValue: _i4.Stream<_i2.Position>.empty(),
