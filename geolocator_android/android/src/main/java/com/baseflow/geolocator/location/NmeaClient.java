@@ -1,8 +1,10 @@
 package com.baseflow.geolocator.location;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.GnssStatus;
 import android.location.Location;
 import android.location.LocationManager;
@@ -73,9 +75,12 @@ public class NmeaClient {
 
     if (locationOptions != null) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && locationManager != null) {
-        locationManager.addNmeaListener(nmeaMessageListener, null);
-        locationManager.registerGnssStatusCallback(gnssCallback, null);
-        listenerAdded = true;
+        if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+          locationManager.addNmeaListener(nmeaMessageListener, null);
+          locationManager.registerGnssStatusCallback(gnssCallback, null);
+          listenerAdded = true;
+        }
       }
     }
   }
