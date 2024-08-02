@@ -1,6 +1,7 @@
 ## 4.0.1
 
-- Upgrade the `web` dependency to version 1.0.0.
+- Upgrade the package:web dependency to version 1.0.0.
+- Upgrade Dart SDK from 3.3.0 to 3.4.0 for geolocator_web
 
 ## 4.0.0
 
