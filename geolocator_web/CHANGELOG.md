@@ -1,12 +1,18 @@
+## 4.0.1
+
+- Upgrade the `web` dependency to version 1.0.0.
+
 ## 4.0.0
 
 **BREAKING CHANGE:**
-  - Migrates from dart:html to package:web and dart:js_interop
-  - Migrates to Dart SDK 3.3.0 and Flutter 3.16.0.
+
+- Migrates from dart:html to package:web and dart:js_interop
+- Migrates to Dart SDK 3.3.0 and Flutter 3.16.0.
 
 ## 3.0.0
 
 **BREAKING CHANGE:**
+
 - `getServiceStatusStream` on web returns a PlatformException i.s.o. UnimplementedError. As the concept of location service doesn't exist on the web platform.
 
 ## 2.2.1
@@ -19,7 +25,7 @@
 
 ## 2.1.7
 
-- Mark `geolocator_web` as implementation of `geolocator` 
+- Mark `geolocator_web` as implementation of `geolocator`
 
 ## 2.1.6
 
@@ -35,7 +41,7 @@
 
 ## 2.1.3
 
-- Updated to the latest version of the `geolocator_platform_interface': `4.0.0`.
+- Updated to the latest version of the `geolocator_platform_interface':`4.0.0`.
 
 ## 2.1.2
 
@@ -47,7 +53,7 @@
 
 ## 2.1.0
 
-- Made changes to the implementation of the `getCurrentPosition` and `getPositionStream` method to match new platform interface. 
+- Made changes to the implementation of the `getCurrentPosition` and `getPositionStream` method to match new platform interface.
 - Fixes issues where geolocator doesn't work on Safari due to missing implementation of `query` method in the browser.
 
 ## 2.0.6
@@ -72,7 +78,7 @@
 
 ## 2.0.1
 
-- Solve bug causing error when requesting permissions (see issue [#673](https://github.com/Baseflow/flutter-geolocator/issues/673)). 
+- Solve bug causing error when requesting permissions (see issue [#673](https://github.com/Baseflow/flutter-geolocator/issues/673)).
 
 ## 2.0.0
 
