@@ -1,3 +1,7 @@
+## 4.2.4
+
+- Correctly handle integer-like numbers when decoding `Position` from JSON.
+
 ## 4.2.3
 
 - Fixes several grammar mistakes in the API documentation.
