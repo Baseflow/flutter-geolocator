@@ -1,7 +1,12 @@
+## 4.1.0
+
+- Adds WebSettings class, allowing a location maximumAge to be specified.
+- Supports maximumAge parameter in `getCurrentPosition` and `watchPosition` methods.
+
 ## 4.0.1
 
 - Upgrades the package:web dependency to version 1.0.0.
-- Upgrades Dart SDK from 3.3.0 to 3.4.0 for geolocator_web
+- Upgrades Dart SDK from 3.3.0 to 3.4.0 for geolocator_web.
 
 ## 4.0.0
 
