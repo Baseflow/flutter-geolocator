@@ -1,4 +1,4 @@
-## 5.0.0
+## 4.1.0
 
 - Adds WebSettings class, allowing a location maximumAge to be specified.
 - Supports maximumAge parameter in `getCurrentPosition` and `watchPosition` methods.
