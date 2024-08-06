@@ -1,3 +1,7 @@
+## 4.1.1
+
+- Exposes the `WebSettings` class as a public type.
+
 ## 4.1.0
 
 - Adds WebSettings class, allowing a location maximumAge to be specified.

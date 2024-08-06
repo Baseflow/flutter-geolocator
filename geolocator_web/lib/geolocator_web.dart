@@ -7,10 +7,10 @@ import 'src/geolocation_manager.dart';
 import 'src/permissions_manager.dart';
 import 'src/html_geolocation_manager.dart';
 import 'src/html_permissions_manager.dart';
-import 'src/types/web_settings.dart';
+import 'web_settings.dart';
 
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
-export 'src/types/web_settings.dart' show WebSettings;
+export 'web_settings.dart' show WebSettings;
 
 /// The web implementation of [GeolocatorPlatform].
 ///
