@@ -13,7 +13,7 @@ export 'package:geolocator_android/geolocator_android.dart'
         AndroidPosition;
 export 'package:geolocator_apple/geolocator_apple.dart'
     show AppleSettings, ActivityType;
-export 'package:geolocator_web/geolocator_web.dart' show WebSettings;
+export 'package:geolocator_web/web_settings.dart' show WebSettings;
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Wraps CLLocationManager (on iOS) and FusedLocationProviderClient or
