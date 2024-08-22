@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
-import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
+
+import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:geolocator/geolocator.dart';
 
 /// Defines the main theme color.
@@ -299,7 +300,18 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      final positionStream = _geolocatorPlatform.getPositionStream();
+      final settings = AndroidSettings(
+        foregroundNotificationConfig: const ForegroundNotificationConfig(
+          notificationTitle: 'Geolocator is tracking your trip',
+          notificationText:
+              'This is a persistent notification and is used to start a foreground service.',
+          enableWifiLock: true,
+          enableWakeLock: true,
+          setOngoing: true,
+        ),
+      );
+      final positionStream =
+          _geolocatorPlatform.getPositionStream(locationSettings: settings);
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
