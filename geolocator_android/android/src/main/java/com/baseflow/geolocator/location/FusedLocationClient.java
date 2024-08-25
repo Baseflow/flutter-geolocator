@@ -168,6 +168,7 @@ class FusedLocationClient implements LocationClient {
             (response) -> {
               if (!response.isSuccessful()) {
                 listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+                return;
               }
 
               try {
