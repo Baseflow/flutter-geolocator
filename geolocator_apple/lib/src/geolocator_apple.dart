@@ -7,18 +7,15 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class GeolocatorApple extends GeolocatorPlatform {
   /// The method channel used to interact with the native platform.
-  static const _methodChannel =
-      MethodChannel('flutter.baseflow.com/geolocator_apple');
+  static const _methodChannel = MethodChannel('flutter.baseflow.com/geolocator_apple');
 
   /// The event channel used to receive [Position] updates from the native
   /// platform.
-  static const _eventChannel =
-      EventChannel('flutter.baseflow.com/geolocator_updates_apple');
+  static const _eventChannel = EventChannel('flutter.baseflow.com/geolocator_updates_apple');
 
   /// The event channel used to receive [LocationServiceStatus] updates from the
   /// native platform.
-  static const _serviceStatusEventChannel =
-      EventChannel('flutter.baseflow.com/geolocator_service_updates_apple');
+  static const _serviceStatusEventChannel = EventChannel('flutter.baseflow.com/geolocator_service_updates_apple');
 
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith() {
@@ -38,8 +35,7 @@ class GeolocatorApple extends GeolocatorPlatform {
   Future<LocationPermission> checkPermission() async {
     try {
       // ignore: omit_local_variable_types
-      final int permission =
-          await _methodChannel.invokeMethod('checkPermission');
+      final int permission = await _methodChannel.invokeMethod('checkPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -53,8 +49,7 @@ class GeolocatorApple extends GeolocatorPlatform {
   Future<LocationPermission> requestPermission() async {
     try {
       // ignore: omit_local_variable_types
-      final int permission =
-          await _methodChannel.invokeMethod('requestPermission');
+      final int permission = await _methodChannel.invokeMethod('requestPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -65,9 +60,8 @@ class GeolocatorApple extends GeolocatorPlatform {
   }
 
   @override
-  Future<bool> isLocationServiceEnabled() async => _methodChannel
-      .invokeMethod<bool>('isLocationServiceEnabled')
-      .then((value) => value ?? false);
+  Future<bool> isLocationServiceEnabled() async =>
+      _methodChannel.invokeMethod<bool>('isLocationServiceEnabled').then((value) => value ?? false);
 
   @override
   Future<Position?> getLastKnownPosition({
@@ -78,8 +72,7 @@ class GeolocatorApple extends GeolocatorPlatform {
         'forceLocationManager': forceLocationManager,
       };
 
-      final positionMap =
-          await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
+      final positionMap = await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
 
       return positionMap != null ? Position.fromMap(positionMap) : null;
     } on PlatformException catch (e) {
@@ -91,8 +84,7 @@ class GeolocatorApple extends GeolocatorPlatform {
 
   @override
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
-    final int accuracy =
-        await _methodChannel.invokeMethod('getLocationAccuracy');
+    final int accuracy = await _methodChannel.invokeMethod('getLocationAccuracy');
     return LocationAccuracyStatus.values[accuracy];
   }
 
@@ -133,12 +125,10 @@ class GeolocatorApple extends GeolocatorPlatform {
     if (_serviceStatusStream != null) {
       return _serviceStatusStream!;
     }
-    var serviceStatusStream =
-        _serviceStatusEventChannel.receiveBroadcastStream();
+    var serviceStatusStream = _serviceStatusEventChannel.receiveBroadcastStream();
 
-    _serviceStatusStream = serviceStatusStream
-        .map((dynamic element) => ServiceStatus.values[element as int])
-        .handleError((error) {
+    _serviceStatusStream =
+        serviceStatusStream.map((dynamic element) => ServiceStatus.values[element as int]).handleError((error) {
       _serviceStatusStream = null;
       if (error is PlatformException) {
         error = _handlePlatformException(error);
@@ -149,46 +139,50 @@ class GeolocatorApple extends GeolocatorPlatform {
     return _serviceStatusStream!;
   }
 
+  // Ryde Modification: added try catch
   @override
   Stream<Position> getPositionStream({
     LocationSettings? locationSettings,
   }) {
-    if (_positionStream != null) {
-      return _positionStream!;
-    }
-    var originalStream = _eventChannel.receiveBroadcastStream(
-      locationSettings?.toJson(),
-    );
-    var positionStream = _wrapStream(originalStream);
+    try {
+      if (_positionStream != null) {
+        return _positionStream!;
+      }
+      var originalStream = _eventChannel.receiveBroadcastStream(
+        locationSettings?.toJson(),
+      );
+      var positionStream = _wrapStream(originalStream);
 
-    var timeLimit = locationSettings?.timeLimit;
+      var timeLimit = locationSettings?.timeLimit;
 
-    if (timeLimit != null) {
-      positionStream = positionStream.timeout(
-        timeLimit,
-        onTimeout: (s) {
-          _positionStream = null;
-          s.addError(TimeoutException(
-            'Time limit reached while waiting for position update.',
-            timeLimit,
-          ));
-          s.close();
+      if (timeLimit != null) {
+        positionStream = positionStream.timeout(
+          timeLimit,
+          onTimeout: (s) {
+            _positionStream = null;
+            s.addError(TimeoutException(
+              'Time limit reached while waiting for position update.',
+              timeLimit,
+            ));
+            s.close();
+          },
+        );
+      }
+
+      _positionStream = positionStream
+          .map<Position>((dynamic element) => Position.fromMap(element.cast<String, dynamic>()))
+          .handleError(
+        (error) {
+          if (error is PlatformException) {
+            error = _handlePlatformException(error);
+          }
+          throw error;
         },
       );
+      return _positionStream!;
+    } catch (e) {
+      return const Stream.empty();
     }
-
-    _positionStream = positionStream
-        .map<Position>((dynamic element) =>
-            Position.fromMap(element.cast<String, dynamic>()))
-        .handleError(
-      (error) {
-        if (error is PlatformException) {
-          error = _handlePlatformException(error);
-        }
-        throw error;
-      },
-    );
-    return _positionStream!;
   }
 
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
@@ -217,14 +211,12 @@ class GeolocatorApple extends GeolocatorPlatform {
   }
 
   @override
-  Future<bool> openAppSettings() async => _methodChannel
-      .invokeMethod<bool>('openAppSettings')
-      .then((value) => value ?? false);
+  Future<bool> openAppSettings() async =>
+      _methodChannel.invokeMethod<bool>('openAppSettings').then((value) => value ?? false);
 
   @override
-  Future<bool> openLocationSettings() async => _methodChannel
-      .invokeMethod<bool>('openLocationSettings')
-      .then((value) => value ?? false);
+  Future<bool> openLocationSettings() async =>
+      _methodChannel.invokeMethod<bool>('openLocationSettings').then((value) => value ?? false);
 
   Exception _handlePlatformException(PlatformException exception) {
     switch (exception.code) {
