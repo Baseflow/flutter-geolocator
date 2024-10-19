@@ -32,6 +32,16 @@ typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
                              errorHandler:(GeolocatorError _Nonnull)errorHandler;
 
 - (void)stopListening;
+
+- (BOOL)isListeningForPositionUpdates;
+
+- (void)updateListenerWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
+                           distanceFilter:(CLLocationDistance)distanceFilter
+        pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
+          showBackgroundLocationIndicator:(BOOL)showBackgroundLocationIndicator
+                             activityType:(CLActivityType)activityType
+           allowBackgroundLocationUpdates:(BOOL)allowBackgroundLocationUpdates;
+
 + (BOOL) shouldEnableBackgroundLocationUpdates;
 @end
 

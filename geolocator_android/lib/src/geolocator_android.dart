@@ -264,6 +264,8 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         return const LocationServiceDisabledException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':
         return const AlreadySubscribedException();
+      case 'LOCATION_SUBSCRIPTION_INACTIVE':
+        return const NotSubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':
         return PermissionDefinitionsNotFoundException(exception.message);
       case 'PERMISSION_DENIED':

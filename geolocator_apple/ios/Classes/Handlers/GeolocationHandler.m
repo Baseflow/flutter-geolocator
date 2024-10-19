@@ -153,6 +153,36 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
     self.listenerResultHandler = nil;
 }
 
+- (BOOL)isListeningForPositionUpdates {
+    return self.isListeningForPositionUpdates;
+}
+
+- (void)updateListenerWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
+                           distanceFilter:(CLLocationDistance)distanceFilter
+        pauseLocationUpdatesAutomatically:(BOOL)pauseLocationUpdatesAutomatically
+          showBackgroundLocationIndicator:(BOOL)showBackgroundLocationIndicator
+                             activityType:(CLActivityType)activityType
+           allowBackgroundLocationUpdates:(BOOL)allowBackgroundLocationUpdates
+{
+    CLLocationManager *locationManager = [self getLocationManager];
+    locationManager.desiredAccuracy = desiredAccuracy;
+    locationManager.distanceFilter = distanceFilter;
+    if (@available(iOS 6.0, macOS 10.15, *)) {
+        locationManager.activityType = activityType;
+        locationManager.pausesLocationUpdatesAutomatically = pauseLocationUpdatesAutomatically;
+    }
+    
+#if TARGET_OS_IOS
+    if (@available(iOS 9.0, macOS 11.0, *)) {
+        locationManager.allowsBackgroundLocationUpdates = allowBackgroundLocationUpdates
+        && [GeolocationHandler shouldEnableBackgroundLocationUpdates];
+    }
+    if (@available(iOS 11.0, macOS 11.0, *)) {
+        locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
+    }
+#endif
+}
+
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
   if (!self.listenerResultHandler && !self.currentLocationResultHandler) return;

@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
-import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
+
+import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
@@ -27,10 +28,11 @@ class GeolocatorWidget extends StatefulWidget {
   }
 
   @override
-  _GeolocatorWidgetState createState() => _GeolocatorWidgetState();
+  GeolocatorWidgetState createState() => GeolocatorWidgetState();
 }
 
-class _GeolocatorWidgetState extends State<GeolocatorWidget> {
+/// State for the [GeolocatorWidget].
+class GeolocatorWidgetState extends State<GeolocatorWidget> {
   static const String _kLocationServicesDisabledMessage =
       'Location services are disabled.';
   static const String _kPermissionDeniedMessage = 'Permission denied.';
@@ -38,7 +40,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       'Permission denied forever.';
   static const String _kPermissionGrantedMessage = 'Permission granted.';
 
-  final GeolocatorPlatform geolocatorAndroid = GeolocatorPlatform.instance;
+  final GeolocatorPlatform _geolocatorAndroid = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
@@ -75,26 +77,26 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       },
       itemBuilder: (context) => [
         const PopupMenuItem(
-          child: Text("Get Location Accuracy"),
           value: 1,
+          child: Text("Get Location Accuracy"),
         ),
         if (Platform.isIOS)
           const PopupMenuItem(
-            child: Text("Request Temporary Full Accuracy"),
             value: 2,
+            child: Text("Request Temporary Full Accuracy"),
           ),
         const PopupMenuItem(
-          child: Text("Open App Settings"),
           value: 3,
+          child: Text("Open App Settings"),
         ),
         if (Platform.isAndroid)
           const PopupMenuItem(
-            child: Text("Open Location Settings"),
             value: 4,
+            child: Text("Open Location Settings"),
           ),
         const PopupMenuItem(
-          child: Text("Clear"),
           value: 5,
+          child: Text("Clear"),
         ),
       ],
     );
@@ -150,10 +152,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FloatingActionButton(
-                    child: (_positionStreamSubscription == null ||
-                            _positionStreamSubscription!.isPaused)
-                        ? const Icon(Icons.play_arrow)
-                        : const Icon(Icons.pause),
                     onPressed: _toggleListening,
                     tooltip: (_positionStreamSubscription == null)
                         ? 'Start position updates'
@@ -161,16 +159,20 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                             ? 'Resume'
                             : 'Pause',
                     backgroundColor: _determineButtonColor(),
+                    child: (_positionStreamSubscription == null ||
+                            _positionStreamSubscription!.isPaused)
+                        ? const Icon(Icons.play_arrow)
+                        : const Icon(Icons.pause),
                   ),
                   sizedBox,
                   FloatingActionButton(
-                    child: const Icon(Icons.my_location),
                     onPressed: _getCurrentPosition,
+                    child: const Icon(Icons.my_location),
                   ),
                   sizedBox,
                   FloatingActionButton(
-                    child: const Icon(Icons.bookmark),
                     onPressed: _getLastKnownPosition,
+                    child: const Icon(Icons.bookmark),
                   ),
                 ],
               ),
@@ -186,7 +188,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return;
     }
 
-    final position = await geolocatorAndroid.getCurrentPosition();
+    final position = await _geolocatorAndroid.getCurrentPosition();
     _updatePositionList(
       _PositionItemType.position,
       position.toString(),
@@ -198,7 +200,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     LocationPermission permission;
 
     // Test if location services are enabled.
-    serviceEnabled = await geolocatorAndroid.isLocationServiceEnabled();
+    serviceEnabled = await _geolocatorAndroid.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
@@ -211,9 +213,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       return false;
     }
 
-    permission = await geolocatorAndroid.checkPermission();
+    permission = await _geolocatorAndroid.checkPermission();
     if (permission == LocationPermission.denied) {
-      permission = await geolocatorAndroid.requestPermission();
+      permission = await _geolocatorAndroid.requestPermission();
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
@@ -262,7 +264,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleServiceStatusStream() {
     if (_serviceStatusStreamSubscription == null) {
-      final serviceStatusStream = geolocatorAndroid.getServiceStatusStream();
+      final serviceStatusStream = _geolocatorAndroid.getServiceStatusStream();
       _serviceStatusStreamSubscription =
           serviceStatusStream.handleError((error) {
         _serviceStatusStreamSubscription?.cancel();
@@ -308,7 +310,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           color: Colors.amber,
         ),
       );
-      final positionStream = geolocatorAndroid.getPositionStream(
+      final positionStream = _geolocatorAndroid.getPositionStream(
           locationSettings: androidSettings);
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
@@ -355,7 +357,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLastKnownPosition() async {
-    final position = await geolocatorAndroid.getLastKnownPosition();
+    final position = await _geolocatorAndroid.getLastKnownPosition();
     if (position != null) {
       _updatePositionList(
         _PositionItemType.position,
@@ -370,12 +372,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _getLocationAccuracy() async {
-    final status = await geolocatorAndroid.getLocationAccuracy();
+    final status = await _geolocatorAndroid.getLocationAccuracy();
     _handleLocationAccuracyStatus(status);
   }
 
   void _requestTemporaryFullAccuracy() async {
-    final status = await geolocatorAndroid.requestTemporaryFullAccuracy(
+    final status = await _geolocatorAndroid.requestTemporaryFullAccuracy(
       purposeKey: "TemporaryPreciseAccuracy",
     );
     _handleLocationAccuracyStatus(status);
@@ -397,7 +399,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _openAppSettings() async {
-    final opened = await geolocatorAndroid.openAppSettings();
+    final opened = await _geolocatorAndroid.openAppSettings();
     String displayValue;
 
     if (opened) {
@@ -413,7 +415,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   void _openLocationSettings() async {
-    final opened = await geolocatorAndroid.openLocationSettings();
+    final opened = await _geolocatorAndroid.openLocationSettings();
     String displayValue;
 
     if (opened) {

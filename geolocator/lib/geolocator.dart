@@ -193,6 +193,10 @@ class Geolocator {
         locationSettings: locationSettings,
       );
 
+  /// Updates the parameters of the active position stream.
+  ///
+  /// Throws a [NotSubscribedException] when there is no active position stream
+  /// to update.
   static Future<void> updatePositionStream({
     required LocationSettings locationSettings,
   }) =>

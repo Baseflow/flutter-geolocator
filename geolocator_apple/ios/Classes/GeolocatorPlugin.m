@@ -98,6 +98,8 @@
     NSString* purposeKey = (NSString *)call.arguments[@"purposeKey"];
     [[self createLocationAccuracyHandler] requestTemporaryFullAccuracyWithResult:result
                                                                    purposeKey:purposeKey];
+  } else if ([@"updatePositionStream" isEqualToString:call.method]) {
+      [self onUpdatePositionStreamWithArguments:call.arguments result:result];
   } else if ([@"openAppSettings" isEqualToString:call.method]) {
     [self openSettings:result];
   } else if ([@"openLocationSettings" isEqualToString:call.method]) {
@@ -166,6 +168,27 @@
                                message: errorDescription
                                details: nil]);
   }];
+}
+
+- (void)onUpdatePositionStreamWithArguments:(id _Nullable)arguments
+                                     result:(FlutterResult)result {
+    if (![self.createGeolocationHandler isListeningForPositionUpdates]) {
+        result([FlutterError errorWithCode: GeolocatorErrorLocationSubscriptionInactive
+                                   message:@"There is no active location stream to update."
+                                   details:nil]);
+        return;
+    }
+    
+    CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
+    CLLocationDistance distanceFilter = [LocationDistanceMapper toCLLocationDistance:(NSNumber *)arguments[@"distanceFilter"]];
+    NSNumber* pauseLocationUpdatesAutomatically = arguments[@"pauseLocationUpdatesAutomatically"];
+    CLActivityType activityType = [ActivityTypeMapper toCLActivityType:(NSNumber *)arguments[@"activityType"]];
+    NSNumber* allowBackgroundLocationUpdates = arguments[@"allowBackgroundLocationUpdates"];
+    NSNumber* showBackgroundLocationIndicator = arguments[@"showBackgroundLocationIndicator"];
+    
+    [self.createGeolocationHandler updateListenerWithDesiredAccuracy:accuracy distanceFilter:distanceFilter pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically && [pauseLocationUpdatesAutomatically boolValue] showBackgroundLocationIndicator:showBackgroundLocationIndicator && [showBackgroundLocationIndicator boolValue] activityType:activityType allowBackgroundLocationUpdates:[allowBackgroundLocationUpdates boolValue]];
+    
+    result(nil);
 }
 
 
