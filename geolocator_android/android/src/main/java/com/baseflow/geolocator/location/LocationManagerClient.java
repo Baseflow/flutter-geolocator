@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,14 +23,15 @@ import com.baseflow.geolocator.errors.ErrorCodes;
 import java.util.List;
 
 class LocationManagerClient implements LocationClient, LocationListenerCompat {
-
+  private static final String TAG = "LocationManagerClient";
   private static final long TWO_MINUTES = 120000;
+
   private final LocationManager locationManager;
   private final NmeaClient nmeaClient;
-  @Nullable private final LocationOptions locationOptions;
   public Context context;
   private boolean isListening = false;
 
+  @Nullable private LocationOptions locationOptions;
   @Nullable private Location currentBestLocation;
   @Nullable private String currentLocationProvider;
   @Nullable private PositionChangedCallback positionChangedCallback;
@@ -143,40 +145,52 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
     return false;
   }
 
-  @SuppressLint("MissingPermission")
   @Override
   public void startPositionUpdates(
       Activity activity,
       PositionChangedCallback positionChangedCallback,
       ErrorCallback errorCallback) {
+      this.positionChangedCallback = positionChangedCallback;
+      this.errorCallback = errorCallback;
 
-    if (!checkLocationService(context)) {
-      errorCallback.onError(ErrorCodes.locationServicesDisabled);
+      if (!checkLocationService(context)) {
+          errorCallback.onError(ErrorCodes.locationServicesDisabled);
+          return;
+      }
+
+      LocationAccuracy accuracy = LocationAccuracy.best;
+      if (this.locationOptions != null) {
+          accuracy = locationOptions.getAccuracy();
+      }
+
+      this.currentLocationProvider = determineProvider(this.locationManager, accuracy);
+
+      if (this.currentLocationProvider == null) {
+          errorCallback.onError(ErrorCodes.locationServicesDisabled);
+          return;
+      }
+
+      requestPositionUpdates();
+  }
+
+  @SuppressLint("MissingPermission")
+  private void requestPositionUpdates() {
+    if (this.currentLocationProvider == null) {
+      Log.e(TAG, "Location provider was null.");
       return;
     }
 
-    this.positionChangedCallback = positionChangedCallback;
-    this.errorCallback = errorCallback;
-
-    LocationAccuracy accuracy = LocationAccuracy.best;
     long timeInterval = 0;
     float distanceFilter = 0;
     @LocationRequestCompat.Quality int quality = LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY;
 
     if (this.locationOptions != null) {
       distanceFilter = locationOptions.getDistanceFilter();
-      accuracy = locationOptions.getAccuracy();
+      LocationAccuracy accuracy = locationOptions.getAccuracy();
       timeInterval = accuracy == LocationAccuracy.lowest
           ? LocationRequestCompat.PASSIVE_INTERVAL
           : locationOptions.getTimeInterval();
       quality = accuracyToQuality(accuracy);
-    }
-
-    this.currentLocationProvider = determineProvider(this.locationManager, accuracy);
-
-    if (this.currentLocationProvider == null) {
-      errorCallback.onError(ErrorCodes.locationServicesDisabled);
-      return;
     }
 
     final LocationRequestCompat locationRequest = new LocationRequestCompat.Builder(timeInterval)
@@ -185,15 +199,23 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
         .setQuality(quality)
         .build();
 
-    this.isListening = true;
     this.nmeaClient.start();
-
     LocationManagerCompat.requestLocationUpdates(
         this.locationManager,
         this.currentLocationProvider,
         locationRequest,
         this,
         Looper.getMainLooper());
+
+    this.isListening = true;
+  }
+
+  @Override
+  public void updateLocationOptions(LocationOptions options) {
+    this.locationOptions = options;
+    if (isListening) {
+      requestPositionUpdates();
+    }
   }
 
   @SuppressLint("MissingPermission")
@@ -205,7 +227,7 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
   }
 
   @Override
-  public synchronized void onLocationChanged(Location location) {
+  public synchronized void onLocationChanged(@NonNull Location location) {
     if (isBetterLocation(location, currentBestLocation)) {
       this.currentBestLocation = location;
 
@@ -232,9 +254,6 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
       onProviderDisabled(provider);
     }
   }
-
-  @Override
-  public void onProviderEnabled(@NonNull String provider) {}
 
   @SuppressLint("MissingPermission")
   @Override

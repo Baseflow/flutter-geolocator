@@ -40,10 +40,11 @@ class FusedLocationClient implements LocationClient {
   private final FusedLocationProviderClient fusedLocationProviderClient;
   private final NmeaClient nmeaClient;
   private final int activityRequestCode;
-  @Nullable private final LocationOptions locationOptions;
 
+  @Nullable private LocationOptions locationOptions;
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PositionChangedCallback positionChangedCallback;
+  private boolean running = false;
 
   public FusedLocationClient(@NonNull Context context, @Nullable LocationOptions locationOptions) {
     this.context = context;
@@ -74,8 +75,9 @@ class FusedLocationClient implements LocationClient {
             if (location.getExtras() == null) {
               location.setExtras(Bundle.EMPTY);
             }
-            if (locationOptions != null) {
-              location.getExtras().putBoolean(LocationOptions.USE_MSL_ALTITUDE_EXTRA, locationOptions.isUseMSLAltitude());
+            if (FusedLocationClient.this.locationOptions != null) {
+              location.getExtras().putBoolean(LocationOptions.USE_MSL_ALTITUDE_EXTRA,
+                      FusedLocationClient.this.locationOptions.isUseMSLAltitude());
             }
 
             nmeaClient.enrichExtrasWithNmea(location);
@@ -157,6 +159,7 @@ class FusedLocationClient implements LocationClient {
     this.nmeaClient.start();
     fusedLocationProviderClient.requestLocationUpdates(
         locationRequest, locationCallback, Looper.getMainLooper());
+    running = true;
   }
 
   @Override
@@ -275,8 +278,17 @@ class FusedLocationClient implements LocationClient {
             });
   }
 
+    @Override
+    public void updateLocationOptions(LocationOptions options) {
+        this.locationOptions = options;
+        if (running) {
+            requestPositionUpdates(options);
+        }
+    }
+
   public void stopPositionUpdates() {
     this.nmeaClient.stop();
     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    running = false;
   }
 }

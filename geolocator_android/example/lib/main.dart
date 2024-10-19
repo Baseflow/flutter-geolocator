@@ -42,6 +42,7 @@ class GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   final GeolocatorPlatform _geolocatorAndroid = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
+  final ScrollController _scrollController = ScrollController();
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
 
@@ -121,6 +122,7 @@ class GeolocatorWidgetState extends State<GeolocatorWidget> {
             (context) => Scaffold(
               backgroundColor: Theme.of(context).colorScheme.surface,
               body: ListView.builder(
+                controller: _scrollController,
                 itemCount: _positionItems.length,
                 itemBuilder: (context, index) {
                   final positionItem = _positionItems[index];
@@ -165,6 +167,17 @@ class GeolocatorWidgetState extends State<GeolocatorWidget> {
                         : const Icon(Icons.pause),
                   ),
                   sizedBox,
+                  if (_positionStreamSubscription != null)
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: _speedUpTracking,
+                          child: const Icon(Icons.speed),
+                        ),
+                        sizedBox,
+                      ],
+                    ),
                   FloatingActionButton(
                     onPressed: _getCurrentPosition,
                     child: const Icon(Icons.my_location),
@@ -250,9 +263,12 @@ class GeolocatorWidgetState extends State<GeolocatorWidget> {
     return true;
   }
 
-  void _updatePositionList(_PositionItemType type, String displayValue) {
+  void _updatePositionList(_PositionItemType type, String displayValue) async {
     _positionItems.add(_PositionItem(type, displayValue));
     setState(() {});
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (!mounted) return;
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   bool _isListening() => !(_positionStreamSubscription == null ||
@@ -294,8 +310,8 @@ class GeolocatorWidgetState extends State<GeolocatorWidget> {
     if (_positionStreamSubscription == null) {
       final androidSettings = AndroidSettings(
         accuracy: LocationAccuracy.best,
-        distanceFilter: 10,
-        intervalDuration: const Duration(seconds: 1),
+        distanceFilter: 0,
+        intervalDuration: const Duration(seconds: 10),
         forceLocationManager: false,
         useMSLAltitude: true,
         foregroundNotificationConfig: const ForegroundNotificationConfig(
@@ -344,6 +360,21 @@ class GeolocatorWidgetState extends State<GeolocatorWidget> {
         'Listening for position updates $statusDisplayValue',
       );
     });
+  }
+
+  Future<void> _speedUpTracking() async {
+    await _geolocatorAndroid.updatePositionStream(
+        locationSettings: AndroidSettings(
+      accuracy: LocationAccuracy.best,
+      distanceFilter: 0,
+      intervalDuration: const Duration(seconds: 1),
+      forceLocationManager: false,
+      useMSLAltitude: true,
+    ));
+    _updatePositionList(
+      _PositionItemType.log,
+      'Position updates interval set to 1 second.',
+    );
   }
 
   @override

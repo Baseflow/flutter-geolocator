@@ -82,6 +82,9 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
       case "cancelGetCurrentPosition":
         onCancelGetCurrentPosition(call, result);
         break;
+      case "updatePositionStream":
+        onUpdatePositionStream(call, result);
+        break;
       case "openAppSettings":
         boolean hasOpenedAppSettings = Utils.openAppSettings(this.context);
         result.success(hasOpenedAppSettings);
@@ -279,4 +282,21 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
     result.success(null);
   }
+
+    private void onUpdatePositionStream(MethodCall call, MethodChannel.Result result) {
+        @SuppressWarnings("unchecked")
+        Map<String, Object> arguments = (Map<String, Object>) call.arguments;
+        LocationOptions locationOptions = LocationOptions.parseArguments(arguments);
+
+        boolean success = geolocationManager.updateLocationOptions(locationOptions);
+
+        if (success) {
+            result.success(null);
+        } else {
+            result.error(
+                    ErrorCodes.locationSubscriptionInactive.toString(),
+                    ErrorCodes.locationSubscriptionInactive.toDescription(),
+                    null);
+        }
+    }
 }
