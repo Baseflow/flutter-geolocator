@@ -172,7 +172,7 @@
 
 - (void)onUpdatePositionStreamWithArguments:(id _Nullable)arguments
                                      result:(FlutterResult)result {
-    if (![self.createGeolocationHandler isListeningForPositionUpdates]) {
+    if (![self.createGeolocationHandler listeningForPositionUpdates]) {
         result([FlutterError errorWithCode: GeolocatorErrorLocationSubscriptionInactive
                                    message:@"There is no active location stream to update."
                                    details:nil]);

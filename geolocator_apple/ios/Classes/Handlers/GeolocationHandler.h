@@ -33,7 +33,7 @@ typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
 
 - (void)stopListening;
 
-- (BOOL)isListeningForPositionUpdates;
+- (BOOL)listeningForPositionUpdates;
 
 - (void)updateListenerWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                            distanceFilter:(CLLocationDistance)distanceFilter

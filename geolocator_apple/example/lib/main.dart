@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
-import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
+
+import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
@@ -40,6 +41,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   final GeolocatorPlatform geolocatorApple = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
+  final ScrollController _scrollController = ScrollController();
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
 
@@ -121,6 +123,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
               backgroundColor: Theme.of(context).colorScheme.surface,
               body: ListView.builder(
                 itemCount: _positionItems.length,
+                controller: _scrollController,
                 itemBuilder: (context, index) {
                   final positionItem = _positionItems[index];
 
@@ -164,6 +167,17 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                         : const Icon(Icons.pause),
                   ),
                   sizedBox,
+                  if (_positionStreamSubscription != null)
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: _speedUpTracking,
+                          child: const Icon(Icons.speed),
+                        ),
+                        sizedBox,
+                      ],
+                    ),
                   FloatingActionButton(
                     onPressed: _getCurrentPosition,
                     child: const Icon(Icons.my_location),
@@ -254,9 +268,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     return true;
   }
 
-  void _updatePositionList(_PositionItemType type, String displayValue) {
+  void _updatePositionList(_PositionItemType type, String displayValue) async {
     _positionItems.add(_PositionItem(type, displayValue));
     setState(() {});
+    await Future.delayed(const Duration(milliseconds: 100));
+    if (!mounted) return;
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   bool _isListening() => !(_positionStreamSubscription == null ||
@@ -301,7 +318,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       final Stream<Position> positionStream = geolocatorApple.getPositionStream(
           locationSettings: AppleSettings(
         accuracy: LocationAccuracy.best,
-        distanceFilter: 10,
+        distanceFilter: 100,
         activityType: ActivityType.other,
         // Only set showBackgroundLocationIndicator and
         // allowBackgroundLocationUpdates to true if our app will be started up
@@ -344,6 +361,21 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         'Listening for position updates $statusDisplayValue',
       );
     });
+  }
+
+  Future<void> _speedUpTracking() async {
+    await geolocatorApple.updatePositionStream(
+        locationSettings: AppleSettings(
+      accuracy: LocationAccuracy.best,
+      distanceFilter: 0,
+      activityType: ActivityType.fitness,
+      showBackgroundLocationIndicator: false,
+      allowBackgroundLocationUpdates: false,
+    ));
+    _updatePositionList(
+      _PositionItemType.log,
+      'Position updates distance filter has been set to zero.',
+    );
   }
 
   @override
