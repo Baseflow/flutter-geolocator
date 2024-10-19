@@ -1,3 +1,6 @@
+## 4.6.2
+Fixes the ./gradlew build issue due to Missing permissions 
+
 ## 4.6.1
 
 * Fixes a bug where the plugin throws an exception while requesting locations updates with coarse location permission only.
