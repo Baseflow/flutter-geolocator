@@ -172,6 +172,17 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     throw UnimplementedError('getPositionStream() has not been implemented.');
   }
 
+  /// Updates the parameters of the active position stream.
+  ///
+  /// Throws a [NotSubscribedException] when there is no active position stream
+  /// to update.
+  Future<void> updatePositionStream({
+    required LocationSettings locationSettings,
+  }) {
+    throw UnimplementedError(
+        'updatePositionStream() has not been implemented.');
+  }
+
   /// Asks the user for Temporary Precise location access (iOS 14 or above).
   ///
   /// Returns [LocationAccuracyStatus.precise] if the user already gave

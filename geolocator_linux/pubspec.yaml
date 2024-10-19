@@ -21,7 +21,8 @@ dependencies:
   flutter:
     sdk: flutter
   geoclue: ^0.1.1
-  geolocator_platform_interface: ^4.1.0
+  geolocator_platform_interface:
+    path: ../geolocator_platform_interface
   gsettings: ^0.2.5
   package_info_plus: "^8.0.0"
 

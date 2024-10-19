@@ -1,3 +1,7 @@
+## 4.3.0
+
+- Adds `updatePositionStream` API.
+
 ## 4.2.4
 
 - Correctly handle integer-like numbers when decoding `Position` from JSON.

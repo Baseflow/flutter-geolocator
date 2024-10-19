@@ -23,7 +23,8 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
-  geolocator_platform_interface: ^4.2.0
+  geolocator_platform_interface:
+    path: ../../geolocator_platform_interface
 
   flutter:
     sdk: flutter

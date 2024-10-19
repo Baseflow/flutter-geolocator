@@ -1,3 +1,7 @@
+## 13.1.0
+
+- Adds updatePositionStream API for changing parameters while a position stream is running.
+
 ## 13.0.2
 
 - Updates dependency on geolocator_apple to version 2.3.8.
