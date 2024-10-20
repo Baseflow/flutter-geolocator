@@ -22,13 +22,13 @@ dependencies:
     sdk: flutter
   geolocator_platform_interface:
     path: ../geolocator_platform_interface
-  meta: ^1.10.0
-  uuid: ">=4.0.0 <6.0.0"
+  meta: ^1.15.0
+  uuid: ">=4.5.1"
 
 dev_dependencies:
-  async: ^2.8.2
+  async: ^2.11.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ">=3.0.0 <5.0.0"
-  mockito: ^5.2.0
-  plugin_platform_interface: ^2.1.2
+  flutter_lints: ">=5.0.0"
+  mockito: ^5.4.4
+  plugin_platform_interface: ^2.1.8
