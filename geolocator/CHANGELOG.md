@@ -1,3 +1,7 @@
+## 13.0.2
+
+- Updates dependency on geolocator_apple to version 2.3.8
+
 ## 13.0.1
 
 - Resolves problems when compiling non-web platforms because of illegal reference to `dart:js_interop`.
