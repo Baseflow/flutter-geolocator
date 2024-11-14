@@ -1,7 +1,6 @@
 ## 2.3.8
 
 * Uses different `CLLocationManager` instances, for one time request location and persistent request location. 
-* Switches to new `[CLLocationManager requestLocation]` method for one time location.
 * Fixes a bug where iOS location settings, e.g. `accuracy` and `distanceFilter` are overridden by different calls.
 * Updates minimum deployment target to `iOS 11` as lower is not supported anymore by Xcode.
 

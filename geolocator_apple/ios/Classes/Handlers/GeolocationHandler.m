@@ -9,13 +9,15 @@
 #import "GeolocationHandler_Test.h"
 #import "../Constants/ErrorCodes.h"
 
+double const kMaxLocationLifeTimeInSeconds = 5.0;
+
 @interface GeolocationHandler() <CLLocationManagerDelegate>
 
 @property(strong, nonatomic, nonnull) CLLocationManager *locationManager;
+@property(strong, nonatomic) GeolocatorError errorHandler;
 
 @property(strong, nonatomic, nonnull) CLLocationManager *oneTimeLocationManager;
-
-@property(strong, nonatomic) GeolocatorError errorHandler;
+@property(strong, nonatomic) GeolocatorError oneTimeErrorHandler;
 
 @property(strong, nonatomic) GeolocatorResult currentLocationResultHandler;
 @property(strong, nonatomic) GeolocatorResult listenerResultHandler;
@@ -30,7 +32,7 @@
   if (!self) {
     return nil;
   }
-    
+  
   return self;
 }
 
@@ -71,9 +73,9 @@
 - (void)requestPositionWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                              resultHandler:(GeolocatorResult _Nonnull)resultHandler
                               errorHandler:(GeolocatorError _Nonnull)errorHandler {
-  self.errorHandler = errorHandler;
+  self.oneTimeErrorHandler = errorHandler;
   self.currentLocationResultHandler = resultHandler;
-    
+  
   BOOL showBackgroundLocationIndicator = NO;
   BOOL allowBackgroundLocationUpdates = NO;
   
@@ -94,10 +96,10 @@
            allowBackgroundLocationUpdates:(BOOL)allowBackgroundLocationUpdates
                             resultHandler:(GeolocatorResult _Nonnull )resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
-    
+  
   self.errorHandler = errorHandler;
   self.listenerResultHandler = resultHandler;
-    
+  
   [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
                                   distanceFilter:distanceFilter
                pauseLocationUpdatesAutomatically:pauseLocationUpdatesAutomatically
@@ -127,7 +129,7 @@
     
 #if TARGET_OS_IOS
     locationManager.allowsBackgroundLocationUpdates = allowBackgroundLocationUpdates
-      && [GeolocationHandler shouldEnableBackgroundLocationUpdates];
+    && [GeolocationHandler shouldEnableBackgroundLocationUpdates];
     locationManager.showsBackgroundLocationIndicator = showBackgroundLocationIndicator;
 #endif
     [locationManager startUpdatingLocation];
@@ -135,32 +137,41 @@
     CLLocationManager *locationManager = [self getOneTimeLocationManager];
     locationManager.desiredAccuracy = desiredAccuracy;
     locationManager.distanceFilter = distanceFilter;
-    [locationManager requestLocation];
+    [locationManager startUpdatingLocation];
   }
 }
 
-- (void)stopListening {
-  [[self getLocationManager] stopUpdatingLocation];
-  self.errorHandler = nil;
-  self.listenerResultHandler = nil;
+- (void)stopOneTimeLocationListening {
+  [[self getOneTimeLocationManager] stopUpdatingLocation];
+  self.oneTimeErrorHandler = nil;
+  self.currentLocationResultHandler = nil;
 }
 
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
   if (!self.listenerResultHandler && !self.currentLocationResultHandler) return;
-
+  
   CLLocation *mostRecentLocation = [locations lastObject];
-    
-  if ([locations lastObject]) {
-      if (self.currentLocationResultHandler != nil) {
-          self.currentLocationResultHandler(mostRecentLocation);
-      }
-      if (self.listenerResultHandler != nil) {
-          self.listenerResultHandler(mostRecentLocation);
-      }
+  NSTimeInterval ageInSeconds = -[mostRecentLocation.timestamp timeIntervalSinceNow];
+  // If location is older then 5.0 seconds it is likely a cached location which
+  // will be skipped.
+  if (manager == [self getOneTimeLocationManager] && ageInSeconds > kMaxLocationLifeTimeInSeconds) {
+    return;
   }
-
+  
+  if ([locations lastObject]) {
+    if (self.currentLocationResultHandler != nil) {
+      self.currentLocationResultHandler(mostRecentLocation);
+    }
+    if (self.listenerResultHandler != nil) {
+      self.listenerResultHandler(mostRecentLocation);
+    }
+  }
+  
   self.currentLocationResultHandler = nil;
+  if (manager == [self getOneTimeLocationManager]) {
+    [self stopOneTimeLocationListening];
+  }
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -177,7 +188,13 @@
     self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
   }
   
-  self.currentLocationResultHandler = nil;
+  if (self.oneTimeErrorHandler) {
+    self.oneTimeErrorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
+  }
+  
+  if (manager == [self getOneTimeLocationManager]) {
+    [self stopOneTimeLocationListening];
+  }
 }
 
 + (BOOL) shouldEnableBackgroundLocationUpdates {
