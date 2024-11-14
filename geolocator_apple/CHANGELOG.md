@@ -1,3 +1,7 @@
+## 2.3.8+1
+
+* HOT FIX: Adds back implementation of the `stopListening` method in the `GeolocationHandler.m` file.
+
 ## 2.3.8
 
 * Uses different `CLLocationManager` instances, for one time request location and persistent request location. 

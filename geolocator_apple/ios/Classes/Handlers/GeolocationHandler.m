@@ -147,6 +147,12 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
   self.currentLocationResultHandler = nil;
 }
 
+- (void)stopListening {
+    [[self getLocationManager] stopUpdatingLocation];
+    self.errorHandler = nil;
+    self.listenerResultHandler = nil;
+}
+
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
   if (!self.listenerResultHandler && !self.currentLocationResultHandler) return;
