@@ -1,3 +1,7 @@
+## 13.0.2+1
+
+- HOT FIX: Fixes crash in geolocator_apple related to `stopListening` call.
+
 ## 13.0.2
 
 - Updates dependency on geolocator_apple to version 2.3.8.
