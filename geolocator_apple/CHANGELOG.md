@@ -1,3 +1,13 @@
+## 2.3.8+1
+
+* HOT FIX: Adds back implementation of the `stopListening` method in the `GeolocationHandler.m` file.
+
+## 2.3.8
+
+* Uses different `CLLocationManager` instances, for one time request location and persistent request location. 
+* Fixes a bug where iOS location settings, e.g. `accuracy` and `distanceFilter` are overridden by different calls.
+* Updates minimum deployment target to `iOS 11` as lower is not supported anymore by Xcode.
+
 ## 2.3.7
 
 * Adds privacy manifest.

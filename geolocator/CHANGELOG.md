@@ -1,6 +1,9 @@
 ## 13.0.2
 
 - Resolves build error on ./gradlew
+- Updates dependency on geolocator_apple to version 2.3.8.
+- Migrates Android configuration of example app away from imperative gradle API.
+
 
 ## 13.0.1
 

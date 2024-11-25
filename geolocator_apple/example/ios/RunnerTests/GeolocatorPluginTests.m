@@ -336,7 +336,7 @@
   
   if (@available(iOS 8, *)) {
     id mockApplication = OCMClassMock([UIApplication class]);
-    OCMStub([mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]]).andReturn(YES);
+    OCMStub([(UIApplication *)mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]]).andReturn(YES);
     OCMStub(ClassMethod([mockApplication sharedApplication])).andReturn(mockApplication);
     
       
@@ -394,7 +394,7 @@
   
   if (@available(iOS 8, *)) {
     id mockApplication = OCMClassMock([UIApplication class]);
-    OCMStub([mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]]).andReturn(YES);
+    OCMStub([(UIApplication *)mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]]).andReturn(YES);
     OCMStub(ClassMethod([mockApplication sharedApplication])).andReturn(mockApplication);
     
       
