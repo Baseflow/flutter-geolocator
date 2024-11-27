@@ -1,3 +1,7 @@
+## 2.3.8+2
+
+* Crash if listen/cancel is executed in quick succession
+
 ## 2.3.8+1
 
 * HOT FIX: Adds back implementation of the `stopListening` method in the `GeolocationHandler.m` file.
