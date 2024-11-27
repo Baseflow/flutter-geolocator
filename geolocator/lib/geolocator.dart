@@ -8,6 +8,7 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 export 'package:geolocator_android/geolocator_android.dart'
     show
         AndroidSettings,
+        AndroidLocationProvider,
         ForegroundNotificationConfig,
         AndroidResource,
         AndroidPosition;
