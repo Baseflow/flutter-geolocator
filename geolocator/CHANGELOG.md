@@ -1,3 +1,7 @@
+## 13.0.3
+
+- Updates dependency on geolocator_apple.
+
 ## 13.0.2
 
 - Updates dependency on geolocator_apple to version 2.3.8.

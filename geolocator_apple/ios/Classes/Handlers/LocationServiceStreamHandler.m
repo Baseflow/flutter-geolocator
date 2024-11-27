@@ -37,10 +37,12 @@
   dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     BOOL isEnabled = [CLLocationManager locationServicesEnabled];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
-        if (isEnabled) {
-            self->_eventSink([NSNumber numberWithInt:(ServiceStatus)enabled]);
-        } else {
-            self->_eventSink([NSNumber numberWithInt:(ServiceStatus)disabled]);
+        if (_eventSink != nil) {
+            if (isEnabled) {
+                self->_eventSink([NSNumber numberWithInt:(ServiceStatus) enabled]);
+            } else {
+                self->_eventSink([NSNumber numberWithInt:(ServiceStatus) disabled]);
+            }
         }
     });
   });
