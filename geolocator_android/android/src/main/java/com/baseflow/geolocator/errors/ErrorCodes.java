@@ -34,7 +34,7 @@ public enum ErrorCodes {
       case errorWhileAcquiringPosition:
         return "An unexpected error occurred while trying to acquire the device's position.";
       case locationServicesDisabled:
-        return "Location services are disabled. To receive location updates the location services should be enabled.";
+        return "Location services are disabled or requested location provider is unavailable. To receive location updates the location services must be enabled. When forcing a specific provider, it must be available on the device.";
       case permissionDefinitionsNotFound:
         return "No location permissions are defined in the manifest. Make sure at least ACCESS_FINE_LOCATION or ACCESS_COARSE_LOCATION are defined in the manifest.";
       case permissionDenied:

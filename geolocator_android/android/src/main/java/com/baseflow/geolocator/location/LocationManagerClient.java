@@ -77,11 +77,14 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
 
   private static @Nullable String determineProvider(
       @NonNull LocationManager locationManager,
-      @NonNull LocationAccuracy accuracy) {
+      @NonNull LocationAccuracy accuracy,
+      @Nullable String forceProvider) {
 
       final List<String> enabledProviders = locationManager.getProviders(true);
 
-      if (accuracy == LocationAccuracy.lowest) {
+      if (forceProvider != null) {
+          return enabledProviders.contains(forceProvider) ? forceProvider : null;
+      } else if (accuracy == LocationAccuracy.lowest) {
           return LocationManager.PASSIVE_PROVIDER;
       } else if (enabledProviders.contains(LocationManager.FUSED_PROVIDER) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
           return LocationManager.FUSED_PROVIDER;
@@ -172,7 +175,10 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
       quality = accuracyToQuality(accuracy);
     }
 
-    this.currentLocationProvider = determineProvider(this.locationManager, accuracy);
+    this.currentLocationProvider = determineProvider(
+            this.locationManager,
+            accuracy,
+            locationOptions != null ? locationOptions.getForceProvider() : null);
 
     if (this.currentLocationProvider == null) {
       errorCallback.onError(ErrorCodes.locationServicesDisabled);

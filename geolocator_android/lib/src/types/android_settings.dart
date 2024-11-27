@@ -17,6 +17,7 @@ class AndroidSettings extends LocationSettings {
     Duration? timeLimit,
     this.foregroundNotificationConfig,
     this.useMSLAltitude = false,
+    this.forceLocationProvider,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
@@ -74,6 +75,11 @@ class AndroidSettings extends LocationSettings {
   /// Defaults to false
   final bool useMSLAltitude;
 
+  /// Set this to use a specific [AndroidLocationProvider].
+  /// Set this value only in conjunction with [forceLocationManager] set to true. Be sure the provider is available on your targeted devices.
+  /// Defaults to null.
+  final AndroidLocationProvider? forceLocationProvider;
+
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
@@ -82,6 +88,19 @@ class AndroidSettings extends LocationSettings {
         'timeInterval': intervalDuration?.inMilliseconds,
         'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
         'useMSLAltitude': useMSLAltitude,
+        'forceLocationProvider': forceLocationProvider?.name,
       });
   }
+}
+
+/// Represents the different [Android location providers](https://developer.android.com/reference/android/location/LocationManager#constants_1)
+enum AndroidLocationProvider {
+  /// [GPS_PROVIDER](https://developer.android.com/reference/android/location/LocationManager#GPS_PROVIDER)
+  gps,
+  /// [FUSED_PROVIDER](https://developer.android.com/reference/android/location/LocationManager#FUSED_PROVIDER)
+  fused,
+  /// [NETWORK_PROVIDER](https://developer.android.com/reference/android/location/LocationManager#NETWORK_PROVIDER)
+  network,
+  /// [PASSIVE_PROVIDER](https://developer.android.com/reference/android/location/LocationManager#PASSIVE_PROVIDER)
+  passive,
 }
