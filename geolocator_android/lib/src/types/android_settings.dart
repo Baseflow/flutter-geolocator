@@ -17,7 +17,7 @@ class AndroidSettings extends LocationSettings {
     Duration? timeLimit,
     this.foregroundNotificationConfig,
     this.useMSLAltitude = false,
-    this.forceLocationProvider,
+    this.forceProvider,
   }) : super(
             accuracy: accuracy,
             distanceFilter: distanceFilter,
@@ -78,7 +78,7 @@ class AndroidSettings extends LocationSettings {
   /// Set this to use a specific [AndroidLocationProvider].
   /// Set this value only in conjunction with [forceLocationManager] set to true. Be sure the provider is available on your targeted devices.
   /// Defaults to null.
-  final AndroidLocationProvider? forceLocationProvider;
+  final AndroidLocationProvider? forceProvider;
 
   @override
   Map<String, dynamic> toJson() {
@@ -88,7 +88,7 @@ class AndroidSettings extends LocationSettings {
         'timeInterval': intervalDuration?.inMilliseconds,
         'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
         'useMSLAltitude': useMSLAltitude,
-        'forceLocationProvider': forceLocationProvider?.name,
+        'forceProvider': forceProvider?.name,
       });
   }
 }
