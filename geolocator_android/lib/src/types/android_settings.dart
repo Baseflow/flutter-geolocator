@@ -97,10 +97,13 @@ class AndroidSettings extends LocationSettings {
 enum AndroidLocationProvider {
   /// [GPS_PROVIDER](https://developer.android.com/reference/android/location/LocationManager#GPS_PROVIDER)
   gps,
+
   /// [FUSED_PROVIDER](https://developer.android.com/reference/android/location/LocationManager#FUSED_PROVIDER)
   fused,
+
   /// [NETWORK_PROVIDER](https://developer.android.com/reference/android/location/LocationManager#NETWORK_PROVIDER)
   network,
+
   /// [PASSIVE_PROVIDER](https://developer.android.com/reference/android/location/LocationManager#PASSIVE_PROVIDER)
   passive,
 }
