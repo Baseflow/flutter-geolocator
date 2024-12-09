@@ -20,8 +20,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  geolocator_platform_interface:
-    path: ../geolocator_platform_interface
+  geolocator_platform_interface: ^4.3.0
   meta: ^1.10.0
   uuid: ">=4.0.0 <6.0.0"
 
