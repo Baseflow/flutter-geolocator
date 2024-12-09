@@ -1,3 +1,7 @@
+## 4.7.0
+
+* Posiiton stream now throws `LocationSignalLostException` when GPS signal is lost. This new exception is safe to ignore.
+
 ## 4.6.1
 
 * Fixes a bug where the plugin throws an exception while requesting locations updates with coarse location permission only.
