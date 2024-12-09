@@ -232,6 +232,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         return ActivityMissingException(exception.message);
       case 'LOCATION_SERVICES_DISABLED':
         return const LocationServiceDisabledException();
+      case 'LOCATION_SIGNAL_LOST':
+        return const LocationSignalLostException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':
         return const AlreadySubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':

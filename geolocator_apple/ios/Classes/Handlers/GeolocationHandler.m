@@ -187,6 +187,9 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
         "Error description: %@", error.localizedFailureReason, error.localizedDescription);
   
   if([error.domain isEqualToString:kCLErrorDomain] && error.code == kCLErrorLocationUnknown) {
+    if (self.errorHandler) {
+      self.errorHandler(GeolocatorErrorLocationSignalLost, error.localizedDescription);
+    }
     return;
   }
   

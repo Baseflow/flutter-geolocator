@@ -85,9 +85,9 @@ class FusedLocationClient implements LocationClient {
           @Override
           public synchronized void onLocationAvailability(
               @NonNull LocationAvailability locationAvailability) {
-            if (!locationAvailability.isLocationAvailable() && !checkLocationService(context)) {
+            if (!locationAvailability.isLocationAvailable()) {
               if (errorCallback != null) {
-                errorCallback.onError(ErrorCodes.locationServicesDisabled);
+                errorCallback.onError(checkLocationService(context) ? ErrorCodes.locationSignalLost : ErrorCodes.locationServicesDisabled);
               }
             }
           }
