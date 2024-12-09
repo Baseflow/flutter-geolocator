@@ -1,3 +1,7 @@
+## 2.4.0
+
+* Posiiton stream now throws `LocationSignalLostException` when GPS signal is lost. This new exception is safe to ignore.
+
 ## 2.3.8+1
 
 * HOT FIX: Adds back implementation of the `stopListening` method in the `GeolocationHandler.m` file.

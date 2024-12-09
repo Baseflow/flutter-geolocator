@@ -1,3 +1,7 @@
+## 13.1.0
+
+* Position update stream may now throw `LocationSignalLostException` when GPS signal is lost. This new exception is safe to catch & ignore.
+
 ## 13.0.2
 
 - Updates dependency on geolocator_apple to version 2.3.8.

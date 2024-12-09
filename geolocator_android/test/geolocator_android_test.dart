@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_android/geolocator_android.dart';
+import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
@@ -1064,6 +1065,40 @@ void main() {
             streamQueue.next,
             throwsA(
               isA<LocationServiceDisabledException>(),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
+      });
+
+      test(
+          // ignore: lines_longer_than_80_chars
+          'Should receive a location signal lost exception if location signal is lost',
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_updates_android',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final positionStream = GeolocatorAndroid().getPositionStream();
+        final streamQueue = StreamQueue(positionStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'LOCATION_SIGNAL_LOST',
+            message: 'Location signal lost',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<LocationSignalLostException>(),
             ));
 
         // Clean up

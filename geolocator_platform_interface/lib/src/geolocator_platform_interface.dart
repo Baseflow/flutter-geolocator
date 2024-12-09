@@ -166,6 +166,9 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// location when the user denied access.
   /// Throws a [LocationServiceDisabledException] when the user allowed access,
   /// but the location services of the device are disabled.
+  /// Throws a [LocationSignalLostException] when the location/GPS signal is
+  /// lost. The caller should catch this exception and is free to ignore it. The
+  /// stream will continue to emit location updates when the signal is restored.
   Stream<Position> getPositionStream({
     LocationSettings? locationSettings,
   }) {

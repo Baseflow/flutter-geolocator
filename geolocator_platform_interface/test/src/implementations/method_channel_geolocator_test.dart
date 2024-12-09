@@ -891,6 +891,39 @@ void main() {
         streamController.close();
       });
 
+      test(
+          'Should receive a location signal lost exception when location signal is lost',
+          () async {
+        // Arrange
+        final streamController =
+            StreamController<PlatformException>.broadcast();
+        EventChannelMock(
+          channelName: 'flutter.baseflow.com/geolocator_updates',
+          stream: streamController.stream,
+        );
+
+        // Act
+        final positionStream = MethodChannelGeolocator().getPositionStream();
+        final streamQueue = StreamQueue(positionStream);
+
+        // Emit test error
+        streamController.addError(PlatformException(
+            code: 'LOCATION_SIGNAL_LOST',
+            message: 'Location signal lost',
+            details: null));
+
+        // Assert
+        expect(
+            streamQueue.next,
+            throwsA(
+              isA<LocationSignalLostException>(),
+            ));
+
+        // Clean up
+        streamQueue.cancel();
+        streamController.close();
+      });
+
       test('Should receive a permission request in progress exception',
           () async {
         // Arrange
