@@ -13,6 +13,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 
 @interface GeolocationHandler() <CLLocationManagerDelegate>
 
+@property(assign, nonatomic) bool isListeningForPositionUpdates;
+
 @property(strong, nonatomic, nonnull) CLLocationManager *locationManager;
 @property(strong, nonatomic) GeolocatorError errorHandler;
 
@@ -32,6 +34,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
   if (!self) {
     return nil;
   }
+
+  self.isListeningForPositionUpdates = NO;
   
   return self;
 }
@@ -107,6 +111,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                    isListeningForPositionUpdates:YES
                  showBackgroundLocationIndicator:showBackgroundLocationIndicator
                   allowBackgroundLocationUpdates:allowBackgroundLocationUpdates];
+    
+  self.isListeningForPositionUpdates = YES;
 }
 
 - (void)startUpdatingLocationWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
@@ -148,6 +154,7 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 }
 
 - (void)stopListening {
+    self.isListeningForPositionUpdates = NO;
     [[self getLocationManager] stopUpdatingLocation];
     self.errorHandler = nil;
     self.listenerResultHandler = nil;
