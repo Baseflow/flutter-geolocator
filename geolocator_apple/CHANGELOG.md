@@ -1,3 +1,7 @@
+## 2.3.9
+
+* Adds Swift Package Manager compatibility.
+
 ## 2.3.8+1
 
 * HOT FIX: Adds back implementation of the `stopListening` method in the `GeolocationHandler.m` file.
