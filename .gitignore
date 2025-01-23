@@ -95,6 +95,8 @@ GeneratedPluginRegistrant.java
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 **/ios/Flutter/Flutter.podspec
+**/.build/
+**/.swiftpm/
 
 # Firebase related
 .firebase/

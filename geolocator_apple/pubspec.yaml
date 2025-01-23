@@ -15,9 +15,11 @@ flutter:
       ios:
         pluginClass: GeolocatorPlugin
         dartPluginClass: GeolocatorApple
+        sharedDarwinSource: true
       macos:
         pluginClass: GeolocatorPlugin
         dartPluginClass: GeolocatorApple
+        sharedDarwinSource: true
 
 dependencies:
   flutter:
