@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 /// Defines the main theme color.
-final MaterialColor themeMaterialColor =
-    BaseflowPluginExample.createMaterialColor(
-        const Color.fromRGBO(48, 49, 60, 1));
+final MaterialColor themeMaterialColor = BaseflowPluginExample.createMaterialColor(const Color.fromRGBO(48, 49, 60, 1));
 
 void main() {
   runApp(const GeolocatorWidget());
@@ -22,8 +21,7 @@ class GeolocatorWidget extends StatefulWidget {
 
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
-    return ExamplePage(
-        Icons.location_on, (context) => const GeolocatorWidget());
+    return ExamplePage(Icons.location_on, (context) => const GeolocatorWidget());
   }
 
   @override
@@ -31,11 +29,9 @@ class GeolocatorWidget extends StatefulWidget {
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
-  static const String _kLocationServicesDisabledMessage =
-      'Location services are disabled.';
+  static const String _kLocationServicesDisabledMessage = 'Location services are disabled.';
   static const String _kPermissionDeniedMessage = 'Permission denied.';
-  static const String _kPermissionDeniedForeverMessage =
-      'Permission denied forever.';
+  static const String _kPermissionDeniedForeverMessage = 'Permission denied forever.';
   static const String _kPermissionGrantedMessage = 'Permission granted.';
 
   final GeolocatorPlatform geolocatorApple = GeolocatorPlatform.instance;
@@ -158,8 +154,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                             ? 'Resume'
                             : 'Pause',
                     backgroundColor: _determineButtonColor(),
-                    child: (_positionStreamSubscription == null ||
-                            _positionStreamSubscription!.isPaused)
+                    child: (_positionStreamSubscription == null || _positionStreamSubscription!.isPaused)
                         ? const Icon(Icons.play_arrow)
                         : const Icon(Icons.pause),
                   ),
@@ -259,8 +254,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     setState(() {});
   }
 
-  bool _isListening() => !(_positionStreamSubscription == null ||
-      _positionStreamSubscription!.isPaused);
+  bool _isListening() => !(_positionStreamSubscription == null || _positionStreamSubscription!.isPaused);
 
   Color _determineButtonColor() {
     return _isListening() ? Colors.green : Colors.red;
@@ -269,8 +263,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   void _toggleServiceStatusStream() {
     if (_serviceStatusStreamSubscription == null) {
       final serviceStatusStream = geolocatorApple.getServiceStatusStream();
-      _serviceStatusStreamSubscription =
-          serviceStatusStream.handleError((error) {
+      _serviceStatusStreamSubscription = serviceStatusStream.handleError((error) {
         _serviceStatusStreamSubscription?.cancel();
         _serviceStatusStreamSubscription = null;
       }).listen((serviceStatus) {
@@ -289,61 +282,66 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   Future<void> _toggleListening() async {
-    final hasPermission = await _handlePermission();
+    try {
+      final hasPermission = await _handlePermission();
 
-    if (!hasPermission) {
-      return;
-    }
+      if (!hasPermission) {
+        return;
+      }
 
-    Exception? error;
+      Exception? error;
 
-    if (_positionStreamSubscription == null) {
-      final Stream<Position> positionStream = geolocatorApple.getPositionStream(
-          locationSettings: AppleSettings(
-        accuracy: LocationAccuracy.best,
-        distanceFilter: 10,
-        activityType: ActivityType.other,
-        // Only set showBackgroundLocationIndicator and
-        // allowBackgroundLocationUpdates to true if our app will be started up
-        // in the background.
-        showBackgroundLocationIndicator: false,
-        allowBackgroundLocationUpdates: false,
-      ));
-      _positionStreamSubscription = positionStream.handleError((e) {
-        _positionStreamSubscription?.cancel();
-        _positionStreamSubscription = null;
-        error = e;
-      }).listen((position) => _updatePositionList(
-            _PositionItemType.position,
-            position.toString(),
-          ));
-      _positionStreamSubscription?.pause();
-    }
-
-    setState(() {
       if (_positionStreamSubscription == null) {
-        return;
+        final positionStream = geolocatorApple.getPositionStream(
+            locationSettings: AppleSettings(
+          accuracy: LocationAccuracy.best,
+          distanceFilter: 10,
+          activityType: ActivityType.other,
+          // Only set showBackgroundLocationIndicator and
+          // allowBackgroundLocationUpdates to true if our app will be started up
+          // in the background.
+          showBackgroundLocationIndicator: false,
+          allowBackgroundLocationUpdates: false,
+        ));
+        if (await positionStream.isEmpty) return;
+        _positionStreamSubscription = positionStream.handleError((e) {
+          _positionStreamSubscription?.cancel();
+          _positionStreamSubscription = null;
+          error = e;
+        }).listen((position) => _updatePositionList(
+              _PositionItemType.position,
+              position.toString(),
+            ));
+        _positionStreamSubscription?.pause();
       }
 
-      if (error != null) {
-        _updatePositionList(_PositionItemType.log, error.toString());
-        return;
-      }
+      setState(() {
+        if (_positionStreamSubscription == null) {
+          return;
+        }
 
-      String statusDisplayValue;
-      if (_positionStreamSubscription!.isPaused) {
-        _positionStreamSubscription!.resume();
-        statusDisplayValue = 'resumed';
-      } else {
-        _positionStreamSubscription!.pause();
-        statusDisplayValue = 'paused';
-      }
+        if (error != null) {
+          _updatePositionList(_PositionItemType.log, error.toString());
+          return;
+        }
 
-      _updatePositionList(
-        _PositionItemType.log,
-        'Listening for position updates $statusDisplayValue',
-      );
-    });
+        String statusDisplayValue;
+        if (_positionStreamSubscription!.isPaused) {
+          _positionStreamSubscription!.resume();
+          statusDisplayValue = 'resumed';
+        } else {
+          _positionStreamSubscription!.pause();
+          statusDisplayValue = 'paused';
+        }
+
+        _updatePositionList(
+          _PositionItemType.log,
+          'Listening for position updates $statusDisplayValue',
+        );
+      });
+    } catch (e) {
+      if (kDebugMode) print(e);
+    }
   }
 
   @override
@@ -372,11 +370,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   }
 
   Future<void> _isLocationServiceEnabled() async {
-    final bool isLocationServiceEnabled =
-        await geolocatorApple.isLocationServiceEnabled();
-    final String displayValue = isLocationServiceEnabled
-        ? 'Location services are enabled.'
-        : 'Location services are disabled.';
+    final bool isLocationServiceEnabled = await geolocatorApple.isLocationServiceEnabled();
+    final String displayValue =
+        isLocationServiceEnabled ? 'Location services are enabled.' : 'Location services are disabled.';
 
     _updatePositionList(_PositionItemType.log, displayValue);
   }

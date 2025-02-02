@@ -187,7 +187,9 @@ class GeolocatorApple extends GeolocatorPlatform {
 
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
     return incoming.asBroadcastStream(onCancel: (subscription) {
-      subscription.cancel();
+      if (!subscription.isPaused) {
+        subscription.cancel();
+      }
       _positionStream = null;
     });
   }
