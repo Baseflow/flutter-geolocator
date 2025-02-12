@@ -1,6 +1,10 @@
-## 2.3.9
+## 2.3.10
 
 * Adds Swift Package Manager compatibility.
+
+## 2.3.9
+
+* Adds privacy manifest for macOS.
 
 ## 2.3.8+1
 
