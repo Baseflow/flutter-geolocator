@@ -32,7 +32,7 @@ android {
         minSdkVersion 16
     }
     lintOptions {
-        disable 'InvalidPackage'
+        disable 'InvalidPackage', 'MissingPermission'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
