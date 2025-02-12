@@ -1,3 +1,7 @@
+## 2.3.9
+
+* Adds privacy manifest for macOS.
+
 ## 2.3.8+1
 
 * HOT FIX: Adds back implementation of the `stopListening` method in the `GeolocationHandler.m` file.
