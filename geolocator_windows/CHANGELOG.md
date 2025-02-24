@@ -1,3 +1,8 @@
+## 0.2.4
+
+* Updates dart SDk to `sdk: ^3.5.0`
+* Fixed analyzzer issues example project
+
 ## 0.2.3
 
 * Fixes crash under Windows when RequestAcess is called while the Geolocation Service is disabled. (#1455)
