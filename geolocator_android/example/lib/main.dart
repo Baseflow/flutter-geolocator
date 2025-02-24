@@ -29,7 +29,9 @@ class GeolocatorWidget extends StatefulWidget {
   }
 
   @override
-  _GeolocatorWidgetState createState() => _GeolocatorWidgetState();
+  State<GeolocatorWidget> createState() {
+    return _GeolocatorWidgetState();
+  }
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
