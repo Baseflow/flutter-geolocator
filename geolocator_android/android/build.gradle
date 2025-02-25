@@ -26,17 +26,17 @@ android {
         namespace("com.baseflow.geolocator")
     }
 
-    compileSdk 35
+    compileSdk flutter.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion flutter.minSdkVersion
     }
     lintOptions {
         disable 'InvalidPackage'
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
