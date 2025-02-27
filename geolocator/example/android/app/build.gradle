@@ -30,6 +30,7 @@ project.getTasks().withType(JavaCompile) {
 android {
     compileSdkVersion 34
 
+    
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.baseflow.geolocator_example"
