@@ -1,6 +1,6 @@
 plugins {
-    id "com.android.application"
-    id "dev.flutter.flutter-gradle-plugin"
+     id "com.android.application"
+     id "dev.flutter.flutter-gradle-plugin"
 }
 
 def localProperties = new Properties()
@@ -21,19 +21,13 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def args = ["-Xlint:deprecation", "-Xlint:unchecked", "-Werror"]
-
-project.getTasks().withType(JavaCompile) {
-    options.compilerArgs.addAll(args)
-}
-
 android {
     namespace 'com.baseflow.geolocator_example'
     compileSdkVersion flutter.compileSdkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
@@ -42,12 +36,12 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.baseflow.geolocator_example"
+        applicationId "com.baseflow.geolocator_exampl"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -61,4 +55,10 @@ android {
 
 flutter {
     source '../..'
+}
+
+dependencies {
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

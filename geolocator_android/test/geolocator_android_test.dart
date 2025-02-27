@@ -1511,7 +1511,7 @@ void main() {
         );
         expect(
           jsonMap['foregroundNotificationConfig']['color'],
-          settings.foregroundNotificationConfig!.color!.toARGB32(),
+          settings.foregroundNotificationConfig!.color!.toARGB32,
         );
       });
 
