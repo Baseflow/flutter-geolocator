@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 def args = ["-Xlint:deprecation", "-Xlint:unchecked", "-Werror"]
 
 project.getTasks().withType(JavaCompile) {
- options.compilerArgs.addAll(args)
+    options.compilerArgs.addAll(args)
 }
 
 android {
@@ -45,7 +45,7 @@ android {
         applicationId "com.baseflow.geolocator_example"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        
+
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
