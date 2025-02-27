@@ -1,8 +1,9 @@
 ## 4.6.2
 
 * Updates compileSDKVersion to 35
-* Updates gradle version to 8.9
-* Updates id("com.android.application") version to 8.7.0
+* Updates Fixed warnings in Android package and Android example project
+* Updates gradle version
+* Updates com.android.application version to 8.7.0
 
 ## 4.6.1
 
