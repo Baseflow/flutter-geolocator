@@ -12,6 +12,7 @@ dependencies:
   baseflow_plugin_template: ^2.1.2
   flutter:
     sdk: flutter
+  geolocator_platform_interface: ^4.2.4
 
   geolocator_android:
     # When depending on this package from a real application you should use:
