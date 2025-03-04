@@ -13,16 +13,12 @@ class AppleSettings extends LocationSettings {
   AppleSettings({
     this.pauseLocationUpdatesAutomatically = false,
     this.activityType = ActivityType.other,
-    LocationAccuracy accuracy = LocationAccuracy.best,
-    int distanceFilter = 0,
-    Duration? timeLimit,
+    super.accuracy,
+    super.distanceFilter,
+    super.timeLimit,
     this.showBackgroundLocationIndicator = false,
     this.allowBackgroundLocationUpdates = true,
-  }) : super(
-          accuracy: accuracy,
-          distanceFilter: distanceFilter,
-          timeLimit: timeLimit,
-        );
+  });
 
   /// Allows the location manager to pause updates to improve battery life
   /// on the target device without sacrificing location data.

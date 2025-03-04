@@ -1511,6 +1511,8 @@ void main() {
         );
         expect(
           jsonMap['foregroundNotificationConfig']['color'],
+          // Temporary ignored for release 4.6.1 (remove in future versions)
+          // ignore: deprecated_member_use
           settings.foregroundNotificationConfig!.color!.value,
         );
       });
