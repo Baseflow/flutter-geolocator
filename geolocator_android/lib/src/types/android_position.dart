@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters
+
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 // ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
@@ -21,7 +23,7 @@ class AndroidPosition extends Position {
     required headingAccuracy,
     required speed,
     required speedAccuracy,
-    int? floor,
+    super.floor,
     isMocked = false,
   }) : super(
           longitude: longitude,
@@ -34,7 +36,6 @@ class AndroidPosition extends Position {
           headingAccuracy: headingAccuracy,
           speed: speed,
           speedAccuracy: speedAccuracy,
-          floor: floor,
           isMocked: isMocked,
         );
 
