@@ -28,7 +28,7 @@ project.getTasks().withType(JavaCompile) {
 }
 
 android {
-    compileSdkVersion 34
+    compileSdkVersion 35
 
 
     defaultConfig {
