@@ -1,3 +1,7 @@
+## NEXT
+
+- Updates dart sdk to `>3.5.0`
+
 ## 4.2.4
 
 - Correctly handle integer-like numbers when decoding `Position` from JSON.
