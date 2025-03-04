@@ -1,3 +1,7 @@
+## 2.3.11
+
+* Adds Swift Package Manager compatibility.
+
 ## 2.3.10
 
 * Updated dart sdk to sdk: `^3.5.0`

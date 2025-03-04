@@ -58,6 +58,7 @@ unlinked.ds
 unlinked_spec.ds
 flutter_export_environment.sh
 **/.flutter-plugins-dependencies
+**/Flutter/ephemeral/
 
 # Android related
 gradle-wrapper.jar
@@ -95,6 +96,8 @@ GeneratedPluginRegistrant.java
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
 **/ios/Flutter/Flutter.podspec
+**/.build/
+**/.swiftpm/
 
 # Firebase related
 .firebase/
