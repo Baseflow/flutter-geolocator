@@ -28,7 +28,7 @@ dependencies:
 
   geolocator_platform_interface: ^4.2.3
   geolocator_android: ^4.6.0
-  geolocator_apple: ^2.3.8
+  geolocator_apple: ^2.3.9
   geolocator_web: ^4.1.1
   geolocator_windows: ^0.2.3
 
