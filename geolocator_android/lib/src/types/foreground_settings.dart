@@ -119,9 +119,7 @@ class ForegroundNotificationConfig {
       'notificationText': notificationText,
       'notificationChannelName': notificationChannelName,
       'setOngoing': setOngoing,
-      // Temporary ignored for release 4.6.1 (remove in future versions)
-      // ignore: deprecated_member_use
-      'color': color?.value,
+      'color': color?.toARGB32(),
     };
   }
 }
