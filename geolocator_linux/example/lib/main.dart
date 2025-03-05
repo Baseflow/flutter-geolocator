@@ -21,7 +21,7 @@ void main() {
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
   /// Create a GeolocatorWidget.
-  const GeolocatorWidget({Key? key}) : super(key: key);
+  const GeolocatorWidget({super.key});
 
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {

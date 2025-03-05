@@ -1,3 +1,8 @@
+## 0.2.2
+
+- Updates dart sdk to `sdk: ^3.5.0`
+- Fixes analyzer issues
+
 ## 0.2.1
 
 - Updates dependency on package_info_plus to version 8.0.0.
