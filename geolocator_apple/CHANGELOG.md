@@ -1,3 +1,7 @@
+## NEXT
+
+* Removed deprecated `-[UIApplication openURL:]` dead code.
+
 ## 2.3.10
 
 * Updated dart sdk to sdk: `^3.5.0`
