@@ -175,20 +175,12 @@
   BOOL success = [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:urlString]];
   result([[NSNumber alloc] initWithBool:success]);
 #else
-  if (@available(iOS 10, *)) {
-    [[UIApplication sharedApplication]
-     openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
-     options:[[NSDictionary alloc] init]
-     completionHandler:^(BOOL success) {
-      result([[NSNumber alloc] initWithBool:success]);
-    }];
-  } else if (@available(iOS 8.0, *)) {
-    BOOL success = [[UIApplication sharedApplication]
-                    openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+  [[UIApplication sharedApplication]
+   openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
+   options:[[NSDictionary alloc] init]
+   completionHandler:^(BOOL success) {
     result([[NSNumber alloc] initWithBool:success]);
-  } else {
-    result([[NSNumber alloc] initWithBool:NO]);
-  }
+  }];
 #endif
 }
 @end
