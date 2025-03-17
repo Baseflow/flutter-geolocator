@@ -1,3 +1,16 @@
+## 2.3.12
+
+* Removed deprecated `-[UIApplication openURL:]` dead code.
+
+## 2.3.11
+
+* Adds privacy manifest for macOS to the podspec.
+
+## 2.3.10
+
+* Updated dart sdk to sdk: `^3.5.0`
+* Fixed example project warnings
+
 ## 2.3.9
 
 * Adds privacy manifest for macOS.
