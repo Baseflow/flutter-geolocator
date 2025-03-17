@@ -1,3 +1,10 @@
+## 4.6.2
+
+* Updates compileSDKVersion to 35
+* Updates Fixed warnings in Android package and Android example project
+* Updates gradle version
+* Updates com.android.application version to 8.7.0
+
 ## 4.6.1
 
 * Fixes a bug where the plugin throws an exception while requesting locations updates with coarse location permission only.
