@@ -1,3 +1,7 @@
+## 2.3.11
+
+* Adds privacy manifest for macOS to the podspec.
+
 ## 2.3.10
 
 * Updated dart sdk to sdk: `^3.5.0`
