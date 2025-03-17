@@ -1,3 +1,7 @@
+## 2.3.12
+
+* Removed deprecated `-[UIApplication openURL:]` dead code.
+
 ## 2.3.11
 
 * Adds privacy manifest for macOS to the podspec.
