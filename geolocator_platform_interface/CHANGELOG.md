@@ -1,4 +1,4 @@
-## NEXT
+## 4.2.5
 
 - Updates dart sdk to `>3.5.0`
 
