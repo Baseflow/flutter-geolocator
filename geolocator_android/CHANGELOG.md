@@ -1,6 +1,6 @@
 ## 5.0.0
 
-- **BREAKING CHANGE:** for Flutter `3.27.0` and below. Make sure you'll upgrade Flutter before using this version.
+- **BREAKING CHANGE:** for Flutter `3.27.0` and below. Make sure you'll upgrade Flutter to `3.29.0` or above before using this version.
 * Fixes deprecation warnings
 
 ## 4.6.2
