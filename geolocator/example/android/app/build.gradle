@@ -28,14 +28,14 @@ project.getTasks().withType(JavaCompile) {
 }
 
 android {
-    compileSdkVersion 35
+    compileSdkVersion flutter.compileSdkVersion
 
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.baseflow.geolocator_example"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 30
+        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
