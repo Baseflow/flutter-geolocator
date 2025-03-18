@@ -3,7 +3,7 @@ description: A common platform interface for the geolocator plugin.
 repository: https://github.com/baseflow/flutter-geolocator/tree/main/geolocator_platform_interface
 # NOTE: We strongly prefer non-breaking changes, even at the expense of a
 # less-clean API. See https://flutter.dev/go/platform-interface-breaking-changes
-version: 4.2.4
+version: 4.2.5
 
 dependencies:
   flutter:
@@ -21,5 +21,5 @@ dev_dependencies:
   mockito: ^5.4.2
 
 environment:
-  sdk: ">=2.15.0 <4.0.0"
+  sdk: ^3.5.0
   flutter: ">=2.8.0"

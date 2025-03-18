@@ -18,4 +18,6 @@ Pod::Spec.new do |s|
   s.dependency 'FlutterMacOS'
   s.platform = :osx, '10.11' 
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  s.resource_bundles = {'geolocator_apple_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
+
 end

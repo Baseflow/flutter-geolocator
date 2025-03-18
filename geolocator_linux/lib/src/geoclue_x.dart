@@ -45,8 +45,6 @@ extension GeoClueLocationAccuracy on LocationAccuracy {
       case LocationAccuracy.best:
       case LocationAccuracy.bestForNavigation:
         return GeoClueAccuracyLevel.exact;
-      default:
-        return GeoClueAccuracyLevel.none;
     }
   }
 }
