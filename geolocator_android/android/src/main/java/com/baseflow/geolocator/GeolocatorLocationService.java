@@ -50,7 +50,6 @@ public class GeolocatorLocationService extends Service {
   public void onCreate() {
     super.onCreate();
     Log.d(TAG, "Creating service.");
-    geolocationManager = new GeolocationManager();
   }
 
   @Override
@@ -85,8 +84,8 @@ public class GeolocatorLocationService extends Service {
   }
 
   public boolean canStopLocationService(boolean cancellationRequested) {
-    if(cancellationRequested) {
-       return listenerCount == 1;
+    if (cancellationRequested) {
+      return listenerCount == 1;
     }
     return connectedEngines == 0;
   }
@@ -143,7 +142,7 @@ public class GeolocatorLocationService extends Service {
       backgroundNotification =
           new BackgroundNotification(
               this.getApplicationContext(), CHANNEL_ID, ONGOING_NOTIFICATION_ID, options);
-      backgroundNotification.updateChannel("Background Location");
+      backgroundNotification.updateChannel(options.getNotificationChannelName());
       Notification notification = backgroundNotification.build();
       startForeground(ONGOING_NOTIFICATION_ID, notification);
       isForeground = true;
@@ -177,6 +176,10 @@ public class GeolocatorLocationService extends Service {
     this.activity = activity;
   }
 
+  public void setGeolocationManager(@Nullable GeolocationManager geolocationManager) {
+      this.geolocationManager = geolocationManager;
+  }
+
   private void releaseWakeLocks() {
     if (wakeLock != null && wakeLock.isHeld()) {
       wakeLock.release();
@@ -204,11 +207,19 @@ public class GeolocatorLocationService extends Service {
       WifiManager wifiManager =
           (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
       if (wifiManager != null) {
-        wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, WIFILOCK_TAG);
+        wifiLock = wifiManager.createWifiLock(getWifiLockType(), WIFILOCK_TAG);
         wifiLock.setReferenceCounted(false);
         wifiLock.acquire();
       }
     }
+  }
+
+  @SuppressWarnings("deprecation")
+  private int getWifiLockType() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+      return WifiManager.WIFI_MODE_FULL_HIGH_PERF;
+    }
+    return WifiManager.WIFI_MODE_FULL_LOW_LATENCY;
   }
 
   class LocalBinder extends Binder {

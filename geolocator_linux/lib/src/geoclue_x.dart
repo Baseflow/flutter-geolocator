@@ -23,7 +23,7 @@ extension GeoCluePosition on GeoClueLocation {
       headingAccuracy: 0,
       latitude: latitude,
       longitude: longitude,
-      timestamp: timestamp,
+      timestamp: timestamp ?? DateTime.now(),
       speed: speed ?? 0,
       speedAccuracy: 0,
     );
@@ -45,8 +45,6 @@ extension GeoClueLocationAccuracy on LocationAccuracy {
       case LocationAccuracy.best:
       case LocationAccuracy.bestForNavigation:
         return GeoClueAccuracyLevel.exact;
-      default:
-        return GeoClueAccuracyLevel.none;
     }
   }
 }

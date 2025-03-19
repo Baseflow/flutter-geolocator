@@ -143,22 +143,27 @@ class Position {
           'The supplied map doesn\'t contain the mandatory key `longitude`.');
     }
 
-    final timestamp = DateTime.fromMillisecondsSinceEpoch(
-        positionMap['timestamp'].toInt(),
-        isUtc: true);
+    // Assume that the timestamp is null if the map does not contain one
+    dynamic timestampInMap = positionMap['timestamp'];
+    final timestamp = timestampInMap == null
+        ? DateTime.now()
+        : DateTime.fromMillisecondsSinceEpoch(
+            timestampInMap.toInt(),
+            isUtc: true,
+          );
 
     return Position(
       latitude: positionMap['latitude'],
       longitude: positionMap['longitude'],
       timestamp: timestamp,
-      altitude: positionMap['altitude'] ?? 0.0,
-      altitudeAccuracy: positionMap['altitude_accuracy'] ?? 0.0,
-      accuracy: positionMap['accuracy'] ?? 0.0,
-      heading: positionMap['heading'] ?? 0.0,
-      headingAccuracy: positionMap['heading_accuracy'] ?? 0.0,
+      altitude: _toDouble(positionMap['altitude']),
+      altitudeAccuracy: _toDouble(positionMap['altitude_accuracy']),
+      accuracy: _toDouble(positionMap['accuracy']),
+      heading: _toDouble(positionMap['heading']),
+      headingAccuracy: _toDouble(positionMap['heading_accuracy']),
       floor: positionMap['floor'],
-      speed: positionMap['speed'] ?? 0.0,
-      speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
+      speed: _toDouble(positionMap['speed']),
+      speedAccuracy: _toDouble(positionMap['speed_accuracy']),
       isMocked: positionMap['is_mocked'] ?? false,
     );
   }
@@ -179,4 +184,12 @@ class Position {
         'speed_accuracy': speedAccuracy,
         'is_mocked': isMocked,
       };
+
+  static double _toDouble(dynamic value) {
+    if (value == null) {
+      return 0.0;
+    }
+
+    return value.toDouble();
+  }
 }

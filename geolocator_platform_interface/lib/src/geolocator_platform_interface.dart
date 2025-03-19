@@ -130,8 +130,6 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   ///
   /// An instance of [LocationServiceStatus] will be emitted each time the
   /// location service is enabled or disabled.
-  /// Throws an [UnimplementedError] on the web as the concept of location
-  /// service doesn't exist on the web platform.
   Stream<ServiceStatus> getServiceStatusStream() {
     throw UnimplementedError(
         'getServiceStatusStream() has not been implemented.');

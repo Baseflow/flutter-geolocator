@@ -1,6 +1,26 @@
-## 4.2.1
+## 4.2.6
 
 - Updates documentation `isMocked` to bring it in line with the functionality. `isMocked` for iOS 15 and higher depends on the result from isSimulatedBySoftware.
+- 
+## 4.2.5
+
+- Updates dart sdk to `>3.5.0`
+
+## 4.2.4
+
+- Correctly handle integer-like numbers when decoding `Position` from JSON.
+
+## 4.2.3
+
+- Fixes several grammar mistakes in the API documentation.
+
+## 4.2.2
+
+- Updates the documentation of the `getServiceStatusStream` method as it nolonger throws a `UnimplementedError` on web.
+
+## 4.2.1
+
+- Ensures that `timestamp` is set to current date and time if platform implementations return a `null` value.
 
 ## 4.2.0
 

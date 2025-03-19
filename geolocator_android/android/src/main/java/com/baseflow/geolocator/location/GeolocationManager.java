@@ -18,10 +18,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GeolocationManager
     implements io.flutter.plugin.common.PluginRegistry.ActivityResultListener {
 
+    private static GeolocationManager geolocationManagerInstance = null;
+
   private final List<LocationClient> locationClients;
 
-  public GeolocationManager() {
+  private GeolocationManager() {
     this.locationClients = new CopyOnWriteArrayList<>();
+  }
+
+  public static synchronized GeolocationManager getInstance() {
+      if (geolocationManagerInstance == null) {
+          geolocationManagerInstance = new GeolocationManager();
+      }
+
+      return geolocationManagerInstance;
   }
 
   public void getLastKnownPosition(

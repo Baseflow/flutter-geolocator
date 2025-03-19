@@ -1,21 +1,79 @@
+## 5.0.0
+
+- **BREAKING CHANGE:** for Flutter `3.27.0` and below. Make sure you'll upgrade Flutter to `3.29.0` or above before using this version.
+* Fixes deprecation warnings
+
+## 4.6.2
+
+* Updates compileSDKVersion to 35
+* Updates Fixed warnings in Android package and Android example project
+* Updates gradle version
+* Updates com.android.application version to 8.7.0
+
+## 4.6.1
+
+* Fixes a bug where the plugin throws an exception while requesting locations updates with coarse location permission only.
+
+## 4.6.0
+
+* Adds support to read NMEA messages from other satellites constellations.
+* Read the MSL altitude directly from the Android location starting with API 34.
+* Always listen to NMEA message to get GPS position fix data.
+* Updates `com.google.android.gms:play-services-location` to version `21.2.0`.
+* Updates `androidx.core:core` to version `1.13.0`.
+
+## 4.5.5
+
+* Fixes a bug where location stream is not automatically started when enabling the location services.
+
+## 4.5.4
+
+* Fixes a bug where the `getPositionStream` was not informed of the location service resolution result. This resulted in a stream that was kept open indefinitely.
+
+## 4.5.3+1
+
+* Reverts `androidx.core:core` to version `1.9.0`.
+
+## 4.5.3
+
+* Adds the `notificationChannelName` field to the `ForegroundNotificationConfig` class, allowing to override the channel name.
+* Reverts `com.google.android.gms:play-services-location` to version `21.0.1`. Version `21.1.0` forces users to update AGP to version 8.0.0 and Kotlin to 1.9.0 which is not inline with stable Flutter version.
+
+## 4.5.2
+
+* Fixes a bug where the Android `activity` is leaked when the `activiy` is detached from the Flutter application. 
+
+## 4.5.1
+
+* Fixes a bug where the Position class properties were not set correctly.
+
+## 4.5.0
+
+* Creates `AndroidPosition`, a child class of `Position` with Android specific properties.
+* Adds the `satelliteCount` and `satellitesUsedInFix` to `AndroidPosition`.
+
+## 4.4.1
+
+* Fixes a bug where `getPositionStream` caused an `java.lang.IllegalStateException: passive location requests must have an explicit minimum update interval` because `minUpdateIntervalMillis` property in location request was set to -1 by default
+
 ## 4.4.0
 
-- Adds `color` to `ForegroundNotificationConfig` to set the color of the notification icon.
+* Adds `color` to `ForegroundNotificationConfig` to set the color of the notification icon.
 
 ## 4.3.3
 
-- Removes deprecated support for Android V1 embedding from the JAVA code base. Note that the geolocator's Flutter version restrictions already don't support V1 embedding anymore.
-- Registers location services state change broadcast receiver with required exported flags
+* Removes deprecated support for Android V1 embedding from the JAVA code base. Note that the geolocator's Flutter version restrictions already don't support V1 embedding anymore.
+* Registers location services state change broadcast receiver with required exported flags
 
 ## 4.3.2
 
-- Updates the following dependencies:
-  - uuid package from ^3.0.7 to ^4.1.0
-  - flutter_lints from ^2.0.0 to ^3.0.0
+* Updates the following dependencies:
+  * uuid package from ^3.0.7 to ^4.1.0
+  * flutter_lints from ^2.0.0 to ^3.0.0
 
 ## 4.3.1
 
-- Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
+* Suppresses a deprecation warning for `LocationListenerCompat.onStatusChanged` when building for Android.
 
 ## 4.3.0
 

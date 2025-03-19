@@ -9,4 +9,8 @@
 /// This should only be used for testing purposes.
 - (void)setLocationManagerOverride:(CLLocationManager *)locationManager;
 
+/// Overrides the CLLocationManager instance used by the GeolocationHandler.
+/// This should only be used for testing purposes.
+- (void)setOneTimeLocationManagerOverride:(CLLocationManager *)locationManager;
+
 @end

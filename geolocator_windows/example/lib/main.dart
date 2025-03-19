@@ -16,7 +16,7 @@ void main() {
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
   /// Creates a new GeolocatorWidget.
-  const GeolocatorWidget({Key? key}) : super(key: key);
+  const GeolocatorWidget({super.key});
 
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
@@ -105,7 +105,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           ExamplePage(
             Icons.location_on,
             (context) => Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               body: ListView.builder(
                 itemCount: _positionItems.length,
                 itemBuilder: (context, index) {

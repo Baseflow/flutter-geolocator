@@ -42,11 +42,11 @@ The TL;DR version is:
 android.useAndroidX=true
 android.enableJetifier=true
 ```
-2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 33:
+2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 35:
 
 ```
 android {
-  compileSdkVersion 33
+  compileSdkVersion 35
 
   ...
 }
@@ -62,7 +62,7 @@ On Android you'll need to add either the `ACCESS_COARSE_LOCATION` or the `ACCESS
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
 
-Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission) if you want to continue receiving updates even when your App is running in the background (note that the geolocator plugin doesn't support receiving and processing location updates while running in the background):
+Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` permission) if you want to continue receiving updates even when your App is running in the background:
 
 ``` xml
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -76,16 +76,32 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 <details>
 <summary>iOS</summary>
 
-On iOS you'll need to add the following entries to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following (make sure you update the description so it is meaningfull in the context of your App):
+On iOS you'll need to add the following entry to your Info.plist file (located under ios/Runner) in order to access the device's location. Simply open your Info.plist file and add the following (make sure you update the description so it is meaningful in the context of your App):
 
 ``` xml
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>This app needs access to location when open.</string>
-<key>NSLocationAlwaysUsageDescription</key>
-<string>This app needs access to location when in the background.</string>
 ```
 
-If you would like to receive updates when your App is in the background, you'll also need to add the Background Modes capability to your XCode project (Project > Signing and Capabilities > "+ Capability" button) and select Location Updates. Be careful with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
+If you don't need to receive updates when your app is in the background, then add a compiler flag as follows: in XCode, click on Pods, choose the Target 'geolocator_apple', choose Build Settings, in the search box look for 'Preprocessor Macros' then add the `BYPASS_PERMISSION_LOCATION_ALWAYS=1` flag.
+Setting this flag prevents your app from requiring the `NSLocationAlwaysAndWhenInUseUsageDescription` entry in Info.plist, and avoids questions from Apple when submitting your app. 
+
+You can also have the flag set automatically by adding the following to the `ios/Podfile` of your application:
+```agsl
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == "geolocator_apple"
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'BYPASS_PERMISSION_LOCATION_ALWAYS=1']
+      end
+    end
+  end
+end
+```
+
+If you do want to receive updates when your App is in the background (or if you don't bypass the permission request as described above) then you'll need to:
+* Add the Background Modes capability to your XCode project (Project > Signing and Capabilities > "+ Capability" button) and select Location Updates. Be careful with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
+* Add an `NSLocationAlwaysAndWhenInUseUsageDescription` entry to your Info.plist (use `NSLocationAlwaysUsageDescription` if you're targeting iOS <11.0) 
 
 When using the `requestTemporaryFullAccuracy({purposeKey: "YourPurposeKey"})` method, a dictionary should be added to the Info.plist file.
 ```xml
@@ -134,11 +150,12 @@ The second key (in this example called `YourPurposeKey`) should match the purpos
 
 To use the Geolocator plugin on the web you need to be using Flutter 1.20 or higher. Flutter will automatically add the endorsed [geolocator_web]() package to your application when you add the `geolocator: ^6.2.0` dependency to your `pubspec.yaml`.
 
-The following methods of the geolocator API are not supported on the web and will result in a `PlatformException` with the code `UNSUPPORTED_OPERATION`:
+The following methods of the geolocator API are not supported on the web and will result in a `UnsupportedError`:
 
 - `getLastKnownPosition({ bool forceAndroidLocationManager = true })`
 - `openAppSettings()`
 - `openLocationSettings()`
+- `getServiceStatusStream()`
 
 **NOTE**
 
@@ -211,12 +228,17 @@ Future<Position> _determinePosition() async {
 To query the current location of the device simply make a call to the `getCurrentPosition` method. You can finetune the results by specifying the following parameters:
 
 - `desiredAccuracy`: the accuracy of the location data that your app wants to receive;
-- `timeLimit`: the maximum amount of time allowed to acquire the current location. When the time limit is passed a `TimeOutException` will be thrown and the call will be cancelled. By default no limit is configured.
+- `timeLimit`: the maximum amount of time allowed to acquire the current location. When the time limit is passed a `TimeoutException` will be thrown and the call will be cancelled. By default no limit is configured.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
 
-Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+final LocationSettings locationSettings = LocationSettings(
+  accuracy: LocationAccuracy.high,
+  distanceFilter: 100,
+);
+
+Position position = await Geolocator.getCurrentPosition(locationSettings: locationSettings);
 ```
 
 #### Last known location
@@ -235,7 +257,7 @@ To listen for location changes you can call the `getPositionStream` to receive s
 
 - `accuracy`: the accuracy of the location data that your app wants to receive;
 - `distanceFilter`: the minimum distance (measured in meters) a device must move horizontally before an update event is generated;
-- `timeLimit`: the maximum amount of time allowed between location updates. When the time limit is passed a `TimeOutException` will be thrown and the stream will be cancelled. By default no limit is configured.
+- `timeLimit`: the maximum amount of time allowed between location updates. When the time limit is passed a `TimeoutException` will be thrown and the stream will be cancelled. By default no limit is configured.
 
 ``` dart
 import 'package:geolocator/geolocator.dart';
@@ -250,29 +272,32 @@ StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locat
     });
 ```
 
-In certain situation it is necessary to specify some platform specific settings. This can be accomplished using the platform specific `AndroidSettings` or `AppleSettings` classes. When using a platform specific class, the platform specific package must be imported as well. For example:
+### Platform specific location settings
+
+In certain situation it is necessary to specify some platform specific settings. This can be accomplished using the platform specific `AndroidSettings`, `AppleSettings` and `WebSettings` classes. When using a platform specific class, the platform specific package must be imported as well. For example:
 
 ```dart
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_android/geolocator_android.dart';
+import 'package:geolocator_android/geolocator_web.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
 
 late LocationSettings locationSettings;
 
 if (defaultTargetPlatform == TargetPlatform.android) {
   locationSettings = AndroidSettings(
-    accuracy: LocationAccuracy.high,
-    distanceFilter: 100,
-    forceLocationManager: true,
-    intervalDuration: const Duration(seconds: 10),
-    //(Optional) Set foreground notification config to keep the app alive 
-    //when going to the background
-    foregroundNotificationConfig: const ForegroundNotificationConfig(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 100,
+      forceLocationManager: true,
+      intervalDuration: const Duration(seconds: 10),
+      //(Optional) Set foreground notification config to keep the app alive 
+      //when going to the background
+      foregroundNotificationConfig: const ForegroundNotificationConfig(
         notificationText:
         "Example app will continue to receive your location even when you aren't using it",
         notificationTitle: "Running in Background",
         enableWakeLock: true,
-    )
+      )
   );
 } else if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS) {
   locationSettings = AppleSettings(
@@ -283,16 +308,26 @@ if (defaultTargetPlatform == TargetPlatform.android) {
     // Only set to true if our app will be started up in the background.
     showBackgroundLocationIndicator: false,
   );
+} else if (kIsWeb) {
+  locationSettings = WebSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 100,
+    maximumAge: Duration(minutes: 5),
+  );
 } else {
-    locationSettings = LocationSettings(
+  locationSettings = LocationSettings(
     accuracy: LocationAccuracy.high,
     distanceFilter: 100,
   );
 }
 
+// supply location settings to getCurrentPosition
+Position position = await Geolocator.getCurrentPosition(locationSettings: locationSettings);
+
+// supply location settings to getPositionStream
 StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-    (Position? position) {
-        print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
+        (Position? position) {
+      print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
     });
 ```
 

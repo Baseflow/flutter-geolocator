@@ -9,7 +9,7 @@ import 'package:geolocator_android/geolocator_android.dart';
 import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
 
-Position get mockPosition => Position(
+Position get mockPosition => AndroidPosition(
     latitude: 52.561270,
     longitude: 5.639382,
     timestamp: DateTime.fromMillisecondsSinceEpoch(
@@ -18,6 +18,8 @@ Position get mockPosition => Position(
     ),
     altitude: 3000.0,
     altitudeAccuracy: 0.0,
+    satelliteCount: 2.0,
+    satellitesUsedInFix: 2.0,
     accuracy: 0.0,
     heading: 0.0,
     headingAccuracy: 0.0,
@@ -1509,7 +1511,7 @@ void main() {
         );
         expect(
           jsonMap['foregroundNotificationConfig']['color'],
-          settings.foregroundNotificationConfig!.color!.value,
+          settings.foregroundNotificationConfig!.color!.toARGB32,
         );
       });
 

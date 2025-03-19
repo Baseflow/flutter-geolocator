@@ -21,7 +21,7 @@ void main() {
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
   /// Create a GeolocatorWidget.
-  const GeolocatorWidget({Key? key}) : super(key: key);
+  const GeolocatorWidget({super.key});
 
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
@@ -30,7 +30,7 @@ class GeolocatorWidget extends StatefulWidget {
   }
 
   @override
-  _GeolocatorWidgetState createState() => _GeolocatorWidgetState();
+  State<GeolocatorWidget> createState() => _GeolocatorWidgetState();
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
@@ -52,7 +52,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     );
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: ListView.builder(
         itemCount: _positionItems.length,
         itemBuilder: (context, index) {
@@ -85,10 +85,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            child: (_positionStreamSubscription == null ||
-                    _positionStreamSubscription!.isPaused)
-                ? const Icon(Icons.play_arrow)
-                : const Icon(Icons.pause),
             onPressed: _toggleListening,
             tooltip: (_positionStreamSubscription == null)
                 ? 'Start position updates'
@@ -96,17 +92,21 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                     ? 'Resume'
                     : 'Pause',
             backgroundColor: _determineButtonColor(),
+            child: (_positionStreamSubscription == null ||
+                    _positionStreamSubscription!.isPaused)
+                ? const Icon(Icons.play_arrow)
+                : const Icon(Icons.pause),
           ),
           buttonSpacer,
           FloatingActionButton(
-            child: const Icon(Icons.my_location),
             onPressed: _getCurrentPosition,
+            child: const Icon(Icons.my_location),
           ),
           buttonSpacer,
           FloatingActionButton(
-            child: const Icon(Icons.close),
             onPressed: () => setState(_positionItems.clear),
             tooltip: 'clear',
+            child: const Icon(Icons.close),
           ),
         ],
       ),

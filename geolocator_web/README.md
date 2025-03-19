@@ -18,6 +18,12 @@ Please file any issues, bugs or feature requests as an issue on our [GitHub](htt
 
 If you would like to contribute to the plugin (e.g. by improving the documentation, solving a bug or adding a cool new feature), please carefully review our [contribution guide](../CONTRIBUTING.md) and send us your [pull request](https://github.com/Baseflow/flutter-geolocator/pulls).
 
+## Tests
+
+Tests require being run on a browser due to the use of the `dart:js_interop` package:
+
+`flutter test --platform chrome`
+
 ## Author
 
 This Geolocator plugin for Flutter is developed by [Baseflow](https://baseflow.com).

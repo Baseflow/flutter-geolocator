@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
@@ -511,6 +513,22 @@ void main() {
 
       // Act & Assert
       expect(() => Position.fromMap(map), throwsArgumentError);
+    });
+
+    test('fromMap should handle a map returned by jsonDecode', () {
+      // Arrange
+      const json = '''{
+        "is_mocked": true,
+        "longitude": -122.406417,
+        "timestamp": 1718643179305.9131,
+        "latitude": 37.785834000000001,
+        "heading_accuracy": -1,
+        "accuracy": 5,
+        "heading": -1.5
+      }''';
+
+      // Act & Assert
+      expect(() => Position.fromMap(jsonDecode(json)), returnsNormally);
     });
   });
 

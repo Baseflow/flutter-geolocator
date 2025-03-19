@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '11.0'
+# platform :ios, '12.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -31,7 +31,7 @@ target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   
   target 'RunnerTests' do
-    platform :ios, '11.0'
+    platform :ios, '12.0'
     inherit! :search_paths
     # Pods for testing
     pod 'OCMock', '~> 3.8.1'
@@ -41,5 +41,11 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    # To bypass the permission check for background location updates, uncomment the following lines
+    #if target.name == "geolocator_apple"
+    #  target.build_configurations.each do |config|
+    #    config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)', 'BYPASS_PERMISSION_LOCATION_ALWAYS=1']
+    #  end
+    #end
   end
 end

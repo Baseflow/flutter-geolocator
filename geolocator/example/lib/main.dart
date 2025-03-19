@@ -17,7 +17,7 @@ void main() {
 /// Example [Widget] showing the functionalities of the geolocator plugin
 class GeolocatorWidget extends StatefulWidget {
   /// Creates a new GeolocatorWidget.
-  const GeolocatorWidget({Key? key}) : super(key: key);
+  const GeolocatorWidget({super.key});
 
   /// Utility method to create a page with the Baseflow templating.
   static ExamplePage createPage() {
@@ -26,7 +26,7 @@ class GeolocatorWidget extends StatefulWidget {
   }
 
   @override
-  _GeolocatorWidgetState createState() => _GeolocatorWidgetState();
+  State<GeolocatorWidget> createState() => _GeolocatorWidgetState();
 }
 
 class _GeolocatorWidgetState extends State<GeolocatorWidget> {
@@ -76,26 +76,26 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       itemBuilder: (context) => [
         if (Platform.isIOS)
           const PopupMenuItem(
-            child: Text("Get Location Accuracy"),
             value: 1,
+            child: Text("Get Location Accuracy"),
           ),
         if (Platform.isIOS)
           const PopupMenuItem(
-            child: Text("Request Temporary Full Accuracy"),
             value: 2,
+            child: Text("Request Temporary Full Accuracy"),
           ),
         const PopupMenuItem(
-          child: Text("Open App Settings"),
           value: 3,
+          child: Text("Open App Settings"),
         ),
         if (Platform.isAndroid || Platform.isWindows)
           const PopupMenuItem(
-            child: Text("Open Location Settings"),
             value: 4,
+            child: Text("Open Location Settings"),
           ),
         const PopupMenuItem(
-          child: Text("Clear"),
           value: 5,
+          child: Text("Clear"),
         ),
       ],
     );
@@ -118,7 +118,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
           ExamplePage(
             Icons.location_on,
             (context) => Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               body: ListView.builder(
                 itemCount: _positionItems.length,
                 itemBuilder: (context, index) {
@@ -151,10 +151,6 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FloatingActionButton(
-                    child: (_positionStreamSubscription == null ||
-                            _positionStreamSubscription!.isPaused)
-                        ? const Icon(Icons.play_arrow)
-                        : const Icon(Icons.pause),
                     onPressed: () {
                       positionStreamStarted = !positionStreamStarted;
                       _toggleListening();
@@ -165,16 +161,20 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                             ? 'Resume'
                             : 'Pause',
                     backgroundColor: _determineButtonColor(),
+                    child: (_positionStreamSubscription == null ||
+                            _positionStreamSubscription!.isPaused)
+                        ? const Icon(Icons.play_arrow)
+                        : const Icon(Icons.pause),
                   ),
                   sizedBox,
                   FloatingActionButton(
-                    child: const Icon(Icons.my_location),
                     onPressed: _getCurrentPosition,
+                    child: const Icon(Icons.my_location),
                   ),
                   sizedBox,
                   FloatingActionButton(
-                    child: const Icon(Icons.bookmark),
                     onPressed: _getLastKnownPosition,
+                    child: const Icon(Icons.bookmark),
                   ),
                 ],
               ),

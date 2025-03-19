@@ -1,15 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'src/geolocation_manager.dart';
 import 'src/permissions_manager.dart';
 import 'src/html_geolocation_manager.dart';
 import 'src/html_permissions_manager.dart';
+import 'web_settings.dart';
 
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+export 'web_settings.dart' show WebSettings;
 
 /// The web implementation of [GeolocatorPlatform].
 ///
@@ -74,9 +75,11 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     LocationSettings? locationSettings,
   }) async {
     final result = await _geolocation.getCurrentPosition(
-      enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
-      timeout: locationSettings?.timeLimit,
-    );
+        enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
+        timeout: locationSettings?.timeLimit,
+        maximumAge: locationSettings is WebSettings
+            ? locationSettings.maximumAge
+            : null);
 
     return result;
   }
@@ -89,9 +92,11 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
     return _geolocation
         .watchPosition(
-      enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
-      timeout: locationSettings?.timeLimit,
-    )
+            enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
+            timeout: locationSettings?.timeLimit,
+            maximumAge: locationSettings is WebSettings
+                ? locationSettings.maximumAge
+                : null)
         .skipWhile((geoposition) {
       if (locationSettings?.distanceFilter == 0 ||
           locationSettings?.distanceFilter == null) {
@@ -114,6 +119,10 @@ class GeolocatorPlugin extends GeolocatorPlatform {
       return distance < locationSettings!.distanceFilter;
     });
   }
+
+  @override
+  Stream<ServiceStatus> getServiceStatusStream() =>
+      throw _unsupported('getServiceStatusStream');
 
   @override
   Future<bool> openAppSettings() => throw _unsupported('openAppSettings');
@@ -139,10 +148,9 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     }
   }
 
-  PlatformException _unsupported(String method) {
-    return PlatformException(
-      code: 'UNSUPPORTED_OPERATION',
-      message: '$method is not supported on the web platform.',
+  UnsupportedError _unsupported(String method) {
+    return UnsupportedError(
+      '$method is not supported on the web platform.',
     );
   }
 }
