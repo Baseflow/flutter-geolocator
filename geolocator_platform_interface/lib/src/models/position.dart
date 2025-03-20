@@ -85,7 +85,9 @@ class Position {
   /// Will be true on Android (starting from API lvl 18) when the location came
   /// from the mocked provider.
   ///
-  /// On iOS this value will always be false.
+  /// Will be true on iOS 15 and higher when flag isSimulatedBySoftware is true (otherwise false).
+  ///
+  /// When not available the default value is false.
   final bool isMocked;
 
   @override
