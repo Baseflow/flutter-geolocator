@@ -1,1 +1,0 @@
-../../ios/Classes/GeolocatorPlugin_Test.h
