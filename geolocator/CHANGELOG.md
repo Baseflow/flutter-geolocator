@@ -1,3 +1,7 @@
+## 13.0.4
+
+- Bump `flutter_lints` to version 5.0.0
+
 ## 13.0.3
 
 - Updates dart sdk to `sdk: ^3.5.0`
