@@ -1,6 +1,10 @@
+## NEXT
+
+- Bump `flutter_lints` to version of afp to 5.0.0
+
 ## 13.0.4
 
-- Bump `flutter_lints` to version 5.0.0
+- Bump `flutter_lints` of to version 5.0.0. EDIT: of afp example project.
 
 ## 13.0.3
 

@@ -211,7 +211,7 @@ class Geolocator {
   /// for approximate location (iOS 14+ only)
   ///
   /// When using this method, the value of the required property `purposeKey`
-  /// should match the <key> value given in the
+  /// should match the &lt;key&gt; value given in the
   /// `NSLocationTemporaryUsageDescription` dictionary in the
   /// Info.plist.
   ///
