@@ -1,3 +1,7 @@
+## 2.3.14
+
+* Updates `flutter_lints` package.
+
 ## 2.3.13
 
 * Adds Swift Package Manager compatibility.
