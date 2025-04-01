@@ -4,7 +4,7 @@
 
 ## 13.0.4
 
-- Bump `flutter_lints` of to version 5.0.0. EDIT: of afp example project.
+- Bump `flutter_lints` to version 5.0.0. Later added: of afp example project.
 
 ## 13.0.3
 
