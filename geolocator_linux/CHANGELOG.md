@@ -1,6 +1,10 @@
+## NEXT
+
+- Updates dependency on flutter_lints to version 5.0.0
+
 ## 0.2.3
 
-- Updates dependency on flutter_lints to version 5.0.0.
+- Updates dependency on flutter_lints to version 5.0.0. Later added: of example project.
 
 ## 0.2.2
 
