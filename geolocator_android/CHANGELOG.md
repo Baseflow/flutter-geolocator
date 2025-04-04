@@ -1,3 +1,7 @@
+## NEXT
+
+- Bump `androidx.core:core` to version 1.15.0
+
 ## 5.0.1
 
 - Bump `flutter_lints` to version 5.0.0
