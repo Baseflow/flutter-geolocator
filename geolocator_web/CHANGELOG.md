@@ -1,4 +1,13 @@
-## 4.1.1
+## 4.1.3
+
+- Bump `flutter_lints` to version 5.0.0
+
+## 4.1.2
+
+- Updates dart SDK to `sdk: ^3.5.0`
+- Fixes analyzer issues
+
+# 4.1.1
 
 - Exposes the `WebSettings` class as a public type.
 

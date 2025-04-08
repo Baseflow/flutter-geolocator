@@ -1,3 +1,15 @@
+## NEXT
+
+- Updated `flutter_lints` to version `^5.0.0`.
+
+## 4.2.6
+
+- Updates documentation `isMocked` to bring it in line with the functionality. `isMocked` for iOS 15 and higher depends on the result from isSimulatedBySoftware.
+
+## 4.2.5
+
+- Updates dart sdk to `>3.5.0`
+
 ## 4.2.4
 
 - Correctly handle integer-like numbers when decoding `Position` from JSON.

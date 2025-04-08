@@ -19,14 +19,18 @@
 
 @implementation GeolocationHandlerTests {
   CLLocationManager *_mockLocationManager;
+  CLLocationManager *_mockOneTimeLocationManager;
+  
   GeolocationHandler *_geolocationHandler;
 }
 
 - (void)setUp {
   _mockLocationManager = OCMClassMock(CLLocationManager.class);
+  _mockOneTimeLocationManager = OCMClassMock(CLLocationManager.class);
   
   _geolocationHandler = [[GeolocationHandler alloc] init];
   [_geolocationHandler setLocationManagerOverride:_mockLocationManager];
+  [_geolocationHandler setOneTimeLocationManagerOverride:_mockOneTimeLocationManager];
 }
 
 #pragma mark - Test requesting current location
@@ -36,25 +40,25 @@
                                             resultHandler:^(CLLocation * _Nullable location) {}
                                              errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
   
-  OCMVerify(times(1), [self->_mockLocationManager setDesiredAccuracy:kCLLocationAccuracyBest]);
-  OCMVerify(times(1), [self->_mockLocationManager startUpdatingLocation]);
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager setDesiredAccuracy:kCLLocationAccuracyBest]);
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager startUpdatingLocation]);
 }
 
 - (void)testRequestPositionShouldReturnLocationWithinTimeConstraints {
   NSDate *now = [NSDate date];
   NSCalendar *calendar = [NSCalendar currentCalendar];
-    
+  
   CLLocation *firstLocation = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.0, 6.4)
                                                             altitude:0.0
                                                   horizontalAccuracy:0
                                                     verticalAccuracy:0
                                                            timestamp:[calendar dateByAddingUnit:NSCalendarUnitSecond value:-6 toDate:now options:0]];
   CLLocation *secondLocation = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.1, 6.4)
-                                                            altitude:0.0
-                                                  horizontalAccuracy:0
-                                                    verticalAccuracy:0
-                                                           timestamp:now];
-
+                                                             altitude:0.0
+                                                   horizontalAccuracy:0
+                                                     verticalAccuracy:0
+                                                            timestamp:now];
+  
   
   XCTestExpectation *expectation = [self expectationWithDescription:@"expect result return third location"];
   [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
@@ -64,20 +68,20 @@
   }
                                              errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
   
-  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[firstLocation]];
-  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[secondLocation]];
-    
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didUpdateLocations: @[firstLocation]];
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didUpdateLocations: @[secondLocation]];
+  
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
-  OCMVerify(times(1), [self->_mockLocationManager stopUpdatingLocation]);
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager stopUpdatingLocation]);
 }
 
 - (void)testRequestPositionShouldStopListeningOnResult {
   CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.1, 6.4)
-                                                            altitude:0.0
-                                                  horizontalAccuracy:0
-                                                    verticalAccuracy:0
-                                                           timestamp:[NSDate date]];
+                                                       altitude:0.0
+                                             horizontalAccuracy:0
+                                               verticalAccuracy:0
+                                                      timestamp:[NSDate date]];
   
   XCTestExpectation *expectation = [self expectationWithDescription:@"expect first result return third location"];
   [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
@@ -88,11 +92,11 @@
     
   }];
   
-  [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[location]];
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didUpdateLocations: @[location]];
   
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
-  OCMVerify(times(1), [self->_mockLocationManager stopUpdatingLocation]);
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager stopUpdatingLocation]);
 }
 
 - (void)testRequestPositionShouldStopListeningOnError {
@@ -107,11 +111,11 @@
     
   }];
   
-  [_geolocationHandler locationManager:_mockLocationManager didFailWithError: error];
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didFailWithError: error];
   
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
   
-  OCMVerify(times(1), [self->_mockLocationManager stopUpdatingLocation]);
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager stopUpdatingLocation]);
 }
 
 - (void)testRequestPositionShouldNotStopListeningOnErrorDomainAndErrorLocationUnknown {
@@ -158,7 +162,7 @@
 - (void)testRequestingPositionWhileListeningDoesntStopStream {
   CLLocation *mockLocation = [[CLLocation alloc] initWithLatitude:54.0 longitude:6.4];
   XCTestExpectation *expectationStream = [self expectationWithDescription:@"expect result return third location"];
-    XCTestExpectation *expectationForeground = [self expectationWithDescription:@"expect result return third location"];
+  XCTestExpectation *expectationForeground = [self expectationWithDescription:@"expect result return third location"];
   [_geolocationHandler startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
                                           distanceFilter:0
                        pauseLocationUpdatesAutomatically:NO
@@ -172,14 +176,14 @@
                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
     
   }];
-    
+  
   [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyHundredMeters
                                             resultHandler:^(CLLocation * _Nullable location) {
-      XCTAssertEqual(location, mockLocation);
-      [expectationForeground fulfill];
-    } errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
-        
-    }];
+    XCTAssertEqual(location, mockLocation);
+    [expectationForeground fulfill];
+  } errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    
+  }];
   [_geolocationHandler locationManager:_mockLocationManager didUpdateLocations: @[mockLocation]];
   
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
@@ -236,39 +240,39 @@
 }
 
 - (void)testListeningBackgroundGeolocationOnlyWhenAllowedAndEnabled {
-    id geolocationHandlerMock = OCMPartialMock(_geolocationHandler);
-    [geolocationHandlerMock setLocationManagerOverride:_mockLocationManager];
-    OCMStub(ClassMethod([geolocationHandlerMock shouldEnableBackgroundLocationUpdates]))._andReturn([NSNumber numberWithBool:YES]);
-    [geolocationHandlerMock startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
-                                            distanceFilter:0
-                         pauseLocationUpdatesAutomatically:NO
-                           showBackgroundLocationIndicator:NO
-                                              activityType:CLActivityTypeOther
-                            allowBackgroundLocationUpdates:YES
-                                             resultHandler:^(CLLocation * _Nullable location) {
-    }
-                                              errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
-      
-    }];
-    OCMVerify([_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
+  id geolocationHandlerMock = OCMPartialMock(_geolocationHandler);
+  [geolocationHandlerMock setLocationManagerOverride:_mockLocationManager];
+  OCMStub(ClassMethod([geolocationHandlerMock shouldEnableBackgroundLocationUpdates]))._andReturn([NSNumber numberWithBool:YES]);
+  [geolocationHandlerMock startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
+                                             distanceFilter:0
+                          pauseLocationUpdatesAutomatically:NO
+                            showBackgroundLocationIndicator:NO
+                                               activityType:CLActivityTypeOther
+                             allowBackgroundLocationUpdates:YES
+                                              resultHandler:^(CLLocation * _Nullable location) {
+  }
+                                               errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    
+  }];
+  OCMVerify([_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
 }
 
 - (void)testNotListeningBackgroundGeolocationWhenNotEnabled {
-    id geolocationHandlerMock = OCMPartialMock(_geolocationHandler);
-    [geolocationHandlerMock setLocationManagerOverride:_mockLocationManager];
-    OCMStub(ClassMethod([geolocationHandlerMock shouldEnableBackgroundLocationUpdates]))._andReturn([NSNumber numberWithBool:YES]);
-    [geolocationHandlerMock startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
-                                            distanceFilter:0
-                         pauseLocationUpdatesAutomatically:NO
-                           showBackgroundLocationIndicator:NO
-                                              activityType:CLActivityTypeOther
-                            allowBackgroundLocationUpdates:NO
-                                             resultHandler:^(CLLocation * _Nullable location) {
-    }
-                                              errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
-      
-    }];
-    OCMVerify(never(), [_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
+  id geolocationHandlerMock = OCMPartialMock(_geolocationHandler);
+  [geolocationHandlerMock setLocationManagerOverride:_mockLocationManager];
+  OCMStub(ClassMethod([geolocationHandlerMock shouldEnableBackgroundLocationUpdates]))._andReturn([NSNumber numberWithBool:YES]);
+  [geolocationHandlerMock startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
+                                             distanceFilter:0
+                          pauseLocationUpdatesAutomatically:NO
+                            showBackgroundLocationIndicator:NO
+                                               activityType:CLActivityTypeOther
+                             allowBackgroundLocationUpdates:NO
+                                              resultHandler:^(CLLocation * _Nullable location) {
+  }
+                                               errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    
+  }];
+  OCMVerify(never(), [_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
 }
 
 - (void)testKeepLocationManagerSettingsWhenRequestingCurrentPosition {
@@ -283,14 +287,14 @@
       ._andReturn([NSNumber numberWithBool:YES]);
   }
   [geolocationHandlerMock startListeningWithDesiredAccuracy: kCLLocationAccuracyBest
-                                          distanceFilter:0
-                       pauseLocationUpdatesAutomatically:NO
-                         showBackgroundLocationIndicator:YES
-                                            activityType:CLActivityTypeOther
-                          allowBackgroundLocationUpdates:YES
-                                           resultHandler:^(CLLocation * _Nullable location) {
+                                             distanceFilter:0
+                          pauseLocationUpdatesAutomatically:NO
+                            showBackgroundLocationIndicator:YES
+                                               activityType:CLActivityTypeOther
+                             allowBackgroundLocationUpdates:YES
+                                              resultHandler:^(CLLocation * _Nullable location) {
   }
-                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+                                               errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
     
   }];
   OCMVerify([_mockLocationManager setAllowsBackgroundLocationUpdates:YES]);
@@ -304,6 +308,31 @@
   if (@available(iOS 11.0, *)) {
     OCMVerify(never(), [_mockLocationManager setShowsBackgroundLocationIndicator:NO]);
   }
+}
+
+- (void)testKeepLocationManagerSettingsWhenRequestingCurrentPosition1 {
+  [_geolocationHandler startListeningWithDesiredAccuracy:kCLLocationAccuracyThreeKilometers
+                                          distanceFilter:kCLLocationAccuracyThreeKilometers
+                       pauseLocationUpdatesAutomatically:NO
+                         showBackgroundLocationIndicator:YES
+                                            activityType:CLActivityTypeOther
+                          allowBackgroundLocationUpdates:YES
+                                           resultHandler:^(CLLocation * _Nullable location) {
+  }
+                                            errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    
+  }];
+  OCMVerify([_mockLocationManager setDesiredAccuracy:kCLLocationAccuracyThreeKilometers]);
+  OCMVerify([_mockLocationManager setDistanceFilter:kCLLocationAccuracyThreeKilometers]);
+  
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {}
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+  OCMVerify([_mockOneTimeLocationManager setDesiredAccuracy:kCLLocationAccuracyBest]);
+  OCMVerify([_mockOneTimeLocationManager setDistanceFilter:kCLDistanceFilterNone]);
+  
+  OCMVerify(never(), [_mockLocationManager setDesiredAccuracy:kCLLocationAccuracyBest]);
+  OCMVerify(never(), [_mockLocationManager setDistanceFilter:kCLDistanceFilterNone]);
 }
 
 @end
