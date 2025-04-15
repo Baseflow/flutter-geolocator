@@ -26,7 +26,6 @@ coverage/
 **/.settings/
 
 # Visual Studio Code related
-.vscode/
 
 # Visual Studio related
 .vs/
@@ -110,3 +109,9 @@ firebase.json
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
+config.bat
+node_modules
+branch_structure.json

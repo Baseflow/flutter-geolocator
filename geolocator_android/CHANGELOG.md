@@ -1,6 +1,6 @@
-## NEXT
+## 5.0.1+1
 
-- Bump `androidx.core:core` to version 1.15.0
+- Bump `androidx.core:core` to version 1.16.0
 
 ## 5.0.1
 
