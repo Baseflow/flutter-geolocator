@@ -1,6 +1,7 @@
 ## 5.0.1+1
 
 - Bump `androidx.core:core` to version 1.16.0
+- Fixes `location service on the device is disabled` bug on Wear OS 
 
 ## 5.0.1
 
