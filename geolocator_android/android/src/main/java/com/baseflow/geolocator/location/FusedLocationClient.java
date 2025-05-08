@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.RuntimeExecutionException;
 
 import java.security.SecureRandom;
 
@@ -161,25 +162,38 @@ class FusedLocationClient implements LocationClient {
 
   @Override
   public void isLocationServiceEnabled(LocationServiceListener listener) {
+	Log.d(TAG, "Checking location services");
     LocationServices.getSettingsClient(context)
         .checkLocationSettings(new LocationSettingsRequest.Builder().build())
         .addOnCompleteListener(
             (response) -> {
               if (!response.isSuccessful()) {
-                listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+				Log.d(TAG, "OnComplete: Location settings response failed");
+                // listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+				return;
               }
 
-              LocationSettingsResponse lsr = response.getResult();
-              if (lsr != null) {
-                LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
-                boolean isGpsUsable = settingsStates != null && settingsStates.isGpsUsable();
-                boolean isNetworkUsable =
-                    settingsStates != null && settingsStates.isNetworkLocationUsable();
-                listener.onLocationServiceResult(isGpsUsable || isNetworkUsable);
-              } else {
-                listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+              try {
+				Log.d(TAG, "Getting location settings response");
+                LocationSettingsResponse lsr = response.getResult();
+                if (lsr != null) {
+                    LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
+                    boolean isGpsUsable = settingsStates != null && settingsStates.isGpsUsable();
+                    boolean isNetworkUsable =
+                        settingsStates != null && settingsStates.isNetworkLocationUsable();
+                    listener.onLocationServiceResult(isGpsUsable || isNetworkUsable);
+                } else {
+                    listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+                }
+              } catch (RuntimeExecutionException e) {
+				Log.e(TAG, "RuntimeExecutionException: " + e.getMessage());
+                listener.onLocationServiceError(ErrorCodes.locationServicesFailed);
               }
-            });
+            })
+        .addOnFailureListener((e) -> {
+            Log.d(TAG, "OnFailure: Location settings response failed");
+            listener.onLocationServiceError(ErrorCodes.locationServicesFailed);
+        });
   }
 
   @SuppressLint("MissingPermission")
