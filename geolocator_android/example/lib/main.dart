@@ -9,8 +9,8 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
     BaseflowPluginExample.createMaterialColor(
-      const Color.fromRGBO(48, 49, 60, 1),
-    );
+  const Color.fromRGBO(48, 49, 60, 1),
+);
 
 void main() {
   runApp(const GeolocatorWidget());
@@ -78,22 +78,21 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             break;
         }
       },
-      itemBuilder:
-          (context) => [
-            const PopupMenuItem(value: 1, child: Text("Get Location Accuracy")),
-            if (Platform.isIOS)
-              const PopupMenuItem(
-                value: 2,
-                child: Text("Request Temporary Full Accuracy"),
-              ),
-            const PopupMenuItem(value: 3, child: Text("Open App Settings")),
-            if (Platform.isAndroid)
-              const PopupMenuItem(
-                value: 4,
-                child: Text("Open Location Settings"),
-              ),
-            const PopupMenuItem(value: 5, child: Text("Clear")),
-          ],
+      itemBuilder: (context) => [
+        const PopupMenuItem(value: 1, child: Text("Get Location Accuracy")),
+        if (Platform.isIOS)
+          const PopupMenuItem(
+            value: 2,
+            child: Text("Request Temporary Full Accuracy"),
+          ),
+        const PopupMenuItem(value: 3, child: Text("Open App Settings")),
+        if (Platform.isAndroid)
+          const PopupMenuItem(
+            value: 4,
+            child: Text("Open Location Settings"),
+          ),
+        const PopupMenuItem(value: 5, child: Text("Clear")),
+      ],
     );
   }
 
@@ -146,18 +145,16 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
               children: [
                 FloatingActionButton(
                   onPressed: _toggleListening,
-                  tooltip:
-                      (_positionStreamSubscription == null)
-                          ? 'Start position updates'
-                          : _positionStreamSubscription!.isPaused
+                  tooltip: (_positionStreamSubscription == null)
+                      ? 'Start position updates'
+                      : _positionStreamSubscription!.isPaused
                           ? 'Resume'
                           : 'Pause',
                   backgroundColor: _determineButtonColor(),
-                  child:
-                      (_positionStreamSubscription == null ||
-                              _positionStreamSubscription!.isPaused)
-                          ? const Icon(Icons.play_arrow)
-                          : const Icon(Icons.pause),
+                  child: (_positionStreamSubscription == null ||
+                          _positionStreamSubscription!.isPaused)
+                      ? const Icon(Icons.play_arrow)
+                      : const Icon(Icons.pause),
                 ),
                 sizedBox,
                 FloatingActionButton(
@@ -242,9 +239,8 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     setState(() {});
   }
 
-  bool _isListening() =>
-      !(_positionStreamSubscription == null ||
-          _positionStreamSubscription!.isPaused);
+  bool _isListening() => !(_positionStreamSubscription == null ||
+      _positionStreamSubscription!.isPaused);
 
   Color _determineButtonColor() {
     return _isListening() ? Colors.green : Colors.red;
@@ -253,23 +249,22 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   void _toggleServiceStatusStream() {
     if (_serviceStatusStreamSubscription == null) {
       final serviceStatusStream = geolocatorAndroid.getServiceStatusStream();
-      _serviceStatusStreamSubscription = serviceStatusStream
-          .handleError((error) {
-            _serviceStatusStreamSubscription?.cancel();
-            _serviceStatusStreamSubscription = null;
-          })
-          .listen((serviceStatus) {
-            String serviceStatusValue;
-            if (serviceStatus == ServiceStatus.enabled) {
-              serviceStatusValue = 'enabled';
-            } else {
-              serviceStatusValue = 'disabled';
-            }
-            _updatePositionList(
-              _PositionItemType.log,
-              'Location service has been $serviceStatusValue',
-            );
-          });
+      _serviceStatusStreamSubscription =
+          serviceStatusStream.handleError((error) {
+        _serviceStatusStreamSubscription?.cancel();
+        _serviceStatusStreamSubscription = null;
+      }).listen((serviceStatus) {
+        String serviceStatusValue;
+        if (serviceStatus == ServiceStatus.enabled) {
+          serviceStatusValue = 'enabled';
+        } else {
+          serviceStatusValue = 'disabled';
+        }
+        _updatePositionList(
+          _PositionItemType.log,
+          'Location service has been $serviceStatusValue',
+        );
+      });
     }
   }
 
@@ -302,18 +297,16 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       final positionStream = geolocatorAndroid.getPositionStream(
         locationSettings: androidSettings,
       );
-      _positionStreamSubscription = positionStream
-          .handleError((error) {
-            _positionStreamSubscription?.cancel();
-            _positionStreamSubscription = null;
-          })
-          .listen((position) {
-            debugPrint(position.altitude.toString());
-            _updatePositionList(
-              _PositionItemType.position,
-              position.toString(),
-            );
-          });
+      _positionStreamSubscription = positionStream.handleError((error) {
+        _positionStreamSubscription?.cancel();
+        _positionStreamSubscription = null;
+      }).listen((position) {
+        debugPrint(position.altitude.toString());
+        _updatePositionList(
+          _PositionItemType.position,
+          position.toString(),
+        );
+      });
       _positionStreamSubscription?.pause();
     }
 

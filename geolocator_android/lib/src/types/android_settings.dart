@@ -90,12 +90,13 @@ class AndroidSettings extends LocationSettings {
 
   @override
   Map<String, dynamic> toJson() {
-    return super.toJson()..addAll({
-      'forceLocationManager': forceLocationManager,
-      'timeInterval': intervalDuration?.inMilliseconds,
-      'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
-      'useMSLAltitude': useMSLAltitude,
-      'enableAccuracyFilter': enableAccuracyFilter,
-    });
+    return super.toJson()
+      ..addAll({
+        'forceLocationManager': forceLocationManager,
+        'timeInterval': intervalDuration?.inMilliseconds,
+        'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
+        'useMSLAltitude': useMSLAltitude,
+        'enableAccuracyFilter': enableAccuracyFilter,
+      });
   }
 }

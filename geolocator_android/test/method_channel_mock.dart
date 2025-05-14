@@ -19,7 +19,7 @@ class MethodChannelMock {
   final log = <MethodCall>[];
 
   MethodChannelMock({required String channelName, required this.methods})
-    : methodChannel = MethodChannel(channelName) {
+      : methodChannel = MethodChannel(channelName) {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(methodChannel, _handler);
   }
@@ -29,12 +29,10 @@ class MethodChannelMock {
 
     final method = methods.firstWhere(
       (MethodMock methodMock) => methodMock.methodName == methodCall.method,
-      orElse:
-          () =>
-              throw MissingPluginException(
-                'No implementation found for '
-                'method ${methodCall.method} on channel ${methodChannel.name}',
-              ),
+      orElse: () => throw MissingPluginException(
+        'No implementation found for '
+        'method ${methodCall.method} on channel ${methodChannel.name}',
+      ),
     );
 
     return Future.delayed(method.delay, () {

@@ -11,7 +11,7 @@ class EventChannelMock {
   StreamSubscription? _streamSubscription;
 
   EventChannelMock({required String channelName, required this.stream})
-    : _methodChannel = MethodChannel(channelName) {
+      : _methodChannel = MethodChannel(channelName) {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_methodChannel, _handler);
   }
@@ -34,16 +34,14 @@ class EventChannelMock {
   }
 
   void _onListen() {
-    _streamSubscription = stream!
-        .handleError((e) {
-          _sendErrorEnvelope(e);
-        })
-        .listen(
-          _sendSuccessEnvelope,
-          onDone: () {
-            _sendEnvelope(null);
-          },
-        );
+    _streamSubscription = stream!.handleError((e) {
+      _sendErrorEnvelope(e);
+    }).listen(
+      _sendSuccessEnvelope,
+      onDone: () {
+        _sendEnvelope(null);
+      },
+    );
   }
 
   void _onCancel() {

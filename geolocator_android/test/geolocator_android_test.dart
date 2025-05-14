@@ -10,20 +10,20 @@ import 'event_channel_mock.dart';
 import 'method_channel_mock.dart';
 
 Position get mockPosition => AndroidPosition(
-  latitude: 52.561270,
-  longitude: 5.639382,
-  timestamp: DateTime.fromMillisecondsSinceEpoch(500, isUtc: true),
-  altitude: 3000.0,
-  altitudeAccuracy: 0.0,
-  satelliteCount: 2.0,
-  satellitesUsedInFix: 2.0,
-  accuracy: 0.0,
-  heading: 0.0,
-  headingAccuracy: 0.0,
-  speed: 0.0,
-  speedAccuracy: 0.0,
-  isMocked: false,
-);
+      latitude: 52.561270,
+      longitude: 5.639382,
+      timestamp: DateTime.fromMillisecondsSinceEpoch(500, isUtc: true),
+      altitude: 3000.0,
+      altitudeAccuracy: 0.0,
+      satelliteCount: 2.0,
+      satellitesUsedInFix: 2.0,
+      accuracy: 0.0,
+      heading: 0.0,
+      headingAccuracy: 0.0,
+      speed: 0.0,
+      speedAccuracy: 0.0,
+      isMocked: false,
+    );
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -153,9 +153,11 @@ void main() {
       );
     });
 
-    group('requestTemporaryFullAccuracy: When requesting temporary full'
+    group(
+        'requestTemporaryFullAccuracy: When requesting temporary full'
         'accuracy.', () {
-      test('Should receive reduced accuracy if Location Accuracy is pinned to'
+      test(
+          'Should receive reduced accuracy if Location Accuracy is pinned to'
           ' reduced', () async {
         // Arrange
         final methodChannel = MethodChannelMock(
@@ -185,7 +187,8 @@ void main() {
         ]);
       });
 
-      test('Should receive reduced accuracy if Location Accuracy is already set'
+      test(
+          'Should receive reduced accuracy if Location Accuracy is already set'
           ' to precise location accuracy', () async {
         // Arrange
         MethodChannelMock(
@@ -797,7 +800,8 @@ void main() {
       });
     });
 
-    group('getPositionStream: When requesting a stream of position updates', () {
+    group('getPositionStream: When requesting a stream of position updates',
+        () {
       group('And requesting for position update multiple times', () {
         test('Should return the same stream', () {
           final plugin = GeolocatorAndroid();
@@ -820,10 +824,10 @@ void main() {
             expect(firstStream == secondStream, true);
 
             // Add multiple subscriptions
-            StreamSubscription<Position>? firstSubscription = firstStream
-                .listen((event) {});
-            StreamSubscription<Position>? secondSubscription = secondStream
-                .listen((event) {});
+            StreamSubscription<Position>? firstSubscription =
+                firstStream.listen((event) {});
+            StreamSubscription<Position>? secondSubscription =
+                secondStream.listen((event) {});
 
             // Cancel first subscription
             firstSubscription.cancel();
@@ -877,10 +881,9 @@ void main() {
           final completer = Completer();
           completer.future.timeout(
             const Duration(milliseconds: 50),
-            onTimeout:
-                () => fail(
-                  'getPositionStream should trigger done and not timeout.',
-                ),
+            onTimeout: () => fail(
+              'getPositionStream should trigger done and not timeout.',
+            ),
           );
           final streamController =
               StreamController<Map<String, dynamic>>.broadcast();
@@ -891,9 +894,9 @@ void main() {
 
           // Act
           GeolocatorAndroid().getPositionStream().listen(
-            (event) {},
-            onDone: completer.complete,
-          );
+                (event) {},
+                onDone: completer.complete,
+              );
 
           await streamController.close();
 
@@ -1468,7 +1471,8 @@ void main() {
             settings.foregroundNotificationConfig!.notificationIcon.name,
           );
           expect(
-            jsonMap['foregroundNotificationConfig']['notificationIcon']['defType'],
+            jsonMap['foregroundNotificationConfig']['notificationIcon']
+                ['defType'],
             settings.foregroundNotificationConfig!.notificationIcon.defType,
           );
           expect(

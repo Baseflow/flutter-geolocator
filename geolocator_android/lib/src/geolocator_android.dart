@@ -152,12 +152,12 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     _serviceStatusStream = serviceStatusStream
         .map((dynamic element) => ServiceStatus.values[element as int])
         .handleError((error) {
-          _serviceStatusStream = null;
-          if (error is PlatformException) {
-            error = _handlePlatformException(error);
-          }
-          throw error;
-        });
+      _serviceStatusStream = null;
+      if (error is PlatformException) {
+        error = _handlePlatformException(error);
+      }
+      throw error;
+    });
 
     return _serviceStatusStream!;
   }
@@ -192,15 +192,15 @@ class GeolocatorAndroid extends GeolocatorPlatform {
 
     _positionStream = positionStream
         .map<Position>(
-          (dynamic element) =>
-              AndroidPosition.fromMap(element.cast<String, dynamic>()),
-        )
+      (dynamic element) =>
+          AndroidPosition.fromMap(element.cast<String, dynamic>()),
+    )
         .handleError((error) {
-          if (error is PlatformException) {
-            error = _handlePlatformException(error);
-          }
-          throw error;
-        });
+      if (error is PlatformException) {
+        error = _handlePlatformException(error);
+      }
+      throw error;
+    });
     return _positionStream!;
   }
 
