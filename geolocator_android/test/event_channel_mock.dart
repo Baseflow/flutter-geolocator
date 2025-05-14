@@ -10,10 +10,8 @@ class EventChannelMock {
   Stream? stream;
   StreamSubscription? _streamSubscription;
 
-  EventChannelMock({
-    required String channelName,
-    required this.stream,
-  }) : _methodChannel = MethodChannel(channelName) {
+  EventChannelMock({required String channelName, required this.stream})
+      : _methodChannel = MethodChannel(channelName) {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_methodChannel, _handler);
   }
@@ -64,8 +62,11 @@ class EventChannelMock {
       details = error.details;
     }
 
-    final envelope = const StandardMethodCodec()
-        .encodeErrorEnvelope(code: code, message: message, details: details);
+    final envelope = const StandardMethodCodec().encodeErrorEnvelope(
+      code: code,
+      message: message,
+      details: details,
+    );
 
     _sendEnvelope(envelope);
   }
@@ -77,10 +78,6 @@ class EventChannelMock {
 
   void _sendEnvelope(ByteData? envelope) {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .handlePlatformMessage(
-      _methodChannel.name,
-      envelope,
-      (_) {},
-    );
+        .handlePlatformMessage(_methodChannel.name, envelope, (_) {});
   }
 }
