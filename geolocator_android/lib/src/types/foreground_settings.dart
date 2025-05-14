@@ -11,17 +11,11 @@ class AndroidResource {
   final String defType;
 
   /// Uniquely identifies an Android resource.
-  const AndroidResource({
-    required this.name,
-    this.defType = 'drawable',
-  });
+  const AndroidResource({required this.name, this.defType = 'drawable'});
 
   /// Returns a JSON representation of this class.
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'defType': defType,
-    };
+    return {'name': name, 'defType': defType};
   }
 }
 
@@ -53,8 +47,10 @@ class ForegroundNotificationConfig {
     required this.notificationTitle,
     required this.notificationText,
     this.notificationChannelName = 'Background Location',
-    this.notificationIcon =
-        const AndroidResource(name: 'ic_launcher', defType: 'mipmap'),
+    this.notificationIcon = const AndroidResource(
+      name: 'ic_launcher',
+      defType: 'mipmap',
+    ),
     this.enableWifiLock = false,
     this.enableWakeLock = false,
     this.setOngoing = false,
