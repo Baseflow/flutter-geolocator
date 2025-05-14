@@ -9,6 +9,7 @@ class AndroidSettings extends LocationSettings {
   ///
   /// The following default values are used:
   /// - forceLocationManager: false
+  /// - enableAccuracyFilter: false
   AndroidSettings({
     this.forceLocationManager = false,
     super.accuracy,
@@ -17,6 +18,7 @@ class AndroidSettings extends LocationSettings {
     super.timeLimit,
     this.foregroundNotificationConfig,
     this.useMSLAltitude = false,
+    this.enableAccuracyFilter = false,
   });
 
   /// Forces the Geolocator plugin to use the legacy LocationManager instead of
@@ -71,6 +73,21 @@ class AndroidSettings extends LocationSettings {
   /// Defaults to false
   final bool useMSLAltitude;
 
+  /// Enables filtering for inaccurate GPS positions that might cause random GPS drift.
+  /// 
+  /// When enabled, the plugin will filter out location updates that are physically implausible
+  /// based on speed, distance jumps, and accuracy thresholds. This is useful for applications
+  /// that require smooth location tracking without sudden jumps that can occur due to GPS
+  /// inaccuracies.
+  ///
+  /// The filter uses the following criteria to filter out problematic positions:
+  /// - Locations with very poor accuracy (> 300 meters)
+  /// - Unrealistically high speeds (> 280 m/s or ~1000 km/h)
+  /// - Large position jumps combined with poor accuracy
+  ///
+  /// Defaults to false
+  final bool enableAccuracyFilter;
+
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()
@@ -79,6 +96,7 @@ class AndroidSettings extends LocationSettings {
         'timeInterval': intervalDuration?.inMilliseconds,
         'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
         'useMSLAltitude': useMSLAltitude,
+        'enableAccuracyFilter': enableAccuracyFilter,
       });
   }
 }
