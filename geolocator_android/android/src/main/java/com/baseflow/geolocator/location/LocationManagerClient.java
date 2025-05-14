@@ -170,6 +170,11 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
           ? LocationRequestCompat.PASSIVE_INTERVAL
           : locationOptions.getTimeInterval();
       quality = accuracyToQuality(accuracy);
+      
+      // Enable or disable the location accuracy filter based on options
+      LocationAccuracyFilter.setFilterEnabled(locationOptions.isEnableAccuracyFilter());
+    } else {
+      LocationAccuracyFilter.setFilterEnabled(false);
     }
 
     this.currentLocationProvider = determineProvider(this.locationManager, accuracy);
@@ -202,11 +207,12 @@ class LocationManagerClient implements LocationClient, LocationListenerCompat {
     this.isListening = false;
     this.nmeaClient.stop();
     this.locationManager.removeUpdates(this);
+    LocationAccuracyFilter.reset();
   }
 
   @Override
   public synchronized void onLocationChanged(Location location) {
-    if (isBetterLocation(location, currentBestLocation)) {
+    if (isBetterLocation(location, currentBestLocation) && LocationAccuracyFilter.shouldAcceptLocation(location)) {
       this.currentBestLocation = location;
 
       if (this.positionChangedCallback != null) {

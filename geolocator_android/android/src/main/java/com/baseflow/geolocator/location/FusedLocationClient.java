@@ -79,7 +79,11 @@ class FusedLocationClient implements LocationClient {
             }
 
             nmeaClient.enrichExtrasWithNmea(location);
-            positionChangedCallback.onPositionChanged(location);
+            
+            // Apply the location accuracy filter before reporting the position
+            if (LocationAccuracyFilter.shouldAcceptLocation(location)) {
+              positionChangedCallback.onPositionChanged(location);
+            }
           }
 
           @Override
@@ -230,6 +234,13 @@ class FusedLocationClient implements LocationClient {
     this.positionChangedCallback = positionChangedCallback;
     this.errorCallback = errorCallback;
 
+    // Enable or disable the location accuracy filter based on options
+    if (this.locationOptions != null) {
+      LocationAccuracyFilter.setFilterEnabled(this.locationOptions.isEnableAccuracyFilter());
+    } else {
+      LocationAccuracyFilter.setFilterEnabled(false);
+    }
+
     LocationRequest locationRequest = buildLocationRequest(this.locationOptions);
     LocationSettingsRequest settingsRequest = buildLocationSettingsRequest(locationRequest);
 
@@ -278,5 +289,7 @@ class FusedLocationClient implements LocationClient {
   public void stopPositionUpdates() {
     this.nmeaClient.stop();
     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    // Reset the location filter when updates are stopped
+    LocationAccuracyFilter.reset();
   }
 }
