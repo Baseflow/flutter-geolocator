@@ -74,7 +74,7 @@ class AndroidSettings extends LocationSettings {
   final bool useMSLAltitude;
 
   /// Enables filtering for inaccurate GPS positions that might cause random GPS drift.
-  /// 
+  ///
   /// When enabled, the plugin will filter out location updates that are physically implausible
   /// based on speed, distance jumps, and accuracy thresholds. This is useful for applications
   /// that require smooth location tracking without sudden jumps that can occur due to GPS
@@ -90,13 +90,12 @@ class AndroidSettings extends LocationSettings {
 
   @override
   Map<String, dynamic> toJson() {
-    return super.toJson()
-      ..addAll({
-        'forceLocationManager': forceLocationManager,
-        'timeInterval': intervalDuration?.inMilliseconds,
-        'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
-        'useMSLAltitude': useMSLAltitude,
-        'enableAccuracyFilter': enableAccuracyFilter,
-      });
+    return super.toJson()..addAll({
+      'forceLocationManager': forceLocationManager,
+      'timeInterval': intervalDuration?.inMilliseconds,
+      'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
+      'useMSLAltitude': useMSLAltitude,
+      'enableAccuracyFilter': enableAccuracyFilter,
+    });
   }
 }

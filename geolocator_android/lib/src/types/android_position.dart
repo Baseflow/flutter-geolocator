@@ -26,18 +26,18 @@ class AndroidPosition extends Position {
     super.floor,
     isMocked = false,
   }) : super(
-          longitude: longitude,
-          latitude: latitude,
-          timestamp: timestamp,
-          accuracy: accuracy,
-          altitude: altitude,
-          altitudeAccuracy: altitudeAccuracy,
-          heading: heading,
-          headingAccuracy: headingAccuracy,
-          speed: speed,
-          speedAccuracy: speedAccuracy,
-          isMocked: isMocked,
-        );
+         longitude: longitude,
+         latitude: latitude,
+         timestamp: timestamp,
+         accuracy: accuracy,
+         altitude: altitude,
+         altitudeAccuracy: altitudeAccuracy,
+         heading: heading,
+         headingAccuracy: headingAccuracy,
+         speed: speed,
+         speedAccuracy: speedAccuracy,
+         isMocked: isMocked,
+       );
 
   /// If available it returns the number of GNSS satellites.
   ///
@@ -51,7 +51,8 @@ class AndroidPosition extends Position {
 
   @override
   bool operator ==(Object other) {
-    var areEqual = other is AndroidPosition &&
+    var areEqual =
+        other is AndroidPosition &&
         super == other &&
         other.satelliteCount == satelliteCount &&
         other.satellitesUsedInFix == satellitesUsedInFix;
@@ -90,10 +91,9 @@ class AndroidPosition extends Position {
   /// serialized to JSON.
   @override
   Map<String, dynamic> toJson() {
-    return super.toJson()
-      ..addAll({
-        'gnss_satellite_count': satelliteCount,
-        'gnss_satellites_used_in_fix': satellitesUsedInFix,
-      });
+    return super.toJson()..addAll({
+      'gnss_satellite_count': satelliteCount,
+      'gnss_satellites_used_in_fix': satellitesUsedInFix,
+    });
   }
 }

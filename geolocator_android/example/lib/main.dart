@@ -9,7 +9,8 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 /// Defines the main theme color.
 final MaterialColor themeMaterialColor =
     BaseflowPluginExample.createMaterialColor(
-        const Color.fromRGBO(48, 49, 60, 1));
+      const Color.fromRGBO(48, 49, 60, 1),
+    );
 
 void main() {
   runApp(const GeolocatorWidget());
@@ -18,14 +19,14 @@ void main() {
 /// Example [Widget] showing the functionalities of the geolocator plugin.
 class GeolocatorWidget extends StatefulWidget {
   /// Creates a [PermissionHandlerWidget].
-  const GeolocatorWidget({
-    super.key,
-  });
+  const GeolocatorWidget({super.key});
 
   /// Create a page containing the functionality of this plugin
   static ExamplePage createPage() {
     return ExamplePage(
-        Icons.location_on, (context) => const GeolocatorWidget());
+      Icons.location_on,
+      (context) => const GeolocatorWidget(),
+    );
   }
 
   @override
@@ -77,110 +78,103 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             break;
         }
       },
-      itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: 1,
-          child: Text("Get Location Accuracy"),
-        ),
-        if (Platform.isIOS)
-          const PopupMenuItem(
-            value: 2,
-            child: Text("Request Temporary Full Accuracy"),
-          ),
-        const PopupMenuItem(
-          value: 3,
-          child: Text("Open App Settings"),
-        ),
-        if (Platform.isAndroid)
-          const PopupMenuItem(
-            value: 4,
-            child: Text("Open Location Settings"),
-          ),
-        const PopupMenuItem(
-          value: 5,
-          child: Text("Clear"),
-        ),
-      ],
+      itemBuilder:
+          (context) => [
+            const PopupMenuItem(value: 1, child: Text("Get Location Accuracy")),
+            if (Platform.isIOS)
+              const PopupMenuItem(
+                value: 2,
+                child: Text("Request Temporary Full Accuracy"),
+              ),
+            const PopupMenuItem(value: 3, child: Text("Open App Settings")),
+            if (Platform.isAndroid)
+              const PopupMenuItem(
+                value: 4,
+                child: Text("Open Location Settings"),
+              ),
+            const PopupMenuItem(value: 5, child: Text("Clear")),
+          ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    const sizedBox = SizedBox(
-      height: 10,
-    );
+    const sizedBox = SizedBox(height: 10);
 
     return BaseflowPluginExample(
-        pluginName: 'Geolocator',
-        githubURL: 'https://github.com/Baseflow/flutter-geolocator',
-        pubDevURL: 'https://pub.dev/packages/geolocator',
-        appBarActions: [
-          _createActions()
-        ],
-        pages: [
-          ExamplePage(
-            Icons.location_on,
-            (context) => Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              body: ListView.builder(
-                itemCount: _positionItems.length,
-                itemBuilder: (context, index) {
-                  final positionItem = _positionItems[index];
+      pluginName: 'Geolocator',
+      githubURL: 'https://github.com/Baseflow/flutter-geolocator',
+      pubDevURL: 'https://pub.dev/packages/geolocator',
+      appBarActions: [_createActions()],
+      pages: [
+        ExamplePage(
+          Icons.location_on,
+          (context) => Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            body: ListView.builder(
+              itemCount: _positionItems.length,
+              itemBuilder: (context, index) {
+                final positionItem = _positionItems[index];
 
-                  if (positionItem.type == _PositionItemType.log) {
-                    return ListTile(
-                      title: Text(positionItem.displayValue,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          )),
-                    );
-                  } else {
-                    return Card(
-                      child: ListTile(
-                        tileColor: themeMaterialColor,
-                        title: Text(
-                          positionItem.displayValue,
-                          style: const TextStyle(color: Colors.white),
-                        ),
+                if (positionItem.type == _PositionItemType.log) {
+                  return ListTile(
+                    title: Text(
+                      positionItem.displayValue,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
-                    );
-                  }
-                },
-              ),
-              floatingActionButton: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  FloatingActionButton(
-                    onPressed: _toggleListening,
-                    tooltip: (_positionStreamSubscription == null)
-                        ? 'Start position updates'
-                        : _positionStreamSubscription!.isPaused
-                            ? 'Resume'
-                            : 'Pause',
-                    backgroundColor: _determineButtonColor(),
-                    child: (_positionStreamSubscription == null ||
-                            _positionStreamSubscription!.isPaused)
-                        ? const Icon(Icons.play_arrow)
-                        : const Icon(Icons.pause),
-                  ),
-                  sizedBox,
-                  FloatingActionButton(
-                    onPressed: _getCurrentPosition,
-                    child: const Icon(Icons.my_location),
-                  ),
-                  sizedBox,
-                  FloatingActionButton(
-                    onPressed: _getLastKnownPosition,
-                    child: const Icon(Icons.bookmark),
-                  ),
-                ],
-              ),
+                    ),
+                  );
+                } else {
+                  return Card(
+                    child: ListTile(
+                      tileColor: themeMaterialColor,
+                      title: Text(
+                        positionItem.displayValue,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
-          )
-        ]);
+            floatingActionButton: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  onPressed: _toggleListening,
+                  tooltip:
+                      (_positionStreamSubscription == null)
+                          ? 'Start position updates'
+                          : _positionStreamSubscription!.isPaused
+                          ? 'Resume'
+                          : 'Pause',
+                  backgroundColor: _determineButtonColor(),
+                  child:
+                      (_positionStreamSubscription == null ||
+                              _positionStreamSubscription!.isPaused)
+                          ? const Icon(Icons.play_arrow)
+                          : const Icon(Icons.pause),
+                ),
+                sizedBox,
+                FloatingActionButton(
+                  onPressed: _getCurrentPosition,
+                  child: const Icon(Icons.my_location),
+                ),
+                sizedBox,
+                FloatingActionButton(
+                  onPressed: _getLastKnownPosition,
+                  child: const Icon(Icons.bookmark),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Future<void> _getCurrentPosition() async {
@@ -191,10 +185,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     }
 
     final position = await geolocatorAndroid.getCurrentPosition();
-    _updatePositionList(
-      _PositionItemType.position,
-      position.toString(),
-    );
+    _updatePositionList(_PositionItemType.position, position.toString());
   }
 
   Future<bool> _handlePermission() async {
@@ -224,10 +215,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        _updatePositionList(
-          _PositionItemType.log,
-          _kPermissionDeniedMessage,
-        );
+        _updatePositionList(_PositionItemType.log, _kPermissionDeniedMessage);
 
         return false;
       }
@@ -245,10 +233,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    _updatePositionList(
-      _PositionItemType.log,
-      _kPermissionGrantedMessage,
-    );
+    _updatePositionList(_PositionItemType.log, _kPermissionGrantedMessage);
     return true;
   }
 
@@ -257,8 +242,9 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     setState(() {});
   }
 
-  bool _isListening() => !(_positionStreamSubscription == null ||
-      _positionStreamSubscription!.isPaused);
+  bool _isListening() =>
+      !(_positionStreamSubscription == null ||
+          _positionStreamSubscription!.isPaused);
 
   Color _determineButtonColor() {
     return _isListening() ? Colors.green : Colors.red;
@@ -267,22 +253,23 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   void _toggleServiceStatusStream() {
     if (_serviceStatusStreamSubscription == null) {
       final serviceStatusStream = geolocatorAndroid.getServiceStatusStream();
-      _serviceStatusStreamSubscription =
-          serviceStatusStream.handleError((error) {
-        _serviceStatusStreamSubscription?.cancel();
-        _serviceStatusStreamSubscription = null;
-      }).listen((serviceStatus) {
-        String serviceStatusValue;
-        if (serviceStatus == ServiceStatus.enabled) {
-          serviceStatusValue = 'enabled';
-        } else {
-          serviceStatusValue = 'disabled';
-        }
-        _updatePositionList(
-          _PositionItemType.log,
-          'Location service has been $serviceStatusValue',
-        );
-      });
+      _serviceStatusStreamSubscription = serviceStatusStream
+          .handleError((error) {
+            _serviceStatusStreamSubscription?.cancel();
+            _serviceStatusStreamSubscription = null;
+          })
+          .listen((serviceStatus) {
+            String serviceStatusValue;
+            if (serviceStatus == ServiceStatus.enabled) {
+              serviceStatusValue = 'enabled';
+            } else {
+              serviceStatusValue = 'disabled';
+            }
+            _updatePositionList(
+              _PositionItemType.log,
+              'Location service has been $serviceStatusValue',
+            );
+          });
     }
   }
 
@@ -313,17 +300,20 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         ),
       );
       final positionStream = geolocatorAndroid.getPositionStream(
-          locationSettings: androidSettings);
-      _positionStreamSubscription = positionStream.handleError((error) {
-        _positionStreamSubscription?.cancel();
-        _positionStreamSubscription = null;
-      }).listen((position) {
-        debugPrint(position.altitude.toString());
-        _updatePositionList(
-          _PositionItemType.position,
-          position.toString(),
-        );
-      });
+        locationSettings: androidSettings,
+      );
+      _positionStreamSubscription = positionStream
+          .handleError((error) {
+            _positionStreamSubscription?.cancel();
+            _positionStreamSubscription = null;
+          })
+          .listen((position) {
+            debugPrint(position.altitude.toString());
+            _updatePositionList(
+              _PositionItemType.position,
+              position.toString(),
+            );
+          });
       _positionStreamSubscription?.pause();
     }
 
@@ -361,10 +351,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
   void _getLastKnownPosition() async {
     final position = await geolocatorAndroid.getLastKnownPosition();
     if (position != null) {
-      _updatePositionList(
-        _PositionItemType.position,
-        position.toString(),
-      );
+      _updatePositionList(_PositionItemType.position, position.toString());
     } else {
       _updatePositionList(
         _PositionItemType.log,
@@ -410,10 +397,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       displayValue = 'Error opening Application Settings.';
     }
 
-    _updatePositionList(
-      _PositionItemType.log,
-      displayValue,
-    );
+    _updatePositionList(_PositionItemType.log, displayValue);
   }
 
   void _openLocationSettings() async {
@@ -426,17 +410,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
       displayValue = 'Error opening Location Settings';
     }
 
-    _updatePositionList(
-      _PositionItemType.log,
-      displayValue,
-    );
+    _updatePositionList(_PositionItemType.log, displayValue);
   }
 }
 
-enum _PositionItemType {
-  log,
-  position,
-}
+enum _PositionItemType { log, position }
 
 class _PositionItem {
   _PositionItem(this.type, this.displayValue);
