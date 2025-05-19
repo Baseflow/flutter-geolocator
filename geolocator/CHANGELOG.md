@@ -1,6 +1,7 @@
 ## NEXT
 
 - Bump `flutter_lints` to version of afp to 5.0.0
+- Fixes PlatformException in example app for Android 14 (API level 34) versions and newer by updating manifest permissions.
 
 ## 13.0.4
 
