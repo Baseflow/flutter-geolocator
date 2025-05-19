@@ -1,6 +1,7 @@
 ## NEXT
 
 - Bump `androidx.core:core` to version 1.15.0
+- Fixes PlatformException in example app for Android 14 (API level 34) versions and newer by updating manifest permissions.
 
 ## 5.0.1
 
