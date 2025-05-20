@@ -4,6 +4,7 @@ public enum ErrorCodes {
   activityMissing,
   errorWhileAcquiringPosition,
   locationServicesDisabled,
+  locationServicesFailed,
   permissionDefinitionsNotFound,
   permissionDenied,
   permissionRequestInProgress;
@@ -16,6 +17,8 @@ public enum ErrorCodes {
         return "ERROR_WHILE_ACQUIRING_POSITION";
       case locationServicesDisabled:
         return "LOCATION_SERVICES_DISABLED";
+      case locationServicesFailed:
+        return "LOCATION_SERVICES_FAILED";
       case permissionDefinitionsNotFound:
         return "PERMISSION_DEFINITIONS_NOT_FOUND";
       case permissionDenied:
@@ -35,6 +38,8 @@ public enum ErrorCodes {
         return "An unexpected error occurred while trying to acquire the device's position.";
       case locationServicesDisabled:
         return "Location services are disabled. To receive location updates the location services should be enabled.";
+      case locationServicesFailed:
+        return "Location services failed.";
       case permissionDefinitionsNotFound:
         return "No location permissions are defined in the manifest. Make sure at least ACCESS_FINE_LOCATION or ACCESS_COARSE_LOCATION are defined in the manifest.";
       case permissionDenied:
