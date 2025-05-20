@@ -1,4 +1,4 @@
-## 5.0.2
+## NEXT
 
 - Fixes PlatformException in example app for Android 14 (API level 34) versions and newer by updating manifest permissions.
 
