@@ -1,3 +1,11 @@
+## UNRELEASED
+
+* Adds location accuracy filtering to prevent random GPS drifts (Issue #1574). Features added:
+  * `LocationAccuracyFilter` class to filter out location updates with unrealistic movement patterns
+  * Optional filtering through new `enableAccuracyFilter` parameter
+  * Configurable thresholds for accuracy, speed, and distance jumps
+  * Comprehensive test coverage for various transportation modes
+
 ## 5.0.1+1
 
 - Bump `androidx.core:core` to version 1.16.0

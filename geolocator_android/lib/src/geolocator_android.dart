@@ -8,18 +8,21 @@ import 'package:uuid/uuid.dart';
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class GeolocatorAndroid extends GeolocatorPlatform {
   /// The method channel used to interact with the native platform.
-  static const _methodChannel =
-      MethodChannel('flutter.baseflow.com/geolocator_android');
+  static const _methodChannel = MethodChannel(
+    'flutter.baseflow.com/geolocator_android',
+  );
 
   /// The event channel used to receive [Position] updates from the native
   /// platform.
-  static const _eventChannel =
-      EventChannel('flutter.baseflow.com/geolocator_updates_android');
+  static const _eventChannel = EventChannel(
+    'flutter.baseflow.com/geolocator_updates_android',
+  );
 
   /// The event channel used to receive [LocationServiceStatus] updates from the
   /// native platform.
-  static const _serviceStatusEventChannel =
-      EventChannel('flutter.baseflow.com/geolocator_service_updates_android');
+  static const _serviceStatusEventChannel = EventChannel(
+    'flutter.baseflow.com/geolocator_service_updates_android',
+  );
 
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith() {
@@ -41,8 +44,9 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   Future<LocationPermission> checkPermission() async {
     try {
       // ignore: omit_local_variable_types
-      final int permission =
-          await _methodChannel.invokeMethod('checkPermission');
+      final int permission = await _methodChannel.invokeMethod(
+        'checkPermission',
+      );
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -56,8 +60,9 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   Future<LocationPermission> requestPermission() async {
     try {
       // ignore: omit_local_variable_types
-      final int permission =
-          await _methodChannel.invokeMethod('requestPermission');
+      final int permission = await _methodChannel.invokeMethod(
+        'requestPermission',
+      );
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -81,8 +86,10 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         'forceLocationManager': forceLocationManager,
       };
 
-      final positionMap =
-          await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
+      final positionMap = await _methodChannel.invokeMethod(
+        'getLastKnownPosition',
+        parameters,
+      );
 
       return positionMap != null ? AndroidPosition.fromMap(positionMap) : null;
     } on PlatformException catch (e) {
@@ -94,8 +101,9 @@ class GeolocatorAndroid extends GeolocatorPlatform {
 
   @override
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
-    final int accuracy =
-        await _methodChannel.invokeMethod('getLocationAccuracy');
+    final int accuracy = await _methodChannel.invokeMethod(
+      'getLocationAccuracy',
+    );
     return LocationAccuracyStatus.values[accuracy];
   }
 
@@ -111,13 +119,10 @@ class GeolocatorAndroid extends GeolocatorPlatform {
 
       final Duration? timeLimit = locationSettings?.timeLimit;
 
-      positionFuture = _methodChannel.invokeMethod(
-        'getCurrentPosition',
-        {
-          ...?locationSettings?.toJson(),
-          'requestId': requestId,
-        },
-      );
+      positionFuture = _methodChannel.invokeMethod('getCurrentPosition', {
+        ...?locationSettings?.toJson(),
+        'requestId': requestId,
+      });
 
       if (timeLimit != null) {
         positionFuture = positionFuture.timeout(timeLimit);
@@ -126,13 +131,8 @@ class GeolocatorAndroid extends GeolocatorPlatform {
       final positionMap = await positionFuture;
       return AndroidPosition.fromMap(positionMap);
     } on TimeoutException {
-      final parameters = <String, dynamic>{
-        'requestId': requestId,
-      };
-      _methodChannel.invokeMethod(
-        'cancelGetCurrentPosition',
-        parameters,
-      );
+      final parameters = <String, dynamic>{'requestId': requestId};
+      _methodChannel.invokeMethod('cancelGetCurrentPosition', parameters);
       rethrow;
     } on PlatformException catch (e) {
       final error = _handlePlatformException(e);
@@ -163,9 +163,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   }
 
   @override
-  Stream<Position> getPositionStream({
-    LocationSettings? locationSettings,
-  }) {
+  Stream<Position> getPositionStream({LocationSettings? locationSettings}) {
     if (_positionStream != null) {
       return _positionStream!;
     }
@@ -181,34 +179,38 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         timeLimit,
         onTimeout: (s) {
           _positionStream = null;
-          s.addError(TimeoutException(
-            'Time limit reached while waiting for position update.',
-            timeLimit,
-          ));
+          s.addError(
+            TimeoutException(
+              'Time limit reached while waiting for position update.',
+              timeLimit,
+            ),
+          );
           s.close();
         },
       );
     }
 
     _positionStream = positionStream
-        .map<Position>((dynamic element) =>
-            AndroidPosition.fromMap(element.cast<String, dynamic>()))
-        .handleError(
-      (error) {
-        if (error is PlatformException) {
-          error = _handlePlatformException(error);
-        }
-        throw error;
-      },
-    );
+        .map<Position>(
+      (dynamic element) =>
+          AndroidPosition.fromMap(element.cast<String, dynamic>()),
+    )
+        .handleError((error) {
+      if (error is PlatformException) {
+        error = _handlePlatformException(error);
+      }
+      throw error;
+    });
     return _positionStream!;
   }
 
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
-    return incoming.asBroadcastStream(onCancel: (subscription) {
-      subscription.cancel();
-      _positionStream = null;
-    });
+    return incoming.asBroadcastStream(
+      onCancel: (subscription) {
+        subscription.cancel();
+        _positionStream = null;
+      },
+    );
   }
 
   @override
@@ -218,9 +220,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     try {
       final int status = await _methodChannel.invokeMethod(
         'requestTemporaryFullAccuracy',
-        <String, dynamic>{
-          'purposeKey': purposeKey,
-        },
+        <String, dynamic>{'purposeKey': purposeKey},
       );
       return LocationAccuracyStatus.values[status];
     } on PlatformException catch (e) {
