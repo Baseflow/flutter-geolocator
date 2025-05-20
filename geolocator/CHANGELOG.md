@@ -1,7 +1,12 @@
-## NEXT
+## 14.0.1
 
-- Bump `flutter_lints` to version of afp to 5.0.0
 - Fixes PlatformException in example app for Android 14 (API level 34) versions and newer by updating manifest permissions.
+
+## 14.0.0
+
+- **BREAKING CHANGE:** for Flutter `3.27.0` and below. Make sure you'll upgrade Flutter to `3.29.0` or above before using this version.
+- Bump `flutter_lints` to version of afp to 5.0.0
+- Updated `geolocator_android` dependency to version `^5.0.0`
 
 ## 13.0.4
 
