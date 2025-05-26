@@ -123,6 +123,15 @@ The second key (in this example called `YourPurposeKey`) should match the purpos
 > NOTE: the first time requesting temporary full accuracy access it might take several seconds for the pop-up to show. This is due to the fact that iOS is determining the exact user location which may take several seconds. Unfortunately this is out of our hands.
 </details>
 
+On iOS 16 and above you need to specify `UIBackgroundModes` `location` to receive location updates in the background.
+
+``` xml
+<key>UIBackgroundModes</key>
+<array>
+  <string>location</string>
+</array>
+```
+
 <details>
 <summary>macOS</summary>
 
