@@ -1,3 +1,7 @@
+## NEXT
+
+- Adds section about `UIBackgroundModes` to the README. 
+
 ## 14.0.1
 
 - Adds section about `FOREGROUND_SERVICE_LOCATION` to the README. 
