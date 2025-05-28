@@ -29,6 +29,7 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.RuntimeExecutionException;
 
 import java.security.SecureRandom;
 
@@ -167,19 +168,27 @@ class FusedLocationClient implements LocationClient {
             (response) -> {
               if (!response.isSuccessful()) {
                 listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+                return;
               }
 
-              LocationSettingsResponse lsr = response.getResult();
-              if (lsr != null) {
-                LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
-                boolean isGpsUsable = settingsStates != null && settingsStates.isGpsUsable();
-                boolean isNetworkUsable =
-                    settingsStates != null && settingsStates.isNetworkLocationUsable();
-                listener.onLocationServiceResult(isGpsUsable || isNetworkUsable);
-              } else {
-                listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+              try {
+                LocationSettingsResponse lsr = response.getResult();
+                if (lsr != null) {
+                    LocationSettingsStates settingsStates = lsr.getLocationSettingsStates();
+                    boolean isGpsUsable = settingsStates != null && settingsStates.isGpsUsable();
+                    boolean isNetworkUsable =
+                        settingsStates != null && settingsStates.isNetworkLocationUsable();
+                    listener.onLocationServiceResult(isGpsUsable || isNetworkUsable);
+                } else {
+                    listener.onLocationServiceError(ErrorCodes.locationServicesDisabled);
+                }
+              } catch (RuntimeExecutionException e) {
+                listener.onLocationServiceError(ErrorCodes.locationServicesFailed);
               }
-            });
+            })
+        .addOnFailureListener((e) -> {
+            listener.onLocationServiceError(ErrorCodes.locationServicesFailed);
+        });
   }
 
   @SuppressLint("MissingPermission")
