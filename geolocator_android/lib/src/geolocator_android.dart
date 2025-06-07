@@ -16,6 +16,11 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   static const _eventChannel =
       EventChannel('flutter.baseflow.com/geolocator_updates_android');
 
+  /// The secondary event channel used to receive [Position] updates from the
+  /// native platform.
+  static const _eventChannelFGN =
+      EventChannel('flutter.baseflow.com/geolocator_updates_android_fgn');
+
   /// The event channel used to receive [LocationServiceStatus] updates from the
   /// native platform.
   static const _serviceStatusEventChannel =
@@ -33,6 +38,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   bool forcedLocationManager = false;
 
   Stream<Position>? _positionStream;
+  Stream<Position>? _positionStreamFGN;
   Stream<ServiceStatus>? _serviceStatusStream;
 
   final Uuid _uuid = const Uuid();
@@ -166,13 +172,24 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   Stream<Position> getPositionStream({
     LocationSettings? locationSettings,
   }) {
-    if (_positionStream != null) {
-      return _positionStream!;
+    final bool useForegroundNotification = locationSettings is AndroidSettings
+        ? locationSettings.foregroundNotificationConfig != null
+        : false;
+    if (useForegroundNotification) {
+      if (_positionStreamFGN != null) {
+        return _positionStreamFGN!;
+      }
+    } else {
+      if (_positionStream != null) {
+        return _positionStream!;
+      }
     }
-    var originalStream = _eventChannel.receiveBroadcastStream(
+    var originalStream =
+        (useForegroundNotification ? _eventChannelFGN : _eventChannel)
+            .receiveBroadcastStream(
       locationSettings?.toJson(),
     );
-    var positionStream = _wrapStream(originalStream);
+    var positionStream = _wrapStream(originalStream, useForegroundNotification);
 
     var timeLimit = locationSettings?.timeLimit;
 
@@ -180,7 +197,11 @@ class GeolocatorAndroid extends GeolocatorPlatform {
       positionStream = positionStream.timeout(
         timeLimit,
         onTimeout: (s) {
-          _positionStream = null;
+          if (useForegroundNotification) {
+            _positionStreamFGN = null;
+          } else {
+            _positionStream = null;
+          }
           s.addError(TimeoutException(
             'Time limit reached while waiting for position update.',
             timeLimit,
@@ -190,7 +211,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
       );
     }
 
-    _positionStream = positionStream
+    final Stream<Position> tmpStream = positionStream
         .map<Position>((dynamic element) =>
             AndroidPosition.fromMap(element.cast<String, dynamic>()))
         .handleError(
@@ -201,13 +222,25 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         throw error;
       },
     );
-    return _positionStream!;
+    if (useForegroundNotification) {
+      _positionStreamFGN = tmpStream;
+    } else {
+      _positionStream = tmpStream;
+    }
+    return tmpStream;
   }
 
-  Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
+  Stream<dynamic> _wrapStream(
+    Stream<dynamic> incoming,
+    bool useForegroundNotification,
+  ) {
     return incoming.asBroadcastStream(onCancel: (subscription) {
       subscription.cancel();
-      _positionStream = null;
+      if (useForegroundNotification) {
+        _positionStreamFGN = null;
+      } else {
+        _positionStream = null;
+      }
     });
   }
 
