@@ -1,8 +1,10 @@
 package com.baseflow.geolocator.location;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.GnssStatus;
 import android.location.Location;
 import android.location.LocationManager;
@@ -44,7 +46,7 @@ public class NmeaClient {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       nmeaMessageListener =
           (message, timestamp) -> {
-            if (message.startsWith("$GPGGA")) {
+            if (message.trim().matches("^\\$..GGA.*$")) {
               lastNmeaMessage = message;
               lastNmeaMessageTime = Calendar.getInstance();
             }
@@ -71,17 +73,20 @@ public class NmeaClient {
       return;
     }
 
-    if (locationOptions != null && locationOptions.isUseMSLAltitude()) {
+    if (locationOptions != null) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && locationManager != null) {
-        locationManager.addNmeaListener(nmeaMessageListener, null);
-        locationManager.registerGnssStatusCallback(gnssCallback, null);
-        listenerAdded = true;
+        if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED) {
+          locationManager.addNmeaListener(nmeaMessageListener, null);
+          locationManager.registerGnssStatusCallback(gnssCallback, null);
+          listenerAdded = true;
+        }
       }
     }
   }
 
   public void stop() {
-    if (locationOptions != null && locationOptions.isUseMSLAltitude()) {
+    if (locationOptions != null) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && locationManager != null) {
         locationManager.removeNmeaListener(nmeaMessageListener);
         locationManager.unregisterGnssStatusCallback(gnssCallback);
@@ -117,7 +122,7 @@ public class NmeaClient {
 
         // Parse altitude above sea level, Detailed description of NMEA string here
         // http://aprs.gids.nl/nmea/#gga
-        if (type.startsWith("$GPGGA") && tokens.length > 9) {
+        if (lastNmeaMessage.trim().matches("^\\$..GGA.*$") && tokens.length > 9) {
           if (!tokens[9].isEmpty()) {
             double mslAltitude = Double.parseDouble(tokens[9]);
             if (location.getExtras() == null) {

@@ -1,3 +1,54 @@
+## NEXT
+
+- Adds section about `UIBackgroundModes` to the README. 
+
+## 14.0.1
+
+- Adds section about `FOREGROUND_SERVICE_LOCATION` to the README. 
+- Fixes PlatformException in example app for Android 14 (SDK level 34) and newer by updating manifest permissions.
+
+## 14.0.0
+
+- **BREAKING CHANGE:** for Flutter `3.27.0` and below. Make sure you'll upgrade Flutter to `3.29.0` or above before using this version.
+- Bump `flutter_lints` to version of afp to 5.0.0
+- Updated `geolocator_android` dependency to version `^5.0.0`
+
+## 13.0.4
+
+- Bump `flutter_lints` to version 5.0.0. Later added: of afp example project.
+
+## 13.0.3
+
+- Updates dart sdk to `sdk: ^3.5.0`
+- Updates example project and fixes analyzer issues
+
+## 13.0.2
+
+- Updates dependency on geolocator_apple to version 2.3.8.
+- Migrates Android configuration of example app away from imperative gradle API.
+
+## 13.0.1
+
+- Resolves problems when compiling non-web platforms because of illegal reference to `dart:js_interop`.
+
+## 13.0.0
+
+- **BREAKING CHANGE:** Deprecates getCurrentPosition desiredAccuracy, forceAndroidLocationManager, and timeLimit parameters in favor of supplying a LocationSettings class.
+- Exposes `WebSettings` from geolocator.
+- Updates dependency on geolocator_web to version 4.1.0
+- Updates dependency on geolocator_android to version 4.3.0
+- Updates dependency on geolocator_apple to version 2.3.7
+- Updates dependency on geolocator_windows to version 0.2.3
+- Updates dependency on geolocator_platform_interface to version 4.2.3
+
+## 12.0.0
+
+- **BREAKING CHANGE:** Updates dependency on geolocator_web to version [4.0.0](https://pub.dev/packages/geolocator_web/changelog).
+
+## 11.1.0
+
+- Expose `AndroidPosition` from geolocator.
+
 ## 11.0.0
 
 - **BREAKING CHANGE:** Updates dependency on geolocator_web to version [3.0.0](https://pub.dev/packages/geolocator_web/changelog).

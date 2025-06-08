@@ -7,8 +7,10 @@ import 'src/geolocation_manager.dart';
 import 'src/permissions_manager.dart';
 import 'src/html_geolocation_manager.dart';
 import 'src/html_permissions_manager.dart';
+import 'web_settings.dart';
 
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+export 'web_settings.dart' show WebSettings;
 
 /// The web implementation of [GeolocatorPlatform].
 ///
@@ -73,9 +75,11 @@ class GeolocatorPlugin extends GeolocatorPlatform {
     LocationSettings? locationSettings,
   }) async {
     final result = await _geolocation.getCurrentPosition(
-      enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
-      timeout: locationSettings?.timeLimit,
-    );
+        enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
+        timeout: locationSettings?.timeLimit,
+        maximumAge: locationSettings is WebSettings
+            ? locationSettings.maximumAge
+            : null);
 
     return result;
   }
@@ -88,9 +92,11 @@ class GeolocatorPlugin extends GeolocatorPlatform {
 
     return _geolocation
         .watchPosition(
-      enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
-      timeout: locationSettings?.timeLimit,
-    )
+            enableHighAccuracy: _enableHighAccuracy(locationSettings?.accuracy),
+            timeout: locationSettings?.timeLimit,
+            maximumAge: locationSettings is WebSettings
+                ? locationSettings.maximumAge
+                : null)
         .skipWhile((geoposition) {
       if (locationSettings?.distanceFilter == 0 ||
           locationSettings?.distanceFilter == null) {

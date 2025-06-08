@@ -85,7 +85,9 @@ class Position {
   /// Will be true on Android (starting from API lvl 18) when the location came
   /// from the mocked provider.
   ///
-  /// On iOS this value will always be false.
+  /// Will be true on iOS 15 and higher when flag isSimulatedBySoftware is true (otherwise false).
+  ///
+  /// When not available the default value is false.
   final bool isMocked;
 
   @override
@@ -154,14 +156,14 @@ class Position {
       latitude: positionMap['latitude'],
       longitude: positionMap['longitude'],
       timestamp: timestamp,
-      altitude: positionMap['altitude'] ?? 0.0,
-      altitudeAccuracy: positionMap['altitude_accuracy'] ?? 0.0,
-      accuracy: positionMap['accuracy'] ?? 0.0,
-      heading: positionMap['heading'] ?? 0.0,
-      headingAccuracy: positionMap['heading_accuracy'] ?? 0.0,
+      altitude: _toDouble(positionMap['altitude']),
+      altitudeAccuracy: _toDouble(positionMap['altitude_accuracy']),
+      accuracy: _toDouble(positionMap['accuracy']),
+      heading: _toDouble(positionMap['heading']),
+      headingAccuracy: _toDouble(positionMap['heading_accuracy']),
       floor: positionMap['floor'],
-      speed: positionMap['speed'] ?? 0.0,
-      speedAccuracy: positionMap['speed_accuracy'] ?? 0.0,
+      speed: _toDouble(positionMap['speed']),
+      speedAccuracy: _toDouble(positionMap['speed_accuracy']),
       isMocked: positionMap['is_mocked'] ?? false,
     );
   }
@@ -182,4 +184,12 @@ class Position {
         'speed_accuracy': speedAccuracy,
         'is_mocked': isMocked,
       };
+
+  static double _toDouble(dynamic value) {
+    if (value == null) {
+      return 0.0;
+    }
+
+    return value.toDouble();
+  }
 }
