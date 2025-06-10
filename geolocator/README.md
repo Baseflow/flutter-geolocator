@@ -72,7 +72,7 @@ Starting from Android 14 (SDK 34) you need to add the `FOREGROUND_SERVICE_LOCATI
  [FOREGROUND_SERVICE_LOCATION](https://developer.android.com/reference/android/Manifest.permission#FOREGROUND_SERVICE_LOCATION) 
 
  ``` xml
- <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"
+ <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
  ```
 
 > **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalent to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
