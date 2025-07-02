@@ -108,16 +108,36 @@
 }
 #endif
 
-- (void) locationManager:(CLLocationManager *)manager didChangeAuthorization:(CLAuthorizationStatus)status {
-  if (status == kCLAuthorizationStatusNotDetermined) {
-    return;
-  }
-  
-  if (self.confirmationHandler) {
-    self.confirmationHandler(status);
-  }
-  
-  [self cleanUp];
+#pragma location authorization delegates fror older and newer versions
+
+// Newer versions
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+#if TARGET_OS_OSX || __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
+    if (@available(iOS 14.0, *)) {
+        CLAuthorizationStatus status = manager.authorizationStatus;
+        [self handleAuthorizationStatus:status];
+    } else {
+        // Not possile
+    }
+#endif
+}
+
+// Olders verions
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorization:(CLAuthorizationStatus)status {
+    [self handleAuthorizationStatus:status];
+}
+
+// Shared handler
+- (void)handleAuthorizationStatus:(CLAuthorizationStatus)status {
+    if (status == kCLAuthorizationStatusNotDetermined) {
+        return;
+    }
+
+    if (self.confirmationHandler) {
+        self.confirmationHandler(status);
+    }
+
+    [self cleanUp];
 }
 
 - (void) cleanUp {

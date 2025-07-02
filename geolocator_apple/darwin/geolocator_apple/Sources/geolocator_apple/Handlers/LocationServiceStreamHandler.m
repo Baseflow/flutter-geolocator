@@ -33,17 +33,40 @@
   return nil;
 }
 
-- (void)locationManager:(CLLocationManager *)manager locationManagerDidChangeAuthorization:(CLAuthorizationStatus)status{
-  dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    BOOL isEnabled = [CLLocationManager locationServicesEnabled];
-    dispatch_async(dispatch_get_main_queue(), ^(void) {
-        if (isEnabled) {
-            self->_eventSink([NSNumber numberWithInt:(ServiceStatus)enabled]);
-        } else {
-            self->_eventSink([NSNumber numberWithInt:(ServiceStatus)disabled]);
-        }
+#pragma location authorization delegates fror older and newer versions
+
+// for implementations of macOS 11+ en iOS 14+
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+#if TARGET_OS_OSX || __IPHONE_OS_VERSION_MAX_ALLOWED >= 140000
+    if (@available(iOS 14.0, *)) {
+        CLAuthorizationStatus status = manager.authorizationStatus;
+        [self handleAuthorizationStatus:status];
+    } else {
+        // Not possible
+    }
+#endif
+}
+
+// older versions (iOS < 14, macOS < 11)
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [self handleAuthorizationStatus:status];
+}
+
+- (void)handleAuthorizationStatus:(CLAuthorizationStatus)status {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL isEnabled = [CLLocationManager locationServicesEnabled];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (isEnabled) {
+                if (self->_eventSink) {
+                    self->_eventSink(@(enabled));
+                }
+            } else {
+                if (self->_eventSink) {
+                    self->_eventSink(@(disabled));
+                }
+            }
+        });
     });
-  });
 }
 
 @end
