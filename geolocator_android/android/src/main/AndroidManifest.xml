@@ -1,11 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.baseflow.geolocator">
+    package="com.baseflow.geolocator">
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application>
         <service
-                android:enabled="true"
-                android:exported="false"
-                android:foregroundServiceType="location"
-                android:name=".GeolocatorLocationService"/>
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location"
+            android:name=".GeolocatorLocationService"/>
     </application>
 </manifest>
