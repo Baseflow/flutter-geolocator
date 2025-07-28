@@ -28,6 +28,7 @@ import io.flutter.plugin.common.MethodChannel;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.StreamHandler;
 
 /**
  * Translates incoming Geolocator MethodCalls into well formed Java function calls for {@link
@@ -39,6 +40,7 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   private final PermissionManager permissionManager;
   private final GeolocationManager geolocationManager;
   private final LocationAccuracyManager locationAccuracyManager;
+  private final StreamHandlerImpl streamHandler;
 
   @VisibleForTesting final Map<String, LocationClient> pendingCurrentPositionLocationClients;
 
@@ -49,52 +51,57 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
   MethodCallHandlerImpl(
       PermissionManager permissionManager,
       GeolocationManager geolocationManager,
-      LocationAccuracyManager locationAccuracyManager) {
+      LocationAccuracyManager locationAccuracyManager,
+      StreamHandlerImpl streamHandler) {
     this.permissionManager = permissionManager;
     this.geolocationManager = geolocationManager;
     this.locationAccuracyManager = locationAccuracyManager;
+    this.streamHandler = streamHandler;
     this.pendingCurrentPositionLocationClients = new HashMap<>();
   }
 
   @Nullable private MethodChannel channel;
 
-  @Override
-  public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-    switch (call.method) {
-      case "checkPermission":
-        onCheckPermission(result);
-        break;
-      case "isLocationServiceEnabled":
-        onIsLocationServiceEnabled(result);
-        break;
-      case "requestPermission":
-        onRequestPermission(result);
-        break;
-      case "getLastKnownPosition":
-        onGetLastKnownPosition(call, result);
-        break;
-      case "getLocationAccuracy":
-        getLocationAccuracy(result, this.context);
-        break;
-      case "getCurrentPosition":
-        onGetCurrentPosition(call, result);
-        break;
-      case "cancelGetCurrentPosition":
-        onCancelGetCurrentPosition(call, result);
-        break;
-      case "openAppSettings":
-        boolean hasOpenedAppSettings = Utils.openAppSettings(this.context);
-        result.success(hasOpenedAppSettings);
-        break;
-      case "openLocationSettings":
-        boolean hasOpenedLocationSettings = Utils.openLocationSettings(this.context);
-        result.success(hasOpenedLocationSettings);
-        break;
-      default:
-        result.notImplemented();
-        break;
+    @Override
+    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+        switch (call.method) {
+            case "checkPermission":
+                onCheckPermission(result);
+                break;
+            case "isLocationServiceEnabled":
+                onIsLocationServiceEnabled(result);
+                break;
+            case "requestPermission":
+                onRequestPermission(result);
+                break;
+            case "getLastKnownPosition":
+                onGetLastKnownPosition(call, result);
+                break;
+            case "getLocationAccuracy":
+                getLocationAccuracy(result, this.context);
+                break;
+            case "getCurrentPosition":
+                onGetCurrentPosition(call, result);
+                break;
+            case "cancelGetCurrentPosition":
+                onCancelGetCurrentPosition(call, result);
+                break;
+            case "openAppSettings":
+                boolean hasOpenedAppSettings = Utils.openAppSettings(this.context);
+                result.success(hasOpenedAppSettings);
+                break;
+            case "openLocationSettings":
+                boolean hasOpenedLocationSettings = Utils.openLocationSettings(this.context);
+                result.success(hasOpenedLocationSettings);
+                break;
+            case "forceStopLocationTracking":
+                onForceStopLocationTracking(result);
+                break;
+            default:
+                result.notImplemented();
+                break;
+        }
     }
-  }
 
   /**
    * Registers this instance as a method call handler on the given {@code messenger}.
@@ -278,5 +285,10 @@ class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     this.pendingCurrentPositionLocationClients.remove(requestId);
 
     result.success(null);
+  }
+
+  private void onForceStopLocationTracking(MethodChannel.Result result) {
+      streamHandler.forceStopLocationService();
+      result.success(null);;
   }
 }

@@ -131,8 +131,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// An instance of [LocationServiceStatus] will be emitted each time the
   /// location service is enabled or disabled.
   Stream<ServiceStatus> getServiceStatusStream() {
-    throw UnimplementedError(
-        'getServiceStatusStream() has not been implemented.');
+    throw UnimplementedError('getServiceStatusStream() has not been implemented.');
   }
 
   /// Fires whenever the location changes inside the bounds of the
@@ -190,8 +189,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
     required String purposeKey,
   }) async {
-    throw UnimplementedError(
-        'requestTemporaryFullAccuracy() has not been implemented');
+    throw UnimplementedError('requestTemporaryFullAccuracy() has not been implemented');
   }
 
   /// Returns a [Future] containing a [LocationAccuracyStatus].
@@ -219,8 +217,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
   /// Returns [true] if the location settings page could be opened, otherwise
   /// [false] is returned.
   Future<bool> openLocationSettings() async {
-    throw UnimplementedError(
-        'openLocationSettings() has not been implemented.');
+    throw UnimplementedError('openLocationSettings() has not been implemented.');
   }
 
   /// Calculates the distance between the supplied coordinates in meters.
@@ -239,10 +236,8 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     var dLat = _toRadians(endLatitude - startLatitude);
     var dLon = _toRadians(endLongitude - startLongitude);
 
-    var a = pow(sin(dLat / 2), 2) +
-        pow(sin(dLon / 2), 2) *
-            cos(_toRadians(startLatitude)) *
-            cos(_toRadians(endLatitude));
+    var a =
+        pow(sin(dLat / 2), 2) + pow(sin(dLon / 2), 2) * cos(_toRadians(startLatitude)) * cos(_toRadians(endLatitude));
     var c = 2 * asin(sqrt(a));
 
     return earthRadius * c;
@@ -269,13 +264,15 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     var endLongitudeRadians = radians(endLongitude);
     var endLatitudeRadians = radians(endLatitude);
 
-    var y = sin(endLongitudeRadians - startLongitudeRadians) *
-        cos(endLatitudeRadians);
+    var y = sin(endLongitudeRadians - startLongitudeRadians) * cos(endLatitudeRadians);
     var x = cos(startLatitudeRadians) * sin(endLatitudeRadians) -
-        sin(startLatitudeRadians) *
-            cos(endLatitudeRadians) *
-            cos(endLongitudeRadians - startLongitudeRadians);
+        sin(startLatitudeRadians) * cos(endLatitudeRadians) * cos(endLongitudeRadians - startLongitudeRadians);
 
     return degrees(atan2(y, x));
+  }
+
+  /// Force stops location tracking. This is useful to release all resources e.g. when the app is terminated.
+  void forceStopLocationTracking() {
+    throw UnimplementedError('forceStopLocationTracking() has not been implemented.');
   }
 }

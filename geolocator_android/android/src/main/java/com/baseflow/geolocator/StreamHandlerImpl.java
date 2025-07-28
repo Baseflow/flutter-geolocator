@@ -161,4 +161,11 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       locationClient = null;
     }
   }
+
+  // Force stop the location service, even if there are connected engines or listeners.
+  public void forceStopLocationService() {
+      if (foregroundLocationService != null) {
+          foregroundLocationService.onDestroy();
+      }
+  }
 }

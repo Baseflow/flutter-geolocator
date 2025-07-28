@@ -6,15 +6,10 @@ import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 export 'package:geolocator_android/geolocator_android.dart'
-    show
-        AndroidSettings,
-        ForegroundNotificationConfig,
-        AndroidResource,
-        AndroidPosition;
-export 'package:geolocator_apple/geolocator_apple.dart'
-    show AppleSettings, ActivityType;
-export 'package:geolocator_web/web_settings.dart' show WebSettings;
+    show AndroidSettings, ForegroundNotificationConfig, AndroidResource, AndroidPosition;
+export 'package:geolocator_apple/geolocator_apple.dart' show AppleSettings, ActivityType;
 export 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
+export 'package:geolocator_web/web_settings.dart' show WebSettings;
 
 /// Wraps CLLocationManager (on iOS) and FusedLocationProviderClient or
 /// LocationManager
@@ -27,8 +22,7 @@ export 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 class Geolocator {
   /// Returns a [Future] indicating if the user allows the App to access
   /// the device's location.
-  static Future<LocationPermission> checkPermission() =>
-      GeolocatorPlatform.instance.checkPermission();
+  static Future<LocationPermission> checkPermission() => GeolocatorPlatform.instance.checkPermission();
 
   /// Request permission to access the location of the device.
   ///
@@ -39,13 +33,11 @@ class Geolocator {
   /// AndroidManifest.xml on Android or the Info.plist on iOS).
   /// A [PermissionRequestInProgressException] is thrown if permissions are
   /// requested while an earlier request has not yet been completed.
-  static Future<LocationPermission> requestPermission() =>
-      GeolocatorPlatform.instance.requestPermission();
+  static Future<LocationPermission> requestPermission() => GeolocatorPlatform.instance.requestPermission();
 
   /// Returns a [Future] containing a [bool] value indicating whether location
   /// services are enabled on the device.
-  static Future<bool> isLocationServiceEnabled() =>
-      GeolocatorPlatform.instance.isLocationServiceEnabled();
+  static Future<bool> isLocationServiceEnabled() => GeolocatorPlatform.instance.isLocationServiceEnabled();
 
   /// Returns the last known position stored on the users device.
   ///
@@ -54,10 +46,8 @@ class Geolocator {
   /// passing true to the [forceAndroidLocationManager] parameter. On iOS
   /// this parameter is ignored.
   /// When no position is available, null is returned.
-  static Future<Position?> getLastKnownPosition(
-          {bool forceAndroidLocationManager = false}) =>
-      GeolocatorPlatform.instance.getLastKnownPosition(
-          forceLocationManager: forceAndroidLocationManager);
+  static Future<Position?> getLastKnownPosition({bool forceAndroidLocationManager = false}) =>
+      GeolocatorPlatform.instance.getLastKnownPosition(forceLocationManager: forceAndroidLocationManager);
 
   /// Returns the current position.
   ///
@@ -118,14 +108,11 @@ class Geolocator {
   /// expense of additional power usage.
   static Future<Position> getCurrentPosition({
     LocationSettings? locationSettings,
-    @Deprecated(
-        "use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings")
+    @Deprecated("use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings")
     LocationAccuracy desiredAccuracy = LocationAccuracy.best,
-    @Deprecated(
-        "use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings")
+    @Deprecated("use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings")
     bool forceAndroidLocationManager = false,
-    @Deprecated(
-        "use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings")
+    @Deprecated("use settings parameter with AndroidSettings, AppleSettings, WebSettings, or LocationSettings")
     Duration? timeLimit,
   }) {
     LocationSettings? settings;
@@ -145,8 +132,7 @@ class Geolocator {
       timeLimit: timeLimit,
     );
 
-    return GeolocatorPlatform.instance
-        .getCurrentPosition(locationSettings: settings);
+    return GeolocatorPlatform.instance.getCurrentPosition(locationSettings: settings);
   }
 
   /// Fires whenever the location changes inside the bounds of the
@@ -197,15 +183,13 @@ class Geolocator {
   /// [LocationAccuracyStatus.reduced] will be returned, if the user has
   /// given permission for precise location, [LocationAccuracyStatus.precise]
   /// will be returned
-  static Future<LocationAccuracyStatus> getLocationAccuracy() =>
-      GeolocatorPlatform.instance.getLocationAccuracy();
+  static Future<LocationAccuracyStatus> getLocationAccuracy() => GeolocatorPlatform.instance.getLocationAccuracy();
 
   /// Fires whenever the location services are disabled/enabled in the notification
   /// bar or in the device settings. Returns ServiceStatus.enabled when location
   /// services are enabled and returns ServiceStatus.disabled when location
   /// services are disabled
-  static Stream<ServiceStatus> getServiceStatusStream() =>
-      GeolocatorPlatform.instance.getServiceStatusStream();
+  static Stream<ServiceStatus> getServiceStatusStream() => GeolocatorPlatform.instance.getServiceStatusStream();
 
   /// Requests temporary precise location when the user only gave permission
   /// for approximate location (iOS 14+ only)
@@ -230,15 +214,13 @@ class Geolocator {
   ///
   /// Returns [true] if the location settings page could be opened, otherwise
   /// [false] is returned.
-  static Future<bool> openAppSettings() =>
-      GeolocatorPlatform.instance.openAppSettings();
+  static Future<bool> openAppSettings() => GeolocatorPlatform.instance.openAppSettings();
 
   /// Opens the location settings page.
   ///
   /// Returns [true] if the location settings page could be opened, otherwise
   /// [false] is returned.
-  static Future<bool> openLocationSettings() =>
-      GeolocatorPlatform.instance.openLocationSettings();
+  static Future<bool> openLocationSettings() => GeolocatorPlatform.instance.openLocationSettings();
 
   /// Calculates the distance between the supplied coordinates in meters.
   ///
@@ -277,4 +259,9 @@ class Geolocator {
         endLatitude,
         endLongitude,
       );
+
+  /// Force stops location tracking. This is useful to release all resources e.g. when the app is terminated.
+  static void forceStopLocationTracking() {
+    GeolocatorPlatform.instance.forceStopLocationTracking();
+  }
 }

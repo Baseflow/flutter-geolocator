@@ -8,18 +8,15 @@ import 'package:uuid/uuid.dart';
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class GeolocatorAndroid extends GeolocatorPlatform {
   /// The method channel used to interact with the native platform.
-  static const _methodChannel =
-      MethodChannel('flutter.baseflow.com/geolocator_android');
+  static const _methodChannel = MethodChannel('flutter.baseflow.com/geolocator_android');
 
   /// The event channel used to receive [Position] updates from the native
   /// platform.
-  static const _eventChannel =
-      EventChannel('flutter.baseflow.com/geolocator_updates_android');
+  static const _eventChannel = EventChannel('flutter.baseflow.com/geolocator_updates_android');
 
   /// The event channel used to receive [LocationServiceStatus] updates from the
   /// native platform.
-  static const _serviceStatusEventChannel =
-      EventChannel('flutter.baseflow.com/geolocator_service_updates_android');
+  static const _serviceStatusEventChannel = EventChannel('flutter.baseflow.com/geolocator_service_updates_android');
 
   /// Registers this class as the default instance of [GeolocatorPlatform].
   static void registerWith() {
@@ -41,8 +38,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   Future<LocationPermission> checkPermission() async {
     try {
       // ignore: omit_local_variable_types
-      final int permission =
-          await _methodChannel.invokeMethod('checkPermission');
+      final int permission = await _methodChannel.invokeMethod('checkPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -56,8 +52,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   Future<LocationPermission> requestPermission() async {
     try {
       // ignore: omit_local_variable_types
-      final int permission =
-          await _methodChannel.invokeMethod('requestPermission');
+      final int permission = await _methodChannel.invokeMethod('requestPermission');
 
       return permission.toLocationPermission();
     } on PlatformException catch (e) {
@@ -68,9 +63,8 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   }
 
   @override
-  Future<bool> isLocationServiceEnabled() async => _methodChannel
-      .invokeMethod<bool>('isLocationServiceEnabled')
-      .then((value) => value ?? false);
+  Future<bool> isLocationServiceEnabled() async =>
+      _methodChannel.invokeMethod<bool>('isLocationServiceEnabled').then((value) => value ?? false);
 
   @override
   Future<Position?> getLastKnownPosition({
@@ -81,8 +75,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         'forceLocationManager': forceLocationManager,
       };
 
-      final positionMap =
-          await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
+      final positionMap = await _methodChannel.invokeMethod('getLastKnownPosition', parameters);
 
       return positionMap != null ? AndroidPosition.fromMap(positionMap) : null;
     } on PlatformException catch (e) {
@@ -94,8 +87,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
 
   @override
   Future<LocationAccuracyStatus> getLocationAccuracy() async {
-    final int accuracy =
-        await _methodChannel.invokeMethod('getLocationAccuracy');
+    final int accuracy = await _methodChannel.invokeMethod('getLocationAccuracy');
     return LocationAccuracyStatus.values[accuracy];
   }
 
@@ -146,12 +138,10 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     if (_serviceStatusStream != null) {
       return _serviceStatusStream!;
     }
-    var serviceStatusStream =
-        _serviceStatusEventChannel.receiveBroadcastStream();
+    var serviceStatusStream = _serviceStatusEventChannel.receiveBroadcastStream();
 
-    _serviceStatusStream = serviceStatusStream
-        .map((dynamic element) => ServiceStatus.values[element as int])
-        .handleError((error) {
+    _serviceStatusStream =
+        serviceStatusStream.map((dynamic element) => ServiceStatus.values[element as int]).handleError((error) {
       _serviceStatusStream = null;
       if (error is PlatformException) {
         error = _handlePlatformException(error);
@@ -191,8 +181,7 @@ class GeolocatorAndroid extends GeolocatorPlatform {
     }
 
     _positionStream = positionStream
-        .map<Position>((dynamic element) =>
-            AndroidPosition.fromMap(element.cast<String, dynamic>()))
+        .map<Position>((dynamic element) => AndroidPosition.fromMap(element.cast<String, dynamic>()))
         .handleError(
       (error) {
         if (error is PlatformException) {
@@ -230,14 +219,12 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   }
 
   @override
-  Future<bool> openAppSettings() async => _methodChannel
-      .invokeMethod<bool>('openAppSettings')
-      .then((value) => value ?? false);
+  Future<bool> openAppSettings() async =>
+      _methodChannel.invokeMethod<bool>('openAppSettings').then((value) => value ?? false);
 
   @override
-  Future<bool> openLocationSettings() async => _methodChannel
-      .invokeMethod<bool>('openLocationSettings')
-      .then((value) => value ?? false);
+  Future<bool> openLocationSettings() async =>
+      _methodChannel.invokeMethod<bool>('openLocationSettings').then((value) => value ?? false);
 
   Exception _handlePlatformException(PlatformException exception) {
     switch (exception.code) {
@@ -257,6 +244,16 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         return PositionUpdateException(exception.message);
       default:
         return exception;
+    }
+  }
+
+  @override
+  void forceStopLocationTracking() {
+    try {
+      _methodChannel.invokeMethod('forceStopLocationTracking');
+    } on PlatformException catch (e) {
+      final error = _handlePlatformException(e);
+      throw error;
     }
   }
 }
