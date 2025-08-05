@@ -23,11 +23,8 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    namespace: "com.baseflow.geolocator"
+    namespace "com.baseflow.geolocator"
 
-    if (project.android.hasProperty("namespace")) {
-        namespace("com.baseflow.geolocator")
-    }
 
     compileSdk flutter.compileSdkVersion
 
