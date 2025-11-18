@@ -1,1 +1,0 @@
-../../../ios/Classes/Utils/ActivityTypeMapper.h

@@ -18,17 +18,21 @@ void main() {
 
 /// Example [Widget] showing the functionalities of the geolocator plugin.
 class GeolocatorWidget extends StatefulWidget {
-  /// Creates a new GeolocatorWidget.
-  const GeolocatorWidget({Key? key}) : super(key: key);
+  /// Creates a [PermissionHandlerWidget].
+  const GeolocatorWidget({
+    super.key,
+  });
 
-  /// Utility method to create a page with the Baseflow templating.
+  /// Create a page containing the functionality of this plugin
   static ExamplePage createPage() {
     return ExamplePage(
         Icons.location_on, (context) => const GeolocatorWidget());
   }
 
   @override
-  GeolocatorWidgetState createState() => GeolocatorWidgetState();
+  State<GeolocatorWidget> createState() {
+    return _GeolocatorWidgetState();
+  }
 }
 
 /// State for the [GeolocatorWidget].

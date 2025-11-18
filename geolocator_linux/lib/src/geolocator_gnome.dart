@@ -1,4 +1,3 @@
-import 'package:geoclue/geoclue.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:gsettings/gsettings.dart';
 import 'package:dbus/dbus.dart';
@@ -6,9 +5,8 @@ import 'package:dbus/dbus.dart';
 import 'geolocator_linux.dart';
 
 class GeolocatorGnome extends GeolocatorLinux {
-  GeolocatorGnome(GeoClueManager manager, {GSettings? settings})
-      : _settings = settings ?? GSettings('org.gnome.system.location'),
-        super(manager);
+  GeolocatorGnome(super.manager, {GSettings? settings})
+      : _settings = settings ?? GSettings('org.gnome.system.location');
 
   final GSettings _settings;
 

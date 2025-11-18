@@ -1,3 +1,28 @@
+## 5.0.2
+
+- Fixes PlatformException in example app for Android 14 (API level 34) versions and newer by updating manifest permissions.
+- Prevented crash by checking `isSuccessful` before calling `getResult()` in location settings check.
+
+## 5.0.1+1
+
+- Bump `androidx.core:core` to version 1.16.0
+
+## 5.0.1
+
+- Bump `flutter_lints` to version 5.0.0
+
+## 5.0.0
+
+- **BREAKING CHANGE:** for Flutter `3.27.0` and below. Make sure you'll upgrade Flutter to `3.29.0` or above before using this version.
+* Fixes deprecation warnings
+
+## 4.6.2
+
+* Updates compileSDKVersion to 35
+* Updates Fixed warnings in Android package and Android example project
+* Updates gradle version
+* Updates com.android.application version to 8.7.0
+
 ## 4.6.1
 
 * Fixes a bug where the plugin throws an exception while requesting locations updates with coarse location permission only.

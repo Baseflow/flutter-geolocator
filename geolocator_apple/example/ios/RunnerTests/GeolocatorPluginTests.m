@@ -311,56 +311,20 @@
 #pragma mark - Test open setting related methods
 
 - (void)testOpenAppSettings {
-  if (@available(iOS 10, *))
-  {
-    id mockApplication = OCMClassMock([UIApplication class]);
-    OCMStub([mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
-                             options:@{}
-                   completionHandler:([OCMArg invokeBlockWithArgs:@(YES), nil])]);
-    OCMStub(ClassMethod([mockApplication sharedApplication])).andReturn(mockApplication);
-    
-      
-    FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"openAppSettings"
-                                                                arguments:@{}];
-    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"openAppSettings should return yes."];
-    GeolocatorPlugin *plugin = [[GeolocatorPlugin alloc] init];
-    [plugin handleMethodCall:call result:^(id  _Nullable result) {
-      XCTAssertTrue(result);
-      [expectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
-    return;
-  }
-  
-  if (@available(iOS 8, *)) {
-    id mockApplication = OCMClassMock([UIApplication class]);
-    OCMStub([(UIApplication *)mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]]).andReturn(YES);
-    OCMStub(ClassMethod([mockApplication sharedApplication])).andReturn(mockApplication);
-    
-      
-    FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"openAppSettings"
-                                                                arguments:@{}];
-    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"openAppSettings should return yes."];
-    GeolocatorPlugin *plugin = [[GeolocatorPlugin alloc] init];
-    [plugin handleMethodCall:call result:^(id  _Nullable result) {
-      XCTAssertTrue(result);
-      [expectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
-    return;
-  }
-  
+  id mockApplication = OCMClassMock([UIApplication class]);
+  OCMStub([mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
+                           options:@{}
+                 completionHandler:([OCMArg invokeBlockWithArgs:@(YES), nil])]);
+  OCMStub(ClassMethod([mockApplication sharedApplication])).andReturn(mockApplication);
+
+
   FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"openAppSettings"
                                                               arguments:@{}];
   
   XCTestExpectation *expectation = [self expectationWithDescription:@"openAppSettings should return yes."];
   GeolocatorPlugin *plugin = [[GeolocatorPlugin alloc] init];
   [plugin handleMethodCall:call result:^(id  _Nullable result) {
-    XCTAssertFalse(result);
+    XCTAssertTrue(result);
     [expectation fulfill];
   }];
   
@@ -369,61 +333,24 @@
 }
 
 - (void)testOpenLocationSettings {
-  if (@available(iOS 10, *))
-  {
-    id mockApplication = OCMClassMock([UIApplication class]);
-    OCMStub([mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
-                             options:@{}
-                   completionHandler:([OCMArg invokeBlockWithArgs:@(YES), nil])]);
-    OCMStub(ClassMethod([mockApplication sharedApplication])).andReturn(mockApplication);
-    
-      
-    FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"openLocationSettings"
-                                                                arguments:@{}];
-    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"openLocationSettings should return yes."];
-    GeolocatorPlugin *plugin = [[GeolocatorPlugin alloc] init];
-    [plugin handleMethodCall:call result:^(id  _Nullable result) {
-      XCTAssertTrue(result);
-      [expectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
-    return;
-  }
-  
-  if (@available(iOS 8, *)) {
-    id mockApplication = OCMClassMock([UIApplication class]);
-    OCMStub([(UIApplication *)mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]]).andReturn(YES);
-    OCMStub(ClassMethod([mockApplication sharedApplication])).andReturn(mockApplication);
-    
-      
-    FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"openLocationSettings"
-                                                                arguments:@{}];
-    
-    XCTestExpectation *expectation = [self expectationWithDescription:@"openLocationSettings should return yes."];
-    GeolocatorPlugin *plugin = [[GeolocatorPlugin alloc] init];
-    [plugin handleMethodCall:call result:^(id  _Nullable result) {
-      XCTAssertTrue(result);
-      [expectation fulfill];
-    }];
-    
-    [self waitForExpectationsWithTimeout:5.0 handler:nil];
-    return;
-  }
-  
+  id mockApplication = OCMClassMock([UIApplication class]);
+  OCMStub([mockApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]
+                           options:@{}
+                 completionHandler:([OCMArg invokeBlockWithArgs:@(YES), nil])]);
+  OCMStub(ClassMethod([mockApplication sharedApplication])).andReturn(mockApplication);
+
+
   FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"openLocationSettings"
                                                               arguments:@{}];
   
   XCTestExpectation *expectation = [self expectationWithDescription:@"openLocationSettings should return yes."];
   GeolocatorPlugin *plugin = [[GeolocatorPlugin alloc] init];
   [plugin handleMethodCall:call result:^(id  _Nullable result) {
-    XCTAssertFalse(result);
+    XCTAssertTrue(result);
     [expectation fulfill];
   }];
   
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
-  return;
 }
 
 @end

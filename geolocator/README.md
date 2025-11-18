@@ -42,11 +42,11 @@ The TL;DR version is:
 android.useAndroidX=true
 android.enableJetifier=true
 ```
-2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 34:
+2. Make sure you set the `compileSdkVersion` in your "android/app/build.gradle" file to 35:
 
 ```
 android {
-  compileSdkVersion 34
+  compileSdkVersion 35
 
   ...
 }
@@ -67,6 +67,13 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 ``` xml
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 ```
+
+Starting from Android 14 (SDK 34) you need to add the `FOREGROUND_SERVICE_LOCATION` permission (next to the `ACCESS_COARSE_LOCATION` or the `ACCESS_FINE_LOCATION` or the `ACCESS_BACKGROUND_LOCATION` permission) if you want to continue receiving updates even when your App is running in the foreground:
+ [FOREGROUND_SERVICE_LOCATION](https://developer.android.com/reference/android/Manifest.permission#FOREGROUND_SERVICE_LOCATION) 
+
+ ``` xml
+ <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"
+ ```
 
 > **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalent to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
 
@@ -115,6 +122,15 @@ The second key (in this example called `YourPurposeKey`) should match the purpos
 
 > NOTE: the first time requesting temporary full accuracy access it might take several seconds for the pop-up to show. This is due to the fact that iOS is determining the exact user location which may take several seconds. Unfortunately this is out of our hands.
 </details>
+
+On iOS 16 and above you need to specify `UIBackgroundModes` `location` to receive location updates in the background.
+
+``` xml
+<key>UIBackgroundModes</key>
+<array>
+  <string>location</string>
+</array>
+```
 
 <details>
 <summary>macOS</summary>
