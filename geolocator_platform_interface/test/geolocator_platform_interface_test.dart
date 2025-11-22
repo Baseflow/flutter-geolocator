@@ -167,6 +167,21 @@ void main() {
 
     test(
         // ignore: lines_longer_than_80_chars
+        'Default implementation of updatePositionStream should throw unimplemented error',
+        () {
+      // Arrange
+      final geolocatorPlatform = ExtendsGeolocatorPlatform();
+
+      // Act & Assert
+      expect(
+        () => geolocatorPlatform.updatePositionStream(
+            locationSettings: LocationSettings()),
+        throwsUnimplementedError,
+      );
+    });
+
+    test(
+        // ignore: lines_longer_than_80_chars
         'Default implementation of openAppSettings should throw unimplemented error',
         () {
       // Arrange
