@@ -1,4 +1,4 @@
-## 4.3.0
+## 4.2.7
 
 - Adds `updatePositionStream` API.
 - Updated `flutter_lints` to version `^5.0.0`.
