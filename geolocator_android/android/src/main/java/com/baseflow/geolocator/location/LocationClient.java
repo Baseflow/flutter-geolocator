@@ -19,6 +19,8 @@ public interface LocationClient {
       PositionChangedCallback positionChangedCallback,
       ErrorCallback errorCallback);
 
+  void updateLocationOptions(LocationOptions options);
+
   void stopPositionUpdates();
   
   default boolean checkLocationService(Context context){

@@ -17,7 +17,8 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  geolocator_platform_interface: ^4.2.3
+  geolocator_platform_interface:
+    path: ../geolocator_platform_interface
   web: ^1.0.0
 
 dev_dependencies:

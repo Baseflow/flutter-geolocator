@@ -3,6 +3,7 @@ package com.baseflow.geolocator.location;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,8 +18,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GeolocationManager
     implements io.flutter.plugin.common.PluginRegistry.ActivityResultListener {
+  private static final String TAG = "GeolocationManager";
 
-    private static GeolocationManager geolocationManagerInstance = null;
+  private static GeolocationManager geolocationManagerInstance = null;
 
   private final List<LocationClient> locationClients;
 
@@ -62,6 +64,16 @@ public class GeolocationManager
 
     this.locationClients.add(locationClient);
     locationClient.startPositionUpdates(activity, positionChangedCallback, errorCallback);
+  }
+
+  public boolean updateLocationOptions(LocationOptions options) {
+      int numClientsUpdated = 0;
+      for (LocationClient client : locationClients) {
+        client.updateLocationOptions(options);
+        numClientsUpdated += 1;
+      }
+      Log.d(TAG, String.format("Updated LocationOptions for %d LocationClient(s).", numClientsUpdated));
+      return numClientsUpdated > 0;
   }
 
   public void stopPositionUpdates(@NonNull LocationClient locationClient) {

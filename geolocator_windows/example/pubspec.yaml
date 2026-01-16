@@ -13,7 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  geolocator_platform_interface: ^4.0.7
+  geolocator_platform_interface:
+    path: ../../geolocator_platform_interface
   geolocator_windows:
     # When depending on this package from a real application you should use:
     #   geolocator_windows: ^x.y.z

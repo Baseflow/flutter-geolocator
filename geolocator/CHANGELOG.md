@@ -1,3 +1,7 @@
+## 14.1.0
+
+- Adds updatePositionStream API for changing parameters while a position stream is running.
+
 ## 14.0.2
 
 - Adds section about `UIBackgroundModes` to the README. 

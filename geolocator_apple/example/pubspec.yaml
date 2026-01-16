@@ -3,18 +3,18 @@ description: Demonstrates how to use the geolocator_ios plugin.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 environment:
   sdk: ^3.5.0
 
 dependencies:
-  baseflow_plugin_template: ^2.1.2
+  baseflow_plugin_template: ^2.2.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.1+1
-  
+  cupertino_icons: ^1.0.8
+
   geolocator_apple:
     # When depending on this package from a real application you should use:
     #   geolocator_apple: ^x.y.z
@@ -23,26 +23,25 @@ dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
-  geolocator_platform_interface: ^4.2.0
+  geolocator_platform_interface: ^4.2.6
 
   flutter:
     sdk: flutter
 
   # The following adds the URL Launcher plugin which is used by
   # the demo application to open the links in the web browser.
-  url_launcher: ^6.0.0-nullsafety.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   uses-material-design: true
 
   assets:

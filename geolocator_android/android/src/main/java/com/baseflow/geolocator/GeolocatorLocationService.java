@@ -1,5 +1,7 @@
 package com.baseflow.geolocator;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
@@ -30,8 +32,8 @@ public class GeolocatorLocationService extends Service {
   private static final String TAG = "FlutterGeolocator";
   private static final int ONGOING_NOTIFICATION_ID = 75415;
   private static final String CHANNEL_ID = "geolocator_channel_01";
-  private final String WAKELOCK_TAG = "GeolocatorLocationService:Wakelock";
-  private final String WIFILOCK_TAG = "GeolocatorLocationService:WifiLock";
+  private static final String WAKELOCK_TAG = "GeolocatorLocationService:Wakelock";
+  private static final String WIFILOCK_TAG = "GeolocatorLocationService:WifiLock";
   private final LocalBinder binder = new LocalBinder(this);
   // Service is foreground
   private boolean isForeground = false;
@@ -144,13 +146,16 @@ public class GeolocatorLocationService extends Service {
               this.getApplicationContext(), CHANNEL_ID, ONGOING_NOTIFICATION_ID, options);
       backgroundNotification.updateChannel(options.getNotificationChannelName());
       Notification notification = backgroundNotification.build();
-      startForeground(ONGOING_NOTIFICATION_ID, notification);
-      isForeground = true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(ONGOING_NOTIFICATION_ID, notification, FOREGROUND_SERVICE_TYPE_LOCATION);
+        } else {
+            startForeground(ONGOING_NOTIFICATION_ID, notification);
+        }
+        isForeground = true;
     }
     obtainWakeLocks(options);
   }
 
-  @SuppressWarnings("deprecation")
   public void disableBackgroundMode() {
     if (isForeground) {
       Log.d(TAG, "Stop service in foreground.");
@@ -222,7 +227,7 @@ public class GeolocatorLocationService extends Service {
     return WifiManager.WIFI_MODE_FULL_LOW_LATENCY;
   }
 
-  class LocalBinder extends Binder {
+  static class LocalBinder extends Binder {
     private final GeolocatorLocationService locationService;
 
     LocalBinder(GeolocatorLocationService locationService) {

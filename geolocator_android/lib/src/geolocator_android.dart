@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+
 import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 import 'package:uuid/uuid.dart';
@@ -212,6 +213,22 @@ class GeolocatorAndroid extends GeolocatorPlatform {
   }
 
   @override
+  Future<void> updatePositionStream(
+      {required LocationSettings locationSettings}) async {
+    if (_positionStream == null) {
+      throw const NotSubscribedException();
+    }
+    try {
+      await _methodChannel.invokeMethod(
+          'updatePositionStream', locationSettings.toJson());
+    } on PlatformException catch (e) {
+      final error = _handlePlatformException(e);
+
+      throw error;
+    }
+  }
+
+  @override
   Future<LocationAccuracyStatus> requestTemporaryFullAccuracy({
     required String purposeKey,
   }) async {
@@ -247,6 +264,8 @@ class GeolocatorAndroid extends GeolocatorPlatform {
         return const LocationServiceDisabledException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':
         return const AlreadySubscribedException();
+      case 'LOCATION_SUBSCRIPTION_INACTIVE':
+        return const NotSubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':
         return PermissionDefinitionsNotFoundException(exception.message);
       case 'PERMISSION_DENIED':

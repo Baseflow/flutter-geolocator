@@ -28,7 +28,8 @@ dependencies:
   # The following adds the URL Launcher plugin which is used by
   # the demo application to open the links in the web browser.
   url_launcher: ^6.0.18
-  geolocator_platform_interface: ^4.2.0
+  geolocator_platform_interface:
+    path: ../../geolocator_platform_interface
 
 dev_dependencies:
   flutter_test:

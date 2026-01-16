@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+
 import 'package:geolocator_android/geolocator_android.dart';
 import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
@@ -189,6 +190,17 @@ class Geolocator {
     LocationSettings? locationSettings,
   }) =>
       GeolocatorPlatform.instance.getPositionStream(
+        locationSettings: locationSettings,
+      );
+
+  /// Updates the parameters of the active position stream.
+  ///
+  /// Throws a [NotSubscribedException] when there is no active position stream
+  /// to update.
+  static Future<void> updatePositionStream({
+    required LocationSettings locationSettings,
+  }) =>
+      GeolocatorPlatform.instance.updatePositionStream(
         locationSettings: locationSettings,
       );
 

@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
-import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:flutter/material.dart';
+
+import 'package:baseflow_plugin_template/baseflow_plugin_template.dart';
 import 'package:geolocator/geolocator.dart';
 
 /// Defines the main theme color.
@@ -39,9 +40,11 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
+  final ScrollController _scrollController = ScrollController();
   StreamSubscription<Position>? _positionStreamSubscription;
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
   bool positionStreamStarted = false;
+  bool fastUpdates = false;
 
   @override
   void initState() {
@@ -120,6 +123,7 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
             (context) => Scaffold(
               backgroundColor: Theme.of(context).colorScheme.surface,
               body: ListView.builder(
+                controller: _scrollController,
                 itemCount: _positionItems.length,
                 itemBuilder: (context, index) {
                   final positionItem = _positionItems[index];
@@ -167,6 +171,17 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
                         : const Icon(Icons.pause),
                   ),
                   sizedBox,
+                  if (_positionStreamSubscription != null)
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FloatingActionButton(
+                          onPressed: _toggleUpdateSpeed,
+                          child: const Icon(Icons.speed),
+                        ),
+                        sizedBox,
+                      ],
+                    ),
                   FloatingActionButton(
                     onPressed: _getCurrentPosition,
                     child: const Icon(Icons.my_location),
@@ -252,9 +267,12 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
     return true;
   }
 
-  void _updatePositionList(_PositionItemType type, String displayValue) {
+  void _updatePositionList(_PositionItemType type, String displayValue) async {
     _positionItems.add(_PositionItem(type, displayValue));
     setState(() {});
+    await Future.delayed(const Duration(milliseconds: 50));
+    if (!mounted) return;
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   bool _isListening() => !(_positionStreamSubscription == null ||
@@ -299,7 +317,19 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
 
   void _toggleListening() {
     if (_positionStreamSubscription == null) {
-      final positionStream = _geolocatorPlatform.getPositionStream();
+      final settings = AndroidSettings(
+        distanceFilter: 50,
+        foregroundNotificationConfig: const ForegroundNotificationConfig(
+          notificationTitle: 'Geolocator is tracking your trip',
+          notificationText:
+              'This is a persistent notification and is used to start a foreground service.',
+          enableWifiLock: true,
+          enableWakeLock: true,
+          setOngoing: true,
+        ),
+      );
+      final positionStream =
+          _geolocatorPlatform.getPositionStream(locationSettings: settings);
       _positionStreamSubscription = positionStream.handleError((error) {
         _positionStreamSubscription?.cancel();
         _positionStreamSubscription = null;
@@ -329,6 +359,41 @@ class _GeolocatorWidgetState extends State<GeolocatorWidget> {
         'Listening for position updates $statusDisplayValue',
       );
     });
+  }
+
+  Future<void> _toggleUpdateSpeed() async {
+    fastUpdates = !fastUpdates;
+
+    final LocationSettings settings;
+    if (Platform.isAndroid) {
+      settings = AndroidSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 0,
+        intervalDuration: Duration(seconds: fastUpdates ? 1 : 10),
+        forceLocationManager: false,
+        useMSLAltitude: true,
+      );
+    } else if (Platform.isIOS) {
+      settings = AppleSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: fastUpdates ? 0 : 50,
+        activityType: ActivityType.fitness,
+        showBackgroundLocationIndicator: false,
+        allowBackgroundLocationUpdates: false,
+      );
+    } else {
+      settings = LocationSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: fastUpdates ? 0 : 50,
+      );
+    }
+
+    await _geolocatorPlatform.updatePositionStream(locationSettings: settings);
+
+    _updatePositionList(
+      _PositionItemType.log,
+      'Position updates ${fastUpdates ? 'sped up' : 'slowed down'}.',
+    );
   }
 
   @override
