@@ -1,3 +1,7 @@
+## 2.3.14
+
+* Deprecation warning fixes and updates.
+
 ## 2.3.13
 
 * Adds Swift Package Manager compatibility.
