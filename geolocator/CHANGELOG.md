@@ -1,3 +1,7 @@
+## NEXT
+
+- Updated MACOSX_DEPLOYMENT_TARGET from version 10.11 to 10.14 in the example project settings.
+
 ## 14.0.2
 
 - Adds section about `UIBackgroundModes` to the README. 
