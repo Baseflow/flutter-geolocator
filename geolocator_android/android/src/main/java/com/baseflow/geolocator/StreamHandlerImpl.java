@@ -25,6 +25,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   private static final String TAG = "FlutterGeolocator";
 
   private final PermissionManager permissionManager;
+  private final String eventChannelIdentifier;
 
   @Nullable private EventChannel channel;
   @Nullable private Context context;
@@ -33,9 +34,10 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   @Nullable private GeolocationManager geolocationManager;
   @Nullable private LocationClient locationClient;
 
-  public StreamHandlerImpl(PermissionManager permissionManager, GeolocationManager geolocationManager) {
+  public StreamHandlerImpl(PermissionManager permissionManager, GeolocationManager geolocationManager, String eventChannelIdentifier) {
     this.permissionManager = permissionManager;
     this.geolocationManager = geolocationManager;
+    this.eventChannelIdentifier = eventChannelIdentifier;
   }
 
   public void setForegroundLocationService(
@@ -65,7 +67,7 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       stopListening();
     }
 
-    channel = new EventChannel(messenger, "flutter.baseflow.com/geolocator_updates_android");
+    channel = new EventChannel(messenger, eventChannelIdentifier);
     channel.setStreamHandler(this);
     this.context = context;
   }
@@ -105,11 +107,6 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
       return;
     }
 
-    if (foregroundLocationService == null) {
-      Log.e(TAG, "Location background service has not started correctly");
-      return;
-    }
-
     @SuppressWarnings("unchecked")
     Map<String, Object> map = (Map<String, Object>) arguments;
     boolean forceLocationManager = false;
@@ -125,6 +122,10 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
               (Map<String, Object>) map.get("foregroundNotificationConfig"));
     }
     if (foregroundNotificationOptions != null) {
+      if (foregroundLocationService == null) {
+        Log.e(TAG, "Location background service has not started correctly");
+        return;
+      }
       Log.e(TAG, "Geolocator position updates started using Android foreground service");
       foregroundLocationService.startLocationService(forceLocationManager, locationOptions, events);
       foregroundLocationService.enableBackgroundMode(foregroundNotificationOptions);
