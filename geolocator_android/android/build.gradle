@@ -1,5 +1,6 @@
 group 'com.baseflow.geolocator'
 version '1.0'
+def args = ["-Xlint:deprecation","-Xlint:unchecked"]
 
 buildscript {
     repositories {
@@ -22,14 +23,13 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    if (project.android.hasProperty("namespace")) {
-        namespace("com.baseflow.geolocator")
-    }
+    namespace "com.baseflow.geolocator"
 
-    compileSdk flutter.compileSdkVersion
+
+    compileSdk 34
 
     defaultConfig {
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 26
     }
     lintOptions {
         disable 'InvalidPackage'

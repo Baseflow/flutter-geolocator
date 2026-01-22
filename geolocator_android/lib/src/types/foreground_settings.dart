@@ -119,7 +119,7 @@ class ForegroundNotificationConfig {
       'notificationText': notificationText,
       'notificationChannelName': notificationChannelName,
       'setOngoing': setOngoing,
-      'color': color?.toARGB32(),
+      'color': color?.value,
     };
   }
 }
