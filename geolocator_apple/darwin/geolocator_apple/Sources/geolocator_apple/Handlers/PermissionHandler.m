@@ -37,14 +37,17 @@
   if (@available(iOS 14, macOS 11, *)) {
     return [self.getLocationManager authorizationStatus];
   } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return [CLLocationManager authorizationStatus];
+#pragma clang diagnostic pop
   }
 }
 
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler
               errorHandler:(PermissionError)errorHandler {
   // When we already have permission we don't have to request it again
-  CLAuthorizationStatus authorizationStatus = CLLocationManager.authorizationStatus;
+  CLAuthorizationStatus authorizationStatus = [self checkPermission];
   if (authorizationStatus != kCLAuthorizationStatusNotDetermined) {
     confirmationHandler(authorizationStatus);
     return;
