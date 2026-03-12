@@ -107,6 +107,23 @@
 }
 #endif
 
+// iOS 14+ / macOS 11+: preferred delegate callback
+- (void) locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+  CLAuthorizationStatus status = [self checkPermission];
+  if (status == kCLAuthorizationStatusNotDetermined) {
+    return;
+  }
+
+  if (self.confirmationHandler) {
+    self.confirmationHandler(status);
+  }
+
+  [self cleanUp];
+}
+
+// Fallback for iOS < 14 / macOS < 11
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
   if (status == kCLAuthorizationStatusNotDetermined) {
     return;
@@ -118,6 +135,7 @@
   
   [self cleanUp];
 }
+#pragma clang diagnostic pop
 
 - (void) cleanUp {
   self.locationManager = nil;
