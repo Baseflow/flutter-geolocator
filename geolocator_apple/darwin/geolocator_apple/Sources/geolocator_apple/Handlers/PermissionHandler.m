@@ -46,8 +46,13 @@
 
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler
               errorHandler:(PermissionError)errorHandler {
-  // When we already have permission we don't have to request it again
-  CLAuthorizationStatus authorizationStatus = [self checkPermission];
+  // When we already have permission we don't have to request it again.
+  // Use the class method directly (with warning suppression) to avoid
+  // lazily creating and retaining a CLLocationManager on the early-return path.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+  CLAuthorizationStatus authorizationStatus = CLLocationManager.authorizationStatus;
+#pragma clang diagnostic pop
   if (authorizationStatus != kCLAuthorizationStatusNotDetermined) {
     confirmationHandler(authorizationStatus);
     return;
