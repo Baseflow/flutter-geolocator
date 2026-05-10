@@ -24,11 +24,16 @@ class HtmlGeolocationManager implements GeolocationManager {
     Completer<Position> completer = Completer();
     try {
       _geolocation.getCurrentPosition(
-        (web.GeolocationPosition position) {
-          completer.complete(toPosition(position));
+        (JSAny position) {
+          try {
+            completer.complete(toPosition(position as web.GeolocationPosition));
+          } catch (e, st) {
+            completer.completeError(e, st);
+          }
         }.toJS,
-        (web.GeolocationPositionError error) {
-          completer.completeError(convertPositionError(error));
+        (JSAny error) {
+          completer.completeError(
+              convertPositionError(error as web.GeolocationPositionError));
         }.toJS,
         web.PositionOptions(
           enableHighAccuracy: enableHighAccuracy ?? false,
@@ -62,11 +67,12 @@ class HtmlGeolocationManager implements GeolocationManager {
     controller.onListen = () {
       assert(watchId == null);
       watchId = _geolocation.watchPosition(
-        (web.GeolocationPosition position) {
-          controller.add(toPosition(position));
+        (JSAny position) {
+          controller.add(toPosition(position as web.GeolocationPosition));
         }.toJS,
-        (web.GeolocationPositionError error) {
-          controller.addError(convertPositionError(error));
+        (JSAny error) {
+          controller.addError(
+              convertPositionError(error as web.GeolocationPositionError));
         }.toJS,
         web.PositionOptions(
           enableHighAccuracy: enableHighAccuracy ?? false,
