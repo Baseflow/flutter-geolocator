@@ -1,3 +1,15 @@
+## NEXT
+
+- Updates dependency on `geolocator_platform_interface` to version `^4.2.6`.
+- Updates dependency on `geolocator_android` to version `^5.0.2`.
+- Updates dependency on `geolocator_apple` to version `^2.3.13`.
+- Updates dependency on `geolocator_web` to version `^4.1.3`.
+- Updates dependency on `geolocator_windows` to version `^0.2.5`.
+- Updates dependency on `geolocator_linux` to version `^0.2.4`.
+- Updates dev dependency on `flutter_lints` to version `^6.0.0`.
+- Updates dev dependency on `mockito` to version `^5.7.0`.
+- Updates dev dependency on `plugin_platform_interface` to version `^2.1.8`.
+
 ## 14.0.2
 
 - Adds section about `UIBackgroundModes` to the README. 

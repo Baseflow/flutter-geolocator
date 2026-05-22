@@ -1,6 +1,9 @@
 ## NEXT
 
-- Bump `flutter_lints` of package to version 5.0.0.
+- Updates dependency on `geolocator_platform_interface` to version `^4.2.6`.
+- Updates dev dependency on `flutter_lints` to version `^6.0.0`.
+- Updates dev dependency on `mockito` to version `^5.7.0`.
+- Updates dev dependency on `plugin_platform_interface` to version `^2.1.8`.
 
 ## 0.2.5
 

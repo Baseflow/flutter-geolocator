@@ -1,3 +1,11 @@
+## NEXT
+
+- Updates dependency on `geolocator_platform_interface` to version `^4.2.6`.
+- Updates dependency on `web` to version `^1.1.1`.
+- Updates dev dependency on `build_runner` to version `^2.15.0`.
+- Updates dev dependency on `flutter_lints` to version `^6.0.0`.
+- Updates dev dependency on `mockito` to version `^5.7.0`.
+
 ## 4.1.3
 
 - Bump `flutter_lints` to version 5.0.0
