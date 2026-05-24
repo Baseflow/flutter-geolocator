@@ -1,3 +1,13 @@
+## NEXT
+
+- Updates dependency on `geolocator_platform_interface` to version `^4.2.6`.
+- Updates dependency on `meta` to version `^1.18.0`.
+- Updates dependency on `uuid` to version `^4.5.3`.
+- Updates dev dependency on `flutter_lints` to version `^6.0.0`.
+- Updates dev dependency on `mockito` to version `^5.7.0`.
+- Updates dev dependency on `plugin_platform_interface` to version `^2.1.8`.
+- Updates dev dependency on `async` to version `^2.13.1`.
+
 ## 5.0.2
 
 - Fixes PlatformException in example app for Android 14 (API level 34) versions and newer by updating manifest permissions.

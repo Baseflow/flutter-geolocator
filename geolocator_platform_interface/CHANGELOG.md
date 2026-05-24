@@ -1,6 +1,11 @@
 ## NEXT
 
-- Updated `flutter_lints` to version `^5.0.0`.
+- Updates dependency on `meta` to version `^1.18.0`.
+- Updates dependency on `vector_math` to version `^2.2.0`.
+- Updates dependency on `plugin_platform_interface` to version `^2.1.8`.
+- Updates dev dependency on `flutter_lints` to version `^6.0.0`.
+- Updates dev dependency on `mockito` to version `^5.7.0`.
+- Updates dev dependency on `async` to version `^2.13.1`.
 
 ## 4.2.6
 

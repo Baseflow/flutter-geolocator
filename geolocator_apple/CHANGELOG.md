@@ -1,3 +1,11 @@
+## NEXT
+
+* Updates dependency on `geolocator_platform_interface` to version `^4.2.6`.
+* Updates dev dependency on `flutter_lints` to version `^6.0.0`.
+* Updates dev dependency on `mockito` to version `^5.7.0`.
+* Updates dev dependency on `plugin_platform_interface` to version `^2.1.8`.
+* Updates dev dependency on `async` to version `^2.13.1`.
+
 ## 2.3.13
 
 * Adds Swift Package Manager compatibility.
