@@ -17,7 +17,7 @@ flutter:
         dartPluginClass: GeolocatorLinux
 
 dependencies:
-  dbus: ^0.7.13
+  dbus: ^0.7.3
   flutter:
     sdk: flutter
   geoclue: ^0.1.1

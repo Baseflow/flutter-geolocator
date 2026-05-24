@@ -2,7 +2,6 @@
 
 - Updates dependency on `package_info_plus` to version `^10.1.0` (major bump).
 - Updates dependency on `geolocator_platform_interface` to version `^4.2.6`.
-- Updates dependency on `dbus` to version `^0.7.13`.
 - Updates dependency on `gsettings` to version `^0.2.8`.
 - Updates dev dependency on `build_runner` to version `^2.15.0`.
 - Updates dev dependency on `flutter_lints` to version `^6.0.0`.
