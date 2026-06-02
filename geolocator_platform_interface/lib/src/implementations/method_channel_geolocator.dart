@@ -6,8 +6,8 @@ import '../enums/enums.dart';
 import '../errors/errors.dart';
 import '../extensions/extensions.dart';
 import '../geolocator_platform_interface.dart';
-import '../models/position.dart';
 import '../models/location_settings.dart';
+import '../models/position.dart';
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class MethodChannelGeolocator extends GeolocatorPlatform {
@@ -191,6 +191,22 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
     return _positionStream!;
   }
 
+  @override
+  Future<void> updatePositionStream(
+      {required LocationSettings locationSettings}) async {
+    if (_positionStream == null) {
+      throw const NotSubscribedException();
+    }
+    try {
+      await _methodChannel.invokeMethod(
+          'updatePositionStream', locationSettings.toJson());
+    } on PlatformException catch (e) {
+      final error = _handlePlatformException(e);
+
+      throw error;
+    }
+  }
+
   Stream<dynamic> _wrapStream(Stream<dynamic> incoming) {
     return incoming.asBroadcastStream(onCancel: (subscription) {
       subscription.cancel();
@@ -234,6 +250,8 @@ class MethodChannelGeolocator extends GeolocatorPlatform {
         return const LocationServiceDisabledException();
       case 'LOCATION_SUBSCRIPTION_ACTIVE':
         return const AlreadySubscribedException();
+      case 'LOCATION_SUBSCRIPTION_INACTIVE':
+        return const NotSubscribedException();
       case 'PERMISSION_DEFINITIONS_NOT_FOUND':
         return PermissionDefinitionsNotFoundException(exception.message);
       case 'PERMISSION_DENIED':
