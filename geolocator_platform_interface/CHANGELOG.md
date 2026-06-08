@@ -2,6 +2,10 @@
 
 - Updated `flutter_lints` to version `^5.0.0`.
 
+## 4.2.7
+
+- Clarifies the documentation of `Position.heading` to explain that it carries the course over ground (direction of travel, from `Location.getBearing()` on Android and `CLLocation.course` on iOS), which is distinct from compass heading. The field keeps the `heading` name for backward compatibility. Resolves [#1187](https://github.com/Baseflow/flutter-geolocator/issues/1187).
+
 ## 4.2.6
 
 - Updates documentation `isMocked` to bring it in line with the functionality. `isMocked` for iOS 15 and higher depends on the result from isSimulatedBySoftware.
