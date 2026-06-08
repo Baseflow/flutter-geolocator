@@ -50,10 +50,22 @@ class Position {
   /// 0.0.
   final double accuracy;
 
-  /// The heading in which the device is traveling in degrees.
+  /// The course over ground (direction of travel) in degrees.
   ///
-  /// The heading is not available on all devices. In these cases the value is
-  /// 0.0.
+  /// This reports the direction in which the device is *moving* across the
+  /// ground, in degrees clockwise relative to true north (0.0 to 360.0). It is
+  /// derived from the platform's GPS-based value: `Location.getBearing()` on
+  /// Android and `CLLocation.course` on iOS.
+  ///
+  /// This is distinct from compass heading: it does *not* report the direction
+  /// the device is physically pointing (the magnetometer/compass reading). A
+  /// stationary device has no meaningful course over ground.
+  ///
+  /// The field is named `heading` for backward compatibility; despite the name
+  /// it carries the course-over-ground value described above.
+  ///
+  /// The course is not available on all devices, and may be unavailable while
+  /// the device is not moving. In these cases the value is 0.0.
   final double heading;
 
   /// The estimated heading accuracy of the position in degrees.
