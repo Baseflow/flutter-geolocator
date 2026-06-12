@@ -1,3 +1,7 @@
+## 4.1.4
+
+- Updates `flutter_lints` dependency to 6.0.0.
+
 ## 4.1.3
 
 - Bump `flutter_lints` to version 5.0.0
