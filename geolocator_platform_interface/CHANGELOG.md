@@ -1,6 +1,7 @@
-## NEXT
+## 4.2.8
 
-- Updated `flutter_lints` to version `^5.0.0`.
+- Updates dependencies to their latest versions.
+- Fixes an analysis warning indicating a missing type declaration.
 
 ## 4.2.7
 

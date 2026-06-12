@@ -248,7 +248,7 @@ abstract class GeolocatorPlatform extends PlatformInterface {
     return earthRadius * c;
   }
 
-  static _toRadians(double degree) {
+  static double _toRadians(double degree) {
     return degree * pi / 180;
   }
 
