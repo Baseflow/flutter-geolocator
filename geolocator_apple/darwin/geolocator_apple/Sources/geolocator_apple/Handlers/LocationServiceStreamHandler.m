@@ -33,7 +33,7 @@
   return nil;
 }
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
+- (void)_notifyServiceStatus {
   dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     BOOL isEnabled = [CLLocationManager locationServicesEnabled];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -45,5 +45,18 @@
     });
   });
 }
+
+// iOS 14+ / macOS 11+: preferred delegate callback
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+  [self _notifyServiceStatus];
+}
+
+// Fallback for iOS < 14 / macOS < 11
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
+  [self _notifyServiceStatus];
+}
+#pragma clang diagnostic pop
 
 @end

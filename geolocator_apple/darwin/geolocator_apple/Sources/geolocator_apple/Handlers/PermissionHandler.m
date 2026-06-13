@@ -37,14 +37,22 @@
   if (@available(iOS 14, macOS 11, *)) {
     return [self.getLocationManager authorizationStatus];
   } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     return [CLLocationManager authorizationStatus];
+#pragma clang diagnostic pop
   }
 }
 
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler
               errorHandler:(PermissionError)errorHandler {
-  // When we already have permission we don't have to request it again
+  // When we already have permission we don't have to request it again.
+  // Use the class method directly (with warning suppression) to avoid
+  // lazily creating and retaining a CLLocationManager on the early-return path.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
   CLAuthorizationStatus authorizationStatus = CLLocationManager.authorizationStatus;
+#pragma clang diagnostic pop
   if (authorizationStatus != kCLAuthorizationStatusNotDetermined) {
     confirmationHandler(authorizationStatus);
     return;
@@ -104,6 +112,23 @@
 }
 #endif
 
+// iOS 14+ / macOS 11+: preferred delegate callback
+- (void) locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+  CLAuthorizationStatus status = [self checkPermission];
+  if (status == kCLAuthorizationStatusNotDetermined) {
+    return;
+  }
+
+  if (self.confirmationHandler) {
+    self.confirmationHandler(status);
+  }
+
+  [self cleanUp];
+}
+
+// Fallback for iOS < 14 / macOS < 11
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
 - (void) locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
   if (status == kCLAuthorizationStatusNotDetermined) {
     return;
@@ -115,6 +140,7 @@
   
   [self cleanUp];
 }
+#pragma clang diagnostic pop
 
 - (void) cleanUp {
   self.locationManager = nil;
