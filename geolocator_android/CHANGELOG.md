@@ -1,3 +1,7 @@
+## 5.1.0
+
+- Adds `maxUpdateAge` to `AndroidSettings`, allowing position streams using the Android Fused Location Provider to accept an initial historical location independently of the update interval.
+
 ## 5.0.3
 
 - Updates `flutter_lints` to version 6.0.0.
