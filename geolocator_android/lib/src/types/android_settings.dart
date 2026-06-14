@@ -14,6 +14,7 @@ class AndroidSettings extends LocationSettings {
     super.accuracy,
     super.distanceFilter,
     this.intervalDuration,
+    this.maxUpdateAge,
     super.timeLimit,
     this.foregroundNotificationConfig,
     this.useMSLAltitude = false,
@@ -44,6 +45,13 @@ class AndroidSettings extends LocationSettings {
   ///
   /// If this value is `null` an interval duration of 5000ms is applied.
   final Duration? intervalDuration;
+
+  /// The maximum age of an initial historical location delivered for the
+  /// position stream.
+  ///
+  /// If this value is `null` the Android Fused Location Provider uses its
+  /// default behavior.
+  final Duration? maxUpdateAge;
 
   /// If this is set then the services is started as a Foreground service with a persistent notification
   /// showing the user that the service will continue running in the background.
@@ -77,6 +85,7 @@ class AndroidSettings extends LocationSettings {
       ..addAll({
         'forceLocationManager': forceLocationManager,
         'timeInterval': intervalDuration?.inMilliseconds,
+        'maxUpdateAge': maxUpdateAge?.inMilliseconds,
         'foregroundNotificationConfig': foregroundNotificationConfig?.toJson(),
         'useMSLAltitude': useMSLAltitude,
       });

@@ -1440,6 +1440,7 @@ void main() {
           distanceFilter: 5,
           forceLocationManager: false,
           intervalDuration: const Duration(seconds: 1),
+          maxUpdateAge: const Duration(seconds: 30),
           timeLimit: const Duration(seconds: 1),
           useMSLAltitude: false,
           foregroundNotificationConfig: const ForegroundNotificationConfig(
@@ -1477,6 +1478,10 @@ void main() {
           settings.intervalDuration!.inMilliseconds,
         );
         expect(
+          jsonMap['maxUpdateAge'],
+          settings.maxUpdateAge!.inMilliseconds,
+        );
+        expect(
           jsonMap['useMSLAltitude'],
           settings.useMSLAltitude,
         );
@@ -1511,7 +1516,7 @@ void main() {
         );
         expect(
           jsonMap['foregroundNotificationConfig']['color'],
-          settings.foregroundNotificationConfig!.color!.toARGB32,
+          settings.foregroundNotificationConfig!.color!.toARGB32(),
         );
       });
 
