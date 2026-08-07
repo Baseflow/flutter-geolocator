@@ -1,3 +1,7 @@
+## 14.0.4
+
+- Fixes the Android build of the example app by updating the Android Gradle Plugin to 9.0.1 and Gradle to 9.1.0.
+
 ## 14.0.3
 
 - Updates the following dependencies:
