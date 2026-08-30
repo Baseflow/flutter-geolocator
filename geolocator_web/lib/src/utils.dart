@@ -9,16 +9,16 @@ Position toPosition(web.GeolocationPosition webPosition) {
   final coords = webPosition.coords;
 
   return Position(
-    latitude: coords.latitude,
-    longitude: coords.longitude,
+    latitude: coords.latitude.toDouble(),
+    longitude: coords.longitude.toDouble(),
     timestamp: DateTime.fromMillisecondsSinceEpoch(webPosition.timestamp),
-    altitude: coords.altitude ?? 0.0,
-    altitudeAccuracy: coords.altitudeAccuracy ?? 0.0,
+    altitude: (coords.altitude ?? 0.0).toDouble(),
+    altitudeAccuracy: (coords.altitudeAccuracy ?? 0.0).toDouble(),
     accuracy: coords.accuracy as double? ?? 0.0,
-    heading: coords.heading ?? 0.0,
+    heading: (coords.heading ?? 0.0).toDouble(),
     headingAccuracy: 0.0,
     floor: null,
-    speed: coords.speed ?? 0.0,
+    speed: (coords.speed ?? 0.0).toDouble(),
     speedAccuracy: 0.0,
     isMocked: false,
   );
