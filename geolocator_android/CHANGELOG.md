@@ -1,3 +1,8 @@
+## 5.0.4
+
+- Declares `FOREGROUND_SERVICE_LOCATION` in the plugin's own manifest so it is merged into
+  the host app automatically, instead of requiring app developers to add it by hand.
+
 ## 5.0.3
 
 - Updates `flutter_lints` to version 6.0.0.
