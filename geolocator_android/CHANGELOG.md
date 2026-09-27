@@ -1,3 +1,8 @@
+## 5.1.1
+
+- Declares `FOREGROUND_SERVICE_LOCATION` in the plugin's own manifest so it is merged into
+  the host app automatically, instead of requiring app developers to add it by hand.
+
 ## 5.1.0
 
 - Forwards optional `verticalSpeed` (m/s) and `verticalSpeedAccuracy` (m/s) from location extras when a location provider supplies them. This package does not calculate vertical speed or guarantee that the extras are present or GNSS Doppler-derived.
