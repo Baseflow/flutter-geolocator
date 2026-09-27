@@ -1,3 +1,7 @@
+## 14.1.1
+
+- Fixes the Android build of the example app by pinning the Kotlin Gradle plugin to 2.4.0 and the Android Gradle Plugin to 9.1.0, matching `geolocator_android`'s example.
+
 ## 14.1.0
 
 - Updates `geolocator_platform_interface` to `^4.4.0`.
