@@ -1,3 +1,7 @@
+## 4.4.0
+
+- Adds `verticalSpeed` and `verticalSpeedAccuracy` with corresponding `hasVerticalSpeed` and `hasVerticalSpeedAccuracy` flags to `Position`.
+
 ## 4.3.0
 
 - Adds `hasAccuracy`, `hasAltitude`, `hasAltitudeAccuracy`, `hasHeading`, `hasHeadingAccuracy`, `hasSpeed` and `hasSpeedAccuracy` to `Position`, so a value the platform could not measure is distinguishable from the same value measured as `0.0`. The Android platform channel already omits a key when its `Location.hasX()` predicate is false; `Position.fromMap` substituted `0.0` for the missing value, and the distinction was lost. The reported numeric values are unchanged and every field defaults to `false`, so existing code is unaffected. Resolves [#1733](https://github.com/Baseflow/flutter-geolocator/issues/1733) and [#1525](https://github.com/Baseflow/flutter-geolocator/issues/1525).

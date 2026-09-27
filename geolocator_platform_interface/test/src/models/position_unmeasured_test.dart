@@ -31,15 +31,19 @@ void main() {
     test('each optional field reports its own presence independently', () {
       final p = Position.fromMap(baseMap()
         ..['accuracy'] = 12.0
-        ..['speed'] = 3.0);
+        ..['speed'] = 3.0
+        ..['vertical_speed'] = 1.2);
 
       expect(p.hasAccuracy, isTrue);
       expect(p.hasSpeed, isTrue);
+      expect(p.hasVerticalSpeed, isTrue);
+      expect(p.verticalSpeed, 1.2);
       expect(p.hasAltitude, isFalse);
       expect(p.hasAltitudeAccuracy, isFalse);
       expect(p.hasHeading, isFalse);
       expect(p.hasHeadingAccuracy, isFalse);
       expect(p.hasSpeedAccuracy, isFalse);
+      expect(p.hasVerticalSpeedAccuracy, isFalse);
     });
 
     test(
@@ -50,6 +54,8 @@ void main() {
       expect(unmeasured.accuracy, 0.0);
       expect(unmeasured.heading, 0.0);
       expect(unmeasured.speed, 0.0);
+      expect(unmeasured.verticalSpeed, 0.0);
+      expect(unmeasured.verticalSpeedAccuracy, 0.0);
     });
 
     test('survives a toJson/fromMap round trip', () {
@@ -57,7 +63,19 @@ void main() {
       final roundTripped = Position.fromMap(unmeasured.toJson());
 
       expect(roundTripped.hasAccuracy, isFalse);
+      expect(roundTripped.hasVerticalSpeed, isFalse);
+      expect(roundTripped.hasVerticalSpeedAccuracy, isFalse);
       expect(roundTripped, equals(unmeasured));
+
+      final measured = Position.fromMap(baseMap()
+        ..['vertical_speed'] = -2.5
+        ..['vertical_speed_accuracy'] = 0.4);
+      final measuredRoundTripped = Position.fromMap(measured.toJson());
+      expect(measuredRoundTripped.hasVerticalSpeed, isTrue);
+      expect(measuredRoundTripped.verticalSpeed, -2.5);
+      expect(measuredRoundTripped.hasVerticalSpeedAccuracy, isTrue);
+      expect(measuredRoundTripped.verticalSpeedAccuracy, 0.4);
+      expect(measuredRoundTripped, equals(measured));
     });
 
     test('a directly constructed Position defaults to no measurement claimed',
@@ -77,6 +95,10 @@ void main() {
 
       expect(p.hasAccuracy, isFalse,
           reason: 'nothing told this constructor a measurement was taken');
+      expect(p.hasVerticalSpeed, isFalse);
+      expect(p.hasVerticalSpeedAccuracy, isFalse);
+      expect(p.verticalSpeed, 0.0);
+      expect(p.verticalSpeedAccuracy, 0.0);
     });
   });
 }

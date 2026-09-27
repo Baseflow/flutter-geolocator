@@ -25,6 +25,17 @@ class AndroidPosition extends Position {
     required speedAccuracy,
     super.floor,
     isMocked = false,
+    verticalSpeed = 0.0,
+    verticalSpeedAccuracy = 0.0,
+    hasAccuracy = false,
+    hasAltitude = false,
+    hasAltitudeAccuracy = false,
+    hasHeading = false,
+    hasHeadingAccuracy = false,
+    hasSpeed = false,
+    hasSpeedAccuracy = false,
+    hasVerticalSpeed = false,
+    hasVerticalSpeedAccuracy = false,
   }) : super(
           longitude: longitude,
           latitude: latitude,
@@ -37,6 +48,17 @@ class AndroidPosition extends Position {
           speed: speed,
           speedAccuracy: speedAccuracy,
           isMocked: isMocked,
+          verticalSpeed: verticalSpeed,
+          verticalSpeedAccuracy: verticalSpeedAccuracy,
+          hasAccuracy: hasAccuracy,
+          hasAltitude: hasAltitude,
+          hasAltitudeAccuracy: hasAltitudeAccuracy,
+          hasHeading: hasHeading,
+          hasHeadingAccuracy: hasHeadingAccuracy,
+          hasSpeed: hasSpeed,
+          hasSpeedAccuracy: hasSpeedAccuracy,
+          hasVerticalSpeed: hasVerticalSpeed,
+          hasVerticalSpeedAccuracy: hasVerticalSpeedAccuracy,
         );
 
   /// If available it returns the number of GNSS satellites.
@@ -83,6 +105,17 @@ class AndroidPosition extends Position {
       speedAccuracy: position.speedAccuracy,
       floor: position.floor,
       isMocked: position.isMocked,
+      verticalSpeed: position.verticalSpeed,
+      verticalSpeedAccuracy: position.verticalSpeedAccuracy,
+      hasAccuracy: position.hasAccuracy,
+      hasAltitude: position.hasAltitude,
+      hasAltitudeAccuracy: position.hasAltitudeAccuracy,
+      hasHeading: position.hasHeading,
+      hasHeadingAccuracy: position.hasHeadingAccuracy,
+      hasSpeed: position.hasSpeed,
+      hasSpeedAccuracy: position.hasSpeedAccuracy,
+      hasVerticalSpeed: position.hasVerticalSpeed,
+      hasVerticalSpeedAccuracy: position.hasVerticalSpeedAccuracy,
     );
   }
 

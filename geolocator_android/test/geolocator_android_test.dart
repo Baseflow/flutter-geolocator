@@ -1511,7 +1511,7 @@ void main() {
         );
         expect(
           jsonMap['foregroundNotificationConfig']['color'],
-          settings.foregroundNotificationConfig!.color!.toARGB32,
+          settings.foregroundNotificationConfig!.color!.toARGB32(),
         );
       });
 
@@ -1536,6 +1536,62 @@ void main() {
           hasOpenedLocationSettings,
           false,
         );
+      });
+    });
+
+    group('AndroidPosition tests:', () {
+      test('fromMap preserves verticalSpeed and hasVerticalSpeed flags', () {
+        final positionMap = {
+          'latitude': 52.561270,
+          'longitude': 5.639382,
+          'timestamp': 1000,
+          'accuracy': 15.0,
+          'altitude': 120.0,
+          'altitude_accuracy': 5.0,
+          'heading': 180.0,
+          'heading_accuracy': 2.0,
+          'speed': 10.0,
+          'speed_accuracy': 1.0,
+          'vertical_speed': 2.5,
+          'vertical_speed_accuracy': 0.3,
+          'gnss_satellite_count': 12.0,
+          'gnss_satellites_used_in_fix': 8.0,
+        };
+
+        final androidPosition = AndroidPosition.fromMap(positionMap);
+
+        expect(androidPosition.verticalSpeed, 2.5);
+        expect(androidPosition.verticalSpeedAccuracy, 0.3);
+        expect(androidPosition.hasVerticalSpeed, isTrue);
+        expect(androidPosition.hasVerticalSpeedAccuracy, isTrue);
+        expect(androidPosition.hasAccuracy, isTrue);
+        expect(androidPosition.hasAltitude, isTrue);
+        expect(androidPosition.hasAltitudeAccuracy, isTrue);
+        expect(androidPosition.hasHeading, isTrue);
+        expect(androidPosition.hasHeadingAccuracy, isTrue);
+        expect(androidPosition.hasSpeed, isTrue);
+        expect(androidPosition.hasSpeedAccuracy, isTrue);
+        expect(androidPosition.satelliteCount, 12.0);
+        expect(androidPosition.satellitesUsedInFix, 8.0);
+      });
+
+      test('fromMap unmeasured vertical speed defaults to 0.0 with false flags',
+          () {
+        final positionMap = {
+          'latitude': 52.561270,
+          'longitude': 5.639382,
+          'timestamp': 1000,
+        };
+
+        final androidPosition = AndroidPosition.fromMap(positionMap);
+
+        expect(androidPosition.verticalSpeed, 0.0);
+        expect(androidPosition.verticalSpeedAccuracy, 0.0);
+        expect(androidPosition.hasVerticalSpeed, isFalse);
+        expect(androidPosition.hasVerticalSpeedAccuracy, isFalse);
+        expect(androidPosition.hasAccuracy, isFalse);
+        expect(androidPosition.hasAltitude, isFalse);
+        expect(androidPosition.hasSpeed, isFalse);
       });
     });
   });

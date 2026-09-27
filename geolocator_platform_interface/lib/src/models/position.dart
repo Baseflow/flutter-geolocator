@@ -19,6 +19,8 @@ class Position {
     required this.speedAccuracy,
     this.floor,
     this.isMocked = false,
+    this.verticalSpeed = 0.0,
+    this.verticalSpeedAccuracy = 0.0,
     this.hasAccuracy = false,
     this.hasAltitude = false,
     this.hasAltitudeAccuracy = false,
@@ -26,6 +28,8 @@ class Position {
     this.hasHeadingAccuracy = false,
     this.hasSpeed = false,
     this.hasSpeedAccuracy = false,
+    this.hasVerticalSpeed = false,
+    this.hasVerticalSpeedAccuracy = false,
   });
 
   /// The latitude of this position in degrees normalized to the interval -90.0
@@ -101,6 +105,21 @@ class Position {
   /// value is 0.0.
   final double speedAccuracy;
 
+  /// The vertical speed at which the device is traveling in meters per second.
+  ///
+  /// A positive value indicates ascending motion and a negative value indicates
+  /// descending motion.
+  ///
+  /// The vertical speed is not available on all devices. In these cases the
+  /// value is 0.0.
+  final double verticalSpeed;
+
+  /// The estimated vertical speed accuracy of this position, in meters per second.
+  ///
+  /// The verticalSpeedAccuracy is not available on all devices. In these cases the
+  /// value is 0.0.
+  final double verticalSpeedAccuracy;
+
   /// Will be true on Android (starting from API lvl 18) when the location came
   /// from the mocked provider.
   ///
@@ -156,6 +175,17 @@ class Position {
   /// `Location.hasSpeedAccuracy()` on Android (API 26+).
   final bool hasSpeedAccuracy;
 
+  /// Whether the platform actually reported [verticalSpeed].
+  ///
+  /// When `false`, [verticalSpeed] is `0.0` as a placeholder, which is also a valid
+  /// level-flight reading.
+  final bool hasVerticalSpeed;
+
+  /// Whether the platform actually reported [verticalSpeedAccuracy].
+  ///
+  /// When `false`, [verticalSpeedAccuracy] is `0.0` as a placeholder.
+  final bool hasVerticalSpeedAccuracy;
+
   @override
   bool operator ==(Object other) {
     var areEqual = other is Position &&
@@ -171,13 +201,17 @@ class Position {
         other.speedAccuracy == speedAccuracy &&
         other.timestamp == timestamp &&
         other.isMocked == isMocked &&
+        other.verticalSpeed == verticalSpeed &&
+        other.verticalSpeedAccuracy == verticalSpeedAccuracy &&
         other.hasAccuracy == hasAccuracy &&
         other.hasAltitude == hasAltitude &&
         other.hasAltitudeAccuracy == hasAltitudeAccuracy &&
         other.hasHeading == hasHeading &&
         other.hasHeadingAccuracy == hasHeadingAccuracy &&
         other.hasSpeed == hasSpeed &&
-        other.hasSpeedAccuracy == hasSpeedAccuracy;
+        other.hasSpeedAccuracy == hasSpeedAccuracy &&
+        other.hasVerticalSpeed == hasVerticalSpeed &&
+        other.hasVerticalSpeedAccuracy == hasVerticalSpeedAccuracy;
 
     return areEqual;
   }
@@ -196,13 +230,17 @@ class Position {
       speedAccuracy.hashCode ^
       timestamp.hashCode ^
       isMocked.hashCode ^
+      verticalSpeed.hashCode ^
+      verticalSpeedAccuracy.hashCode ^
       hasAccuracy.hashCode ^
       hasAltitude.hashCode ^
       hasAltitudeAccuracy.hashCode ^
       hasHeading.hashCode ^
       hasHeadingAccuracy.hashCode ^
       hasSpeed.hashCode ^
-      hasSpeedAccuracy.hashCode;
+      hasSpeedAccuracy.hashCode ^
+      hasVerticalSpeed.hashCode ^
+      hasVerticalSpeedAccuracy.hashCode;
 
   @override
   String toString() {
@@ -245,6 +283,8 @@ class Position {
       speed: _toDouble(positionMap['speed']),
       speedAccuracy: _toDouble(positionMap['speed_accuracy']),
       isMocked: positionMap['is_mocked'] ?? false,
+      verticalSpeed: _toDouble(positionMap['vertical_speed']),
+      verticalSpeedAccuracy: _toDouble(positionMap['vertical_speed_accuracy']),
       // A platform that could not measure a value omits its key — see
       // `LocationMapper.toHashMap` on Android, which guards every optional
       // field with the platform's own predicate. `_toDouble` substitutes 0.0
@@ -263,6 +303,10 @@ class Position {
       hasSpeed: _presence(positionMap, 'has_speed', 'speed'),
       hasSpeedAccuracy:
           _presence(positionMap, 'has_speed_accuracy', 'speed_accuracy'),
+      hasVerticalSpeed:
+          _presence(positionMap, 'has_vertical_speed', 'vertical_speed'),
+      hasVerticalSpeedAccuracy: _presence(positionMap,
+          'has_vertical_speed_accuracy', 'vertical_speed_accuracy'),
     );
   }
 
@@ -281,6 +325,8 @@ class Position {
         'speed': speed,
         'speed_accuracy': speedAccuracy,
         'is_mocked': isMocked,
+        'vertical_speed': verticalSpeed,
+        'vertical_speed_accuracy': verticalSpeedAccuracy,
         'has_accuracy': hasAccuracy,
         'has_altitude': hasAltitude,
         'has_altitude_accuracy': hasAltitudeAccuracy,
@@ -288,6 +334,8 @@ class Position {
         'has_heading_accuracy': hasHeadingAccuracy,
         'has_speed': hasSpeed,
         'has_speed_accuracy': hasSpeedAccuracy,
+        'has_vertical_speed': hasVerticalSpeed,
+        'has_vertical_speed_accuracy': hasVerticalSpeedAccuracy,
       };
 
   /// Whether [map] carries a measurement for a field.
