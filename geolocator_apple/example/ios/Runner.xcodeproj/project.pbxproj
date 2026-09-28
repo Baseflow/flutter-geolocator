@@ -17,7 +17,6 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		A27A00010000000000000001 /* ActivityTypeMapperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A27A00010000000000000002 /* ActivityTypeMapperTests.m */; };
 		F694587D27B1673A00EE1C9B /* GeolocationHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F694587C27B1673A00EE1C9B /* GeolocationHandlerTests.m */; };
 		F6BD360127B26CA200B25458 /* GeolocatorPluginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BD360027B26CA200B25458 /* GeolocatorPluginTests.m */; };
 /* End PBXBuildFile section */
@@ -69,7 +68,6 @@
 		AA31144EC1926C7BC5B0F1B6 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		E4C3DF784ED17014DDE2FDCF /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
 		F694587A27B1673A00EE1C9B /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A27A00010000000000000002 /* ActivityTypeMapperTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActivityTypeMapperTests.m; sourceTree = "<group>"; };
 		F694587C27B1673A00EE1C9B /* GeolocationHandlerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeolocationHandlerTests.m; sourceTree = "<group>"; };
 		F6BD360027B26CA200B25458 /* GeolocatorPluginTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeolocatorPluginTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -176,7 +174,6 @@
 		F694587B27B1673A00EE1C9B /* RunnerTests */ = {
 			isa = PBXGroup;
 			children = (
-				A27A00010000000000000002 /* ActivityTypeMapperTests.m */,
 				F694587C27B1673A00EE1C9B /* GeolocationHandlerTests.m */,
 				F6BD360027B26CA200B25458 /* GeolocatorPluginTests.m */,
 			);
@@ -383,7 +380,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A27A00010000000000000001 /* ActivityTypeMapperTests.m in Sources */,
 				F694587D27B1673A00EE1C9B /* GeolocationHandlerTests.m in Sources */,
 				F6BD360127B26CA200B25458 /* GeolocatorPluginTests.m in Sources */,
 			);
