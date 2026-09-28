@@ -13,4 +13,9 @@
 /// This should only be used for testing purposes.
 - (void)setOneTimeLocationManagerOverride:(CLLocationManager *)locationManager;
 
+/// Overrides how long a single position request waits after Core Location
+/// reports `kCLErrorLocationUnknown` before it fails.
+/// This should only be used for testing purposes.
+- (void)setLocationUnknownGracePeriodOverride:(NSTimeInterval)gracePeriod;
+
 @end

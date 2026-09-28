@@ -11,6 +11,15 @@
 
 double const kMaxLocationLifeTimeInSeconds = 5.0;
 
+// How long a single position request keeps waiting after Core Location reports
+// `kCLErrorLocationUnknown` before it gives up. The error is transient while
+// updates run continuously, but `getCurrentPosition` expects one answer:
+// without a deadline it never completes when the position cannot be determined
+// at all (for example on a Mac with Wi-Fi turned off). This mirrors
+// `-[CLLocationManager requestLocation]`, which also reports
+// `kCLErrorLocationUnknown` when no fix arrives in a timely manner.
+double const kLocationUnknownGracePeriodInSeconds = 10.0;
+
 @interface GeolocationHandler() <CLLocationManagerDelegate>
 
 @property(strong, nonatomic, nonnull) CLLocationManager *locationManager;
@@ -22,6 +31,12 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 @property(strong, nonatomic) GeolocatorResult currentLocationResultHandler;
 @property(strong, nonatomic) GeolocatorResult listenerResultHandler;
 
+// Identifies the current single position request, so that the grace period of
+// a previous request cannot fail the one that replaced it.
+@property(nonatomic) NSUInteger oneTimeRequestId;
+@property(nonatomic) BOOL oneTimeLocationUnknownPending;
+@property(nonatomic) NSTimeInterval locationUnknownGracePeriod;
+
 @end
 
 @implementation GeolocationHandler
@@ -32,6 +47,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
   if (!self) {
     return nil;
   }
+  
+  _locationUnknownGracePeriod = kLocationUnknownGracePeriodInSeconds;
   
   return self;
 }
@@ -60,6 +77,10 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
   self.oneTimeLocationManager = locationManager;
 }
 
+- (void)setLocationUnknownGracePeriodOverride:(NSTimeInterval)gracePeriod {
+  self.locationUnknownGracePeriod = gracePeriod;
+}
+
 - (CLLocation *) getLastKnownPosition {
   CLLocationManager *locationManager = [self getLocationManager];
   CLLocation *cashedLocation = [locationManager location];
@@ -75,6 +96,8 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
                               errorHandler:(GeolocatorError _Nonnull)errorHandler {
   self.oneTimeErrorHandler = errorHandler;
   self.currentLocationResultHandler = resultHandler;
+  self.oneTimeRequestId += 1;
+  self.oneTimeLocationUnknownPending = NO;
   
   BOOL showBackgroundLocationIndicator = NO;
   BOOL allowBackgroundLocationUpdates = NO;
@@ -187,6 +210,11 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
         "Error description: %@", error.localizedFailureReason, error.localizedDescription);
   
   if([error.domain isEqualToString:kCLErrorDomain] && error.code == kCLErrorLocationUnknown) {
+    // Transient while updates run continuously: the position stream keeps
+    // waiting. A single position request waits a grace period, and then fails.
+    if (manager == [self getOneTimeLocationManager]) {
+      [self failOneTimeRequestAfterGracePeriodWithDescription:error.localizedDescription];
+    }
     return;
   }
   
@@ -201,6 +229,32 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
   if (manager == [self getOneTimeLocationManager]) {
     [self stopOneTimeLocationListening];
   }
+}
+
+- (void)failOneTimeRequestAfterGracePeriodWithDescription:(NSString *)errorDescription {
+  if (self.currentLocationResultHandler == nil || self.oneTimeLocationUnknownPending) {
+    return;
+  }
+  self.oneTimeLocationUnknownPending = YES;
+  
+  NSUInteger requestId = self.oneTimeRequestId;
+  __weak typeof(self) weakSelf = self;
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.locationUnknownGracePeriod * NSEC_PER_SEC)),
+                 dispatch_get_main_queue(), ^{
+    typeof(self) strongSelf = weakSelf;
+    // A position arrived, or another request took over, in the meantime.
+    if (strongSelf == nil
+        || strongSelf.oneTimeRequestId != requestId
+        || strongSelf.currentLocationResultHandler == nil) {
+      return;
+    }
+    
+    GeolocatorError errorHandler = strongSelf.oneTimeErrorHandler;
+    [strongSelf stopOneTimeLocationListening];
+    if (errorHandler) {
+      errorHandler(GeolocatorErrorLocationUpdateFailure, errorDescription);
+    }
+  });
 }
 
 + (BOOL) shouldEnableBackgroundLocationUpdates {
