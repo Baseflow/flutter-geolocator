@@ -53,6 +53,11 @@ jobs:
         run: flutter analyze
         working-directory: ${{env.source-directory}}
 
+      # Run the Dart unit tests, including native channel serialization
+      - name: Run Flutter tests
+        run: flutter test
+        working-directory: ${{env.source-directory}}
+
       # Build iOS version of the example App
       - name: Run iOS build
         run: flutter build ios --no-codesign --release

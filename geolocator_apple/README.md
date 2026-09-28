@@ -10,6 +10,22 @@ Since version 7.5.0 of the [geolocator](https://pub.dev/packages/geolocator) plu
 
 More detailed instructions on using the API can be found in the [README.md](../geolocator/README.md) of the [geolocator](https://pub.dev/packages/geolocator) package.
 
+### Maritime positioning
+
+For location streams used on boats, including while anchored, select
+`ActivityType.maritime`:
+
+```dart
+final settings = AppleSettings(activityType: ActivityType.maritime);
+final positions = GeolocatorApple().getPositionStream(locationSettings: settings);
+```
+
+This uses Core Location's [maritime activity type](https://developer.apple.com/documentation/corelocation/clactivitytype/maritime)
+when built with the iOS 27 or macOS 27 SDK (Xcode 27 or later) and running on
+that OS version or later. On older SDKs or operating systems, it falls back to
+`ActivityType.otherNavigation`. Existing activity types and the default activity
+type are unchanged.
+
 ## Issues
 
 Please file any issues, bugs or feature requests as an issue on our [GitHub](https://github.com/Baseflow/flutter-geolocator/issues) page. Commercial support is available, you can contact us at <hello@baseflow.com>.
