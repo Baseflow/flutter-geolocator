@@ -1,3 +1,7 @@
+## 2.4.0
+
+* Adds `ActivityType.maritime` for vessels on water, including while anchored, on iOS 27 and macOS 27. Falls back to `ActivityType.otherNavigation` when built with an older SDK or running on an older OS.
+
 ## 2.3.14
 
 * Updates `flutter_lints` to version 6.0.0.
