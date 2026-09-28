@@ -15,10 +15,15 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 // `kCLErrorLocationUnknown` before it gives up. The error is transient while
 // updates run continuously, but `getCurrentPosition` expects one answer:
 // without a deadline it never completes when the position cannot be determined
-// at all (for example on a Mac with Wi-Fi turned off). This mirrors
-// `-[CLLocationManager requestLocation]`, which also reports
-// `kCLErrorLocationUnknown` when no fix arrives in a timely manner.
-double const kLocationUnknownGracePeriodInSeconds = 10.0;
+// at all (for example on a Mac with Wi-Fi turned off).
+//
+// The period has to outlast the Wi-Fi scan interval of macOS. Without a recent
+// position, locationd reports `kCLErrorLocationUnknown` right away and only
+// finds a position at its next scheduled Wi-Fi scan, every 300 seconds, so a
+// working Mac can take minutes to answer. A shorter period would fail requests
+// that would still succeed. Apps that want a bounded wait keep using
+// `LocationSettings.timeLimit`.
+double const kLocationUnknownGracePeriodInSeconds = 360.0;
 
 @interface GeolocationHandler() <CLLocationManagerDelegate>
 
