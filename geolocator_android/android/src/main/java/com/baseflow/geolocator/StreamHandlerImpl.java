@@ -46,7 +46,11 @@ class StreamHandlerImpl implements EventChannel.StreamHandler {
   public void setActivity(@Nullable Activity activity) {
 
     if (activity == null && locationClient != null && channel != null) {
-      stopListening();
+      // Only stop the position updates. The FlutterEngine, and the Dart subscription listening
+      // to this channel, can outlive the Activity (for example with a cached engine), and the
+      // channel is only registered again from onAttachedToEngine. Unregistering it here would
+      // make every later 'listen' and 'cancel' fail with a MissingPluginException.
+      disposeListeners(false);
     }
 
     this.activity = activity;
