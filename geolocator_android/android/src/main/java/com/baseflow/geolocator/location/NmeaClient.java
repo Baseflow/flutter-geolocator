@@ -22,6 +22,8 @@ public class NmeaClient {
   public static final String NMEA_ALTITUDE_EXTRA = "geolocator_mslAltitude";
   public static final String GNSS_SATELLITE_COUNT_EXTRA = "geolocator_mslSatelliteCount";
   public static final String GNSS_SATELLITES_USED_IN_FIX_EXTRA = "geolocator_mslSatellitesUsedInFix";
+  public static final String VERTICAL_SPEED_EXTRA = "geolocator_verticalSpeed";
+  public static final String VERTICAL_SPEED_ACCURACY_EXTRA = "geolocator_verticalSpeedAccuracy";
 
   private final Context context;
   private final LocationManager locationManager;

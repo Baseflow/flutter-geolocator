@@ -488,6 +488,90 @@ void main() {
         true,
       );
     });
+
+    test(
+        'hashCode should not match when the verticalSpeed property is different',
+        () {
+      // Arrange
+      final firstPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        verticalSpeed: 0,
+        verticalSpeedAccuracy: 0,
+        isMocked: false,
+      );
+      final secondPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        verticalSpeed: 1.5,
+        verticalSpeedAccuracy: 0,
+        isMocked: false,
+      );
+
+      // Act & Assert
+      expect(
+        firstPosition.hashCode != secondPosition.hashCode,
+        true,
+      );
+    });
+
+    test(
+        'hashCode should not match when the verticalSpeedAccuracy property is different',
+        () {
+      // Arrange
+      final firstPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        verticalSpeed: 0,
+        verticalSpeedAccuracy: 0,
+        isMocked: false,
+      );
+      final secondPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        verticalSpeed: 0,
+        verticalSpeedAccuracy: 0.5,
+        isMocked: false,
+      );
+
+      // Act & Assert
+      expect(
+        firstPosition.hashCode != secondPosition.hashCode,
+        true,
+      );
+    });
   });
 
   group('fromMap tests:', () {

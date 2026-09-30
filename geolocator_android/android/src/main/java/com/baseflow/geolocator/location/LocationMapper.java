@@ -2,6 +2,9 @@ package com.baseflow.geolocator.location;
 
 import android.location.Location;
 import android.os.Build;
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,8 +57,48 @@ public class LocationMapper {
           position.put("altitude_accuracy", mslAccuracy);
         }
       }
+      // Location has no standard vertical-speed getter. Only forward an
+      // existing provider extra; altitude accuracy is not speed accuracy.
+      Double verticalSpeed =
+          getDoubleExtra(
+              location.getExtras(),
+              NmeaClient.VERTICAL_SPEED_EXTRA,
+              "vertical_speed",
+              "verticalSpeed",
+              "vVel");
+      if (verticalSpeed != null) {
+        position.put("vertical_speed", verticalSpeed);
+      }
+      Double verticalSpeedAccuracy =
+          getDoubleExtra(
+              location.getExtras(),
+              NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA,
+              "vertical_speed_accuracy",
+              "verticalSpeedAccuracy");
+      if (verticalSpeedAccuracy != null && verticalSpeedAccuracy >= 0.0) {
+        position.put("vertical_speed_accuracy", verticalSpeedAccuracy);
+      }
     }
     return position;
+  }
+
+  @Nullable
+  private static Double getDoubleExtra(@Nullable Bundle extras, String... keys) {
+    if (extras == null) {
+      return null;
+    }
+    for (String key : keys) {
+      if (extras.containsKey(key)) {
+        Object value = extras.get(key);
+        if (value instanceof Number) {
+          double d = ((Number) value).doubleValue();
+          if (!Double.isNaN(d) && !Double.isInfinite(d)) {
+            return d;
+          }
+        }
+      }
+    }
+    return null;
   }
 
   @SuppressWarnings("deprecation")
