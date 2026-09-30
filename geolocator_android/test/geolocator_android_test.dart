@@ -1440,6 +1440,7 @@ void main() {
           distanceFilter: 5,
           forceLocationManager: false,
           intervalDuration: const Duration(seconds: 1),
+          maxUpdateAge: const Duration(seconds: 30),
           timeLimit: const Duration(seconds: 1),
           useMSLAltitude: false,
           foregroundNotificationConfig: const ForegroundNotificationConfig(
@@ -1475,6 +1476,10 @@ void main() {
         expect(
           jsonMap['timeInterval'],
           settings.intervalDuration!.inMilliseconds,
+        );
+        expect(
+          jsonMap['maxUpdateAge'],
+          settings.maxUpdateAge!.inMilliseconds,
         );
         expect(
           jsonMap['useMSLAltitude'],

@@ -106,6 +106,11 @@ class FusedLocationClient implements LocationClient {
       builder.setIntervalMillis(options.getTimeInterval());
       builder.setMinUpdateIntervalMillis(options.getTimeInterval());
       builder.setMinUpdateDistanceMeters(options.getDistanceFilter());
+
+      Long maxUpdateAgeMillis = options.getMaxUpdateAgeMillis();
+      if (maxUpdateAgeMillis != null) {
+        builder.setMaxUpdateAgeMillis(maxUpdateAgeMillis);
+      }
     }
 
     return builder.build();
