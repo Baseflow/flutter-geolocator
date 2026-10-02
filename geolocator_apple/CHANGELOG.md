@@ -1,3 +1,7 @@
+## 2.3.15
+
+* Adds support for the `BYPASS_PERMISSION_LOCATION_ALWAYS` flag when using Swift Package Manager (SPM). Set the `BYPASS_PERMISSION_LOCATION_ALWAYS=1` environment variable when building to bypass the request for permission to update location in the background, matching the existing CocoaPods behavior.
+
 ## 2.3.14
 
 * Updates `flutter_lints` to version 6.0.0.
