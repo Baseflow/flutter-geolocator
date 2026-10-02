@@ -59,6 +59,11 @@ jobs:
         run: flutter analyze
         working-directory: ${{env.source-directory}}
 
+      # Run all unit-tests with code coverage
+      - name: Run unit tests
+        run: flutter test --coverage
+        working-directory: ${{env.source-directory}}
+
       # Build Android version of the example App
       - name: Run Android build
         run: flutter build apk --release
