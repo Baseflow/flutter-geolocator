@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.baseflow.geolocator.errors.ErrorCallback;
 import com.baseflow.geolocator.errors.ErrorCodes;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
@@ -240,6 +241,7 @@ class FusedLocationClient implements LocationClient {
             locationSettingsResponse -> requestPositionUpdates(this.locationOptions))
         .addOnFailureListener(
             e -> {
+              Log.w(TAG, "checkLocationSettings error", e);
               if (e instanceof ResolvableApiException) {
                 // When we don't have an activity return an error code explaining the
                 // location services are not enabled
@@ -264,7 +266,9 @@ class FusedLocationClient implements LocationClient {
               } else {
                 ApiException ae = (ApiException) e;
                 int statusCode = ae.getStatusCode();
-                if (statusCode == LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE) {
+                // checkLocationSettings returns DEVELOPER_ERROR on Wear OS.
+                if (statusCode == LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE
+                    || statusCode == CommonStatusCodes.DEVELOPER_ERROR) {
                   requestPositionUpdates(this.locationOptions);
                 } else {
                   // This should not happen according to Android documentation but it has been
