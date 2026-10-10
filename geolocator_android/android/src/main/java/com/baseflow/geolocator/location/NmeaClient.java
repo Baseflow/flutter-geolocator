@@ -11,11 +11,13 @@ import android.location.LocationManager;
 import android.location.OnNmeaMessageListener;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
+import java.util.concurrent.Executor;
 
 public class NmeaClient {
 
@@ -34,18 +36,45 @@ public class NmeaClient {
   @TargetApi(Build.VERSION_CODES.N)
   private GnssStatus.Callback gnssCallback;
 
-  private String lastNmeaMessage;
-  private double gnss_satellite_count;
-  private double gnss_satellites_used_in_fix;
-  @Nullable private Calendar lastNmeaMessageTime;
-  private boolean listenerAdded = false;
+  // Written on the NMEA thread, read when a location is enriched.
+  private volatile String lastNmeaMessage;
+  private volatile double gnss_satellite_count;
+  private volatile double gnss_satellites_used_in_fix;
+  @Nullable private volatile Calendar lastNmeaMessageTime;
+
+  // Registration runs on [registrationExecutor], off the Android main thread: the calls are
+  // binder transactions that block while the system location service is slow (ANR).
+  private final Executor registrationExecutor;
+  @Nullable private final Handler callbackHandler;
+  private final boolean nmeaSupported;
+  // What the caller asked for; read by queued registration work.
+  private volatile boolean active = false;
+  // Whether the listeners are registered right now; only the executor writes it.
+  private volatile boolean listenerAdded = false;
 
   public NmeaClient(@NonNull Context context, @Nullable LocationOptions locationOptions) {
+    this(
+        context,
+        locationOptions,
+        NmeaThread::post,
+        NmeaThread.handler(),
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
+  }
+
+  NmeaClient(
+      @NonNull Context context,
+      @Nullable LocationOptions locationOptions,
+      @NonNull Executor registrationExecutor,
+      @Nullable Handler callbackHandler,
+      boolean nmeaSupported) {
     this.context = context;
     this.locationOptions = locationOptions;
     this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    this.registrationExecutor = registrationExecutor;
+    this.callbackHandler = callbackHandler;
+    this.nmeaSupported = nmeaSupported;
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    if (nmeaSupported) {
       nmeaMessageListener =
           (message, timestamp) -> {
             if (message.trim().matches("^\\$..GGA.*$")) {
@@ -69,27 +98,52 @@ public class NmeaClient {
     }
   }
 
-  @SuppressLint("MissingPermission")
+  /** Stops the shared NMEA thread after its queued work; call when the plugin detaches. */
+  public static void releaseThread() {
+    NmeaThread.quit();
+  }
+
+  /** Asks for the listeners; they are registered on the registration executor. */
   public void start() {
-    if (listenerAdded) {
+    if (active) {
+      return;
+    }
+    active = true;
+    registrationExecutor.execute(this::register);
+  }
+
+  /** Asks to remove the listeners; safe before the matching registration has run. */
+  public void stop() {
+    active = false;
+    registrationExecutor.execute(this::unregister);
+  }
+
+  @SuppressLint("MissingPermission")
+  private void register() {
+    // A stop() queued after this start() runs next and removes what this adds; a stop()
+    // that came before this ran means the caller no longer wants the listeners.
+    if (!active || listenerAdded) {
       return;
     }
 
     if (locationOptions != null) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && locationManager != null) {
+      if (nmeaSupported && locationManager != null) {
         if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
-          locationManager.addNmeaListener(nmeaMessageListener, null);
-          locationManager.registerGnssStatusCallback(gnssCallback, null);
+          locationManager.addNmeaListener(nmeaMessageListener, callbackHandler);
+          locationManager.registerGnssStatusCallback(gnssCallback, callbackHandler);
           listenerAdded = true;
         }
       }
     }
   }
 
-  public void stop() {
+  private void unregister() {
+    if (active || !listenerAdded) {
+      return;
+    }
     if (locationOptions != null) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && locationManager != null) {
+      if (nmeaSupported && locationManager != null) {
         locationManager.removeNmeaListener(nmeaMessageListener);
         locationManager.unregisterGnssStatusCallback(gnssCallback);
         listenerAdded = false;

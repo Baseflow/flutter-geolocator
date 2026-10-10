@@ -1,3 +1,13 @@
+## 5.1.2
+
+- Registers and unregisters the NMEA and GNSS status listeners on a background
+  `HandlerThread` instead of the Android main thread. These calls are binder
+  transactions into the system location service; on the main thread they
+  blocked the UI while that service was slow, causing ANRs when a position
+  request or stream started or stopped. Start and stop keep their order, a stop
+  issued before the queued start runs registers nothing, and the thread quits
+  when the plugin detaches.
+
 ## 5.1.1+1
 
 - Rollsback the declaration of the `FOREGROUND_SERVICE_LOCATION` in the 

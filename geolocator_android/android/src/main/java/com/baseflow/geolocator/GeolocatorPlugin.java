@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.baseflow.geolocator.location.GeolocationManager;
+import com.baseflow.geolocator.location.NmeaClient;
 import com.baseflow.geolocator.location.LocationAccuracyManager;
 import com.baseflow.geolocator.permission.PermissionManager;
 
@@ -84,6 +85,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     unbindForegroundService(binding.getApplicationContext());
     dispose();
+    NmeaClient.releaseThread();
   }
 
   @Override

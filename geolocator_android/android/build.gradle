@@ -22,6 +22,11 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    testOptions {
+        // NmeaClientTest builds Android listener classes in a JVM test.
+        unitTests.returnDefaultValues = true
+    }
+
     if (project.android.hasProperty("namespace")) {
         namespace("com.baseflow.geolocator")
     }
