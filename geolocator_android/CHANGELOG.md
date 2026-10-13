@@ -1,5 +1,9 @@
-## 5.1.1+1
+## 5.1.2
 
+- Fixes the position updates `EventChannel` being unregistered when the plugin is detached from
+  its Activity while a position stream without a foreground notification is active. On an engine
+  that outlives the Activity, every later `listen` and `cancel` failed with a
+  `MissingPluginException` until the process was restarted.
 - Rollsback the declaration of the `FOREGROUND_SERVICE_LOCATION` in the 
   plugin's own manifest. Adding the permission by default results in automatic
   rejections by Google when publishing an application that doesn't need nor 
