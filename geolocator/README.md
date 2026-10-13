@@ -105,6 +105,12 @@ post_install do |installer|
 end
 ```
 
+When your project uses Swift Package Manager (SPM) instead of CocoaPods, set the `BYPASS_PERMISSION_LOCATION_ALWAYS` environment variable to `1` when building. This defines the same preprocessor macro for the `geolocator_apple` package:
+```bash
+BYPASS_PERMISSION_LOCATION_ALWAYS=1 flutter build ios
+```
+Leaving the variable unset (or `0`) keeps the default behavior and requests the "always" authorization.
+
 If you do want to receive updates when your App is in the background (or if you don't bypass the permission request as described above) then you'll need to:
 * Add the Background Modes capability to your XCode project (Project > Signing and Capabilities > "+ Capability" button) and select Location Updates. Be careful with this, you will need to explain in detail to Apple why your App needs this when submitting your App to the AppStore. If Apple isn't satisfied with the explanation your App will be rejected.
 * Add an `NSLocationAlwaysAndWhenInUseUsageDescription` entry to your Info.plist (use `NSLocationAlwaysUsageDescription` if you're targeting iOS <11.0) 
