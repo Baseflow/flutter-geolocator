@@ -75,7 +75,13 @@ public class NmeaClient {
       return;
     }
 
-    if (locationOptions != null) {
+    // addNmeaListener / registerGnssStatusCallback are synchronous Binder calls
+    // into the system location service and run on the main thread (the plugin's
+    // method and stream handlers do). When that service is slow they freeze the
+    // UI (ANR, see #1795), and with a null Handler every NMEA sentence is also
+    // posted to the main looper. The NMEA data is only needed to report the MSL
+    // altitude, so only listen when it was requested.
+    if (locationOptions != null && locationOptions.isUseMSLAltitude()) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && locationManager != null) {
         if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
@@ -88,6 +94,11 @@ public class NmeaClient {
   }
 
   public void stop() {
+    // Nothing was registered: skip the (synchronous) Binder calls.
+    if (!listenerAdded) {
+      return;
+    }
+
     if (locationOptions != null) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && locationManager != null) {
         locationManager.removeNmeaListener(nmeaMessageListener);
