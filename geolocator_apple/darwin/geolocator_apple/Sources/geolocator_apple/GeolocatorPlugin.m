@@ -108,8 +108,9 @@
 }
 
 - (void)onCheckPermission:(FlutterResult) result {
-  CLAuthorizationStatus status = [[self createPermissionHandler] checkPermission];
-  result([AuthorizationStatusMapper toDartIndex:status]);
+  [[self createPermissionHandler] checkPermissionInBackground:^(CLAuthorizationStatus status) {
+    result([AuthorizationStatusMapper toDartIndex:status]);
+  }];
 }
 
 - (void)onRequestPermission:(FlutterResult)result {
@@ -134,26 +135,35 @@
 }
 
 - (void)onGetLastKnownPosition:(FlutterResult)result {
-  if (![[self createPermissionHandler] hasPermission]) {
-    result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
-                               message:@"User denied permissions to access the device's location."
-                               details:nil]);
-    return;
-  }
-  
-  CLLocation *location = [self.createGeolocationHandler getLastKnownPosition];
-  result([LocationMapper toDictionary:location]);
+  [[self createPermissionHandler] checkPermissionInBackground:^(CLAuthorizationStatus status) {
+    if (![PermissionUtils isStatusGranted:status]) {
+      result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
+                                 message:@"User denied permissions to access the device's location."
+                                 details:nil]);
+      return;
+    }
+
+    CLLocation *location = [self.createGeolocationHandler getLastKnownPosition];
+    result([LocationMapper toDictionary:location]);
+  }];
 }
 
 - (void)onGetCurrentPositionWithArguments:(id _Nullable)arguments
                                    result:(FlutterResult)result {
-  if (![[self createPermissionHandler] hasPermission]) {
-    result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
-                               message:@"User denied permissions to access the device's location."
-                               details:nil]);
-    return;
-  }
-  
+  [[self createPermissionHandler] checkPermissionInBackground:^(CLAuthorizationStatus status) {
+    if (![PermissionUtils isStatusGranted:status]) {
+      result([FlutterError errorWithCode: GeolocatorErrorPermissionDenied
+                                 message:@"User denied permissions to access the device's location."
+                                 details:nil]);
+      return;
+    }
+
+    [self requestPositionWithArguments:arguments result:result];
+  }];
+}
+
+- (void)requestPositionWithArguments:(id _Nullable)arguments
+                              result:(FlutterResult)result {
   CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
   GeolocationHandler *geolocationHandler = [self createGeolocationHandler];
   

@@ -1,3 +1,7 @@
+## 2.3.16
+
+* Reads the location permission status off the main thread in `checkPermission`, `requestPermission`, `getCurrentPosition` and `getLastKnownPosition`. The status read waits for a synchronous reply from `locationd`, which froze the app for seconds when `locationd` was slow to answer.
+
 ## 2.3.15
 
 * Adds support for the `BYPASS_PERMISSION_LOCATION_ALWAYS` flag when using Swift Package Manager (SPM). Set the `BYPASS_PERMISSION_LOCATION_ALWAYS=1` environment variable when building to bypass the request for permission to update location in the background, matching the existing CocoaPods behavior.

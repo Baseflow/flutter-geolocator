@@ -17,7 +17,7 @@ typedef void (^PermissionError)(NSString *errorCode, NSString *errorDiscription)
 @interface PermissionHandler : NSObject
 
 - (CLAuthorizationStatus) checkPermission;
-- (BOOL) hasPermission;
+- (void) checkPermissionInBackground:(PermissionConfirmation)completionHandler;
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler
               errorHandler:(PermissionError)errorHandler;
 
