@@ -354,8 +354,9 @@ StreamSubscription<Position> positionStream = Geolocator.getPositionStream(locat
 
 #### Location accuracy (Android and iOS 14+ only)
 
-To query if a user enabled Approximate location fetching or Precise location fetching, you can call the `Geolocator().getLocationAccuracy()` method. This will return a `Future<LocationAccuracyStatus>`, which when completed contains a `LocationAccuracyStatus.reduced` if the user has enabled Approximate location fetching or `LocationAccuracyStatus.precise` if the user has enabled Precise location fetching.
-When calling `getLocationAccuracy` before the user has given permission, the method will return `LocationAccuracyStatus.reduced` by default.
+To query if a user enabled Approximate location fetching or Precise location fetching, you can call the `Geolocator.getLocationAccuracy()` method. This will return a `Future<LocationAccuracyStatus>`, which when completed contains a `LocationAccuracyStatus.reduced` if the user has enabled Approximate location fetching or `LocationAccuracyStatus.precise` if the user has enabled Precise location fetching.
+On Android, `LocationAccuracyStatus.reduced` means the app was only granted the `ACCESS_COARSE_LOCATION` permission. Calling `getLocationAccuracy` before any location permission has been granted throws a `PlatformException` with the code `PERMISSION_DENIED`.
+On iOS 14 and higher, calling `getLocationAccuracy` before the user has given permission returns `LocationAccuracyStatus.reduced` by default.
 On iOS 13 or below, the method `getLocationAccuracy` will always return `LocationAccuracyStatus.precise`, since that is the default value for iOS 13 and below.
 
 ``` dart

@@ -196,10 +196,15 @@ abstract class GeolocatorPlatform extends PlatformInterface {
 
   /// Returns a [Future] containing a [LocationAccuracyStatus].
   ///
-  /// When on iOS the user has given permission for approximate location,
-  /// [LocationAccuracyStatus.reduced] will be returned, if the user gave
-  /// permission for precise/full accuracy location, [LocationAccuracyStatus.precise]
-  /// will be returned.
+  /// When the user has given permission for approximate location (on Android,
+  /// or on iOS 14 and higher), [LocationAccuracyStatus.reduced] will be
+  /// returned. If the user gave permission for precise location,
+  /// [LocationAccuracyStatus.precise] will be returned. See
+  /// [LocationAccuracyStatus] for how each platform determines the value.
+  ///
+  /// On Android, a `PlatformException` with the code `PERMISSION_DENIED` is
+  /// thrown when the app has not been granted any location permission yet.
+  ///
   /// When executing the method on platforms that don't support location
   /// accuracy features [LocationAccuracyStatus.unknown] should be returned.
   Future<LocationAccuracyStatus> getLocationAccuracy() async {

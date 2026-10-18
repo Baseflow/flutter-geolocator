@@ -1,3 +1,7 @@
+## 4.4.1
+
+- Corrects the documentation of `LocationAccuracyStatus` and `getLocationAccuracy()`, which said that Android always returns `LocationAccuracyStatus.unknown` and that the status only applies to iOS 14 and higher. On Android the status is `precise` or `reduced`, depending on the granted location permission. The documentation now describes the behaviour on each platform. Resolves [#1528](https://github.com/Baseflow/flutter-geolocator/issues/1528).
+
 ## 4.4.0
 
 - Adds `verticalSpeed` and `verticalSpeedAccuracy` with corresponding `hasVerticalSpeed` and `hasVerticalSpeedAccuracy` flags to `Position`.
