@@ -1,3 +1,10 @@
+## 5.2.1
+
+- Fixes the position updates `EventChannel` being unregistered when the plugin is detached from
+  its Activity while a position stream without a foreground notification is active. On an engine
+  that outlives the Activity, every later `listen` and `cancel` failed with a
+  `MissingPluginException` until the process was restarted.
+
 ## 5.2.0
 
 - Adds `maxUpdateAge` to `AndroidSettings`, allowing position streams using the Android Fused Location Provider to accept an initial historical location independently of the update interval.
