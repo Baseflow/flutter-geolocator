@@ -131,6 +131,77 @@
   [_geolocationHandler locationManager:_mockLocationManager didFailWithError: error];
 }
 
+- (void)testRequestPositionShouldFailWhenLocationStaysUnknownPastGracePeriod {
+  NSError *error = [NSError errorWithDomain:kCLErrorDomain code:kCLErrorLocationUnknown userInfo:nil];
+  [_geolocationHandler setLocationUnknownGracePeriodOverride:0.1];
+
+  XCTestExpectation *expectation = [self expectationWithDescription:@"expect the request to fail once the grace period elapses"];
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {
+    XCTFail(@"no position was reported");
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    XCTAssertEqualObjects(errorCode, GeolocatorErrorLocationUpdateFailure);
+    [expectation fulfill];
+  }];
+
+  // Core Location keeps reporting the error while it cannot determine a position.
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didFailWithError: error];
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didFailWithError: error];
+
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager stopUpdatingLocation]);
+}
+
+- (void)testRequestPositionShouldReturnLocationArrivingWithinGracePeriod {
+  NSError *error = [NSError errorWithDomain:kCLErrorDomain code:kCLErrorLocationUnknown userInfo:nil];
+  CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.1, 6.4)
+                                                       altitude:0.0
+                                             horizontalAccuracy:0
+                                               verticalAccuracy:0
+                                                      timestamp:[NSDate date]];
+  [_geolocationHandler setLocationUnknownGracePeriodOverride:0.2];
+
+  XCTestExpectation *resultExpectation = [self expectationWithDescription:@"expect the location to be returned"];
+  XCTestExpectation *errorExpectation = [self expectationWithDescription:@"expect no error after the grace period"];
+  errorExpectation.inverted = YES;
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable result) {
+    XCTAssertEqual(result, location);
+    [resultExpectation fulfill];
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    [errorExpectation fulfill];
+  }];
+
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didFailWithError: error];
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didUpdateLocations: @[location]];
+
+  [self waitForExpectations:@[resultExpectation, errorExpectation] timeout:1.0];
+}
+
+- (void)testGracePeriodOfPreviousRequestShouldNotFailTheNextRequest {
+  NSError *error = [NSError errorWithDomain:kCLErrorDomain code:kCLErrorLocationUnknown userInfo:nil];
+  [_geolocationHandler setLocationUnknownGracePeriodOverride:0.2];
+
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {}
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didFailWithError: error];
+
+  // A new request replaces the pending one before its grace period elapses.
+  XCTestExpectation *errorExpectation = [self expectationWithDescription:@"expect the new request not to fail"];
+  errorExpectation.inverted = YES;
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {}
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    [errorExpectation fulfill];
+  }];
+
+  [self waitForExpectations:@[errorExpectation] timeout:0.5];
+}
+
 
 #pragma mark - Test listening to location stream
 
