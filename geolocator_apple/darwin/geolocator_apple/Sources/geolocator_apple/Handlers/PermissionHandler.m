@@ -7,7 +7,6 @@
 
 #import "../include/geolocator_apple/Handlers/PermissionHandler.h"
 #import "../include/geolocator_apple/Constants/ErrorCodes.h"
-#import "../include/geolocator_apple/Utils/PermissionUtils.h"
 
 @interface PermissionHandler() <CLLocationManagerDelegate>
 
@@ -27,24 +26,32 @@
   return self.locationManager;
 }
 
-- (BOOL) hasPermission {
-  CLAuthorizationStatus status = [self checkPermission];
-  
-  return [PermissionUtils isStatusGranted:status];
+- (CLAuthorizationStatus) checkPermission {
+  return [CLLocationManager authorizationStatus];
 }
 
-- (CLAuthorizationStatus) checkPermission {
-  if (@available(iOS 14, macOS 11, *)) {
-    return [self.getLocationManager authorizationStatus];
-  } else {
-    return [CLLocationManager authorizationStatus];
-  }
+- (void) checkPermissionInBackground:(PermissionConfirmation)completionHandler {
+  dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+    CLAuthorizationStatus status = [self checkPermission];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      completionHandler(status);
+    });
+  });
 }
 
 - (void) requestPermission:(PermissionConfirmation)confirmationHandler
               errorHandler:(PermissionError)errorHandler {
+  [self checkPermissionInBackground:^(CLAuthorizationStatus authorizationStatus) {
+    [self requestPermission:confirmationHandler
+               errorHandler:errorHandler
+        authorizationStatus:authorizationStatus];
+  }];
+}
+
+- (void) requestPermission:(PermissionConfirmation)confirmationHandler
+              errorHandler:(PermissionError)errorHandler
+       authorizationStatus:(CLAuthorizationStatus)authorizationStatus {
   // When we already have permission we don't have to request it again
-  CLAuthorizationStatus authorizationStatus = CLLocationManager.authorizationStatus;
   if (authorizationStatus != kCLAuthorizationStatusNotDetermined) {
     confirmationHandler(authorizationStatus);
     return;

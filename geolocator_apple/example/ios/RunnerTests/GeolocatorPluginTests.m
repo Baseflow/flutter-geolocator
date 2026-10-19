@@ -26,7 +26,7 @@
   GeolocatorPlugin *plugin = [[GeolocatorPlugin alloc] init];
   [plugin setPermissionHandlerOverride: mockPermissionHandler];
   
-  OCMStub([mockPermissionHandler checkPermission]).andReturn(kCLAuthorizationStatusDenied);
+  OCMStub([mockPermissionHandler checkPermissionInBackground:([OCMArg invokeBlockWithArgs:@(kCLAuthorizationStatusDenied), nil])]);
     
   FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"checkPermission"
                                                               arguments:@{}];
@@ -38,7 +38,7 @@
     [expectation fulfill];
   }];
   
-  OCMVerify(times(1), [mockPermissionHandler checkPermission]);
+  OCMVerify(times(1), [mockPermissionHandler checkPermissionInBackground:[OCMArg any]]);
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
@@ -96,7 +96,7 @@
   [plugin setGeolocationHandlerOverride:mockGeolocationHandler];
   [plugin setPermissionHandlerOverride:mockPermissionHandler];
   
-  OCMStub([mockPermissionHandler hasPermission]).andReturn(YES);
+  OCMStub([mockPermissionHandler checkPermissionInBackground:([OCMArg invokeBlockWithArgs:@(kCLAuthorizationStatusAuthorizedAlways), nil])]);
   OCMStub([mockGeolocationHandler getLastKnownPosition]).andReturn(dummyLocation);
   
   FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"getLastKnownPosition"
@@ -109,7 +109,7 @@
     [expectation fulfill];
   }];
   
-  OCMVerify(times(1), [mockPermissionHandler hasPermission]);
+  OCMVerify(times(1), [mockPermissionHandler checkPermissionInBackground:[OCMArg any]]);
   OCMVerify(times(1), [mockGeolocationHandler getLastKnownPosition]);
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
@@ -121,7 +121,7 @@
   [plugin setGeolocationHandlerOverride:mockGeolocationHandler];
   [plugin setPermissionHandlerOverride:mockPermissionHandler];
   
-  OCMStub([mockPermissionHandler hasPermission]).andReturn(NO);
+  OCMStub([mockPermissionHandler checkPermissionInBackground:([OCMArg invokeBlockWithArgs:@(kCLAuthorizationStatusDenied), nil])]);
   
   FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"getLastKnownPosition"
                                                               arguments:@{}];
@@ -134,7 +134,7 @@
     [expectation fulfill];
   }];
   
-  OCMVerify(times(1), [mockPermissionHandler hasPermission]);
+  OCMVerify(times(1), [mockPermissionHandler checkPermissionInBackground:[OCMArg any]]);
   OCMVerify(never(), [mockGeolocationHandler getLastKnownPosition]);
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
@@ -146,7 +146,7 @@
   [plugin setGeolocationHandlerOverride:mockGeolocationHandler];
   [plugin setPermissionHandlerOverride:mockPermissionHandler];
   
-  OCMStub([mockPermissionHandler hasPermission]).andReturn(NO);
+  OCMStub([mockPermissionHandler checkPermissionInBackground:([OCMArg invokeBlockWithArgs:@(kCLAuthorizationStatusDenied), nil])]);
   
   FlutterMethodCall *call = [FlutterMethodCall methodCallWithMethodName:@"getCurrentPosition"
                                                               arguments:@{}];
@@ -159,7 +159,7 @@
     [expectation fulfill];
   }];
   
-  OCMVerify(times(1), [mockPermissionHandler hasPermission]);
+  OCMVerify(times(1), [mockPermissionHandler checkPermissionInBackground:[OCMArg any]]);
   OCMVerify(never(), [mockGeolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest resultHandler:[OCMArg any] errorHandler:[OCMArg any]]);
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
@@ -172,7 +172,7 @@
   [plugin setGeolocationHandlerOverride:mockGeolocationHandler];
   [plugin setPermissionHandlerOverride:mockPermissionHandler];
   
-  OCMStub([mockPermissionHandler hasPermission]).andReturn(YES);
+  OCMStub([mockPermissionHandler checkPermissionInBackground:([OCMArg invokeBlockWithArgs:@(kCLAuthorizationStatusAuthorizedAlways), nil])]);
   OCMStub([mockGeolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyHundredMeters
                                                        resultHandler:([OCMArg invokeBlockWithArgs:dummyLocation, nil])
                                                         errorHandler:[OCMArg any]]);
@@ -187,7 +187,7 @@
     [expectation fulfill];
   }];
   
-  OCMVerify(times(1), [mockPermissionHandler hasPermission]);
+  OCMVerify(times(1), [mockPermissionHandler checkPermissionInBackground:[OCMArg any]]);
   OCMVerify(times(1), [mockGeolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyHundredMeters resultHandler:[OCMArg any] errorHandler:[OCMArg any]]);
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
@@ -199,7 +199,7 @@
   [plugin setGeolocationHandlerOverride:mockGeolocationHandler];
   [plugin setPermissionHandlerOverride:mockPermissionHandler];
   
-  OCMStub([mockPermissionHandler hasPermission]).andReturn(YES);
+  OCMStub([mockPermissionHandler checkPermissionInBackground:([OCMArg invokeBlockWithArgs:@(kCLAuthorizationStatusAuthorizedAlways), nil])]);
   OCMStub([mockGeolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyHundredMeters
                                                        resultHandler:[OCMArg any]
                                                         errorHandler:([OCMArg invokeBlockWithArgs:@"error_code", @"error_description", nil])]);
@@ -215,7 +215,7 @@
     [expectation fulfill];
   }];
   
-  OCMVerify(times(1), [mockPermissionHandler hasPermission]);
+  OCMVerify(times(1), [mockPermissionHandler checkPermissionInBackground:[OCMArg any]]);
   OCMVerify(times(1), [mockGeolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyHundredMeters resultHandler:[OCMArg any] errorHandler:[OCMArg any]]);
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
