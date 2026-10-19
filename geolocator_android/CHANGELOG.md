@@ -1,10 +1,18 @@
-## 5.1.2
+## 5.2.1
 
+- Fixes the position updates `EventChannel` being unregistered when the plugin is detached from
+  its Activity while a position stream without a foreground notification is active. On an engine
+  that outlives the Activity, every later `listen` and `cancel` failed with a
+  `MissingPluginException` until the process was restarted.
 - Fixes an ANR caused by `NmeaClient` registering the NMEA listener and the
   GNSS status callback (synchronous Binder calls) on the main thread for every
   position request. The listener is now only registered when `useMSLAltitude`
   is requested, and `stop()` skips the Binder calls when nothing was
   registered ([#1795](https://github.com/Baseflow/flutter-geolocator/issues/1795)).
+
+## 5.2.0
+
+- Adds `maxUpdateAge` to `AndroidSettings`, allowing position streams using the Android Fused Location Provider to accept an initial historical location independently of the update interval.
 
 ## 5.1.1+1
 
