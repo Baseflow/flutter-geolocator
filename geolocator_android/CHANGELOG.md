@@ -1,3 +1,7 @@
+## 5.2.0
+
+- Adds `maxUpdateAge` to `AndroidSettings`, allowing position streams using the Android Fused Location Provider to accept an initial historical location independently of the update interval.
+
 ## 5.1.1+1
 
 - Rollsback the declaration of the `FOREGROUND_SERVICE_LOCATION` in the 
