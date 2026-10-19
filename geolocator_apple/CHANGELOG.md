@@ -1,3 +1,7 @@
+## 2.4.1
+
+* Fixes `getCurrentPosition` never completing when Core Location cannot determine a position, for example on a Mac with Wi-Fi turned off. Core Location reports `kCLErrorLocationUnknown` and keeps trying; a single position request now fails with a `PositionUpdateException` when no position arrives within 6 minutes of that error — longer than the 5-minute interval at which macOS rescans Wi-Fi networks for a position, so requests that would still succeed are not cut short. Position streams keep waiting, as before.
+
 ## 2.4.0
 
 * Adds `ActivityType.maritime` for vessels on water, including while anchored, on iOS 27 and macOS 27. Falls back to `ActivityType.otherNavigation` when built with an older SDK or running on an older OS.
