@@ -1,9 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.baseflow.geolocator">
-
-    <!-- Required since Android 14 (API 34) to run a foreground service of type "location". -->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
-
     <application>
         <service
                 android:enabled="true"
