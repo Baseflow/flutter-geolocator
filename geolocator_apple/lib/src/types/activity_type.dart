@@ -18,4 +18,10 @@ enum ActivityType {
 
   /// The location manager is being used for an unknown activity.
   other,
+
+  /// Positioning for vessels on water, including while anchored.
+  ///
+  /// Requires an iOS 27 or macOS 27 SDK and iOS 27 or macOS 27 at runtime.
+  /// Falls back to [otherNavigation] on older SDKs or operating systems.
+  maritime,
 }
