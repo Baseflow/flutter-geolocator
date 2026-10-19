@@ -1,3 +1,7 @@
+## 14.1.2
+
+- Updates the "Location accuracy" section of the README to describe the Android behaviour of `getLocationAccuracy()`: it returns `LocationAccuracyStatus.reduced` when only `ACCESS_COARSE_LOCATION` is granted, and throws a `PlatformException` with the code `PERMISSION_DENIED` when no location permission has been granted. Resolves [#1528](https://github.com/Baseflow/flutter-geolocator/issues/1528).
+
 ## 14.1.1
 
 - Fixes the Android build of the example app by pinning the Kotlin Gradle plugin to 2.4.0 and the Android Gradle Plugin to 9.1.0, matching `geolocator_android`'s example.
