@@ -31,13 +31,19 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
 @property(strong, nonatomic) GeolocatorError errorHandler;
 
 @property(strong, nonatomic, nonnull) CLLocationManager *oneTimeLocationManager;
-@property(strong, nonatomic) GeolocatorError oneTimeErrorHandler;
 
-@property(strong, nonatomic) GeolocatorResult currentLocationResultHandler;
+// The handlers of every pending single position request, in the order they
+// were made. Requests made while another one is still running share its
+// location updates, and all of them complete with the same position or error.
+@property(strong, nonatomic, nonnull) NSMutableArray<GeolocatorResult> *oneTimeResultHandlers;
+@property(strong, nonatomic, nonnull) NSMutableArray<GeolocatorError> *oneTimeErrorHandlers;
+// The most accurate accuracy asked for by the pending single position requests.
+@property(nonatomic) CLLocationAccuracy oneTimeDesiredAccuracy;
+
 @property(strong, nonatomic) GeolocatorResult listenerResultHandler;
 
-// Identifies the current single position request, so that the grace period of
-// a previous request cannot fail the one that replaced it.
+// Changes with every single position request, so that a grace period armed
+// before the latest request cannot fail the pending requests.
 @property(nonatomic) NSUInteger oneTimeRequestId;
 @property(nonatomic) BOOL oneTimeLocationUnknownPending;
 @property(nonatomic) NSTimeInterval locationUnknownGracePeriod;
@@ -54,6 +60,8 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
   }
   
   _locationUnknownGracePeriod = kLocationUnknownGracePeriodInSeconds;
+  _oneTimeResultHandlers = [[NSMutableArray alloc] init];
+  _oneTimeErrorHandlers = [[NSMutableArray alloc] init];
   
   return self;
 }
@@ -99,15 +107,22 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
 - (void)requestPositionWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                              resultHandler:(GeolocatorResult _Nonnull)resultHandler
                               errorHandler:(GeolocatorError _Nonnull)errorHandler {
-  self.oneTimeErrorHandler = errorHandler;
-  self.currentLocationResultHandler = resultHandler;
+  // A request made while another one is pending joins it instead of replacing
+  // its handlers, which would leave the earlier request without an answer.
+  BOOL joinsPendingRequest = self.oneTimeResultHandlers.count > 0;
+  [self.oneTimeResultHandlers addObject:resultHandler];
+  [self.oneTimeErrorHandlers addObject:errorHandler];
+  self.oneTimeDesiredAccuracy = joinsPendingRequest
+    ? MIN(self.oneTimeDesiredAccuracy, desiredAccuracy)
+    : desiredAccuracy;
+  // A new request restarts the grace period of every pending request.
   self.oneTimeRequestId += 1;
   self.oneTimeLocationUnknownPending = NO;
   
   BOOL showBackgroundLocationIndicator = NO;
   BOOL allowBackgroundLocationUpdates = NO;
   
-  [self startUpdatingLocationWithDesiredAccuracy:desiredAccuracy
+  [self startUpdatingLocationWithDesiredAccuracy:self.oneTimeDesiredAccuracy
                                   distanceFilter:kCLDistanceFilterNone
                pauseLocationUpdatesAutomatically:NO
                                     activityType:CLActivityTypeOther
@@ -171,8 +186,26 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
 
 - (void)stopOneTimeLocationListening {
   [[self getOneTimeLocationManager] stopUpdatingLocation];
-  self.oneTimeErrorHandler = nil;
-  self.currentLocationResultHandler = nil;
+  [self.oneTimeResultHandlers removeAllObjects];
+  [self.oneTimeErrorHandlers removeAllObjects];
+}
+
+- (void)completeOneTimeRequestsWithLocation:(CLLocation *)location {
+  NSArray<GeolocatorResult> *resultHandlers = [self.oneTimeResultHandlers copy];
+  [self.oneTimeResultHandlers removeAllObjects];
+  [self.oneTimeErrorHandlers removeAllObjects];
+  for (GeolocatorResult resultHandler in resultHandlers) {
+    resultHandler(location);
+  }
+}
+
+- (void)failOneTimeRequestsWithDescription:(NSString *)errorDescription {
+  NSArray<GeolocatorError> *errorHandlers = [self.oneTimeErrorHandlers copy];
+  [self.oneTimeResultHandlers removeAllObjects];
+  [self.oneTimeErrorHandlers removeAllObjects];
+  for (GeolocatorError errorHandler in errorHandlers) {
+    errorHandler(GeolocatorErrorLocationUpdateFailure, errorDescription);
+  }
 }
 
 - (void)stopListening {
@@ -183,7 +216,7 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
 
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray<CLLocation *> *)locations {
-  if (!self.listenerResultHandler && !self.currentLocationResultHandler) return;
+  if (!self.listenerResultHandler && self.oneTimeResultHandlers.count == 0) return;
   
   CLLocation *mostRecentLocation = [locations lastObject];
   NSTimeInterval ageInSeconds = -[mostRecentLocation.timestamp timeIntervalSinceNow];
@@ -193,16 +226,13 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
     return;
   }
   
-  if ([locations lastObject]) {
-    if (self.currentLocationResultHandler != nil) {
-      self.currentLocationResultHandler(mostRecentLocation);
-    }
+  if (mostRecentLocation) {
+    [self completeOneTimeRequestsWithLocation:mostRecentLocation];
     if (self.listenerResultHandler != nil) {
       self.listenerResultHandler(mostRecentLocation);
     }
   }
   
-  self.currentLocationResultHandler = nil;
   if (manager == [self getOneTimeLocationManager]) {
     [self stopOneTimeLocationListening];
   }
@@ -227,9 +257,7 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
     self.errorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
   }
   
-  if (self.oneTimeErrorHandler) {
-    self.oneTimeErrorHandler(GeolocatorErrorLocationUpdateFailure, error.localizedDescription);
-  }
+  [self failOneTimeRequestsWithDescription:error.localizedDescription];
   
   if (manager == [self getOneTimeLocationManager]) {
     [self stopOneTimeLocationListening];
@@ -237,7 +265,7 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
 }
 
 - (void)failOneTimeRequestAfterGracePeriodWithDescription:(NSString *)errorDescription {
-  if (self.currentLocationResultHandler == nil || self.oneTimeLocationUnknownPending) {
+  if (self.oneTimeResultHandlers.count == 0 || self.oneTimeLocationUnknownPending) {
     return;
   }
   self.oneTimeLocationUnknownPending = YES;
@@ -247,18 +275,16 @@ double const kLocationUnknownGracePeriodInSeconds = 360.0;
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.locationUnknownGracePeriod * NSEC_PER_SEC)),
                  dispatch_get_main_queue(), ^{
     typeof(self) strongSelf = weakSelf;
-    // A position arrived, or another request took over, in the meantime.
+    // A position arrived, or a new request restarted the grace period, in
+    // the meantime.
     if (strongSelf == nil
         || strongSelf.oneTimeRequestId != requestId
-        || strongSelf.currentLocationResultHandler == nil) {
+        || strongSelf.oneTimeResultHandlers.count == 0) {
       return;
     }
     
-    GeolocatorError errorHandler = strongSelf.oneTimeErrorHandler;
-    [strongSelf stopOneTimeLocationListening];
-    if (errorHandler) {
-      errorHandler(GeolocatorErrorLocationUpdateFailure, errorDescription);
-    }
+    [[strongSelf getOneTimeLocationManager] stopUpdatingLocation];
+    [strongSelf failOneTimeRequestsWithDescription:errorDescription];
   });
 }
 

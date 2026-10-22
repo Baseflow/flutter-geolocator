@@ -203,6 +203,146 @@
 }
 
 
+- (void)testConcurrentRequestsShouldAllReceiveTheLocation {
+  CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.1, 6.4)
+                                                       altitude:0.0
+                                             horizontalAccuracy:0
+                                               verticalAccuracy:0
+                                                      timestamp:[NSDate date]];
+
+  XCTestExpectation *firstExpectation = [self expectationWithDescription:@"expect the first request to receive the location"];
+  XCTestExpectation *secondExpectation = [self expectationWithDescription:@"expect the second request to receive the location"];
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable result) {
+    XCTAssertEqual(result, location);
+    [firstExpectation fulfill];
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    XCTFail(@"no error was reported");
+  }];
+  // A second request while the first one is still pending.
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable result) {
+    XCTAssertEqual(result, location);
+    [secondExpectation fulfill];
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    XCTFail(@"no error was reported");
+  }];
+
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didUpdateLocations: @[location]];
+
+  [self waitForExpectations:@[firstExpectation, secondExpectation] timeout:5.0];
+
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager stopUpdatingLocation]);
+}
+
+- (void)testConcurrentRequestsShouldAllReceiveTheError {
+  NSError *error = [NSError errorWithDomain:kCLErrorDomain code:kCLErrorDenied userInfo:nil];
+
+  XCTestExpectation *firstExpectation = [self expectationWithDescription:@"expect the first request to fail"];
+  XCTestExpectation *secondExpectation = [self expectationWithDescription:@"expect the second request to fail"];
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {
+    XCTFail(@"no position was reported");
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    XCTAssertEqualObjects(errorCode, GeolocatorErrorLocationUpdateFailure);
+    [firstExpectation fulfill];
+  }];
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {
+    XCTFail(@"no position was reported");
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    XCTAssertEqualObjects(errorCode, GeolocatorErrorLocationUpdateFailure);
+    [secondExpectation fulfill];
+  }];
+
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didFailWithError: error];
+
+  [self waitForExpectations:@[firstExpectation, secondExpectation] timeout:5.0];
+
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager stopUpdatingLocation]);
+}
+
+- (void)testConcurrentRequestsShouldAllFailWhenLocationStaysUnknownPastGracePeriod {
+  NSError *error = [NSError errorWithDomain:kCLErrorDomain code:kCLErrorLocationUnknown userInfo:nil];
+  [_geolocationHandler setLocationUnknownGracePeriodOverride:0.1];
+
+  XCTestExpectation *firstExpectation = [self expectationWithDescription:@"expect the first request to fail"];
+  XCTestExpectation *secondExpectation = [self expectationWithDescription:@"expect the second request to fail"];
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {
+    XCTFail(@"no position was reported");
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    [firstExpectation fulfill];
+  }];
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {
+    XCTFail(@"no position was reported");
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {
+    [secondExpectation fulfill];
+  }];
+
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didFailWithError: error];
+
+  [self waitForExpectations:@[firstExpectation, secondExpectation] timeout:5.0];
+}
+
+- (void)testRequestAfterACompletedRequestShouldOnlyAnswerTheNewRequest {
+  CLLocation *firstLocation = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.0, 6.4)
+                                                            altitude:0.0
+                                                  horizontalAccuracy:0
+                                                    verticalAccuracy:0
+                                                           timestamp:[NSDate date]];
+  CLLocation *secondLocation = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(54.1, 6.4)
+                                                             altitude:0.0
+                                                   horizontalAccuracy:0
+                                                     verticalAccuracy:0
+                                                            timestamp:[NSDate date]];
+
+  __block NSUInteger firstCalls = 0;
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {
+    firstCalls += 1;
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didUpdateLocations: @[firstLocation]];
+
+  XCTestExpectation *expectation = [self expectationWithDescription:@"expect the new request to receive the new location"];
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {
+    XCTAssertEqual(location, secondLocation);
+    [expectation fulfill];
+  }
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+  [_geolocationHandler locationManager:_mockOneTimeLocationManager didUpdateLocations: @[secondLocation]];
+
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+  XCTAssertEqual(firstCalls, 1);
+}
+
+- (void)testJoiningRequestShouldKeepTheMostAccurateAccuracy {
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyHundredMeters
+                                            resultHandler:^(CLLocation * _Nullable location) {}
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyBest
+                                            resultHandler:^(CLLocation * _Nullable location) {}
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+  // A less accurate request does not lower the accuracy the pending requests asked for.
+  [_geolocationHandler requestPositionWithDesiredAccuracy:kCLLocationAccuracyKilometer
+                                            resultHandler:^(CLLocation * _Nullable location) {}
+                                             errorHandler:^(NSString * _Nonnull errorCode, NSString * _Nonnull errorDescription) {}];
+
+  OCMVerify(times(1), [self->_mockOneTimeLocationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters]);
+  OCMVerify(times(2), [self->_mockOneTimeLocationManager setDesiredAccuracy:kCLLocationAccuracyBest]);
+  OCMVerify(never(), [self->_mockOneTimeLocationManager setDesiredAccuracy:kCLLocationAccuracyKilometer]);
+}
+
+
 #pragma mark - Test listening to location stream
 
 - (void)testStartListeningShouldNotStopListeningWhenListeningToStream {
