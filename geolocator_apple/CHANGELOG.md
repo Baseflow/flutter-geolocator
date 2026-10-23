@@ -1,3 +1,7 @@
+## 2.4.3
+
+* Fixes `getCurrentPosition` never completing when it is called again before an earlier call has completed. The new request replaced the handlers of the pending one, which was left waiting forever. Requests made while another one is pending now share its location updates, and all of them complete with the same position or error, using the most accurate of the requested accuracies. Each new request restarts the `kCLErrorLocationUnknown` grace period for every pending request.
+
 ## 2.4.2
 
 * Reads the location permission status off the main thread in `checkPermission`, `requestPermission`, `getCurrentPosition` and `getLastKnownPosition`. The status read waits for a synchronous reply from `locationd`, which froze the app for seconds when `locationd` was slow to answer.
