@@ -149,7 +149,20 @@ public class PermissionManager
       Log.i(
           "Geolocator",
           "The grantResults array is empty. This can happen when the user cancels the permission request");
-      return false;
+      final PermissionResultCallback pendingResult = this.resultCallback;
+      final ErrorCallback pendingError = this.errorCallback;
+      this.resultCallback = null;
+      this.errorCallback = null;
+      try {
+        if (pendingResult != null) {
+          pendingResult.onResult(checkPermissionStatus(this.activity));
+        }
+      } catch (PermissionUndefinedException ex) {
+        if (pendingError != null) {
+          pendingError.onError(ErrorCodes.permissionDefinitionsNotFound);
+        }
+      }
+      return true;
     }
 
     LocationPermission locationPermission = LocationPermission.denied;
