@@ -22,6 +22,20 @@ public class LocationMapperTest {
   }
 
   @Test
+  public void toHashMap_mapsElapsedRealtimeNanos() {
+    Location location = mock(Location.class);
+    when(location.getLatitude()).thenReturn(52.0);
+    when(location.getLongitude()).thenReturn(5.0);
+    when(location.getTime()).thenReturn(1000L);
+    when(location.getElapsedRealtimeNanos()).thenReturn(123456789012345L);
+    when(location.getExtras()).thenReturn(null);
+
+    Map<String, Object> map = LocationMapper.toHashMap(location);
+
+    assertEquals(123456789012345L, map.get("elapsed_realtime_nanos"));
+  }
+
+  @Test
   public void toHashMap_omitsVerticalSpeedWhenNotProvided() {
     Location location = mock(Location.class);
     when(location.getLatitude()).thenReturn(52.0);
