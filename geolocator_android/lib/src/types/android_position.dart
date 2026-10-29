@@ -13,6 +13,7 @@ class AndroidPosition extends Position {
   const AndroidPosition({
     required this.satelliteCount,
     required this.satellitesUsedInFix,
+    this.elapsedRealtimeNanos,
     required longitude,
     required latitude,
     required timestamp,
@@ -71,18 +72,33 @@ class AndroidPosition extends Position {
   /// If the number of satellites used in fix is not available it returns the default value: 0.0.
   final double satellitesUsedInFix;
 
+  /// The time of this fix on the elapsed-realtime clock, in nanoseconds since
+  /// the device booted, deep sleep included
+  /// (`Location.getElapsedRealtimeNanos()`).
+  ///
+  /// Unlike [timestamp], which is wall-clock time and can be changed by the
+  /// user, this clock is monotonic. Subtracting it from
+  /// `SystemClock.elapsedRealtimeNanos()` gives the age of the fix.
+  ///
+  /// Returns null if the platform did not report it.
+  final int? elapsedRealtimeNanos;
+
   @override
   bool operator ==(Object other) {
     var areEqual = other is AndroidPosition &&
         super == other &&
         other.satelliteCount == satelliteCount &&
-        other.satellitesUsedInFix == satellitesUsedInFix;
+        other.satellitesUsedInFix == satellitesUsedInFix &&
+        other.elapsedRealtimeNanos == elapsedRealtimeNanos;
     return areEqual;
   }
 
   @override
   int get hashCode =>
-      satelliteCount.hashCode ^ satellitesUsedInFix.hashCode ^ super.hashCode;
+      satelliteCount.hashCode ^
+      satellitesUsedInFix.hashCode ^
+      elapsedRealtimeNanos.hashCode ^
+      super.hashCode;
 
   /// Converts the supplied [Map] to an instance of the [AndroidPosition] class.
   static AndroidPosition fromMap(dynamic message) {
@@ -93,6 +109,8 @@ class AndroidPosition extends Position {
     return AndroidPosition(
       satelliteCount: positionMap['gnss_satellite_count'] ?? 0.0,
       satellitesUsedInFix: positionMap['gnss_satellites_used_in_fix'] ?? 0.0,
+      elapsedRealtimeNanos:
+          (positionMap['elapsed_realtime_nanos'] as num?)?.toInt(),
       latitude: position.latitude,
       longitude: position.longitude,
       timestamp: position.timestamp,
@@ -127,6 +145,7 @@ class AndroidPosition extends Position {
       ..addAll({
         'gnss_satellite_count': satelliteCount,
         'gnss_satellites_used_in_fix': satellitesUsedInFix,
+        'elapsed_realtime_nanos': elapsedRealtimeNanos,
       });
   }
 }
