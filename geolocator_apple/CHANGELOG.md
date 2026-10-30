@@ -1,3 +1,7 @@
+## 2.4.4
+
+* Fixes a crash (`EXC_BAD_ACCESS`) when the service status stream is cancelled while a location authorization change is being delivered. The status is read off the main thread before it is sent to Dart; if `getServiceStatusStream()` was cancelled in between, the plugin called the event sink after it had been cleared. Such an event is now dropped.
+
 ## 2.4.3
 
 * Fixes `getCurrentPosition` never completing when it is called again before an earlier call has completed. The new request replaced the handlers of the pending one, which was left waiting forever. Requests made while another one is pending now share its location updates, and all of them complete with the same position or error, using the most accurate of the requested accuracies. Each new request restarts the `kCLErrorLocationUnknown` grace period for every pending request.
