@@ -163,7 +163,8 @@ Traps:
 Per [CONTRIBUTING.md](CONTRIBUTING.md) and Baseflow's open-source forking workflow:
 
 1. Fork `https://github.com/Baseflow/flutter-geolocator` on GitHub.
-2. Clone your fork: `git clone git@github.com:<your_name>/flutter-geolocator.git`
+2. Clone your fork: `git clone git@github.com:<your_name>/flutter-geolocator.git`,
+   then enter the checkout: `cd flutter-geolocator`.
 3. Add upstream (the official repo you fetch from, not your fork):
 
 ```bash
