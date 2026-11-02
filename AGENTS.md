@@ -330,10 +330,10 @@ platform interface method, or the app-facing package using a new implementation)
 publish the dependency first and raise the constraint in a pull request before
 releasing the dependent package.
 
-`CHANGELOG.md` uses `## x.y.z` headings with no date and a flat list of `-`
-bullets, newest first, with no `## [Unreleased]` section. Match that format.
-Introducing a different one is a separate decision, not part of an unrelated
-change.
+Use `## x.y.z` headings without dates for new releases, newest first. Preserve
+that package's existing bullet style and leave unrelated historical entries
+unchanged. Do not introduce a new `## [Unreleased]` section as part of an
+unrelated change.
 
 Published versions are immutable, so keep branch names out of URLs in
 `pubspec.yaml` and in docs: a branch-specific link becomes a permanent dead link
