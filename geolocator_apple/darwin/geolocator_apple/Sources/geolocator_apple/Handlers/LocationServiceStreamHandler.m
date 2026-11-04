@@ -37,10 +37,15 @@
   dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     BOOL isEnabled = [CLLocationManager locationServicesEnabled];
     dispatch_async(dispatch_get_main_queue(), ^(void) {
+        // The stream can be cancelled while the service status is read off the
+        // main thread. onCancel clears the sink, and calling a nil block crashes.
+        FlutterEventSink eventSink = self->_eventSink;
+        if (!eventSink) return;
+
         if (isEnabled) {
-            self->_eventSink([NSNumber numberWithInt:(ServiceStatus)enabled]);
+            eventSink([NSNumber numberWithInt:(ServiceStatus)enabled]);
         } else {
-            self->_eventSink([NSNumber numberWithInt:(ServiceStatus)disabled]);
+            eventSink([NSNumber numberWithInt:(ServiceStatus)disabled]);
         }
     });
   });
