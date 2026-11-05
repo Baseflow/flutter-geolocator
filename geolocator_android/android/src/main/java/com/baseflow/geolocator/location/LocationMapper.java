@@ -20,6 +20,7 @@ public class LocationMapper {
     position.put("latitude", location.getLatitude());
     position.put("longitude", location.getLongitude());
     position.put("timestamp", location.getTime());
+    position.put("elapsed_realtime_nanos", location.getElapsedRealtimeNanos());
     position.put("is_mocked", isMocked(location));
 
     if (location.hasAltitude()) position.put("altitude", location.getAltitude());

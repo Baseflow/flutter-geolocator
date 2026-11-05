@@ -1,3 +1,10 @@
+## 5.3.0
+
+- Adds `elapsedRealtimeNanos` to `AndroidPosition`: the time of the fix on the
+  elapsed-realtime clock (`Location.getElapsedRealtimeNanos()`). Unlike `timestamp`,
+  it does not change when the user sets the device clock, so the age of a
+  position can be computed against `SystemClock.elapsedRealtimeNanos()`.
+
 ## 5.2.1
 
 - Fixes the position updates `EventChannel` being unregistered when the plugin is detached from

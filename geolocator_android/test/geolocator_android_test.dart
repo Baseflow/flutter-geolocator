@@ -1598,6 +1598,33 @@ void main() {
         expect(androidPosition.hasAltitude, isFalse);
         expect(androidPosition.hasSpeed, isFalse);
       });
+
+      test('fromMap preserves elapsedRealtimeNanos', () {
+        final positionMap = {
+          'latitude': 52.561270,
+          'longitude': 5.639382,
+          'timestamp': 1000,
+          'elapsed_realtime_nanos': 123456789012345,
+        };
+
+        final androidPosition = AndroidPosition.fromMap(positionMap);
+
+        expect(androidPosition.elapsedRealtimeNanos, 123456789012345);
+        expect(
+            AndroidPosition.fromMap(androidPosition.toJson()), androidPosition);
+      });
+
+      test('fromMap without elapsedRealtimeNanos returns null', () {
+        final positionMap = {
+          'latitude': 52.561270,
+          'longitude': 5.639382,
+          'timestamp': 1000,
+        };
+
+        final androidPosition = AndroidPosition.fromMap(positionMap);
+
+        expect(androidPosition.elapsedRealtimeNanos, isNull);
+      });
     });
   });
 }
