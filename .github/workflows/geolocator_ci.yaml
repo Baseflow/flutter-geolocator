@@ -1,0 +1,174 @@
+name: Geolocator - Continuous Integration
+
+# Single entry point for CI. Every package is checked by the reusable
+# geolocator_package.yaml, and only when that package changed. Make `ci-result`
+# the only required status check: it reports on every run, also when the
+# package jobs are skipped.
+#
+# Starting it by hand runs every package, for example to check main against a
+# new Flutter stable release.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A new push to a pull request cancels the run for the previous one. Every other
+# run gets a group of its own and is never cancelled, so every merged commit and
+# every manual run gets a result.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# The called workflow inherits these and can only narrow them. paths-filter
+# reads the changed files of a pull request through the API.
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      platform_interface: ${{ steps.filter.outputs.platform_interface }}
+      android: ${{ steps.filter.outputs.android }}
+      apple: ${{ steps.filter.outputs.apple }}
+      linux: ${{ steps.filter.outputs.linux }}
+      web: ${{ steps.filter.outputs.web }}
+      windows: ${{ steps.filter.outputs.windows }}
+      app_facing: ${{ steps.filter.outputs.app_facing }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dorny/paths-filter@v4
+        id: filter
+        if: github.event_name != 'workflow_dispatch'
+        with:
+          # The repository is not a pub workspace: every package resolves its
+          # siblings from pub.dev and only its example builds against the local
+          # sources, so a package's filter lists just its own directory.
+          filters: |
+            shared: &shared
+              - '.github/workflows/geolocator_ci.yaml'
+              - '.github/workflows/geolocator_package.yaml'
+            platform_interface:
+              - *shared
+              - 'geolocator_platform_interface/**'
+            android:
+              - *shared
+              - 'geolocator_android/**'
+            apple:
+              - *shared
+              - 'geolocator_apple/**'
+            linux:
+              - *shared
+              - 'geolocator_linux/**'
+            web:
+              - *shared
+              - 'geolocator_web/**'
+            windows:
+              - *shared
+              - 'geolocator_windows/**'
+            app_facing:
+              - *shared
+              - 'geolocator/**'
+
+  platform_interface:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.platform_interface == 'true'
+    uses: ./.github/workflows/geolocator_package.yaml
+    with:
+      package: geolocator_platform_interface
+      runs-on: ubuntu-latest
+      unit-tests: true
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  android:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.android == 'true'
+    uses: ./.github/workflows/geolocator_package.yaml
+    with:
+      package: geolocator_android
+      runs-on: ubuntu-latest
+      java: true
+      unit-tests: true
+      example-build: flutter build apk --release
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  apple:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.apple == 'true'
+    uses: ./.github/workflows/geolocator_package.yaml
+    with:
+      package: geolocator_apple
+      runs-on: macos-latest
+      unit-tests: true
+      example-build: flutter build ios --no-codesign --release
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  # The Linux desktop build needs the GTK headers and Ninja, which the runner
+  # image does not ship.
+  linux:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.linux == 'true'
+    uses: ./.github/workflows/geolocator_package.yaml
+    with:
+      package: geolocator_linux
+      runs-on: ubuntu-latest
+      setup: |
+        sudo apt-get update -y
+        sudo apt-get install -y ninja-build libgtk-3-dev
+      unit-tests: true
+      example-build: flutter build linux --release
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  # The tests use browser APIs, so they run in Chrome, which the runner image
+  # ships. `flutter test` writes no coverage there, so nothing is uploaded.
+  web:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.web == 'true'
+    uses: ./.github/workflows/geolocator_package.yaml
+    with:
+      package: geolocator_web
+      runs-on: ubuntu-latest
+      unit-tests: true
+      test-arguments: --platform chrome
+      example-build: flutter build web --release
+
+  windows:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.windows == 'true'
+    uses: ./.github/workflows/geolocator_package.yaml
+    with:
+      package: geolocator_windows
+      runs-on: windows-latest
+      example-build: flutter build windows --release
+
+  app_facing:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.app_facing == 'true'
+    uses: ./.github/workflows/geolocator_package.yaml
+    with:
+      package: geolocator
+      runs-on: macos-latest
+      java: true
+      unit-tests: true
+      example-build: |
+        flutter build apk --release
+        flutter build ios --release --no-codesign
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  ci-result:            # ← the only required check
+    needs: [changes, platform_interface, android, apple, linux, web, windows, app_facing]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            exit 1
+          fi
