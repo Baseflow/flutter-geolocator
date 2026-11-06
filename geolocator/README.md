@@ -72,7 +72,12 @@ Starting from Android 10 you need to add the `ACCESS_BACKGROUND_LOCATION` permis
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 ```
 
-Starting from Android 14 (SDK 34) the [`FOREGROUND_SERVICE_LOCATION`](https://developer.android.com/reference/android/Manifest.permission#FOREGROUND_SERVICE_LOCATION) permission is required to run a foreground service of type location, which this plugin uses to keep delivering updates while your app is in the foreground. The plugin's own manifest already declares it, so it is merged into your app automatically — no action needed on your part.
+If you receive location updates through a foreground service (by passing a `foregroundNotificationConfig` to `AndroidSettings`, see [Platform specific location settings](#platform-specific-location-settings)), you need to add the [`FOREGROUND_SERVICE`](https://developer.android.com/reference/android/Manifest.permission#FOREGROUND_SERVICE) permission and, when targeting Android 14 (SDK 34) or higher, the [`FOREGROUND_SERVICE_LOCATION`](https://developer.android.com/reference/android/Manifest.permission#FOREGROUND_SERVICE_LOCATION) permission. The plugin doesn't declare them itself, so apps that don't use the foreground service aren't asked by Google Play for a foreground service declaration:
+
+``` xml
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+```
 
 > **NOTE:** Specifying the `ACCESS_COARSE_LOCATION` permission results in location updates with an accuracy approximately equivalent to a city block. It might take a long time (minutes) before you will get your first locations fix as `ACCESS_COARSE_LOCATION` will only use the network services to calculate the position of the device. More information can be found [here](https://developer.android.com/training/location/retrieve-current#permissions). 
 
