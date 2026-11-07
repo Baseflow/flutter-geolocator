@@ -125,10 +125,17 @@ public class PermissionManager
       return false;
     }
 
-    if (this.activity == null) {
+    final ErrorCallback errorCb = this.errorCallback;
+    final PermissionResultCallback resultCb = this.resultCallback;
+    final Activity currentActivity = this.activity;
+    this.errorCallback = null;
+    this.resultCallback = null;
+    this.activity = null;
+
+    if (currentActivity == null) {
       Log.e("Geolocator", "Trying to process permission result without an valid Activity instance");
-      if (this.errorCallback != null) {
-        this.errorCallback.onError(ErrorCodes.activityMissing);
+      if (errorCb != null) {
+        errorCb.onError(ErrorCodes.activityMissing);
       }
       return false;
     }
@@ -136,10 +143,10 @@ public class PermissionManager
     List<String> requestedPermissions;
 
     try {
-      requestedPermissions = getLocationPermissionsFromManifest(this.activity);
+      requestedPermissions = getLocationPermissionsFromManifest(currentActivity);
     } catch (PermissionUndefinedException ex) {
-      if (this.errorCallback != null) {
-        this.errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
+      if (errorCb != null) {
+        errorCb.onError(ErrorCodes.permissionDefinitionsNotFound);
       }
 
       return false;
@@ -165,7 +172,7 @@ public class PermissionManager
       if (grantResults[requestedPermissionIndex] == PackageManager.PERMISSION_GRANTED) {
         grantedResult = PackageManager.PERMISSION_GRANTED;
       }
-      if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+      if (ActivityCompat.shouldShowRequestPermissionRationale(currentActivity, permission)) {
         shouldShowRationale = true;
       }
     }
@@ -187,8 +194,8 @@ public class PermissionManager
       }
     }
 
-    if (this.resultCallback != null) {
-      this.resultCallback.onResult(locationPermission);
+    if (resultCb != null) {
+      resultCb.onResult(locationPermission);
     }
 
     return true;
