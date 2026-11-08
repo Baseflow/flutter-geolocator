@@ -353,4 +353,36 @@
   [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
+#pragma mark - Test service status stream
+
+- (void)testServiceStatusEventAfterCancelIsDropped {
+  LocationServiceStreamHandler *handler = [[LocationServiceStreamHandler alloc] init];
+  [handler onListenWithArguments:nil eventSink:^(id _Nullable event) {}];
+
+  // The authorization change arrives, and the stream is cancelled before the
+  // status, read on a background queue, is sent on the main queue.
+  [handler locationManager:OCMClassMock([CLLocationManager class])
+      didChangeAuthorizationStatus:kCLAuthorizationStatusAuthorizedWhenInUse];
+  [handler onCancelWithArguments:nil];
+
+  // Called the cleared sink, and crashed, before the fix.
+  [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:1.0]];
+}
+
+- (void)testServiceStatusEventIsSentWhileListening {
+  LocationServiceStreamHandler *handler = [[LocationServiceStreamHandler alloc] init];
+  XCTestExpectation *expectation = [self expectationWithDescription:@"The service status should be sent to the event sink."];
+  expectation.assertForOverFulfill = NO;
+  [handler onListenWithArguments:nil eventSink:^(id _Nullable event) {
+    XCTAssertTrue([event isKindOfClass:[NSNumber class]]);
+    [expectation fulfill];
+  }];
+
+  [handler locationManager:OCMClassMock([CLLocationManager class])
+      didChangeAuthorizationStatus:kCLAuthorizationStatusAuthorizedWhenInUse];
+
+  [self waitForExpectationsWithTimeout:5.0 handler:nil];
+  [handler onCancelWithArguments:nil];
+}
+
 @end
