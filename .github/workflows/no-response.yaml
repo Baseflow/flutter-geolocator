@@ -39,7 +39,7 @@ jobs:
       # the `status: needs more info` label, the issue should be closed automatically.
       # 5. Set the `close-issue-message` parameter with a text that will be placed as a comment to the respective issue that
       # is closed to explain why the issue was closed.
-      - uses: actions/stale@v9
+      - uses: actions/stale@v10
         with:
           stale-issue-label: 'status: needs more info'
           days-before-stale: -1
