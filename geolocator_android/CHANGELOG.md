@@ -1,3 +1,10 @@
+## 5.2.2
+
+- Fixes `requestPermission()` never completing when Android interrupts the
+  permission request and delivers empty results. The request now completes with
+  the current permission status
+  ([#1112](https://github.com/Baseflow/flutter-geolocator/issues/1112)).
+
 ## 5.2.1
 
 - Fixes the position updates `EventChannel` being unregistered when the plugin is detached from
