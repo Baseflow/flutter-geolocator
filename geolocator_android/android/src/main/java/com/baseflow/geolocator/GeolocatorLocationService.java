@@ -35,6 +35,7 @@ public class GeolocatorLocationService extends Service {
   private final LocalBinder binder = new LocalBinder(this);
   // Service is foreground
   private boolean isForeground = false;
+  private int activeNotificationId = ONGOING_NOTIFICATION_ID;
   private int connectedEngines = 0;
   private int listenerCount = 0;
   @Nullable private Activity activity = null;
@@ -132,6 +133,11 @@ public class GeolocatorLocationService extends Service {
     }
   }
 
+  private int getNotificationId(ForegroundNotificationOptions options) {
+    Integer customId = options.getNotificationId();
+    return customId != null ? customId : ONGOING_NOTIFICATION_ID;
+  }
+
   public void enableBackgroundMode(ForegroundNotificationOptions options) {
     if (backgroundNotification != null) {
       Log.d(TAG, "Service already in foreground mode.");
@@ -139,12 +145,13 @@ public class GeolocatorLocationService extends Service {
     } else {
       Log.d(TAG, "Start service in foreground mode.");
 
+      activeNotificationId = getNotificationId(options);
       backgroundNotification =
           new BackgroundNotification(
-              this.getApplicationContext(), CHANNEL_ID, ONGOING_NOTIFICATION_ID, options);
+              this.getApplicationContext(), CHANNEL_ID, activeNotificationId, options);
       backgroundNotification.updateChannel(options.getNotificationChannelName());
       Notification notification = backgroundNotification.build();
-      startForeground(ONGOING_NOTIFICATION_ID, notification);
+      startForeground(activeNotificationId, notification);
       isForeground = true;
     }
     obtainWakeLocks(options);
