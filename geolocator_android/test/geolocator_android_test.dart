@@ -1453,6 +1453,7 @@ void main() {
             ),
             notificationText: 'text',
             notificationTitle: 'title',
+            notificationId: 12345,
             setOngoing: true,
           ),
         );
@@ -1517,6 +1518,24 @@ void main() {
         expect(
           jsonMap['foregroundNotificationConfig']['color'],
           settings.foregroundNotificationConfig!.color!.toARGB32(),
+        );
+        expect(
+          jsonMap['foregroundNotificationConfig']['notificationId'],
+          settings.foregroundNotificationConfig!.notificationId,
+        );
+      });
+
+      test('Should serialize null notificationId when not provided', () async {
+        final settings = AndroidSettings(
+          foregroundNotificationConfig: const ForegroundNotificationConfig(
+            notificationText: 'text',
+            notificationTitle: 'title',
+          ),
+        );
+        final jsonMap = settings.toJson();
+        expect(
+          jsonMap['foregroundNotificationConfig']['notificationId'],
+          isNull,
         );
       });
 

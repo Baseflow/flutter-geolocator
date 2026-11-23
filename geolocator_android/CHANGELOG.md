@@ -1,3 +1,7 @@
+## 5.3.0
+
+- Adds optional `notificationId` to `ForegroundNotificationConfig`, allowing the foreground service to reuse an existing notification instead of always creating its own ([#1200](https://github.com/Baseflow/flutter-geolocator/issues/1200)).
+
 ## 5.2.1
 
 - Fixes the position updates `EventChannel` being unregistered when the plugin is detached from

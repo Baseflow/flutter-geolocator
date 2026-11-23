@@ -49,6 +49,9 @@ class ForegroundNotificationConfig {
   /// [setOngoing] indicates wether or not the displayed notification is
   /// persistent and the user cannot dismiss it.
   /// [color] is the accent color that is applied to the [notificationIcon].
+  /// [notificationId] is an optional Android notification ID. When provided it
+  /// is used instead of the default ID, so the service can share a
+  /// notification with other foreground services.
   const ForegroundNotificationConfig({
     required this.notificationTitle,
     required this.notificationText,
@@ -59,6 +62,7 @@ class ForegroundNotificationConfig {
     this.enableWakeLock = false,
     this.setOngoing = false,
     this.color,
+    this.notificationId,
   });
 
   /// The title used for the foreground service notification.
@@ -109,6 +113,15 @@ class ForegroundNotificationConfig {
   /// If this color is null, a system default color is used.
   final Color? color;
 
+  /// The Android notification ID used for the foreground service notification.
+  ///
+  /// When provided, the foreground service uses this ID instead of the
+  /// default one. This is useful when multiple foreground services should
+  /// share a single notification.
+  ///
+  /// If this is null, the default ID is used.
+  final int? notificationId;
+
   /// Returns a JSON representation of this class.
   Map<String, dynamic> toJson() {
     return {
@@ -120,6 +133,7 @@ class ForegroundNotificationConfig {
       'notificationChannelName': notificationChannelName,
       'setOngoing': setOngoing,
       'color': color?.toARGB32(),
+      'notificationId': notificationId,
     };
   }
 }
