@@ -1,3 +1,7 @@
+## 4.5.0
+
+- Adds `isProducedByAccessory` to `Position`, which tells whether an external accessory, such as a Bluetooth GPS receiver, determined the position instead of the device itself. Platforms that do not report it leave it `false`.
+
 ## 4.4.1
 
 - Corrects the documentation of `LocationAccuracyStatus` and `getLocationAccuracy()`, which said that Android always returns `LocationAccuracyStatus.unknown` and that the status only applies to iOS 14 and higher. On Android the status is `precise` or `reduced`, depending on the granted location permission. The documentation now describes the behaviour on each platform. Resolves [#1528](https://github.com/Baseflow/flutter-geolocator/issues/1528).

@@ -19,6 +19,7 @@ class Position {
     required this.speedAccuracy,
     this.floor,
     this.isMocked = false,
+    this.isProducedByAccessory = false,
     this.verticalSpeed = 0.0,
     this.verticalSpeedAccuracy = 0.0,
     this.hasAccuracy = false,
@@ -128,6 +129,13 @@ class Position {
   /// When not available the default value is false.
   final bool isMocked;
 
+  /// Will be true on iOS 15 and higher when the flag isProducedByAccessory is
+  /// true, that is when the position was determined by an external accessory,
+  /// such as a Bluetooth GPS receiver, instead of the device itself.
+  ///
+  /// When not available the default value is false.
+  final bool isProducedByAccessory;
+
   /// Whether the platform actually reported [accuracy].
   ///
   /// When this is `false`, [accuracy] carries no measurement: the platform
@@ -201,6 +209,7 @@ class Position {
         other.speedAccuracy == speedAccuracy &&
         other.timestamp == timestamp &&
         other.isMocked == isMocked &&
+        other.isProducedByAccessory == isProducedByAccessory &&
         other.verticalSpeed == verticalSpeed &&
         other.verticalSpeedAccuracy == verticalSpeedAccuracy &&
         other.hasAccuracy == hasAccuracy &&
@@ -230,6 +239,7 @@ class Position {
       speedAccuracy.hashCode ^
       timestamp.hashCode ^
       isMocked.hashCode ^
+      isProducedByAccessory.hashCode ^
       verticalSpeed.hashCode ^
       verticalSpeedAccuracy.hashCode ^
       hasAccuracy.hashCode ^
@@ -283,6 +293,7 @@ class Position {
       speed: _toDouble(positionMap['speed']),
       speedAccuracy: _toDouble(positionMap['speed_accuracy']),
       isMocked: positionMap['is_mocked'] ?? false,
+      isProducedByAccessory: positionMap['is_produced_by_accessory'] ?? false,
       verticalSpeed: _toDouble(positionMap['vertical_speed']),
       verticalSpeedAccuracy: _toDouble(positionMap['vertical_speed_accuracy']),
       // A platform that could not measure a value omits its key — see
@@ -325,6 +336,7 @@ class Position {
         'speed': speed,
         'speed_accuracy': speedAccuracy,
         'is_mocked': isMocked,
+        'is_produced_by_accessory': isProducedByAccessory,
         'vertical_speed': verticalSpeed,
         'vertical_speed_accuracy': verticalSpeedAccuracy,
         'has_accuracy': hasAccuracy,
