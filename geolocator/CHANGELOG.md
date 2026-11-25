@@ -1,3 +1,8 @@
+## 14.1.3
+
+- Fixes the Android permissions section of the README: apps that pass a `foregroundNotificationConfig` must add the `FOREGROUND_SERVICE` and `FOREGROUND_SERVICE_LOCATION` permissions to their own manifest. `geolocator_android` no longer declares `FOREGROUND_SERVICE_LOCATION` since 5.1.1+1 (see [#1806](https://github.com/Baseflow/flutter-geolocator/issues/1806)).
+- Updates `geolocator_android` to `^5.1.1+1`, excluding 5.1.1, whose manifest made Google Play ask every app for a foreground service declaration.
+
 ## 14.1.2
 
 - Updates the "Location accuracy" section of the README to describe the Android behaviour of `getLocationAccuracy()`: it returns `LocationAccuracyStatus.reduced` when only `ACCESS_COARSE_LOCATION` is granted, and throws a `PlatformException` with the code `PERMISSION_DENIED` when no location permission has been granted. Resolves [#1528](https://github.com/Baseflow/flutter-geolocator/issues/1528).
