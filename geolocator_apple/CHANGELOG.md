@@ -1,3 +1,7 @@
+## 2.5.0
+
+* Reports on iOS 15 and macOS 12 and higher whether an external accessory, such as a Bluetooth GPS receiver, determined a position, read from `CLLocation.sourceInformation.isProducedByAccessory`. Exposed as `Position.isProducedByAccessory` from `geolocator_platform_interface` 4.5.0 on; older versions of the platform interface ignore it.
+
 ## 2.4.3
 
 * Fixes `getCurrentPosition` never completing when it is called again before an earlier call has completed. The new request replaced the handlers of the pending one, which was left waiting forever. Requests made while another one is pending now share its location updates, and all of them complete with the same position or error, using the most accurate of the requested accuracies. Each new request restarts the `kCLErrorLocationUnknown` grace period for every pending request.
