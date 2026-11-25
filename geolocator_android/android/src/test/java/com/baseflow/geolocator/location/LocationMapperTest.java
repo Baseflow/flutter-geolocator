@@ -14,6 +14,8 @@ import org.junit.Test;
 
 import java.util.Map;
 
+// BundleCompat delegates to the legacy getter on the SDK-less Mockito test runtime.
+@SuppressWarnings("deprecation")
 public class LocationMapperTest {
 
   @Test
@@ -44,9 +46,9 @@ public class LocationMapperTest {
 
     Bundle extras = mock(Bundle.class);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(2.5);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(2.5);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(0.3);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(0.3);
     when(location.getExtras()).thenReturn(extras);
 
     Map<String, Object> map = LocationMapper.toHashMap(location);
@@ -66,9 +68,9 @@ public class LocationMapperTest {
 
     Bundle extras = mock(Bundle.class);
     when(extras.containsKey("vertical_speed")).thenReturn(true);
-    when(extras.get("vertical_speed")).thenReturn(-1.8);
+    when(extras.getSerializable("vertical_speed")).thenReturn(-1.8);
     when(extras.containsKey("vertical_speed_accuracy")).thenReturn(true);
-    when(extras.get("vertical_speed_accuracy")).thenReturn(0.5);
+    when(extras.getSerializable("vertical_speed_accuracy")).thenReturn(0.5);
     when(location.getExtras()).thenReturn(extras);
 
     Map<String, Object> map = LocationMapper.toHashMap(location);
@@ -88,9 +90,9 @@ public class LocationMapperTest {
 
     Bundle extras = mock(Bundle.class);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(3.75f);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(3.75f);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(0.25f);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(0.25f);
     when(location.getExtras()).thenReturn(extras);
 
     Map<String, Object> map = LocationMapper.toHashMap(location);
@@ -110,9 +112,9 @@ public class LocationMapperTest {
 
     Bundle extras = mock(Bundle.class);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(Double.NaN);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(Double.NaN);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(Double.POSITIVE_INFINITY);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(Double.POSITIVE_INFINITY);
     when(location.getExtras()).thenReturn(extras);
 
     Map<String, Object> map = LocationMapper.toHashMap(location);
@@ -130,9 +132,9 @@ public class LocationMapperTest {
 
     Bundle extras = mock(Bundle.class);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(1.5);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(1.5);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(-1.0);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_ACCURACY_EXTRA)).thenReturn(-1.0);
     when(location.getExtras()).thenReturn(extras);
 
     Map<String, Object> map = LocationMapper.toHashMap(location);
@@ -151,9 +153,9 @@ public class LocationMapperTest {
 
     Bundle extras = mock(Bundle.class);
     when(extras.containsKey(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(true);
-    when(extras.get(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(4.2);
+    when(extras.getSerializable(NmeaClient.VERTICAL_SPEED_EXTRA)).thenReturn(4.2);
     when(extras.containsKey("vertical_speed")).thenReturn(true);
-    when(extras.get("vertical_speed")).thenReturn(1.1);
+    when(extras.getSerializable("vertical_speed")).thenReturn(1.1);
     when(location.getExtras()).thenReturn(extras);
 
     Map<String, Object> map = LocationMapper.toHashMap(location);

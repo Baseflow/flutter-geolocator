@@ -1,3 +1,7 @@
+## 5.2.2
+
+- Uses typed AndroidX Bundle access for vertical-speed extras, retaining support for numeric provider values without calling the deprecated `Bundle.get` API.
+
 ## 5.2.1
 
 - Fixes the position updates `EventChannel` being unregistered when the plugin is detached from
