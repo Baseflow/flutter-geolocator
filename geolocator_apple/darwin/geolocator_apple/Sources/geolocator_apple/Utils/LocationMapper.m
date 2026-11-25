@@ -66,6 +66,7 @@
     
     if(@available(iOS 15.0, macOS 12.0, *)) {
         [locationMap setObject:@(location.sourceInformation.isSimulatedBySoftware) forKey: @"is_mocked"];
+        [locationMap setObject:@(location.sourceInformation.isProducedByAccessory) forKey: @"is_produced_by_accessory"];
     }
     
     if (@available(macOS 10.15, *)) {
