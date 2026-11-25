@@ -451,6 +451,44 @@ void main() {
       );
     });
 
+    test(
+        'hashCode should not match when the isProducedByAccessory property is different',
+        () {
+      // Arrange
+      final firstPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        isProducedByAccessory: false,
+      );
+      final secondPosition = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        isProducedByAccessory: true,
+      );
+
+      // Act & Assert
+      expect(
+        firstPosition.hashCode != secondPosition.hashCode,
+        true,
+      );
+    });
+
     test('hashCode should not match when the floor property is different', () {
       // Arrange
       final firstPosition = Position(
@@ -613,6 +651,60 @@ void main() {
 
       // Act & Assert
       expect(() => Position.fromMap(jsonDecode(json)), returnsNormally);
+    });
+
+    test('fromMap should read is_produced_by_accessory', () {
+      // Arrange
+      final map = <String, dynamic>{
+        'latitude': 0.0,
+        'longitude': 0.0,
+        'is_produced_by_accessory': true,
+      };
+
+      // Act
+      final position = Position.fromMap(map);
+
+      // Assert
+      expect(position.isProducedByAccessory, true);
+    });
+
+    test(
+        'fromMap should default isProducedByAccessory to false when the key is missing',
+        () {
+      // Arrange
+      final map = <String, dynamic>{
+        'latitude': 0.0,
+        'longitude': 0.0,
+      };
+
+      // Act
+      final position = Position.fromMap(map);
+
+      // Assert
+      expect(position.isProducedByAccessory, false);
+    });
+
+    test('fromMap should keep isProducedByAccessory through toJson', () {
+      // Arrange
+      final position = Position(
+        longitude: 0,
+        latitude: 0,
+        timestamp: DateTime.fromMillisecondsSinceEpoch(0),
+        accuracy: 0,
+        altitude: 0,
+        altitudeAccuracy: 0,
+        heading: 0,
+        headingAccuracy: 0,
+        speed: 0,
+        speedAccuracy: 0,
+        isProducedByAccessory: true,
+      );
+
+      // Act
+      final roundTripped = Position.fromMap(position.toJson());
+
+      // Assert
+      expect(roundTripped.isProducedByAccessory, true);
     });
   });
 
