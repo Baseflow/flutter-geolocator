@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.os.BundleCompat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -89,9 +90,9 @@ public class LocationMapper {
     }
     for (String key : keys) {
       if (extras.containsKey(key)) {
-        Object value = extras.get(key);
-        if (value instanceof Number) {
-          double d = ((Number) value).doubleValue();
+        Number value = BundleCompat.getSerializable(extras, key, Number.class);
+        if (value != null) {
+          double d = value.doubleValue();
           if (!Double.isNaN(d) && !Double.isInfinite(d)) {
             return d;
           }
